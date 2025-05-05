@@ -1,10 +1,10 @@
 ﻿using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using Benchmarks.Components;
-using Myriad.ECS;
-using Myriad.ECS.Command;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs;
+using Myriad.Ecs.Command;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Benchmarks;
 

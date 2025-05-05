@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.Command;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Tests.Components;
+namespace Myriad.Ecs.Tests.Components;
 
 [TestClass]
 public class DisposableComponentTests

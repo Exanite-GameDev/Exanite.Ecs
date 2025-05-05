@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.Allocations;
+﻿using Myriad.Ecs.Allocations;
 
-namespace Myriad.ECS.Tests.Collections;
+namespace Myriad.Ecs.Tests.Collections;
 
 [TestClass]
 public class LocalPoolTests

@@ -1,5 +1,5 @@
 //using System.Text;
-//using Myriad.ECS.Command;
+//using Myriad.Ecs.Command;
 //using Myriad.ECS.Queries;
 //using Myriad.ECS.Serialization;
 //using Myriad.ECS.Worlds;

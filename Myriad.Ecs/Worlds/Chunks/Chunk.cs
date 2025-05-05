@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
-using Myriad.ECS.Allocations;
-using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds.Archetypes;
+using Myriad.Ecs.Allocations;
+using Myriad.Ecs.Collections;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.ECS.Worlds.Chunks;
+namespace Myriad.Ecs.Worlds.Chunks;
 
 [NonPublic]
 public sealed class Chunk

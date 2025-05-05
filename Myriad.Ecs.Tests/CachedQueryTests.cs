@@ -1,4 +1,4 @@
-﻿using Myriad.ECS.Components;
+﻿using Myriad.Ecs.Components;
 using Myriad.ECS.Queries;
 using Myriad.ECS.Worlds;
 

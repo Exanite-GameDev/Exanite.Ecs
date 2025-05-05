@@ -1,9 +1,9 @@
-﻿using Myriad.ECS.IDs;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Systems;
-using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.IDs;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Systems;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Components;
+namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// Represents a transform

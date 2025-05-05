@@ -1,9 +1,9 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Components;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.Command;
+using Myriad.Ecs.Components;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Tests.Queries;
+namespace Myriad.Ecs.Tests.Queries;
 
 [TestClass]
 public class StructQueryTests

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Myriad.ECS.Allocations;
+namespace Myriad.Ecs.Allocations;
 
 internal static class ArrayFactory
 {

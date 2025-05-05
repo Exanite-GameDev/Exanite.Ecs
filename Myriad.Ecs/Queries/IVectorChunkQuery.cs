@@ -1,14 +1,14 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
-using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -30,7 +30,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -43,7 +43,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <param name="query">A query expressing which entities to execute this query over</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		public int ExecuteVectorChunk<TQ, T0, TV0>(
 			TQ q,
 			QueryDescription? query = null
@@ -123,7 +123,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -147,7 +147,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -256,7 +256,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -282,7 +282,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -407,7 +407,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -435,7 +435,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -576,7 +576,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -606,7 +606,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -763,7 +763,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -795,7 +795,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -968,7 +968,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -1002,7 +1002,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1191,7 +1191,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -1227,7 +1227,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1432,7 +1432,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -1470,7 +1470,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1691,7 +1691,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -1731,7 +1731,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1968,7 +1968,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -2010,7 +2010,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2263,7 +2263,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -2307,7 +2307,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2576,7 +2576,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -2622,7 +2622,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2907,7 +2907,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -2955,7 +2955,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -3256,7 +3256,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -3306,7 +3306,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -3623,7 +3623,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Execute over a vector of values, taken from components. Mapping from components to vectorised values
@@ -3675,7 +3675,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{

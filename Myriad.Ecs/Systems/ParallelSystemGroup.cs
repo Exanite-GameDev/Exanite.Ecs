@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Systems;
+﻿namespace Myriad.Ecs.Systems;
 
 /// <summary>
 /// Executes all systems in the group in parallel, with no safety assurances of any kind.

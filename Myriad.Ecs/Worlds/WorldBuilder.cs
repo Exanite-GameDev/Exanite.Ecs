@@ -1,8 +1,8 @@
-﻿using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Threading;
+﻿using Myriad.Ecs.Collections;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Threading;
 
-namespace Myriad.ECS.Worlds;
+namespace Myriad.Ecs.Worlds;
 
 /// <summary>
 /// A builder to create a new <see cref="World"/>

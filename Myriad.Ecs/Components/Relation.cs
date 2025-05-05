@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Components;
+﻿namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// A relation component can be added to a command buffer, along with an associated buffered entity. When the

@@ -8,10 +8,10 @@
     const int PARAM_COUNT = 16;
 #>
 
-using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Collections;
-using Myriad.ECS.Worlds.Chunks;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Collections;
+using Myriad.Ecs.Worlds.Chunks;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
@@ -41,7 +41,7 @@ using System.Diagnostics.CodeAnalysis;
     }
 #>
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     <#= CoverageAttribute(i) #>
     public readonly struct QueryResultEnumerable<#= i #><#= tparams #>
@@ -97,7 +97,7 @@ namespace Myriad.ECS.Queries
         {
             get
             {
-<# 
+<#
 if (i == 0)
 {
 #>
@@ -131,7 +131,7 @@ for (var k = 0; k < i; k++)
                 );
 <#
 }
-#>            
+#>
             }
         }
 
@@ -201,7 +201,7 @@ for (var k = 0; k < i; k++)
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -247,7 +247,7 @@ else
 }
 #>
 
-<#+ 
+<#+
     static string CoverageAttribute(int index)
 	{
 		if (index < 2)

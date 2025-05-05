@@ -1,9 +1,9 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Worlds;
-using Myriad.ECS.Worlds.Archetypes;
+﻿using Myriad.Ecs.Command;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.ECS.Tests.Queries;
+namespace Myriad.Ecs.Tests.Queries;
 
 [TestClass]
 public class CursorQuery

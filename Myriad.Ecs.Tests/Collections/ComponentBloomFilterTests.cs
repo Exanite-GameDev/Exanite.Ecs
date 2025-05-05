@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.Collections;
+using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Tests.Collections;
+namespace Myriad.Ecs.Tests.Collections;
 
 [TestClass]
 public class ComponentBloomFilterTests

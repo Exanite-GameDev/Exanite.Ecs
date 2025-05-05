@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Systems;
+﻿namespace Myriad.Ecs.Systems;
 
 /// <summary>
 /// Base interface for all systems

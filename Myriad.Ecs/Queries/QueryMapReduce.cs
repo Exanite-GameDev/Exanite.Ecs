@@ -1,5 +1,5 @@
-﻿using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ConvertToPrimaryConstructor
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>
 	/// Reduce intermediate values
@@ -28,7 +28,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -55,7 +55,7 @@ namespace Myriad.ECS.Queries
 		where T0 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -68,7 +68,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="mapper">Delegate to extract values from entities</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
@@ -115,7 +115,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="mapper">Delegate to extract values from entities</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
@@ -161,7 +161,7 @@ namespace Myriad.ECS.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
@@ -182,7 +182,7 @@ namespace Myriad.ECS.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
@@ -207,7 +207,7 @@ namespace Myriad.ECS.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TMapper q,
@@ -235,7 +235,7 @@ namespace Myriad.ECS.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			ref TMapper q,
 			ref TReducer r,
@@ -276,7 +276,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -306,7 +306,7 @@ namespace Myriad.ECS.Queries
         where T1 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -538,7 +538,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -571,7 +571,7 @@ namespace Myriad.ECS.Queries
         where T2 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -814,7 +814,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -850,7 +850,7 @@ namespace Myriad.ECS.Queries
         where T3 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1104,7 +1104,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -1143,7 +1143,7 @@ namespace Myriad.ECS.Queries
         where T4 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1408,7 +1408,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -1450,7 +1450,7 @@ namespace Myriad.ECS.Queries
         where T5 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1726,7 +1726,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -1771,7 +1771,7 @@ namespace Myriad.ECS.Queries
         where T6 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2058,7 +2058,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -2106,7 +2106,7 @@ namespace Myriad.ECS.Queries
         where T7 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2404,7 +2404,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -2455,7 +2455,7 @@ namespace Myriad.ECS.Queries
         where T8 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2764,7 +2764,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -2818,7 +2818,7 @@ namespace Myriad.ECS.Queries
         where T9 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -3138,7 +3138,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -3195,7 +3195,7 @@ namespace Myriad.ECS.Queries
         where T10 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -3526,7 +3526,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -3586,7 +3586,7 @@ namespace Myriad.ECS.Queries
         where T11 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -3928,7 +3928,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -3991,7 +3991,7 @@ namespace Myriad.ECS.Queries
         where T12 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -4344,7 +4344,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -4410,7 +4410,7 @@ namespace Myriad.ECS.Queries
         where T13 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -4774,7 +4774,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -4843,7 +4843,7 @@ namespace Myriad.ECS.Queries
         where T14 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -5218,7 +5218,7 @@ namespace Myriad.ECS.Worlds
 		}
 	}
 }
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -5290,7 +5290,7 @@ namespace Myriad.ECS.Queries
         where T15 : IComponent;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{

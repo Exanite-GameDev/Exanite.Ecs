@@ -1,8 +1,8 @@
-﻿using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds.Archetypes;
-using Myriad.ECS.Worlds.Chunks;
+﻿using Myriad.Ecs.IDs;
+using Myriad.Ecs.Worlds.Archetypes;
+using Myriad.Ecs.Worlds.Chunks;
 
-namespace Myriad.ECS.Queries;
+namespace Myriad.Ecs.Queries;
 
 /// <summary>
 /// Temporary handle to a specific chunk

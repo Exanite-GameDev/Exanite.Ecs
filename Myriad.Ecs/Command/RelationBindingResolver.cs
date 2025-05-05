@@ -1,8 +1,8 @@
-﻿using Myriad.ECS.Allocations;
-using Myriad.ECS.Components;
-using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.Allocations;
+using Myriad.Ecs.Components;
+using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Command;
+namespace Myriad.Ecs.Command;
 
 public partial class CommandBuffer
 {

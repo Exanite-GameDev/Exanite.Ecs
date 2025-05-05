@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Collections;
+﻿namespace Myriad.Ecs.Collections;
 
 /// <summary>
 /// A list which stores data in "segments", this removes the need for copying data when the list grows.

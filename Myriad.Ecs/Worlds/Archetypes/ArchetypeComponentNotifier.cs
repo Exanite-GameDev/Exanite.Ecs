@@ -1,9 +1,9 @@
-﻿using Myriad.ECS.Collections;
-using Myriad.ECS.Components;
-using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.Collections;
+using Myriad.Ecs.Components;
+using Myriad.Ecs.IDs;
 using System.Reflection;
 
-namespace Myriad.ECS.Worlds.Archetypes;
+namespace Myriad.Ecs.Worlds.Archetypes;
 
 internal class ArchetypePhantomComponentNotifier
 {

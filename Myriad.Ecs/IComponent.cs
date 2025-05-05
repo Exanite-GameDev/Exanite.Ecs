@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS;
+﻿namespace Myriad.Ecs;
 
 /// <summary>
 /// Marker interface for components

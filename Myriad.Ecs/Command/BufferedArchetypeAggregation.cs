@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Command;
+namespace Myriad.Ecs.Command;
 
 public sealed partial class CommandBuffer
 {

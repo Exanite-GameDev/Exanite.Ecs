@@ -1,14 +1,14 @@
 ﻿using System.Buffers;
 using System.Diagnostics;
-using Myriad.ECS.Allocations;
-using Myriad.ECS.Collections;
-using Myriad.ECS.Components;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Worlds;
-using Myriad.ECS.Worlds.Archetypes;
+using Myriad.Ecs.Allocations;
+using Myriad.Ecs.Collections;
+using Myriad.Ecs.Components;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.ECS.Command;
+namespace Myriad.Ecs.Command;
 
 /// <summary>
 /// Buffers up modifications to entities and replays them all at once.
@@ -398,7 +398,7 @@ public sealed partial class CommandBuffer
         // Put it in aggregate node 0 (i.e. no components)
         var id = (uint)_bufferedSets.Count;
         _bufferedSets.Add(new BufferedEntityData(id, set));
-        
+
         return new BufferedEntity(id, this, _nextResolver);
     }
 

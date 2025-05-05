@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.xxHash;
+﻿using Myriad.Ecs.xxHash;
 using System.Runtime.InteropServices;
 
-namespace Myriad.ECS.Queries;
+namespace Myriad.Ecs.Queries;
 
 internal struct ValueRandom
 {

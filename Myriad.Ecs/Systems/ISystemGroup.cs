@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Myriad.ECS.Systems;
+namespace Myriad.Ecs.Systems;
 
 /// <summary>
 /// A group of systems that will be executed together. A group is itself a system, so groups can be nested.

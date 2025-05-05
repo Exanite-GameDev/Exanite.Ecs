@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Myriad.ECS.Allocations;
-using Myriad.ECS.Components;
+using Myriad.Ecs.Allocations;
+using Myriad.Ecs.Components;
 
-namespace Myriad.ECS.IDs;
+namespace Myriad.Ecs.IDs;
 
 /// <summary>
 /// Store a lookup from component type to unique 32 bit ID.

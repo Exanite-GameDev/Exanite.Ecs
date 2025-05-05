@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.Command;
+﻿using Myriad.Ecs.Command;
 
-namespace Myriad.ECS.Components;
+namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// A list of child entities that will be destroyed when this entity is destroyed

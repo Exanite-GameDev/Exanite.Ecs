@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
-using Myriad.ECS.Systems;
+using Myriad.Ecs.Systems;
 
-namespace Myriad.ECS.Tests.Systems;
+namespace Myriad.Ecs.Tests.Systems;
 
 [TestClass]
 public class OrderedParallelSystemGroupTest

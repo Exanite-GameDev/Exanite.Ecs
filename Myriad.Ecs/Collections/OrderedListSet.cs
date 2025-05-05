@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Runtime.InteropServices;
-using Myriad.ECS.IDs;
+using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Collections;
+namespace Myriad.Ecs.Collections;
 
 /// <summary>
 /// A set built out of an ordered list. This allows allocation free enumeration of the set.
@@ -10,7 +10,7 @@ namespace Myriad.ECS.Collections;
 /// <typeparam name="TItem"></typeparam>
 internal class OrderedListSet<TItem>
     : IReadOnlyList<TItem>
-    where TItem : struct, IComparable<TItem>, IEquatable<TItem> 
+    where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
     private readonly List<TItem> _items = [ ];
     public int Count => _items.Count;

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using Myriad.ECS.Queries;
+using Myriad.Ecs.Queries;
 
-namespace Myriad.ECS.Threading;
+namespace Myriad.Ecs.Threading;
 
 internal class ParallelQueryWorker<TWork>
     : IThreadPoolWork

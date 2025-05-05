@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.Allocations;
-using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.Allocations;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Command;
+namespace Myriad.Ecs.Command;
 
 public sealed partial class CommandBuffer
 {

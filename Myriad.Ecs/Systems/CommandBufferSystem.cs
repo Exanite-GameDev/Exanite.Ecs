@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.Command;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Systems;
+namespace Myriad.Ecs.Systems;
 
 /// <summary>
 /// Executes a command buffer in Update.

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Concurrent;
-using Myriad.ECS.Collections;
-using Myriad.ECS.Command;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Threading;
-using Myriad.ECS.Worlds.Archetypes;
+using Myriad.Ecs.Collections;
+using Myriad.Ecs.Command;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Threading;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.ECS.Worlds;
+namespace Myriad.Ecs.Worlds;
 
 /// <summary>
 /// A world contains all entities.

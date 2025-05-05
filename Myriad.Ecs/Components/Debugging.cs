@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Myriad.ECS.Components;
+namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// Friendly name to use when displaying this entity for debugging purposes.

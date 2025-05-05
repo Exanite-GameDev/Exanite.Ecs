@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Allocations;
+﻿namespace Myriad.Ecs.Allocations;
 
 /// <summary>
 /// A non-thread safe pool, backed by the global thread safe pool.

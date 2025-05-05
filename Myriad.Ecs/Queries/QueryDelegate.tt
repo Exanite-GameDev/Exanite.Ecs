@@ -7,7 +7,7 @@
 <#
 	const int PARAM_COUNT = 16;
 #>
-using Myriad.ECS.Queries;
+using Myriad.Ecs.Queries;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -22,7 +22,7 @@ using System.Runtime.CompilerServices;
 	var delegate_wrapper_name = "QueryDelegateWrapper" + i;
 	var delegate_call_params = string.Join(", ", Enumerable.Range(0, i).Select(x => $"ref t{x}"));
 #>
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// A delegate called for entities in a query. Receives just the components requested.
@@ -133,7 +133,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -344,7 +344,7 @@ namespace Myriad.ECS.Worlds
 #>
 
 
-<#+ 
+<#+
 	static string CoverageAttribute(int index)
 	{
 		if (index < 2)

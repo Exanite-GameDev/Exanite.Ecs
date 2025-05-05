@@ -1,9 +1,9 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Components;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.Command;
+using Myriad.Ecs.Components;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Systems;
+namespace Myriad.Ecs.Systems;
 
 /// <summary>
 /// Automatically attaches <typeparamref name="TAssociated"/> component to any entity which has <typeparamref name="TComponent"/>. Automatically removes
@@ -55,7 +55,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
 
     /// <summary>
     /// Called when an Entity is found that has <typeparamref name="TAssociated"/> but does not have <typeparamref name="TComponent"/>.
-    /// 
+    ///
     /// Call base.OnDetach to detach <typeparamref name="TAssociated"/>.
     /// </summary>
     /// <param name="e"></param>

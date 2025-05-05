@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Components;
+﻿namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// Store an array reference in a component
@@ -70,7 +70,7 @@ public readonly record struct ComponentList<T>
     /// <param name="Index"></param>
     /// <returns></returns>
     public T this[int Index]
-    { 
+    {
         get => List[Index];
         set => List[Index] = value;
     }

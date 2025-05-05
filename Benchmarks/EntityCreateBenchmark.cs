@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Benchmarks.Components;
-using Myriad.ECS.Command;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs.Command;
+using Myriad.Ecs.Worlds;
 
 namespace Benchmarks;
 

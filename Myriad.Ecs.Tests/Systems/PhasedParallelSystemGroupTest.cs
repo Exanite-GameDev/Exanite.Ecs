@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Systems;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Systems;
 
-namespace Myriad.ECS.Tests.Systems;
+namespace Myriad.Ecs.Tests.Systems;
 
 [TestClass]
 public class PhasedParallelSystemGroupTest

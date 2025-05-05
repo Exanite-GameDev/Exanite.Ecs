@@ -1,9 +1,9 @@
 ﻿
 
-using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Threading;
-using Myriad.ECS.Allocations;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Threading;
+using Myriad.Ecs.Allocations;
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -27,7 +27,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -39,7 +39,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			QueryDescription? query = null
@@ -59,7 +59,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			ref QueryDescription? query
@@ -80,7 +80,7 @@ namespace Myriad.ECS.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
@@ -101,7 +101,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
@@ -122,7 +122,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
@@ -143,7 +143,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -189,7 +189,7 @@ namespace Myriad.ECS.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-		
+
 		public int ExecuteChunkParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
@@ -313,7 +313,7 @@ namespace Myriad.ECS.Worlds
 			return count;
 		}
 
-		
+
 		private readonly struct ChunkWorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent
@@ -339,7 +339,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -355,7 +355,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -685,7 +685,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -702,7 +702,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1050,7 +1050,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -1068,7 +1068,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1434,7 +1434,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -1453,7 +1453,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -1837,7 +1837,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -1857,7 +1857,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2259,7 +2259,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -2280,7 +2280,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -2700,7 +2700,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -2722,7 +2722,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -3160,7 +3160,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -3183,7 +3183,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -3639,7 +3639,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -3663,7 +3663,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -4137,7 +4137,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -4162,7 +4162,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -4654,7 +4654,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -4680,7 +4680,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -5190,7 +5190,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -5217,7 +5217,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -5745,7 +5745,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -5773,7 +5773,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -6319,7 +6319,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -6348,7 +6348,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -6912,7 +6912,7 @@ namespace Myriad.ECS.Worlds
 	}
 }
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -6942,7 +6942,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{

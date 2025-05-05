@@ -1,4 +1,4 @@
-﻿using Myriad.ECS.Collections;
+﻿using Myriad.Ecs.Collections;
 using Myriad.ECS.IDs;
 using Myriad.ECS.Worlds;
 using System.Diagnostics;

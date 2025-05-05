@@ -7,8 +7,8 @@
 <#
 	const int PARAM_COUNT = 16;
 #>
-using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ConvertToPrimaryConstructor
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>
 	/// Reduce intermediate values
@@ -42,7 +42,7 @@ namespace Myriad.ECS.Queries
 	var sumij = i;
 	var generics = string.Join(", ", Enumerable.Range(0, sumij).Select(x => "T" + x));
 #>
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Map from a set of components to a single value
@@ -69,7 +69,7 @@ namespace Myriad.ECS.Queries
 		where <#= Constraints(sumij, 8) #>;
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -313,7 +313,7 @@ namespace Myriad.ECS.Worlds
 #>
 
 
-<#+ 
+<#+
 	static string CoverageAttribute(int index)
 	{
 		if (index < 2)

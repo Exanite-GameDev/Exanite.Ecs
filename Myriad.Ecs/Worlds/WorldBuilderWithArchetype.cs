@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Worlds;
+namespace Myriad.Ecs.Worlds;
 
 /* dotcover disable */
 

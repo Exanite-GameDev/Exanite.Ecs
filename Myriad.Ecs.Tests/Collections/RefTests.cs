@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.Collections;
+﻿using Myriad.Ecs.Collections;
 
-namespace Myriad.ECS.Tests.Collections;
+namespace Myriad.Ecs.Tests.Collections;
 
 [TestClass]
 public class RefTests

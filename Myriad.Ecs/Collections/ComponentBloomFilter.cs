@@ -1,9 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Myriad.ECS.IDs;
-using Myriad.ECS.xxHash;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.xxHash;
 
-namespace Myriad.ECS.Collections;
+namespace Myriad.Ecs.Collections;
 
 /// <summary>
 /// Probabilistic set of component IDs. Can be used to check if two sets intersect.<br />

@@ -8,7 +8,7 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>Myriad.ECS</Title>
+    <Title>Myriad.Ecs</Title>
     <Authors>Martin Evans</Authors>
     <Version>36.2.2</Version>
     <Description>Myriad.ECS is a high performance Entity Component System (ECS).</Description>

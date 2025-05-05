@@ -1,8 +1,8 @@
 ﻿
-using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Collections;
-using Myriad.ECS.Worlds.Chunks;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Collections;
+using Myriad.Ecs.Worlds.Chunks;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable UnusedType.Global
@@ -14,11 +14,11 @@ using System.Diagnostics.CodeAnalysis;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
-    
+
     public readonly struct QueryResultEnumerable0
-        
+
     {
         private readonly QueryDescription _query;
 
@@ -35,9 +35,9 @@ namespace Myriad.ECS.Queries
         }
     }
 
-    
+
     public ref struct QueryResultEnumerator0
-        
+
     {
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
@@ -57,7 +57,7 @@ namespace Myriad.ECS.Queries
             get
             {
                 return SpanEntities[_entityIndex];
-            
+
             }
         }
 
@@ -120,7 +120,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -134,9 +134,9 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
-    
+
     public readonly struct QueryResultEnumerable1<T0>
         where T0 : IComponent
     {
@@ -155,7 +155,7 @@ namespace Myriad.ECS.Queries
         }
     }
 
-    
+
     public ref struct QueryResultEnumerator1<T0>
         where T0 : IComponent
     {
@@ -186,7 +186,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T0>(Components0!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -250,18 +250,18 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
-        
+
         public QueryResultEnumerable1<T0> Query<T0>(QueryDescription? query = null)
             where T0 : IComponent
         {
             return Query<T0>(ref query);
         }
 
-        
+
         public QueryResultEnumerable1<T0> Query<T0>(ref QueryDescription? query)
             where T0 : IComponent
         {
@@ -276,7 +276,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable2<T0, T1>
@@ -334,7 +334,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T1>(Components1!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -399,7 +399,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -427,7 +427,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable3<T0, T1, T2>
@@ -491,7 +491,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T2>(Components2!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -557,7 +557,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -587,7 +587,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable4<T0, T1, T2, T3>
@@ -657,7 +657,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T3>(Components3!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -724,7 +724,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -756,7 +756,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable5<T0, T1, T2, T3, T4>
@@ -832,7 +832,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T4>(Components4!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -900,7 +900,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -934,7 +934,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable6<T0, T1, T2, T3, T4, T5>
@@ -1016,7 +1016,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T5>(Components5!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -1085,7 +1085,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -1121,7 +1121,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable7<T0, T1, T2, T3, T4, T5, T6>
@@ -1209,7 +1209,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T6>(Components6!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -1279,7 +1279,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -1317,7 +1317,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable8<T0, T1, T2, T3, T4, T5, T6, T7>
@@ -1411,7 +1411,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T7>(Components7!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -1482,7 +1482,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -1522,7 +1522,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
@@ -1622,7 +1622,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T8>(Components8!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -1694,7 +1694,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -1736,7 +1736,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
@@ -1842,7 +1842,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T9>(Components9!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -1915,7 +1915,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -1959,7 +1959,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
@@ -2071,7 +2071,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T10>(Components10!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -2145,7 +2145,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -2191,7 +2191,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
@@ -2309,7 +2309,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T11>(Components11!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -2384,7 +2384,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -2432,7 +2432,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
@@ -2556,7 +2556,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T12>(Components12!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -2632,7 +2632,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -2682,7 +2682,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
@@ -2812,7 +2812,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T13>(Components13!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -2889,7 +2889,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -2941,7 +2941,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
@@ -3077,7 +3077,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T14>(Components14!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -3155,7 +3155,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
@@ -3209,7 +3209,7 @@ namespace Myriad.ECS.Worlds
 }
 
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     [ExcludeFromCodeCoverage]
     public readonly struct QueryResultEnumerable16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
@@ -3351,7 +3351,7 @@ namespace Myriad.ECS.Queries
                     new RefT<T15>(Components15!, _entityIndex)
 #endif
                 );
-            
+
             }
         }
 
@@ -3430,7 +3430,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {

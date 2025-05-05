@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.Queries;
+﻿using Myriad.Ecs.Queries;
 
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>
     /// Interface for query handlers which operate over entities
@@ -28,7 +28,7 @@ namespace Myriad.ECS.Queries
     }
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {

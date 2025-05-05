@@ -1,5 +1,5 @@
-﻿global using Myriad.ECS.Extensions;
+﻿global using Myriad.Ecs.Extensions;
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Myriad.ECS.Tests")]
+[assembly: InternalsVisibleTo("Myriad.Ecs.Tests")]

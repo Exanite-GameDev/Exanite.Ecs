@@ -1,13 +1,13 @@
-﻿using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
-using Myriad.ECS.xxHash;
-using Myriad.ECS.Collections;
-using Myriad.ECS.Components;
+﻿using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.xxHash;
+using Myriad.Ecs.Collections;
+using Myriad.Ecs.Components;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 
 #if NETSTANDARD2_1
-using Myriad.ECS.Extensions;
+using Myriad.Ecs.Extensions;
 #endif
 
 // ReSharper disable UnusedType.Global
@@ -16,7 +16,7 @@ using Myriad.ECS.Extensions;
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 
-namespace Myriad.ECS.Worlds;
+namespace Myriad.Ecs.Worlds;
 
 public partial class World
 {
@@ -324,7 +324,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 3 included components. 
+    // Cache of all queries with 3 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -333,7 +333,7 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock3 = new();
 
-    
+
     private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2)
     {
         // Accumulate all components in ascending order
@@ -375,7 +375,7 @@ public partial class World
                 list = [ ];
                 _queryCache3.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -411,7 +411,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
-    
+
     public QueryDescription GetCachedQuery<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
@@ -425,7 +425,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 4 included components. 
+    // Cache of all queries with 4 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -477,7 +477,7 @@ public partial class World
                 list = [ ];
                 _queryCache4.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -530,7 +530,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 5 included components. 
+    // Cache of all queries with 5 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -583,7 +583,7 @@ public partial class World
                 list = [ ];
                 _queryCache5.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -639,7 +639,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 6 included components. 
+    // Cache of all queries with 6 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -693,7 +693,7 @@ public partial class World
                 list = [ ];
                 _queryCache6.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -752,7 +752,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 7 included components. 
+    // Cache of all queries with 7 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -807,7 +807,7 @@ public partial class World
                 list = [ ];
                 _queryCache7.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -869,7 +869,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 8 included components. 
+    // Cache of all queries with 8 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -925,7 +925,7 @@ public partial class World
                 list = [ ];
                 _queryCache8.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -990,7 +990,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 9 included components. 
+    // Cache of all queries with 9 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -1047,7 +1047,7 @@ public partial class World
                 list = [ ];
                 _queryCache9.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -1115,7 +1115,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 10 included components. 
+    // Cache of all queries with 10 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -1173,7 +1173,7 @@ public partial class World
                 list = [ ];
                 _queryCache10.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -1244,7 +1244,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 11 included components. 
+    // Cache of all queries with 11 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -1303,7 +1303,7 @@ public partial class World
                 list = [ ];
                 _queryCache11.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -1377,7 +1377,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 12 included components. 
+    // Cache of all queries with 12 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -1437,7 +1437,7 @@ public partial class World
                 list = [ ];
                 _queryCache12.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -1514,7 +1514,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 13 included components. 
+    // Cache of all queries with 13 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -1575,7 +1575,7 @@ public partial class World
                 list = [ ];
                 _queryCache13.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -1655,7 +1655,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 14 included components. 
+    // Cache of all queries with 14 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -1717,7 +1717,7 @@ public partial class World
                 list = [ ];
                 _queryCache14.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -1800,7 +1800,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 15 included components. 
+    // Cache of all queries with 15 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -1863,7 +1863,7 @@ public partial class World
                 list = [ ];
                 _queryCache15.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,
@@ -1949,7 +1949,7 @@ public partial class World
     }
 
 
-    // Cache of all queries with 16 included components. 
+    // Cache of all queries with 16 included components.
     // Key is the hash of the sorted component IDs.
     // The value has a list of tuples, containing:
     // - The actual components for this item (sorted)
@@ -2013,7 +2013,7 @@ public partial class World
                 list = [ ];
                 _queryCache16.Add(hash, list);
             }
-            
+
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
                 id0,
                 id1,

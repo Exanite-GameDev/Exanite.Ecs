@@ -1,10 +1,10 @@
 ﻿using System.Runtime.CompilerServices;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds;
-using Myriad.ECS.Collections;
-using Myriad.ECS.Components;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Worlds;
+using Myriad.Ecs.Collections;
+using Myriad.Ecs.Components;
 
-namespace Myriad.ECS.Queries;
+namespace Myriad.Ecs.Queries;
 
 /// <summary>
 /// Build a new <see cref="QueryDescription"/> object

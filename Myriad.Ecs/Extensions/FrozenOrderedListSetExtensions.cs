@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.Collections;
+using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Extensions;
+namespace Myriad.Ecs.Extensions;
 
 internal static class FrozenOrderedListSetExtensions
 {

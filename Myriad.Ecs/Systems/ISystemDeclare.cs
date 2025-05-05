@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
+﻿using Myriad.Ecs.Collections;
+using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Systems;
+namespace Myriad.Ecs.Systems;
 
 /// <summary>
 /// A system which declares which components is access in the update phase

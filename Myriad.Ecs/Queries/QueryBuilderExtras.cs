@@ -5,7 +5,7 @@
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ConvertToPrimaryConstructor
 
-namespace Myriad.ECS.Queries;
+namespace Myriad.Ecs.Queries;
 
 public sealed partial class QueryBuilder
 {

@@ -7,7 +7,7 @@
 <#
     const int PARAM_COUNT = 16;
 #>
-using Myriad.ECS.Queries;
+using Myriad.Ecs.Queries;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -17,7 +17,7 @@ using System.Runtime.CompilerServices;
 // ReSharper disable CheckNamespace
 // ReSharper disable ArrangeAccessorOwnerBody
 
-namespace Myriad.ECS.Worlds;
+namespace Myriad.Ecs.Worlds;
 
 public partial class World
 {
@@ -82,7 +82,7 @@ for (var i = 1; i <= PARAM_COUNT; i++)
 #>
 }
 
-<#+ 
+<#+
     static string CoverageAttribute(int index)
 	{
 		if (index < 3)

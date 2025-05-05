@@ -1,8 +1,8 @@
-﻿using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
-using Myriad.ECS.xxHash;
+﻿using Myriad.Ecs.Collections;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.xxHash;
 
-namespace Myriad.ECS.Worlds.Archetypes;
+namespace Myriad.Ecs.Worlds.Archetypes;
 
 /// <summary>
 /// An archetype hash is made by mixing all of the components in an archetype.

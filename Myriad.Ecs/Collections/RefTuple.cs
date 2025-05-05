@@ -10,7 +10,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace Myriad.ECS.Collections;
+namespace Myriad.Ecs.Collections;
 
 #if NET6_0_OR_GREATER
 
@@ -18,7 +18,7 @@ public readonly ref struct RefT<T>
 {
 	private readonly ref T _ref;
 
-	public ref T Ref 
+	public ref T Ref
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get => ref _ref;

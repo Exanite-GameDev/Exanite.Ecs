@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Myriad.ECS.Collections;
+namespace Myriad.Ecs.Collections;
 
 [StructLayout(LayoutKind.Explicit)]
 internal struct Union64

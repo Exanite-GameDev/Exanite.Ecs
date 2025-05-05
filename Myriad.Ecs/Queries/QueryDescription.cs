@@ -1,9 +1,9 @@
-﻿using Myriad.ECS.Collections;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds;
-using Myriad.ECS.Worlds.Archetypes;
+﻿using Myriad.Ecs.Collections;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Worlds;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.ECS.Queries;
+namespace Myriad.Ecs.Queries;
 
 /// <summary>
 /// Describes a query for entities, bound to a world.
@@ -424,7 +424,7 @@ public sealed class QueryDescription
         {
             if (archetype.Archetype.EntityCount == 0)
                 continue;
-            
+
             for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
             {
                 var chunk = archetype.Archetype.Chunks[i];
@@ -460,7 +460,7 @@ public sealed class QueryDescription
         {
             if (archetype.Archetype.EntityCount == 0)
                 continue;
-            
+
             for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
             {
                 var chunk = archetype.Archetype.Chunks[i];
@@ -472,7 +472,7 @@ public sealed class QueryDescription
 
                 result = chunk.Entities.Span[0];
             }
-            
+
         }
 
         return result;

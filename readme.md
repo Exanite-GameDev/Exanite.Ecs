@@ -1,4 +1,4 @@
-# Myriad.ECS
+# Myriad.Ecs
 
 [![Nuget](https://img.shields.io/nuget/v/Myriad.ECS?style=for-the-badge)](https://www.nuget.org/packages/Myriad.ECS/)
 

@@ -1,4 +1,4 @@
-namespace Myriad.ECS;
+namespace Myriad.Ecs;
 
 /// <summary>
 /// The marked API was originally non-public, but has been made public.

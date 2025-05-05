@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Threading;
+﻿namespace Myriad.Ecs.Threading;
 
 /// <summary>
 /// A threadpool provides a way to queue work on other threads

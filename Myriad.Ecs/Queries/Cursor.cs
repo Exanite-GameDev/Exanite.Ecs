@@ -1,6 +1,6 @@
-﻿using Myriad.ECS.Worlds.Archetypes;
+﻿using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.ECS.Queries;
+namespace Myriad.Ecs.Queries;
 
 /// <summary>
 /// Keep track of how far through execution a query got, can be used to resume execution at <b>approximately</b> the same point.

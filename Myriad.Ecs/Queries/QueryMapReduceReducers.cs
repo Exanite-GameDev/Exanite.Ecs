@@ -8,7 +8,7 @@
 // ReSharper disable ConvertToPrimaryConstructor
 
 // ReSharper disable once CheckNamespace
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>
     public static partial class Reduce
@@ -97,7 +97,7 @@ namespace Myriad.ECS.Queries
 }
 
 // ReSharper disable once CheckNamespace
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>
     public static partial class Reduce
@@ -186,7 +186,7 @@ namespace Myriad.ECS.Queries
 }
 
 // ReSharper disable once CheckNamespace
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>
     public static partial class Reduce
@@ -275,7 +275,7 @@ namespace Myriad.ECS.Queries
 }
 
 // ReSharper disable once CheckNamespace
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>
     public static partial class Reduce
@@ -364,7 +364,7 @@ namespace Myriad.ECS.Queries
 }
 
 // ReSharper disable once CheckNamespace
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>
     public static partial class Reduce
@@ -421,7 +421,7 @@ namespace Myriad.ECS.Queries
 }
 
 // ReSharper disable once CheckNamespace
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>
     public static partial class Reduce
@@ -478,7 +478,7 @@ namespace Myriad.ECS.Queries
 }
 
 // ReSharper disable once CheckNamespace
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>
     public static partial class Reduce

@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Myriad.ECS.Extensions;
+namespace Myriad.Ecs.Extensions;
 
 internal static class EnumeratorExtensions
 {

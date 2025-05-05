@@ -1,8 +1,8 @@
-﻿using Myriad.ECS.Command;
-using Myriad.ECS.Systems;
-using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.Command;
+using Myriad.Ecs.Systems;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Tests.Systems;
+namespace Myriad.Ecs.Tests.Systems;
 
 [TestClass]
 public class SystemStateTests

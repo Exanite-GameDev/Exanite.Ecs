@@ -1,4 +1,4 @@
-using Myriad.ECS.IDs;
+using Myriad.Ecs.IDs;
 
 namespace Myriad.ECS.Tests;
 

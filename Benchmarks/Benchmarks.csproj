@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Myriad.ECS\Myriad.ECS.csproj" SetTargetFramework="TargetFramework=$(TargetFramework)" />
+    <ProjectReference Include="..\Myriad.Ecs\Myriad.Ecs.csproj" SetTargetFramework="TargetFramework=$(TargetFramework)" />
   </ItemGroup>
 
   <ItemGroup>

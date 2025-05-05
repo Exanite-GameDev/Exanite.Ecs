@@ -1,4 +1,4 @@
-﻿namespace Myriad.ECS.Locks;
+﻿namespace Myriad.Ecs.Locks;
 
 internal class RWLock<T>(T value)
     where T : class

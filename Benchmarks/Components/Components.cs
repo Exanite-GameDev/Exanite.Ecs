@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Myriad.ECS;
+using Myriad.Ecs;
 
 namespace Benchmarks.Components;
 

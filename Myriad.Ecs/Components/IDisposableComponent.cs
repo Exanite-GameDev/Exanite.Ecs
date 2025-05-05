@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using Myriad.ECS.Command;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds.Chunks;
+using Myriad.Ecs.Command;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Worlds.Chunks;
 
-namespace Myriad.ECS.Components;
+namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// Automatically has Dispose() called when this component is destroyed. Either because the Entity

@@ -8,10 +8,10 @@
 <#
 	const int PARAM_COUNT = 16;
 #>
-using Myriad.ECS.Queries;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Threading;
-using Myriad.ECS.Allocations;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Threading;
+using Myriad.Ecs.Allocations;
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -26,7 +26,7 @@ using System.Runtime.CompilerServices;
 	var queryConstraints = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
 	var workItemName = $"ChunkWorkItem{i}<TQ, {queryConstraints}>";
 #>
-namespace Myriad.ECS.Queries
+namespace Myriad.Ecs.Queries
 {
 	/// <summary>
 	/// Process entire chunks of entities together.
@@ -41,7 +41,7 @@ namespace Myriad.ECS.Queries
 	}
 }
 
-namespace Myriad.ECS.Worlds
+namespace Myriad.Ecs.Worlds
 {
 	public partial class World
 	{
@@ -345,7 +345,7 @@ namespace Myriad.ECS.Worlds
 #>
 
 
-<#+ 
+<#+
 	static string CoverageAttribute(int index)
 	{
 		if (index < 2)

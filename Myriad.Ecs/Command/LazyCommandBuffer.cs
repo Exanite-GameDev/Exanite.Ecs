@@ -1,7 +1,7 @@
-﻿using Myriad.ECS.Worlds;
+﻿using Myriad.Ecs.Worlds;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Myriad.ECS.Command;
+namespace Myriad.Ecs.Command;
 
 /// <summary>
 /// Provides a <see cref="CommandBuffer"/>, which is lazily created the first time it is accessed
