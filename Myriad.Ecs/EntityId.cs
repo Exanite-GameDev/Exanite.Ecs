@@ -1,9 +1,9 @@
 ﻿using Myriad.Ecs.Collections;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Worlds;
 using System.Diagnostics;
 
-namespace Myriad.ECS;
+namespace Myriad.Ecs;
 
 /// <summary>
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)

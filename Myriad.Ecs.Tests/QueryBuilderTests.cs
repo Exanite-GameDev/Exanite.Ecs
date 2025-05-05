@@ -1,8 +1,8 @@
 ﻿using Myriad.Ecs.IDs;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 [TestClass]
 public class QueryBuilderTests

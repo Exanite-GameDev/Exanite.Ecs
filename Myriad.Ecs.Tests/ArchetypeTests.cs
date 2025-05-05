@@ -1,7 +1,7 @@
 ﻿using Myriad.Ecs.Command;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 [TestClass]
 public class ArchetypeTests

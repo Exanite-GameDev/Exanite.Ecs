@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 using Myriad.Ecs.Command;
-using Myriad.ECS.Components;
+using Myriad.Ecs.Components;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 public record struct ComponentByte(byte Value) : IComponent;
 public record struct ComponentInt16(short Value) : IComponent;

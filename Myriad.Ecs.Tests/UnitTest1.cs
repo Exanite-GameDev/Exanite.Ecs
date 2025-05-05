@@ -1,10 +1,10 @@
 //using System.Text;
 //using Myriad.Ecs.Command;
-//using Myriad.ECS.Queries;
-//using Myriad.ECS.Serialization;
-//using Myriad.ECS.Worlds;
+//using Myriad.Ecs.Queries;
+//using Myriad.Ecs.Serialization;
+//using Myriad.Ecs.Worlds;
 
-//namespace Myriad.ECS.Tests;
+//namespace Myriad.Ecs.Tests;
 
 //[TestClass]
 //public class UnitTest1

@@ -1,7 +1,7 @@
 ﻿using Myriad.Ecs.IDs;
-using Myriad.ECS.Worlds.Archetypes;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 [TestClass]
 public class ArchetypeHashTests

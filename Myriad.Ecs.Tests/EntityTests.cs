@@ -1,8 +1,8 @@
 ﻿using Myriad.Ecs.Worlds;
 using Myriad.Ecs.Command;
-using Myriad.ECS.IDs;
+using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 [TestClass]
 public class EntityTests

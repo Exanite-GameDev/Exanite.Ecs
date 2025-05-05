@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using Myriad.Ecs.Collections;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS;
+namespace Myriad.Ecs;
 
 /// <summary>
 /// An <see cref="Entity"/> is an ID in the <see cref="World"/> which has a set of components associated with it.

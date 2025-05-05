@@ -1,16 +1,16 @@
 # Myriad.Ecs
 
-[![Nuget](https://img.shields.io/nuget/v/Myriad.ECS?style=for-the-badge)](https://www.nuget.org/packages/Myriad.ECS/)
+[![Nuget](https://img.shields.io/nuget/v/Myriad.Ecs?style=for-the-badge)](https://www.nuget.org/packages/Myriad.Ecs/)
 
-Myriad.ECS is a high performance Entity Component System (ECS) for C#.
+Myriad.Ecs is a high performance Entity Component System (Ecs) for C#.
 
 ## Benchmarks
 
-[C# ECS Benchmarks](https://github.com/Doraku/Ecs.CSharp.Benchmark).
+[C# Ecs Benchmarks](https://github.com/Doraku/Ecs.CSharp.Benchmark).
 
 ## Unity
 
-Myriad.ECS supports netstandard2.0, and is compatible with Unity. There is a Unity integration package (providing editor integration) [here](https://github.com/martindevans/Myriad.ECS.Unity).
+Myriad.Ecs supports netstandard2.0, and is compatible with Unity. There is a Unity integration package (providing editor integration) [here](https://github.com/martindevans/Myriad.Ecs.Unity).
 
 ## Guide
 
@@ -61,7 +61,7 @@ One common case for this is resource disposal, for this you can use `IDisposable
 
 ### Querying
 
-Myriad.ECS has several different querying systems. These have different trade-offs in usability and performance.
+Myriad.Ecs has several different querying systems. These have different trade-offs in usability and performance.
 
 #### QueryDescription/QueryBuilder
 
@@ -150,7 +150,7 @@ foreach (var (e, p, v) in world.Query<Position, Velocity>())
 
 ### Systems
 
-Systems are a completely optional part of `Myriad.ECS`. The library can be used as an in memory database, without any systems running every tick.
+Systems are a completely optional part of `Myriad.Ecs`. The library can be used as an in memory database, without any systems running every tick.
 
 #### `ISystem`
 
@@ -210,7 +210,7 @@ This allows multiple systems to share one single `CommandBuffer`, which is execu
 
 #### Parallel Systems
 
-`Myriad.ECS` includes 3 parallel system groups, these are all somewhat experimental and should be used carefully.
+`Myriad.Ecs` includes 3 parallel system groups, these are all somewhat experimental and should be used carefully.
 
 #### `ParallelSystemGroup`
 

@@ -1,12 +1,12 @@
 ﻿using Myriad.Ecs.Collections;
-using Myriad.ECS.Command;
-using Myriad.ECS.Components;
-using Myriad.ECS.IDs;
-using Myriad.ECS.Queries;
-using Myriad.ECS.Tests.Queries;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs.Command;
+using Myriad.Ecs.Components;
+using Myriad.Ecs.IDs;
+using Myriad.Ecs.Queries;
+using Myriad.Ecs.Tests.Queries;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 [TestClass]
 public class CommandBufferTests
@@ -290,7 +290,7 @@ public class CommandBufferTests
         // Try to modify the buffered entity
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            eb1.Set(new ComponentFloat(8)); 
+            eb1.Set(new ComponentFloat(8));
         });
     }
 

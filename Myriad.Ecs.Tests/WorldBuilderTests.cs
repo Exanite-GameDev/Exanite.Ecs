@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
 using Myriad.Ecs.Threading;
-using Myriad.ECS.Worlds;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 [TestClass]
 public class WorldBuilderTests

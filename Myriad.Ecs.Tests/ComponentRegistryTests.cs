@@ -1,6 +1,6 @@
 using Myriad.Ecs.IDs;
 
-namespace Myriad.ECS.Tests;
+namespace Myriad.Ecs.Tests;
 
 [TestClass]
 public class ComponentRegistryTests
