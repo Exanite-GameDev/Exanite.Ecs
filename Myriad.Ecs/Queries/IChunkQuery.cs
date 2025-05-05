@@ -1,10 +1,12 @@
 ﻿
 
+using System;
 using Myriad.Ecs.Queries;
 using Myriad.Ecs.IDs;
 using Myriad.Ecs.Threading;
 using Myriad.Ecs.Allocations;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 

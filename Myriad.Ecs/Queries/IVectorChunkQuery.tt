@@ -5,6 +5,7 @@
 <#
 	const int PARAM_COUNT = 16;
 #>
+using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;

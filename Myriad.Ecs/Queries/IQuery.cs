@@ -1,7 +1,9 @@
 ﻿
 
+using System;
 using System.Diagnostics;
 using System.Buffers;
+using System.Collections.Generic;
 using Myriad.Ecs.Queries;
 using Myriad.Ecs.IDs;
 using Myriad.Ecs.Worlds.Archetypes;

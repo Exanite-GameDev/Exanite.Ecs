@@ -1,4 +1,6 @@
-﻿using Myriad.Ecs.Queries;
+﻿using System;
+using System.Collections.Generic;
+using Myriad.Ecs.Queries;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
