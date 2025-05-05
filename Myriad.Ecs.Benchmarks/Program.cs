@@ -2,7 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
-using Benchmarks;
+using Myriad.Ecs.Benchmarks;
 
 //var e = new QueryBenchmark();
 //e.Setup();

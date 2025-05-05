@@ -1,9 +1,9 @@
 ﻿using BenchmarkDotNet.Attributes;
-using Benchmarks.Components;
+using Myriad.Ecs.Benchmarks.Components;
 using Myriad.Ecs.Command;
 using Myriad.Ecs.Worlds;
 
-namespace Benchmarks;
+namespace Myriad.Ecs.Benchmarks;
 
 [MemoryDiagnoser]
 [ShortRunJob]
