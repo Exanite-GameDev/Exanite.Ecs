@@ -127,7 +127,7 @@ public readonly partial record struct EntityId
     /// Get the set of components which this entity currently has
     /// </summary>
     /// <returns></returns>
-    public FrozenOrderedListSet<ComponentID> GetComponents(World world)
+    public FrozenOrderedListSet<ComponentId> GetComponents(World world)
     {
         var info = world.GetEntityInfo(this);
         return info.Chunk.Archetype.Components;
@@ -175,7 +175,7 @@ public readonly partial record struct EntityId
     /// <param name="world"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public object? GetBoxedComponent(World world, ComponentID id)
+    public object? GetBoxedComponent(World world, ComponentId id)
     {
         if (!Exists(world))
             return null;

@@ -16,7 +16,7 @@ public sealed class QueryDescription
     // Cache of result from last time TryMatch was called
     private MatchResult? _result;
     private readonly ReaderWriterLockSlim _resultLock = new();
-    private readonly OrderedListSet<ComponentID> _temporarySet = [];
+    private readonly OrderedListSet<ComponentId> _temporarySet = [];
 
     private readonly ComponentBloomFilter _includeBloom;
     private readonly ComponentBloomFilter _excludeBloom;
@@ -29,27 +29,27 @@ public sealed class QueryDescription
     /// <summary>
     /// The components which must be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentID> Include { get; }
+    public FrozenOrderedListSet<ComponentId> Include { get; }
 
     /// <summary>
     /// The components which must not be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentID> Exclude { get; }
+    public FrozenOrderedListSet<ComponentId> Exclude { get; }
 
     /// <summary>
     /// At least one of these components must be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentID> AtLeastOneOf { get; }
+    public FrozenOrderedListSet<ComponentId> AtLeastOneOf { get; }
 
     /// <summary>
     /// Exactly one of these components must be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentID> ExactlyOneOf { get; }
+    public FrozenOrderedListSet<ComponentId> ExactlyOneOf { get; }
 
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
-    internal QueryDescription(World world, FrozenOrderedListSet<ComponentID> include, FrozenOrderedListSet<ComponentID> exclude, FrozenOrderedListSet<ComponentID> atLeastOne, FrozenOrderedListSet<ComponentID> exactlyOne)
+    internal QueryDescription(World world, FrozenOrderedListSet<ComponentId> include, FrozenOrderedListSet<ComponentId> exclude, FrozenOrderedListSet<ComponentId> atLeastOne, FrozenOrderedListSet<ComponentId> exactlyOne)
     {
         World = world;
 
@@ -100,14 +100,14 @@ public sealed class QueryDescription
     /// <returns></returns>
     public bool IsIncluded(Type type)
     {
-        return IsIncluded(ComponentID.Get(type));
+        return IsIncluded(ComponentId.Get(type));
     }
 
     /// <summary>
     /// Check if this query requires the given component
     /// </summary>
     /// <returns></returns>
-    public bool IsIncluded(ComponentID id)
+    public bool IsIncluded(ComponentId id)
     {
         return Include.Contains(id);
     }
@@ -130,14 +130,14 @@ public sealed class QueryDescription
     /// <returns></returns>
     public bool IsExcluded(Type type)
     {
-        return IsExcluded(ComponentID.Get(type));
+        return IsExcluded(ComponentId.Get(type));
     }
 
     /// <summary>
     /// Check if this query excludes entities with the given component
     /// </summary>
     /// <returns></returns>
-    public bool IsExcluded(ComponentID id)
+    public bool IsExcluded(ComponentId id)
     {
         return Exclude.Contains(id);
     }
@@ -160,14 +160,14 @@ public sealed class QueryDescription
     /// <returns></returns>
     public bool IsAtLeastOneOf(Type type)
     {
-        return IsAtLeastOneOf(ComponentID.Get(type));
+        return IsAtLeastOneOf(ComponentId.Get(type));
     }
 
     /// <summary>
     /// Check if the given component is one of the components which at least one of must be on the entity
     /// </summary>
     /// <returns></returns>
-    public bool IsAtLeastOneOf(ComponentID id)
+    public bool IsAtLeastOneOf(ComponentId id)
     {
         return AtLeastOneOf.Contains(id);
     }
@@ -190,14 +190,14 @@ public sealed class QueryDescription
     /// <returns></returns>
     public bool IsExactlyOneOf(Type type)
     {
-        return IsExactlyOneOf(ComponentID.Get(type));
+        return IsExactlyOneOf(ComponentId.Get(type));
     }
 
     /// <summary>
     /// Check if the given component is one of the components which exactly one of must be on the entity
     /// </summary>
     /// <returns></returns>
-    public bool IsExactlyOneOf(ComponentID id)
+    public bool IsExactlyOneOf(ComponentId id)
     {
         return ExactlyOneOf.Contains(id);
     }
@@ -306,7 +306,7 @@ public sealed class QueryDescription
         set.Clear();
 
         // Check if there are any "exactly one" items
-        var exactlyOne = default(ComponentID?);
+        var exactlyOne = default(ComponentId?);
         if (ExactlyOneOf.Count > 0)
         {
             set.Clear();
@@ -369,7 +369,7 @@ public sealed class QueryDescription
     /// <param name="Archetype">The archetype</param>
     /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query)</param>
     /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query)</param>
-    public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentID>? AtLeastOne, ComponentID? ExactlyOne)
+    public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne)
         : IComparable<ArchetypeMatch>
     {
         /// <inheritdoc />

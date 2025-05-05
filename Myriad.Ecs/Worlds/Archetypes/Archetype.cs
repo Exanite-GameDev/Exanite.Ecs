@@ -32,7 +32,7 @@ public sealed partial class Archetype
     /// <summary>
     /// The components of entities in this archetype
     /// </summary>
-    public FrozenOrderedListSet<ComponentID> Components { get; }
+    public FrozenOrderedListSet<ComponentId> Components { get; }
 
     /// <summary>
     /// A bloom filter of all the components in this archetype
@@ -64,7 +64,7 @@ public sealed partial class Archetype
     /// </summary>
     private readonly Stack<Chunk> _spareChunks = new(CHUNK_HOT_SPARES);
 
-    private readonly ComponentID[] _componentIDs;
+    private readonly ComponentId[] _componentIDs;
     private readonly Type[] _componentTypes;
     private readonly ArchetypeComponentDisposal? _disposer;
     private readonly ArchetypePhantomComponentNotifier? _phantomNotifier;
@@ -104,7 +104,7 @@ public sealed partial class Archetype
     /// </summary>
     public bool HasPhantomNotifierComponents { get; }
 
-    internal Archetype(World world, FrozenOrderedListSet<ComponentID> components)
+    internal Archetype(World world, FrozenOrderedListSet<ComponentId> components)
     {
         World = world;
         Components = components;
@@ -112,7 +112,7 @@ public sealed partial class Archetype
 
         // Create arrays to fills in below
         _componentTypes = new Type[components.Count];
-        _componentIDs = new ComponentID[components.Count];
+        _componentIDs = new ComponentId[components.Count];
 
         // Calculate archetype hash and also keep track of the max component ID ever seen
         var maxComponentId = int.MinValue;
@@ -157,7 +157,7 @@ public sealed partial class Archetype
         // Get the destination archetype for deleted entities, if they become phantoms
         if (HasPhantomComponents && !IsPhantom)
         {
-            var c = new OrderedListSet<ComponentID>(components)
+            var c = new OrderedListSet<ComponentId>(components)
             {
                 ComponentID<ComponentPhantom>.ID
             };
@@ -343,12 +343,12 @@ public sealed partial class Archetype
         return _chunks.GetEnumerator();
     }
 
-    internal bool SetEquals(OrderedListSet<ComponentID> query)
+    internal bool SetEquals(OrderedListSet<ComponentId> query)
     {
         return Components.SetEquals(query);
     }
 
-    internal bool SetEquals<TV>(Dictionary<ComponentID, TV> query)
+    internal bool SetEquals<TV>(Dictionary<ComponentId, TV> query)
     {
         return Components.SetEquals(query);
     }

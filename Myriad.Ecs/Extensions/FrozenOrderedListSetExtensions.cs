@@ -5,7 +5,7 @@ namespace Myriad.Ecs.Extensions;
 
 internal static class FrozenOrderedListSetExtensions
 {
-    public static ComponentBloomFilter ToBloomFilter(this FrozenOrderedListSet<ComponentID> set)
+    public static ComponentBloomFilter ToBloomFilter(this FrozenOrderedListSet<ComponentId> set)
     {
         var filter = new ComponentBloomFilter();
         foreach (var item in set)

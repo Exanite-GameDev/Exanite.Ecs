@@ -57,7 +57,7 @@ public struct GenericDisposable<TDisposable, TTag>
 
 internal static class Disposer
 {
-    [ThreadStatic] private static Dictionary<ComponentID, IDisposer>? _disposerCache;
+    [ThreadStatic] private static Dictionary<ComponentId, IDisposer>? _disposerCache;
 
     public static IDisposer Get(Type type)
     {
@@ -69,7 +69,7 @@ internal static class Disposer
         return (IDisposer)v;
     }
 
-    public static IDisposer Get(ComponentID id)
+    public static IDisposer Get(ComponentId id)
     {
         _disposerCache ??= [ ];
 
@@ -106,7 +106,7 @@ internal static class Disposer<T>
         : IDisposer
         where U : IDisposableComponent
     {
-        public ComponentID Component { get; } = ComponentID<U>.ID;
+        public ComponentId Component { get; } = ComponentID<U>.ID;
 
         //public void Dispose(Array array, int index, ref LazyCommandBuffer buffer)
         //{
@@ -137,7 +137,7 @@ internal static class Disposer<T>
     private class EmptyImpl
         : IDisposer
     {
-        public ComponentID Component { get; } = ComponentID<T>.ID;
+        public ComponentId Component { get; } = ComponentID<T>.ID;
 
         public void Dispose(IList list, int index, ref LazyCommandBuffer buffer)
         {
@@ -155,7 +155,7 @@ internal static class Disposer<T>
 
 internal interface IDisposer
 {
-    public ComponentID Component { get; }
+    public ComponentId Component { get; }
 
     void Dispose(IList list, int index, ref LazyCommandBuffer buffer);
 

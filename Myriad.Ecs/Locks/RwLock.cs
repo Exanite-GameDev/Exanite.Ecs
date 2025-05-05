@@ -2,7 +2,7 @@
 
 namespace Myriad.Ecs.Locks;
 
-internal class RWLock<T>(T value)
+internal class RwLock<T>(T value)
     where T : class
 {
     private readonly ReaderWriterLockSlim _lock = new(LockRecursionPolicy.SupportsRecursion);

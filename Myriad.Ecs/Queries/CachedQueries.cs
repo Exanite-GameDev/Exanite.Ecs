@@ -19,11 +19,11 @@ namespace Myriad.Ecs.Worlds;
 
 public partial class World
 {
-    internal static FrozenOrderedListSet<ComponentID> ExcludePhantom = FrozenOrderedListSet<ComponentID>.Create(
-        (ReadOnlySpan<ComponentID>)[ ComponentID<ComponentPhantom>.ID ]
+    internal static FrozenOrderedListSet<ComponentId> ExcludePhantom = FrozenOrderedListSet<ComponentId>.Create(
+        (ReadOnlySpan<ComponentId>)[ ComponentID<ComponentPhantom>.ID ]
     );
 
-    internal QueryDescription? TryGetCachedQuery(OrderedListSet<ComponentID> components)
+    internal QueryDescription? TryGetCachedQuery(OrderedListSet<ComponentId> components)
     {
         return components.Count switch
         {
@@ -203,7 +203,7 @@ public partial class World
     private readonly Dictionary<int, QueryDescription> _queryCache1 = [ ];
     private readonly ReaderWriterLockSlim _lock1 = new();
 
-    private QueryDescription GetCachedQuery(ComponentID id0)
+    private QueryDescription GetCachedQuery(ComponentId id0)
     {
         // Try to find query
         _lock1.EnterReadLock();
@@ -222,17 +222,17 @@ public partial class World
         _lock1.EnterWriteLock();
         try
         {
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0 });
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] { id0 });
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -261,7 +261,7 @@ public partial class World
     private readonly Dictionary<long, QueryDescription> _queryCache2 = [ ];
     private readonly ReaderWriterLockSlim _lock2 = new();
 
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1)
     {
         var u = new Union64
         {
@@ -286,17 +286,17 @@ public partial class World
         _lock2.EnterWriteLock();
         try
         {
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0, id1 });
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] { id0, id1 });
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -333,7 +333,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock3 = new();
 
     
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -375,7 +375,7 @@ public partial class World
                 _queryCache3.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -383,15 +383,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -434,7 +434,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock4 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -477,7 +477,7 @@ public partial class World
                 _queryCache4.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -486,15 +486,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -539,7 +539,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock5 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -583,7 +583,7 @@ public partial class World
                 _queryCache5.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -593,15 +593,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -648,7 +648,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock6 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -693,7 +693,7 @@ public partial class World
                 _queryCache6.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -704,15 +704,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -761,7 +761,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock7 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -807,7 +807,7 @@ public partial class World
                 _queryCache7.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -819,15 +819,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -878,7 +878,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock8 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -925,7 +925,7 @@ public partial class World
                 _queryCache8.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -938,15 +938,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -999,7 +999,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock9 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -1047,7 +1047,7 @@ public partial class World
                 _queryCache9.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -1061,15 +1061,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -1124,7 +1124,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock10 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8, ComponentId id9)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -1173,7 +1173,7 @@ public partial class World
                 _queryCache10.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -1188,15 +1188,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -1253,7 +1253,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock11 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8, ComponentId id9, ComponentId id10)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -1303,7 +1303,7 @@ public partial class World
                 _queryCache11.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -1319,15 +1319,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -1386,7 +1386,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock12 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8, ComponentId id9, ComponentId id10, ComponentId id11)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -1437,7 +1437,7 @@ public partial class World
                 _queryCache12.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -1454,15 +1454,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -1523,7 +1523,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock13 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8, ComponentId id9, ComponentId id10, ComponentId id11, ComponentId id12)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -1575,7 +1575,7 @@ public partial class World
                 _queryCache13.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -1593,15 +1593,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -1664,7 +1664,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock14 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12, ComponentID id13)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8, ComponentId id9, ComponentId id10, ComponentId id11, ComponentId id12, ComponentId id13)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -1717,7 +1717,7 @@ public partial class World
                 _queryCache14.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -1736,15 +1736,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -1809,7 +1809,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock15 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12, ComponentID id13, ComponentID id14)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8, ComponentId id9, ComponentId id10, ComponentId id11, ComponentId id12, ComponentId id13, ComponentId id14)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -1863,7 +1863,7 @@ public partial class World
                 _queryCache15.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -1883,15 +1883,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache
@@ -1958,7 +1958,7 @@ public partial class World
     private readonly ReaderWriterLockSlim _lock16 = new();
 
     [ExcludeFromCodeCoverage]
-    private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2, ComponentID id3, ComponentID id4, ComponentID id5, ComponentID id6, ComponentID id7, ComponentID id8, ComponentID id9, ComponentID id10, ComponentID id11, ComponentID id12, ComponentID id13, ComponentID id14, ComponentID id15)
+    private QueryDescription GetCachedQuery(ComponentId id0, ComponentId id1, ComponentId id2, ComponentId id3, ComponentId id4, ComponentId id5, ComponentId id6, ComponentId id7, ComponentId id8, ComponentId id9, ComponentId id10, ComponentId id11, ComponentId id12, ComponentId id13, ComponentId id14, ComponentId id15)
     {
         // Accumulate all components in ascending order
         Span<int> orderedComponents = stackalloc int[] {
@@ -2013,7 +2013,7 @@ public partial class World
                 _queryCache16.Add(hash, list);
             }
 
-            var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] {
+            var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] {
                 id0,
                 id1,
                 id2,
@@ -2034,15 +2034,15 @@ public partial class World
 
             // Auto exclude phantoms, unless specifically included
             var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
-                ? FrozenOrderedListSet<ComponentID>.Empty
+                ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
             var query = new QueryDescription(
                 this,
                 include,
                 exclude,
-                FrozenOrderedListSet<ComponentID>.Empty,
-                FrozenOrderedListSet<ComponentID>.Empty
+                FrozenOrderedListSet<ComponentId>.Empty,
+                FrozenOrderedListSet<ComponentId>.Empty
             );
 
             // Add query to the cache

@@ -16,7 +16,7 @@ public sealed partial class CommandBuffer
     /// <summary>
     /// Map from (current_archetype_key, added_component) => new_archetype_key
     /// </summary>
-    private readonly Dictionary<(int, ComponentID), int> _archetypeEdges = new();
+    private readonly Dictionary<(int, ComponentId), int> _archetypeEdges = new();
 
     /// <summary>
     /// Given an archetype key and an added component, determine the new archetype key
@@ -24,7 +24,7 @@ public sealed partial class CommandBuffer
     /// <param name="currentKey"></param>
     /// <param name="added"></param>
     /// <returns></returns>
-    private int GetArchetypeKey(int currentKey, ComponentID added)
+    private int GetArchetypeKey(int currentKey, ComponentId added)
     {
         if (!_archetypeEdges.TryGetValue((currentKey, added), out var value))
         {

@@ -11,7 +11,7 @@ internal class ArchetypePhantomComponentNotifier
 {
     private readonly List<IPhantomNotifier> _notifiers = [];
 
-    public ArchetypePhantomComponentNotifier(FrozenOrderedListSet<ComponentID> components)
+    public ArchetypePhantomComponentNotifier(FrozenOrderedListSet<ComponentId> components)
     {
         // Get a disposer for each disposable component
         foreach (var component in components)
@@ -30,7 +30,7 @@ internal class ArchetypePhantomComponentNotifier
 
     private static class PhantomNotifier
     {
-        [ThreadStatic] private static Dictionary<ComponentID, IPhantomNotifier>? _disposerCache;
+        [ThreadStatic] private static Dictionary<ComponentId, IPhantomNotifier>? _disposerCache;
 
         private static IPhantomNotifier Get(Type type)
         {
@@ -42,7 +42,7 @@ internal class ArchetypePhantomComponentNotifier
             return (IPhantomNotifier)v;
         }
 
-        public static IPhantomNotifier Get(ComponentID id)
+        public static IPhantomNotifier Get(ComponentId id)
         {
             _disposerCache ??= [];
 

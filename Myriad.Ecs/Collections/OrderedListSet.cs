@@ -287,7 +287,7 @@ internal class OrderedListSet<TItem>
 
         // Add a specialization for ComponentID. This allows it to be compared with fast SIMD equality
         // instead of calling the equality implementation for every item individually.
-        if (typeof(TItem) == typeof(ComponentID))
+        if (typeof(TItem) == typeof(ComponentId))
         {
             var aa = MemoryMarshal.Cast<TItem, int>(a);
             var bb = MemoryMarshal.Cast<TItem, int>(b);

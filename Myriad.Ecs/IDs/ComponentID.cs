@@ -8,8 +8,8 @@ namespace Myriad.Ecs.IDs;
 /// Unique numeric ID for a type which implements IComponent
 /// </summary>
 [DebuggerDisplay("{Type} ({Value})")]
-public readonly record struct ComponentID
-    : IComparable<ComponentID>
+public readonly record struct ComponentId
+    : IComparable<ComponentId>
 {
     internal const int SpecialBitsCount = 4;
     internal const int SpecialBitsMask  = ~(~0 << SpecialBitsCount);
@@ -48,13 +48,13 @@ public readonly record struct ComponentID
     /// </summary>
     public bool IsPhantomNotifierComponent => (Value & IsPhantomNotifierComponentMask) == IsPhantomNotifierComponentMask;
 
-    internal ComponentID(int value)
+    internal ComponentId(int value)
     {
         Value = value;
     }
 
     /// <inheritdoc />
-    public int CompareTo(ComponentID other)
+    public int CompareTo(ComponentId other)
     {
         return Value.CompareTo(other.Value);
     }
@@ -73,7 +73,7 @@ public readonly record struct ComponentID
     /// <param name="type"></param>
     /// <exception cref="ArgumentException">Thrown if 'type' does not implement <see cref="IComponent"/></exception>
     /// <returns></returns>
-    public static ComponentID Get(Type type)
+    public static ComponentId Get(Type type)
     {
         return ComponentRegistry.Get(type);
     }
@@ -89,5 +89,5 @@ public static class ComponentID<TComponent>
     /// <summary>
     /// The ID for <typeparamref name="TComponent" />
     /// </summary>
-    public static readonly ComponentID ID = ComponentRegistry.Get<TComponent>();
+    public static readonly ComponentId ID = ComponentRegistry.Get<TComponent>();
 }

@@ -19,7 +19,7 @@ internal readonly record struct ArchetypeHash
     /// Toggle (add or remove) the given component
     /// </summary>
     /// <param name="component"></param>
-    public ArchetypeHash Toggle(ComponentID component)
+    public ArchetypeHash Toggle(ComponentId component)
     {
         return new ArchetypeHash
         {
@@ -27,7 +27,7 @@ internal readonly record struct ArchetypeHash
         };
     }
 
-    private static long Toggle(long value, ComponentID component)
+    private static long Toggle(long value, ComponentId component)
     {
         unsafe
         {
@@ -45,7 +45,7 @@ internal readonly record struct ArchetypeHash
         return $"0x{Value:X16}";
     }
 
-    internal static ArchetypeHash Create(OrderedListSet<ComponentID> componentIds)
+    internal static ArchetypeHash Create(OrderedListSet<ComponentId> componentIds)
     {
         long l = 0;
         foreach (var componentId in componentIds)
@@ -54,7 +54,7 @@ internal readonly record struct ArchetypeHash
         return new ArchetypeHash { Value = l };
     }
 
-    public static ArchetypeHash Create<TV>(Dictionary<ComponentID, TV> componentIds)
+    public static ArchetypeHash Create<TV>(Dictionary<ComponentId, TV> componentIds)
     {
         long l = 0;
         foreach (var componentId in componentIds.Keys)

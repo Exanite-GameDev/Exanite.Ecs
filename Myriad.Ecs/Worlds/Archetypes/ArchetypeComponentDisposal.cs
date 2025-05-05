@@ -11,7 +11,7 @@ internal class ArchetypeComponentDisposal
 {
     private readonly List<IDisposer> _disposers = [ ];
 
-    public ArchetypeComponentDisposal(FrozenOrderedListSet<ComponentID> components)
+    public ArchetypeComponentDisposal(FrozenOrderedListSet<ComponentId> components)
     {
         // Get a disposer for each disposable component
         foreach (var component in components)
@@ -39,7 +39,7 @@ internal class ArchetypeComponentDisposal
     /// <param name="buffer"></param>
     /// <param name="info"></param>
     /// <param name="to"></param>
-    public void DisposeRemoved(ref LazyCommandBuffer buffer, EntityInfo info, FrozenOrderedListSet<ComponentID> to)
+    public void DisposeRemoved(ref LazyCommandBuffer buffer, EntityInfo info, FrozenOrderedListSet<ComponentId> to)
     {
         foreach (var disposer in _disposers)
             if (!to.Contains(disposer.Component))

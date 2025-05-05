@@ -12,7 +12,7 @@ namespace Myriad.Ecs.Command;
 /// </summary>
 internal class ComponentSetterCollection
 {
-    private readonly Dictionary<ComponentID, IComponentList> _components = [ ];
+    private readonly Dictionary<ComponentId, IComponentList> _components = [ ];
 
     public void Clear()
     {
@@ -72,7 +72,7 @@ internal class ComponentSetterCollection
     /// </summary>
     /// <param name="sets"></param>
     /// <param name="buffer"></param>
-    public void Dispose(Dictionary<ComponentID, SetterId>? sets, ref LazyCommandBuffer buffer)
+    public void Dispose(Dictionary<ComponentId, SetterId>? sets, ref LazyCommandBuffer buffer)
     {
         if (sets != null)
         {
@@ -102,14 +102,14 @@ internal class ComponentSetterCollection
         /// <summary>
         /// Component ID of the component being overwritten
         /// </summary>
-        internal readonly ComponentID ID;
+        internal readonly ComponentId ID;
 
         /// <summary>
         /// Index of the setter in the setters list
         /// </summary>
         internal readonly int Index;
 
-        internal SetterId(ComponentID id, int idx)
+        internal SetterId(ComponentId id, int idx)
         {
             ID = id;
             Index = idx;

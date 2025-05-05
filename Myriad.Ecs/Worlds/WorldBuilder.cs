@@ -12,15 +12,15 @@ namespace Myriad.Ecs.Worlds;
 /// </summary>
 public sealed partial class WorldBuilder
 {
-    private readonly List<OrderedListSet<ComponentID>> _archetypes = [ ];
+    private readonly List<OrderedListSet<ComponentId>> _archetypes = [ ];
     private IThreadPool? _pool;
 
-    private bool AddArchetype(HashSet<ComponentID> ids)
+    private bool AddArchetype(HashSet<ComponentId> ids)
     {
         if (_archetypes.Any(a => a.SetEquals(ids)))
             return false;
 
-        _archetypes.Add(new OrderedListSet<ComponentID>(ids));
+        _archetypes.Add(new OrderedListSet<ComponentId>(ids));
         return true;
     }
 
@@ -30,10 +30,10 @@ public sealed partial class WorldBuilder
     /// </summary>
     public WorldBuilder WithArchetype(params Type[] types)
     {
-        var set = new HashSet<ComponentID>(types.Length);
+        var set = new HashSet<ComponentId>(types.Length);
 
         foreach (var type in types)
-            if (!set.Add(ComponentID.Get(type)))
+            if (!set.Add(ComponentId.Get(type)))
                 throw new ArgumentException($"Duplicate component type: {type.Name}");
 
         AddArchetype(set);

@@ -86,8 +86,8 @@ public class BaseUpdateTransformHierarchySystem<TData, TTransform, TLocalTransfo
     where TTransformParent : ITransformParent
     where TTransform : ITransform<TTransform>
 {
-    private static readonly ComponentID WorldTransformID = ComponentID<TWorldTransform>.ID;
-    private static readonly ComponentID LocalTransformID = ComponentID<TLocalTransform>.ID;
+    private static readonly ComponentId WorldTransformID = ComponentID<TWorldTransform>.ID;
+    private static readonly ComponentId LocalTransformID = ComponentID<TLocalTransform>.ID;
 
     private readonly World _world;
     private readonly QueryDescription _queryRoot;

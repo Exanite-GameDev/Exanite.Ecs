@@ -36,7 +36,7 @@ public sealed partial class CommandBuffer
     private readonly List<QueryDescription> _archetypeDeletes = [ ];
     private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = [ ];
 
-    private readonly OrderedListSet<ComponentID> _tempComponentIdSet = [ ];
+    private readonly OrderedListSet<ComponentId> _tempComponentIdSet = [ ];
 
     private readonly BufferedRelationBinder _bufferedRelationBindings = new();
     private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
@@ -393,7 +393,7 @@ public sealed partial class CommandBuffer
     public BufferedEntity Create()
     {
         // Get a set to hold all of the component setters
-        var set = Pool<Dictionary<ComponentID, ComponentSetterCollection.SetterId>>.Get();
+        var set = Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get();
         set.Clear();
 
         // Store this entity in the collection of entities
@@ -599,8 +599,8 @@ public sealed partial class CommandBuffer
         if (!_entityModifications.TryGetValue(entity, out var existing))
         {
             var mod = new EntityModificationData(
-                ensureSet ? Pool<Dictionary<ComponentID, ComponentSetterCollection.SetterId>>.Get() : null,
-                ensureRemove ? Pool<OrderedListSet<ComponentID>>.Get() : null
+                ensureSet ? Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get() : null,
+                ensureRemove ? Pool<OrderedListSet<ComponentId>>.Get() : null
             );
             mod.Sets?.Clear();
             mod.Removes?.Clear();
@@ -617,13 +617,13 @@ public sealed partial class CommandBuffer
             var overwrite = false;
             if (mod.Sets == null && ensureSet)
             {
-                mod.Sets = Pool<Dictionary<ComponentID, ComponentSetterCollection.SetterId>>.Get();
+                mod.Sets = Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get();
                 overwrite = true;
             }
 
             if (mod.Removes == null && ensureRemove)
             {
-                mod.Removes = Pool<OrderedListSet<ComponentID>>.Get();
+                mod.Removes = Pool<OrderedListSet<ComponentId>>.Get();
                 overwrite = true;
             }
 
@@ -643,7 +643,7 @@ public sealed partial class CommandBuffer
         public uint Id { get; }
 
         /// <summary>All setters to be run on this entity</summary>
-        public Dictionary<ComponentID, ComponentSetterCollection.SetterId> Setters { get; }
+        public Dictionary<ComponentId, ComponentSetterCollection.SetterId> Setters { get; }
 
         /// <summary>The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</summary>
         public int ArchetypeKey { get; set; }
@@ -653,14 +653,14 @@ public sealed partial class CommandBuffer
         /// </summary>
         /// <param name="id">ID of this buffered entity, used in resolver to get actual entity</param>
         /// <param name="setters">All setters to be run on this entity</param>
-        public BufferedEntityData(uint id, Dictionary<ComponentID, ComponentSetterCollection.SetterId> setters)
+        public BufferedEntityData(uint id, Dictionary<ComponentId, ComponentSetterCollection.SetterId> setters)
         {
             Id = id;
             Setters = setters;
         }
     }
 
-    private record struct EntityModificationData(Dictionary<ComponentID, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentID>? Removes);
+    private record struct EntityModificationData(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
 
     /// <summary>
     /// Indicates how multiple Set operations enqueued for the same entity in this buffer should that be handled

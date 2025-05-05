@@ -22,7 +22,7 @@ internal struct ComponentBloomFilter
     private ulong _e;
     private ulong _f;
 
-    public void Add(ComponentID id)
+    public void Add(ComponentId id)
     {
         Span<int> value = stackalloc int[] { id.Value };
         var bytes = MemoryMarshal.Cast<int, byte>(value);

@@ -178,7 +178,7 @@ public sealed partial class World
     /// <param name="components"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components, ArchetypeHash hash)
+    internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components, ArchetypeHash hash)
     {
         // Get list of all archetypes with this hash
         if (!_archetypesByHash.TryGetValue(hash, out var candidates))
@@ -193,7 +193,7 @@ public sealed partial class World
                 return archetype;
 
         // Didn't find one, create the new archetype
-        var a = new Archetype(this, FrozenOrderedListSet<ComponentID>.Create(components));
+        var a = new Archetype(this, FrozenOrderedListSet<ComponentId>.Create(components));
 
         // Add it to the relevant lists
         _archetypes.Add(a);
@@ -202,7 +202,7 @@ public sealed partial class World
         return a;
     }
 
-    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentID, TV> components, ArchetypeHash hash)
+    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentId, TV> components, ArchetypeHash hash)
     {
         // Get list of all archetypes with this hash
         if (!_archetypesByHash.TryGetValue(hash, out var candidates))
@@ -217,7 +217,7 @@ public sealed partial class World
                 return archetype;
 
         // Didn't find one, create the new archetype
-        var set = FrozenOrderedListSet<ComponentID>.Create(components);
+        var set = FrozenOrderedListSet<ComponentId>.Create(components);
         var a = new Archetype(this, set);
 
         // Add it to the relevant lists
@@ -227,12 +227,12 @@ public sealed partial class World
         return a;
     }
 
-    internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentID> components)
+    internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components)
     {
         return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
     }
 
-    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentID, TV> components)
+    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentId, TV> components)
     {
         return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
     }

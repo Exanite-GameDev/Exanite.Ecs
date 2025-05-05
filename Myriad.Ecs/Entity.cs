@@ -28,7 +28,7 @@ public readonly partial record struct Entity
     /// Get the set of components which this entity currently has
     /// </summary>
     /// <returns></returns>
-    public FrozenOrderedListSet<ComponentID> ComponentTypes => ID.GetComponents(World);
+    public FrozenOrderedListSet<ComponentId> ComponentTypes => ID.GetComponents(World);
 
     /// <summary>
     /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
@@ -106,5 +106,5 @@ public readonly partial record struct Entity
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public object? GetBoxedComponent(ComponentID id) => ID.GetBoxedComponent(World, id);
+    public object? GetBoxedComponent(ComponentId id) => ID.GetBoxedComponent(World, id);
 }

@@ -22,7 +22,7 @@ public sealed class Chunk
     /// <summary>
     /// Map from index to component ID
     /// </summary>
-    private readonly IReadOnlyList<ComponentID> _componentIdLookup;
+    private readonly IReadOnlyList<ComponentId> _componentIdLookup;
 
     private readonly Entity[] _entities;
     private readonly Array[] _components;
@@ -37,7 +37,7 @@ public sealed class Chunk
     /// </summary>
     public ReadOnlyMemory<Entity> Entities => _entities.AsMemory(0, EntityCount);
 
-    internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentID> ids)
+    internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentId> ids)
     {
         Archetype = archetype;
         _componentIndexLookup = componentIndexLookup;
@@ -78,7 +78,7 @@ public sealed class Chunk
         return ref GetRef<T>(rowIndex, ComponentID<T>.ID);
     }
 
-    internal ref T GetRef<T>(int rowIndex, ComponentID id)
+    internal ref T GetRef<T>(int rowIndex, ComponentId id)
         where T : IComponent
     {
         return ref GetSpan<T>(id)[rowIndex];
@@ -91,7 +91,7 @@ public sealed class Chunk
     }
 
     [NonPublic]
-    public Span<T> GetSpan<T>(ComponentID id)
+    public Span<T> GetSpan<T>(ComponentId id)
         where T : IComponent
     {
         return GetComponentArray<T>(id).AsSpan(0, EntityCount);
@@ -109,13 +109,13 @@ public sealed class Chunk
     /// <typeparam name="T"></typeparam>
     /// <param name="id"></param>
     /// <returns></returns>
-    internal T[] GetComponentArray<T>(ComponentID id)
+    internal T[] GetComponentArray<T>(ComponentId id)
         where T : IComponent
     {
         return (GetComponentArray(id) as T[])!;
     }
 
-    internal Array GetComponentArray(ComponentID id)
+    internal Array GetComponentArray(ComponentId id)
     {
         return _components[_componentIndexLookup[id.Value]];
     }

@@ -10,7 +10,7 @@ public partial class CommandBuffer
     private abstract class BaseRelationBinder<TKey>
         where TKey : struct
     {
-        private readonly Dictionary<ComponentID, IInternalResolver> _resolvers = [ ];
+        private readonly Dictionary<ComponentId, IInternalResolver> _resolvers = [ ];
 
         public void Create<TComponent>(TKey key, BufferedEntity relation)
             where TComponent : IEntityRelationComponent
