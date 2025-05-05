@@ -7,12 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.Ecs", "Myriad.Ecs\My
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.Ecs.Tests", "Myriad.Ecs.Tests\Myriad.Ecs.Tests.csproj", "{6DD3CD1E-78C3-4A77-9652-75C8C136D788}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{680E8964-CA4A-4640-9A83-CCB38C32E028}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Myriad.Ecs.Benchmarks", "Myriad.Ecs.Benchmarks\Myriad.Ecs.Benchmarks.csproj", "{680E8964-CA4A-4640-9A83-CCB38C32E028}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repo", "Repo", "{D92C09B4-A191-46FE-AB1B-0C7E618F658E}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		README.md = README.md
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParallelTasks", "ParallelTasks\ParallelTasks.csproj", "{FB7D000F-9BE2-44F7-B66D-B945F8331033}"
