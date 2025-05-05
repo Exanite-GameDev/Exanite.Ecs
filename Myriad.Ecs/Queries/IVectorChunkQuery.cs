@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.Ecs.Queries;
@@ -44,7 +43,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <param name="query">A query expressing which entities to execute this query over</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		public int ExecuteVectorChunk<TQ, T0, TV0>(
 			TQ q,
 			QueryDescription? query = null

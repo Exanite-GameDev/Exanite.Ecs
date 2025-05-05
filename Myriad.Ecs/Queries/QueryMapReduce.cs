@@ -2,7 +2,6 @@
 using Myriad.Ecs.IDs;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Myriad.Ecs;
 
 //using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;
@@ -69,7 +68,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="mapper">Delegate to extract values from entities</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
@@ -116,7 +115,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="mapper">Delegate to extract values from entities</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
@@ -162,7 +161,7 @@ namespace Myriad.Ecs.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
@@ -183,7 +182,7 @@ namespace Myriad.Ecs.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
@@ -208,7 +207,7 @@ namespace Myriad.Ecs.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TMapper q,
@@ -236,7 +235,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-
+		
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			ref TMapper q,
 			ref TReducer r,

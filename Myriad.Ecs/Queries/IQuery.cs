@@ -1,9 +1,7 @@
 ﻿
 
-using System;
 using System.Diagnostics;
 using System.Buffers;
-using System.Collections.Generic;
 using Myriad.Ecs.Queries;
 using Myriad.Ecs.IDs;
 using Myriad.Ecs.Worlds.Archetypes;
@@ -11,7 +9,6 @@ using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Threading;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Myriad.Ecs;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -42,7 +39,7 @@ namespace Myriad.Ecs.Worlds
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -50,9 +47,9 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, T0>(
 			QueryDescription? query = null
@@ -69,7 +66,7 @@ namespace Myriad.Ecs.Worlds
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -78,9 +75,9 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, T0>(
 			ref QueryDescription? query
@@ -100,7 +97,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <param name="query"></param>
 		/// <returns>The number of entities discovered by this query</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, T0>(
 			TQ q,
@@ -117,7 +114,7 @@ namespace Myriad.Ecs.Worlds
 		/// </summary>
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -126,10 +123,10 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, T0>(
 			TQ q,
@@ -151,7 +148,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -159,9 +156,9 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int Execute<TQ, T0>(
 			ref TQ q,
@@ -183,7 +180,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -192,9 +189,9 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
-
+		
 		public int Execute<TQ, T0>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -259,7 +256,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -268,9 +265,9 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
-
+		
 		public int Execute<TQ, T0>(
 			ref TQ q,
 			ref QueryDescription? query,
@@ -373,7 +370,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="batchSize"></param>
 		/// <returns></returns>
 		/// <exception cref="AggregateException"></exception>
-
+		
 		public int ExecuteParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null,
@@ -520,7 +517,7 @@ namespace Myriad.Ecs.Worlds
 			return count;
 		}
 
-
+		
 		private readonly struct WorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent
@@ -586,7 +583,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -594,7 +591,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -615,7 +612,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -624,7 +621,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -667,7 +664,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="TQ">The type of the query to execute for every entity. A new TQ() instance is used.</typeparam>
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -676,7 +673,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -703,7 +700,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -711,7 +708,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -737,7 +734,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -746,7 +743,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
@@ -819,7 +816,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -828,7 +825,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1>(
@@ -1163,7 +1160,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1171,7 +1168,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1194,7 +1191,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1203,7 +1200,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1250,7 +1247,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T0">Component 0 to include in query</typeparam>
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1259,7 +1256,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -1288,7 +1285,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1296,7 +1293,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1324,7 +1321,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1333,7 +1330,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
@@ -1412,7 +1409,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1421,7 +1418,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2>(
@@ -1773,7 +1770,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1781,7 +1778,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1806,7 +1803,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1815,7 +1812,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1866,7 +1863,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T1">Component 1 to include in query</typeparam>
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1875,7 +1872,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -1906,7 +1903,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1914,7 +1911,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1944,7 +1941,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -1953,7 +1950,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
@@ -2038,7 +2035,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -2047,7 +2044,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3>(
@@ -2416,7 +2413,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -2424,7 +2421,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2451,7 +2448,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -2460,7 +2457,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2515,7 +2512,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T2">Component 2 to include in query</typeparam>
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -2524,7 +2521,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -2557,7 +2554,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -2565,7 +2562,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2597,7 +2594,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -2606,7 +2603,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
@@ -2697,7 +2694,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -2706,7 +2703,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4>(
@@ -3092,7 +3089,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3100,7 +3097,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3129,7 +3126,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3138,7 +3135,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3197,7 +3194,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T3">Component 3 to include in query</typeparam>
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3206,7 +3203,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -3241,7 +3238,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3249,7 +3246,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3283,7 +3280,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3292,7 +3289,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
@@ -3389,7 +3386,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3398,7 +3395,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5>(
@@ -3801,7 +3798,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3809,7 +3806,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3840,7 +3837,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3849,7 +3846,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3912,7 +3909,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T4">Component 4 to include in query</typeparam>
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3921,7 +3918,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -3958,7 +3955,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -3966,7 +3963,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -4002,7 +3999,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4011,7 +4008,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
@@ -4114,7 +4111,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4123,7 +4120,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6>(
@@ -4543,7 +4540,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4551,7 +4548,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -4584,7 +4581,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4593,7 +4590,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -4660,7 +4657,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T5">Component 5 to include in query</typeparam>
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4669,7 +4666,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -4708,7 +4705,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4716,7 +4713,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -4754,7 +4751,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4763,7 +4760,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
@@ -4872,7 +4869,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -4881,7 +4878,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7>(
@@ -5318,7 +5315,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -5326,7 +5323,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -5361,7 +5358,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -5370,7 +5367,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -5441,7 +5438,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T6">Component 6 to include in query</typeparam>
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -5450,7 +5447,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -5491,7 +5488,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -5499,7 +5496,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -5539,7 +5536,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -5548,7 +5545,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
@@ -5663,7 +5660,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -5672,7 +5669,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8>(
@@ -6126,7 +6123,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -6134,7 +6131,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -6171,7 +6168,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -6180,7 +6177,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -6255,7 +6252,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T7">Component 7 to include in query</typeparam>
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -6264,7 +6261,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -6307,7 +6304,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -6315,7 +6312,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -6357,7 +6354,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -6366,7 +6363,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
@@ -6487,7 +6484,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -6496,7 +6493,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
@@ -6967,7 +6964,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -6975,7 +6972,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -7014,7 +7011,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7023,7 +7020,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -7102,7 +7099,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T8">Component 8 to include in query</typeparam>
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7111,7 +7108,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -7156,7 +7153,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7164,7 +7161,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -7208,7 +7205,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7217,7 +7214,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
@@ -7344,7 +7341,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7353,7 +7350,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
@@ -7841,7 +7838,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7849,7 +7846,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -7890,7 +7887,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7899,7 +7896,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -7982,7 +7979,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T9">Component 9 to include in query</typeparam>
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -7991,7 +7988,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -8038,7 +8035,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -8046,7 +8043,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -8092,7 +8089,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -8101,7 +8098,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
@@ -8234,7 +8231,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -8243,7 +8240,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
@@ -8748,7 +8745,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -8756,7 +8753,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -8799,7 +8796,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -8808,7 +8805,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -8895,7 +8892,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T10">Component 10 to include in query</typeparam>
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -8904,7 +8901,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -8953,7 +8950,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -8961,7 +8958,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -9009,7 +9006,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -9018,7 +9015,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
@@ -9157,7 +9154,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -9166,7 +9163,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
@@ -9688,7 +9685,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -9696,7 +9693,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -9741,7 +9738,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -9750,7 +9747,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -9841,7 +9838,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T11">Component 11 to include in query</typeparam>
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -9850,7 +9847,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -9901,7 +9898,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -9909,7 +9906,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -9959,7 +9956,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -9968,7 +9965,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
@@ -10113,7 +10110,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -10122,7 +10119,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
@@ -10661,7 +10658,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
 		/// <typeparam name="T14">Component 14 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -10669,7 +10666,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -10716,7 +10713,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
 		/// <typeparam name="T14">Component 14 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -10725,7 +10722,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -10820,7 +10817,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T12">Component 12 to include in query</typeparam>
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
 		/// <typeparam name="T14">Component 14 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -10829,7 +10826,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -10882,7 +10879,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -10890,7 +10887,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -10942,7 +10939,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -10951,7 +10948,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
@@ -11102,7 +11099,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -11111,7 +11108,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
@@ -11667,7 +11664,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
 		/// <typeparam name="T14">Component 14 to include in query</typeparam>
 		/// <typeparam name="T15">Component 15 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -11675,7 +11672,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -11724,7 +11721,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
 		/// <typeparam name="T14">Component 14 to include in query</typeparam>
 		/// <typeparam name="T15">Component 15 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -11733,7 +11730,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -11832,7 +11829,7 @@ namespace Myriad.Ecs.Worlds
 		/// <typeparam name="T13">Component 13 to include in query</typeparam>
 		/// <typeparam name="T14">Component 14 to include in query</typeparam>
 		/// <typeparam name="T15">Component 15 to include in query</typeparam>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -11841,7 +11838,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <param name="q">The instance to execute over every entity.</param>
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
@@ -11896,7 +11893,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -11904,7 +11901,7 @@ namespace Myriad.Ecs.Worlds
 		/// If null a default query will be used, selecting all entities which include the components
 		/// in the type signature.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -11958,7 +11955,7 @@ namespace Myriad.Ecs.Worlds
 		/// struct will be persistent. This can allow values from one entity to be accessed by
 		/// the next entity, or after the entire Execute call is complete.
 		/// </param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -11967,7 +11964,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
@@ -12124,7 +12121,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="cursor">Tracks how manu archetypes and chunks were executed in the query. If the number of processed entities exceeds the budget set in
 		/// the cursor execution will early exit. Passing the same cursor to the same query again will resume at approximately the same position. This is only
 		/// approximate because new archetypes may be created, or chunks may be added and removed</param>
-
+		
 		/// <param name="query">
 		/// Optional query to filter by. If non-null this <b>must</b> Include all of the component
 		/// types specified in the type signature of this call!
@@ -12133,7 +12130,7 @@ namespace Myriad.Ecs.Worlds
 		/// in the type signature. This query object will be written to the query parameter by ref. It
 		/// can be used next frame to slightly speed up query execution.
 		/// </param>
-
+		
 		/// <returns>The number of entities discovered by this query</returns>
 		[ExcludeFromCodeCoverage]
 		public int Execute<TQ, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(

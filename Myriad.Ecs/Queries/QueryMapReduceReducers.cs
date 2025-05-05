@@ -8,9 +8,6 @@
 // ReSharper disable ConvertToPrimaryConstructor
 
 // ReSharper disable once CheckNamespace
-
-using System;
-
 namespace Myriad.Ecs.Queries
 {
     /// <summary>Standard reducers for Map/Reduce queries</summary>

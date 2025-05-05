@@ -39,7 +39,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
-
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0>()
         where T0 : IComponent
@@ -53,7 +53,7 @@ public partial class World
     /// </summary>
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
-
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0>(ref QueryDescription? cache)
         where T0 : IComponent
@@ -66,7 +66,7 @@ public partial class World
     /// Count how many entities exist which include all given components
     /// </summary>
     /// <returns></returns>
-
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1>()
         where T0 : IComponent
@@ -81,7 +81,7 @@ public partial class World
     /// </summary>
     /// <param name="cache">If null, will be set the the query. If not null, will be used to determine the count.</param>
     /// <returns></returns>
-
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int Count<T0, T1>(ref QueryDescription? cache)
         where T0 : IComponent

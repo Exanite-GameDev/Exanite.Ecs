@@ -1,15 +1,12 @@
 ﻿
 
-using System;
 using Myriad.Ecs.Queries;
 using Myriad.Ecs.IDs;
 using Myriad.Ecs.Threading;
 using Myriad.Ecs.Allocations;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Myriad.Ecs;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -42,7 +39,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			QueryDescription? query = null
@@ -62,7 +59,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			ref QueryDescription? query
@@ -83,7 +80,7 @@ namespace Myriad.Ecs.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
@@ -104,7 +101,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
@@ -125,7 +122,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
@@ -146,7 +143,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -192,7 +189,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		public int ExecuteChunkParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
@@ -316,7 +313,7 @@ namespace Myriad.Ecs.Worlds
 			return count;
 		}
 
-
+		
 		private readonly struct ChunkWorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent

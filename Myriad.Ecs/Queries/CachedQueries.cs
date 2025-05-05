@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Myriad.Ecs.Queries;
+﻿using Myriad.Ecs.Queries;
 using Myriad.Ecs.IDs;
 using Myriad.Ecs.xxHash;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 
 #if NETSTANDARD2_1
 using Myriad.Ecs.Extensions;
@@ -336,7 +333,7 @@ public partial class World
 
     private readonly ReaderWriterLockSlim _lock3 = new();
 
-
+    
     private QueryDescription GetCachedQuery(ComponentID id0, ComponentID id1, ComponentID id2)
     {
         // Accumulate all components in ascending order
@@ -414,7 +411,7 @@ public partial class World
     /// will be shared with other requests for the same set of types.
     /// </summary>
     /// <returns>A query that finds entities which include all of the given types</returns>
-
+    
     public QueryDescription GetCachedQuery<T0, T1, T2>()
         where T0 : IComponent
         where T1 : IComponent
