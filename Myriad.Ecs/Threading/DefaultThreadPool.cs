@@ -1,4 +1,7 @@
-﻿namespace Myriad.Ecs.Threading;
+﻿using System;
+using System.Threading;
+
+namespace Myriad.Ecs.Threading;
 
 /// <summary>
 /// Use the dotnet <see cref="ThreadPool"/>

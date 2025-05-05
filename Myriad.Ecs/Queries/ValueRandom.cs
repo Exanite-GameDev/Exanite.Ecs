@@ -1,4 +1,5 @@
-﻿using Myriad.Ecs.xxHash;
+﻿using System;
+using Myriad.Ecs.xxHash;
 using System.Runtime.InteropServices;
 
 namespace Myriad.Ecs.Queries;

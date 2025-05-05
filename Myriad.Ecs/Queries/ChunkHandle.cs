@@ -1,4 +1,5 @@
-﻿using Myriad.Ecs.IDs;
+﻿using System;
+using Myriad.Ecs.IDs;
 using Myriad.Ecs.Worlds.Archetypes;
 using Myriad.Ecs.Worlds.Chunks;
 

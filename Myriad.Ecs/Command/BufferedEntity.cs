@@ -1,4 +1,6 @@
-﻿using Myriad.Ecs.Components;
+﻿using System;
+using Myriad.Ecs;
+using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Command;
 

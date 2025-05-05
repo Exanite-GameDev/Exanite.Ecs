@@ -1,4 +1,6 @@
-﻿using Myriad.Ecs.Queries;
+﻿using System;
+using Myriad.Ecs;
+using Myriad.Ecs.Queries;
 
 namespace Myriad.Ecs.Queries
 {

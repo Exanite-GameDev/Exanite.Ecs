@@ -1,4 +1,6 @@
-﻿using Myriad.Ecs.Collections;
+﻿using System;
+using System.Collections.Generic;
+using Myriad.Ecs.Collections;
 using Myriad.Ecs.IDs;
 using Myriad.Ecs.xxHash;
 

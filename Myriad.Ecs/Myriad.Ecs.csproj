@@ -1,33 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFrameworks>net9.0;netstandard2.1</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Myriad.Ecs</AssemblyName>
+    <RootNamespace>Myriad.Ecs</RootNamespace>
+    <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
+
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>Myriad.Ecs</Title>
-    <Authors>Martin Evans</Authors>
-    <Version>36.2.2</Version>
-    <Description>Myriad.Ecs is a high performance Entity Component System (Ecs).</Description>
-    <PackageProjectUrl>https://github.com/martindevans/Myriad.Ecs</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/martindevans/Myriad.Ecs</RepositoryUrl>
-    <PackageTags>games, simulation, Ecs</PackageTags>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
-
-  <!-- <ItemGroup>-->
-  <!--   <PackageReference Include="JetBrains.dotCover.MSBuild" Version="1.0.5-alpha">-->
-  <!--     <PrivateAssets>all</PrivateAssets>-->
-  <!--     <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
-  <!--   </PackageReference>-->
-  <!-- </ItemGroup>-->
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
+  <PropertyGroup>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnableTrimAnalzyer>true</EnableTrimAnalzyer>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <WarningsAsErrors>true</WarningsAsErrors>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Update="Collections\RefTuple.cs">
@@ -168,5 +155,4 @@
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
-
 </Project>

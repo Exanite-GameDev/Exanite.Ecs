@@ -1,4 +1,6 @@
-﻿namespace Myriad.Ecs.Locks;
+﻿using System.Threading;
+
+namespace Myriad.Ecs.Locks;
 
 internal class RWLock<T>(T value)
     where T : class

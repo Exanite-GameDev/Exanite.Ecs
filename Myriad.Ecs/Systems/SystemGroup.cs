@@ -1,4 +1,6 @@
-﻿namespace Myriad.Ecs.Systems;
+﻿using System.Collections.Generic;
+
+namespace Myriad.Ecs.Systems;
 
 /// <summary>
 /// Execute all systems in order

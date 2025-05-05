@@ -1,7 +1,9 @@
 ﻿
 
+using System;
 using System.Diagnostics;
 using System.Buffers;
+using System.Collections.Generic;
 using Myriad.Ecs.Queries;
 using Myriad.Ecs.IDs;
 using Myriad.Ecs.Worlds.Archetypes;
@@ -9,6 +11,7 @@ using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Threading;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Myriad.Ecs;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global

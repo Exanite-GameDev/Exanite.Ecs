@@ -1,4 +1,6 @@
-﻿namespace Myriad.Ecs.Threading;
+﻿using System.Threading;
+
+namespace Myriad.Ecs.Threading;
 
 internal class CountdownEventContainer
 {

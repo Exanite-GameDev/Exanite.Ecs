@@ -1,4 +1,6 @@
-﻿namespace Myriad.Ecs.Components;
+﻿using System.Collections.Generic;
+
+namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// Store an array reference in a component

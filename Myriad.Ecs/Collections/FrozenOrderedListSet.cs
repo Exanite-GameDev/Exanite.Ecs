@@ -1,4 +1,7 @@
-﻿namespace Myriad.Ecs.Collections;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Myriad.Ecs.Collections;
 
 /// <summary>
 /// A frozen (i.e. completely immutable) set of objects.

@@ -2,6 +2,7 @@
 using Myriad.Ecs.IDs;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Myriad.Ecs;
 
 //using Parallel = System.Threading.Tasks.Parallel;
 //using Parallel = ParallelTasks.Parallel;

@@ -1,4 +1,5 @@
-﻿using Myriad.Ecs.Command;
+﻿using System.Collections.Generic;
+using Myriad.Ecs.Command;
 
 namespace Myriad.Ecs.Components;
 

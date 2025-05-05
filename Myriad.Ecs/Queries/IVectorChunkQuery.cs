@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.Ecs.Queries;

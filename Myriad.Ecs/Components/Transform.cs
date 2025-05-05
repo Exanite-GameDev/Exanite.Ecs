@@ -1,4 +1,5 @@
-﻿using Myriad.Ecs.IDs;
+﻿using System;
+using Myriad.Ecs.IDs;
 using Myriad.Ecs.Queries;
 using Myriad.Ecs.Systems;
 using Myriad.Ecs.Worlds;

@@ -1,6 +1,9 @@
-﻿using Myriad.Ecs.Queries;
+﻿using System;
+using System.Collections.Generic;
+using Myriad.Ecs.Queries;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Myriad.Ecs;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global

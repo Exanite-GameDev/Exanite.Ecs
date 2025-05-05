@@ -52,8 +52,9 @@ var entity = bufferedEntity.Resolve(resolver);
 Myriad supports "Phantom Components", these are defined by `IPhantomComponent` instead of `IComponent`. When an `Entity` with any phantom components is destroyed the entity is not actually destroyed, instead it becomes a "phantom". Phantom entities are automatically **excluded** from queries and must be explicitly included with `.Include<Phantom>`.
 
 A phantom entity can be destroyed in two ways:
- - Delete it again.
- - Remove all phantom components.
+
+- Delete it again.
+- Remove all phantom components.
 
 Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. When you have done whatever is needed you should remove the `DoTheThing` component. Once all of the phantoms have been handled and removed, the entity will be automatically destroyed.
 
@@ -66,10 +67,11 @@ Myriad.Ecs has several different querying systems. These have different trade-of
 #### QueryDescription/QueryBuilder
 
 Queries can be filtered based on the components an Entity has. This is done with a `QueryDescription`, created with a `QueryBuilder`. Filtering like this is very fast, so as much as possible should be encoded into query descriptions. There are 4 types filtering a query can do:
- - Include: Entities **must** include this component.
- - Exclude: Entities **must not** include this component.
- - At Least One: Entities must contain one or more of the listed components.
- - Exactly One: Entities must contain exactly one of the listed components.
+
+- Include: Entities **must** include this component.
+- Exclude: Entities **must not** include this component.
+- At Least One: Entities must contain one or more of the listed components.
+- Exactly One: Entities must contain exactly one of the listed components.
 
 #### ChunkQuery
 
