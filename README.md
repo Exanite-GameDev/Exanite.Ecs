@@ -4,9 +4,18 @@
 
 Myriad.Ecs is a high performance Entity Component System (Ecs) for C#.
 
+## Note
+
+This repository has been heavily modified for use in Exanite.Engine.
+
+Major modifications include:
+- Reformatting of codebase to match conventions used in Exanite.Engine.
+  - Eg: Myriad.Ecs instead of Myriad.ECS
+- Removal of code unused by Exanite.Engine
+
 ## Benchmarks
 
-[C# Ecs Benchmarks](https://github.com/Doraku/Ecs.CSharp.Benchmark).
+[C# ECS Benchmarks](https://github.com/Doraku/Ecs.CSharp.Benchmark).
 
 ## Unity
 
