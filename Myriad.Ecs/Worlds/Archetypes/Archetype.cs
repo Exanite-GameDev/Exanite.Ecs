@@ -139,7 +139,7 @@ public sealed partial class Archetype
         // Gather flags for special components
         foreach (var component in components)
         {
-            IsPhantom |= component == ComponentID<ComponentPhantom>.ID;
+            IsPhantom |= component == ComponentId<ComponentPhantom>.Id;
             HasPhantomComponents |= component.IsPhantomComponent;
             HasRelationComponents |= component.IsRelationComponent;
             HasDisposableComponents |= component.IsDisposableComponent;
@@ -159,7 +159,7 @@ public sealed partial class Archetype
         {
             var c = new OrderedListSet<ComponentId>(components)
             {
-                ComponentID<ComponentPhantom>.ID
+                ComponentId<ComponentPhantom>.Id
             };
             _phantomDestination = World.GetOrCreateArchetype(c);
         }

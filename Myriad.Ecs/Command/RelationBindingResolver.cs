@@ -15,7 +15,7 @@ public partial class CommandBuffer
         public void Create<TComponent>(TKey key, BufferedEntity relation)
             where TComponent : IEntityRelationComponent
         {
-            var c = ComponentID<TComponent>.ID;
+            var c = ComponentId<TComponent>.Id;
             if (!_resolvers.TryGetValue(c, out var resolver))
             {
                 resolver = Pool<Binder<TComponent>>.Get();

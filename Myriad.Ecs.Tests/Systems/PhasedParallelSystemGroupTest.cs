@@ -74,7 +74,7 @@ public class PhasedParallelSystemGroupTest
 
         public void Update(ConcurrentDictionary<int, SemaphoreSlim> data)
         {
-            var v = data.GetOrAdd(ComponentID<TComponent>.ID.Value, new SemaphoreSlim(1));
+            var v = data.GetOrAdd(ComponentId<TComponent>.Id.Value, new SemaphoreSlim(1));
 
             if (_check)
             {

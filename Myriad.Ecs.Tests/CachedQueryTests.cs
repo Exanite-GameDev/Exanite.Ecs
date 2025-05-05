@@ -16,7 +16,7 @@ public class CachedQueryTests
             Assert.IsTrue(q.IsIncluded(component));
 
         Assert.AreEqual(1, q.Exclude.Count);
-        Assert.IsTrue(q.IsExcluded<Phantom>());
+        Assert.IsTrue(q.IsExcluded<ComponentPhantom>());
     }
 
     [TestMethod]
@@ -41,7 +41,7 @@ public class CachedQueryTests
 
         Assert.IsTrue(q1!.IsIncluded<Component0>());
         Assert.AreEqual(1, q1.Include.Count);
-        Assert.IsTrue(q1!.IsExcluded<Phantom>());
+        Assert.IsTrue(q1!.IsExcluded<ComponentPhantom>());
         Assert.AreEqual(1, q1.Exclude.Count);
     }
 

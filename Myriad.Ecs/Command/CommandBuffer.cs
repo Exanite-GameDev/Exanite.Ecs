@@ -232,7 +232,7 @@ public sealed partial class CommandBuffer
                 var destHasPhantomComponents = _tempComponentIdSet.Any(static a => a.IsPhantomComponent);
 
                 // Entity must be auto deleted if, after the change, it will be a `Phantom` but not have any phantom components
-                var autodelete = _tempComponentIdSet.Contains(ComponentID<ComponentPhantom>.ID) && !destHasPhantomComponents;
+                var autodelete = _tempComponentIdSet.Contains(ComponentId<ComponentPhantom>.Id) && !destHasPhantomComponents;
                 if (autodelete)
                 {
                     World.DeleteImmediate(entity.ID, ref lazy);
@@ -415,7 +415,7 @@ public sealed partial class CommandBuffer
         var bufferedData = _bufferedSets[(int)id];
         var setters = bufferedData.Setters;
 
-        var key = ComponentID<T>.ID;
+        var key = ComponentId<T>.Id;
 
         if (setters.TryGetValue(key, out var existing))
         {
@@ -513,7 +513,7 @@ public sealed partial class CommandBuffer
         var mod = GetModificationData(entity, true, false);
 
         // Create a setter and store it in the list (recycling the old one, if it's there)
-        var id = ComponentID<T>.ID;
+        var id = ComponentId<T>.Id;
         if (mod.Sets!.TryGetValue(id, out var existing))
         {
             _setters.Overwrite(existing, value);
@@ -556,7 +556,7 @@ public sealed partial class CommandBuffer
         var mod = GetModificationData(entity, false, true);
 
         // Add a remover to the list
-        var id = ComponentID<T>.ID;
+        var id = ComponentId<T>.Id;
         mod.Removes!.Add(id);
 
         // Remove it from the setters, if it's there

@@ -94,7 +94,7 @@ internal static class Disposer<T>
 
     private static IDisposer GetInstance()
     {
-        var id = ComponentID<T>.ID;
+        var id = ComponentId<T>.Id;
 
         if (!id.IsDisposableComponent)
             return new EmptyImpl();
@@ -106,7 +106,7 @@ internal static class Disposer<T>
         : IDisposer
         where U : IDisposableComponent
     {
-        public ComponentId Component { get; } = ComponentID<U>.ID;
+        public ComponentId Component { get; } = ComponentId<U>.Id;
 
         //public void Dispose(Array array, int index, ref LazyCommandBuffer buffer)
         //{
@@ -137,7 +137,7 @@ internal static class Disposer<T>
     private class EmptyImpl
         : IDisposer
     {
-        public ComponentId Component { get; } = ComponentID<T>.ID;
+        public ComponentId Component { get; } = ComponentId<T>.Id;
 
         public void Dispose(IList list, int index, ref LazyCommandBuffer buffer)
         {

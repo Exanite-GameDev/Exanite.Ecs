@@ -35,7 +35,7 @@ public struct SystemDeclaration
     public void Read<T>()
         where T : IComponent
     {
-        _reads.Add(ComponentID<T>.ID);
+        _reads.Add(ComponentId<T>.Id);
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public struct SystemDeclaration
     public void Write<T>()
         where T : IComponent
     {
-        _writes.Add(ComponentID<T>.ID);
+        _writes.Add(ComponentId<T>.Id);
     }
 
     internal readonly bool Intersects(ref readonly SystemDeclaration other)

@@ -14,7 +14,7 @@ namespace Myriad.Ecs.Queries;
 public sealed partial class QueryBuilder
 {
     internal static readonly FrozenOrderedListSet<ComponentId> SetWithJustPhantom = FrozenOrderedListSet<ComponentId>.Create(
-        new[] { ComponentID<ComponentPhantom>.ID }
+        new[] { ComponentId<ComponentPhantom>.Id }
     );
 
     private readonly ComponentSet _include;
@@ -68,7 +68,7 @@ public sealed partial class QueryBuilder
         }
 
         // Automatically exclude all Phantom entities, unless specifically requested.
-        if (!_include.Contains(ComponentID<ComponentPhantom>.ID))
+        if (!_include.Contains(ComponentId<ComponentPhantom>.Id))
             Exclude<ComponentPhantom>();
 
         return new QueryDescription(
@@ -370,7 +370,7 @@ public sealed partial class QueryBuilder
                 case 0:
                     return FrozenOrderedListSet<ComponentId>.Empty;
 
-                case 1 when Items.Contains(ComponentID<ComponentPhantom>.ID):
+                case 1 when Items.Contains(ComponentId<ComponentPhantom>.Id):
                     return SetWithJustPhantom;
 
                 default:
@@ -399,7 +399,7 @@ public sealed partial class QueryBuilder
         public bool Add<T>([CallerMemberName] string caller = "")
             where T : IComponent
         {
-            return Add(ComponentID<T>.ID, caller);
+            return Add(ComponentId<T>.Id, caller);
         }
 
         public bool Contains(ComponentId id)
@@ -415,7 +415,7 @@ public sealed partial class QueryBuilder
         public bool Contains<T>()
             where T : IComponent
         {
-            return Contains(ComponentID<T>.ID);
+            return Contains(ComponentId<T>.Id);
         }
     }
 }

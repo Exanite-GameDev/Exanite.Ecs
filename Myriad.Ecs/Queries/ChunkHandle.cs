@@ -40,7 +40,7 @@ public readonly ref struct ChunkHandle
     public bool HasComponent<T>()
         where T : IComponent
     {
-        return HasComponent(ComponentID<T>.ID);
+        return HasComponent(ComponentId<T>.Id);
     }
 
     /// <summary>

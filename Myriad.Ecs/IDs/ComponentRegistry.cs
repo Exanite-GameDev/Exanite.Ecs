@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Components;
+using Myriad.Ecs.Locks;
 
 namespace Myriad.Ecs.IDs;
 
@@ -11,7 +12,7 @@ namespace Myriad.Ecs.IDs;
 /// </summary>
 internal static class ComponentRegistry
 {
-    private static readonly Locks.RwLock<State> _lock = new(new State());
+    private static readonly RwLock<State> _lock = new(new State());
 
     /// <summary>
     /// Get the ID for the given type

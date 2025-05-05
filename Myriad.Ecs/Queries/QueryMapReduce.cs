@@ -68,7 +68,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="mapper">Delegate to extract values from entities</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
@@ -115,7 +115,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="mapper">Delegate to extract values from entities</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TReducer, TOutput, T0>(
 			TOutput initial,
@@ -161,7 +161,7 @@ namespace Myriad.Ecs.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
@@ -182,7 +182,7 @@ namespace Myriad.Ecs.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TOutput initial,
@@ -207,7 +207,7 @@ namespace Myriad.Ecs.Worlds
 		/// matched this is returned.</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			TMapper q,
@@ -235,7 +235,7 @@ namespace Myriad.Ecs.Worlds
 		/// <param name="initial">Initial value to start reducing from</param>
 		/// <param name="query">Query to select matched entities</param>
 		/// <returns>A value calculated by reducing all intermediate values</returns>
-		
+
 		public TOutput ExecuteMapReduce<TMapper, TReducer, TOutput, T0>(
 			ref TMapper q,
 			ref TReducer r,
@@ -250,7 +250,7 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
+			var c0 = ComponentId<T0>.Id;
 
 			var accumulator = initial;
 
@@ -510,8 +510,8 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
 
 			var accumulator = initial;
 
@@ -784,9 +784,9 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
 
 			var accumulator = initial;
 
@@ -1072,10 +1072,10 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
 
 			var accumulator = initial;
 
@@ -1374,11 +1374,11 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
 
 			var accumulator = initial;
 
@@ -1690,12 +1690,12 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
 
 			var accumulator = initial;
 
@@ -2020,13 +2020,13 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
 
 			var accumulator = initial;
 
@@ -2364,14 +2364,14 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
 
 			var accumulator = initial;
 
@@ -2722,15 +2722,15 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
 
 			var accumulator = initial;
 
@@ -3094,16 +3094,16 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
-			var c9 = ComponentID<T9>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
+			var c9 = ComponentId<T9>.Id;
 
 			var accumulator = initial;
 
@@ -3480,17 +3480,17 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
-			var c9 = ComponentID<T9>.ID;
-			var c10 = ComponentID<T10>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
+			var c9 = ComponentId<T9>.Id;
+			var c10 = ComponentId<T10>.Id;
 
 			var accumulator = initial;
 
@@ -3880,18 +3880,18 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
-			var c9 = ComponentID<T9>.ID;
-			var c10 = ComponentID<T10>.ID;
-			var c11 = ComponentID<T11>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
+			var c9 = ComponentId<T9>.Id;
+			var c10 = ComponentId<T10>.Id;
+			var c11 = ComponentId<T11>.Id;
 
 			var accumulator = initial;
 
@@ -4294,19 +4294,19 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
-			var c9 = ComponentID<T9>.ID;
-			var c10 = ComponentID<T10>.ID;
-			var c11 = ComponentID<T11>.ID;
-			var c12 = ComponentID<T12>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
+			var c9 = ComponentId<T9>.Id;
+			var c10 = ComponentId<T10>.Id;
+			var c11 = ComponentId<T11>.Id;
+			var c12 = ComponentId<T12>.Id;
 
 			var accumulator = initial;
 
@@ -4722,20 +4722,20 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
-			var c9 = ComponentID<T9>.ID;
-			var c10 = ComponentID<T10>.ID;
-			var c11 = ComponentID<T11>.ID;
-			var c12 = ComponentID<T12>.ID;
-			var c13 = ComponentID<T13>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
+			var c9 = ComponentId<T9>.Id;
+			var c10 = ComponentId<T10>.Id;
+			var c11 = ComponentId<T11>.Id;
+			var c12 = ComponentId<T12>.Id;
+			var c13 = ComponentId<T13>.Id;
 
 			var accumulator = initial;
 
@@ -5164,21 +5164,21 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
-			var c9 = ComponentID<T9>.ID;
-			var c10 = ComponentID<T10>.ID;
-			var c11 = ComponentID<T11>.ID;
-			var c12 = ComponentID<T12>.ID;
-			var c13 = ComponentID<T13>.ID;
-			var c14 = ComponentID<T14>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
+			var c9 = ComponentId<T9>.Id;
+			var c10 = ComponentId<T10>.Id;
+			var c11 = ComponentId<T11>.Id;
+			var c12 = ComponentId<T12>.Id;
+			var c13 = ComponentId<T13>.Id;
+			var c14 = ComponentId<T14>.Id;
 
 			var accumulator = initial;
 
@@ -5620,22 +5620,22 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-			var c0 = ComponentID<T0>.ID;
-			var c1 = ComponentID<T1>.ID;
-			var c2 = ComponentID<T2>.ID;
-			var c3 = ComponentID<T3>.ID;
-			var c4 = ComponentID<T4>.ID;
-			var c5 = ComponentID<T5>.ID;
-			var c6 = ComponentID<T6>.ID;
-			var c7 = ComponentID<T7>.ID;
-			var c8 = ComponentID<T8>.ID;
-			var c9 = ComponentID<T9>.ID;
-			var c10 = ComponentID<T10>.ID;
-			var c11 = ComponentID<T11>.ID;
-			var c12 = ComponentID<T12>.ID;
-			var c13 = ComponentID<T13>.ID;
-			var c14 = ComponentID<T14>.ID;
-			var c15 = ComponentID<T15>.ID;
+			var c0 = ComponentId<T0>.Id;
+			var c1 = ComponentId<T1>.Id;
+			var c2 = ComponentId<T2>.Id;
+			var c3 = ComponentId<T3>.Id;
+			var c4 = ComponentId<T4>.Id;
+			var c5 = ComponentId<T5>.Id;
+			var c6 = ComponentId<T6>.Id;
+			var c7 = ComponentId<T7>.Id;
+			var c8 = ComponentId<T8>.Id;
+			var c9 = ComponentId<T9>.Id;
+			var c10 = ComponentId<T10>.Id;
+			var c11 = ComponentId<T11>.Id;
+			var c12 = ComponentId<T12>.Id;
+			var c13 = ComponentId<T13>.Id;
+			var c14 = ComponentId<T14>.Id;
+			var c15 = ComponentId<T15>.Id;
 
 			var accumulator = initial;
 

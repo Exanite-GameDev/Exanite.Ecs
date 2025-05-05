@@ -101,7 +101,7 @@ public class EntityTests
         var entity = e.Resolve();
 
         Assert.AreEqual(1, entity.ComponentTypes.Count);
-        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentID<ComponentInt16>.ID));
+        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentId<ComponentInt16>.Id));
     }
 
     [TestMethod]
@@ -149,15 +149,15 @@ public class EntityTests
         using var resolver = b.Playback();
         var entity = e.Resolve();
 
-        var c = (ComponentInt16)entity.GetBoxedComponent(ComponentID<ComponentInt16>.ID)!;
+        var c = (ComponentInt16)entity.GetBoxedComponent(ComponentId<ComponentInt16>.Id)!;
         Assert.AreEqual(7, c.Value);
 
-        Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt32>.ID));
+        Assert.IsNull(entity.GetBoxedComponent(ComponentId<ComponentInt32>.Id));
 
         b.Delete(entity);
         b.Playback().Dispose();
 
-        Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt16>.ID));
-        Assert.IsNull(entity.GetBoxedComponent(ComponentID<ComponentInt32>.ID));
+        Assert.IsNull(entity.GetBoxedComponent(ComponentId<ComponentInt16>.Id));
+        Assert.IsNull(entity.GetBoxedComponent(ComponentId<ComponentInt32>.Id));
     }
 }

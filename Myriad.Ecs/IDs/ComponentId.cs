@@ -83,11 +83,11 @@ public readonly record struct ComponentId
 /// Retrieve the component ID for a type
 /// </summary>
 /// <typeparam name="TComponent"></typeparam>
-public static class ComponentID<TComponent>
+public static class ComponentId<TComponent>
     where TComponent : IComponent
 {
     /// <summary>
     /// The ID for <typeparamref name="TComponent" />
     /// </summary>
-    public static readonly ComponentId ID = ComponentRegistry.Get<TComponent>();
+    public static readonly ComponentId Id = ComponentRegistry.Get<TComponent>();
 }

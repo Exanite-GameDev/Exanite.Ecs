@@ -76,7 +76,7 @@ public class StructQueryTests
         Assert.IsNotNull(q);
         Assert.IsTrue(q.IsIncluded<ComponentInt32>());
         Assert.AreEqual(1, q.Include.Count);
-        Assert.IsTrue(q.IsExcluded<Phantom>());
+        Assert.IsTrue(q.IsExcluded<ComponentPhantom>());
         Assert.AreEqual(1, q.Exclude.Count);
         Assert.AreEqual(0, q.ExactlyOneOf.Count);
         Assert.AreEqual(0, q.AtLeastOneOf.Count);

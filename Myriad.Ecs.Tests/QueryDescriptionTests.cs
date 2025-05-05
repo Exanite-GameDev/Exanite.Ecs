@@ -148,24 +148,24 @@ public class QueryDescriptionTests
         Assert.IsNull(a.LINQ().Single().ExactlyOne);
 
         // Add an archetype to the world that the query should match
-        var c1 = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentID<ComponentInt32>.ID, ComponentID<ComponentFloat>.ID });
+        var c1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId<ComponentInt32>.Id, ComponentId<ComponentFloat>.Id });
         w.GetOrCreateArchetype(c1, ArchetypeHash.Create(c1));
 
         // Check it now matches 2 archetypes
         var b = q.GetArchetypes();
         Assert.IsNotNull(b);
         Assert.AreEqual(2, b.Count);
-        Assert.IsTrue(a.LINQ().All(x => x.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID)));
+        Assert.IsTrue(a.LINQ().All(x => x.Archetype.Components.Contains(ComponentId<ComponentFloat>.Id)));
 
         // Add an archetype to the world that the query should NOT match
-        var c2 = new OrderedListSet<ComponentID>(new HashSet<ComponentID> { ComponentID<ComponentInt32>.ID, ComponentID<ComponentByte>.ID });
+        var c2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId<ComponentInt32>.Id, ComponentId<ComponentByte>.Id });
         w.GetOrCreateArchetype(c2, ArchetypeHash.Create(c2));
 
         // Check it now matches 2 archetypes
         var c = q.GetArchetypes();
         Assert.IsNotNull(c);
         Assert.AreEqual(2, c.Count);
-        Assert.IsTrue(c.LINQ().All(x => x.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID)));
+        Assert.IsTrue(c.LINQ().All(x => x.Archetype.Components.Contains(ComponentId<ComponentFloat>.Id)));
     }
 
     [TestMethod]
@@ -186,7 +186,7 @@ public class QueryDescriptionTests
         Assert.IsNotNull(a);
         Assert.AreEqual(2, a.Count);
 
-        Assert.IsTrue(a.LINQ().All(x => x.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID)));
+        Assert.IsTrue(a.LINQ().All(x => x.Archetype.Components.Contains(ComponentId<ComponentFloat>.Id)));
     }
 
     [TestMethod]
@@ -211,8 +211,8 @@ public class QueryDescriptionTests
         var single = a.LINQ().Single();
         Assert.IsNull(single.AtLeastOne);
         Assert.IsNull(single.ExactlyOne);
-        Assert.IsTrue(single.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID));
-        Assert.IsFalse(single.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
+        Assert.IsTrue(single.Archetype.Components.Contains(ComponentId<ComponentFloat>.Id));
+        Assert.IsFalse(single.Archetype.Components.Contains(ComponentId<ComponentInt32>.Id));
     }
 
     [TestMethod]
@@ -238,7 +238,7 @@ public class QueryDescriptionTests
         foreach (var match in matches)
         {
             Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == ComponentID<ComponentInt32>.ID || match.ExactlyOne == ComponentID<ComponentFloat>.ID);
+            Assert.IsTrue(match.ExactlyOne == ComponentId<ComponentInt32>.Id || match.ExactlyOne == ComponentId<ComponentFloat>.Id);
             Assert.IsTrue(match.AtLeastOne == null);
             Assert.IsTrue(match.Archetype.Components.Count == 1);
         }
@@ -270,8 +270,8 @@ public class QueryDescriptionTests
             Assert.IsNotNull(match);
             Assert.IsTrue(match.ExactlyOne == null);
 
-            Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID)
-                       || match.Archetype.Components.Contains(ComponentID<ComponentFloat>.ID));
+            Assert.IsTrue(match.Archetype.Components.Contains(ComponentId<ComponentInt32>.Id)
+                       || match.Archetype.Components.Contains(ComponentId<ComponentFloat>.Id));
         }
     }
 
@@ -280,7 +280,7 @@ public class QueryDescriptionTests
     {
         var w = new WorldBuilder()
                .WithArchetype<ComponentInt32>()
-               .WithArchetype<ComponentInt32, Phantom>()
+               .WithArchetype<ComponentInt32, ComponentPhantom>()
                .WithArchetype<ComponentFloat>()
                .WithArchetype<ComponentFloat, ComponentInt32>()
                .WithArchetype<ComponentInt16, ComponentInt64>()
@@ -300,7 +300,7 @@ public class QueryDescriptionTests
             Assert.IsNotNull(match);
             Assert.IsTrue(match.ExactlyOne == null);
 
-            Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
+            Assert.IsTrue(match.Archetype.Components.Contains(ComponentId<ComponentInt32>.Id));
         }
     }
 
@@ -309,7 +309,7 @@ public class QueryDescriptionTests
     {
         var w = new WorldBuilder()
                .WithArchetype<ComponentInt32>()
-               .WithArchetype<ComponentInt32, Phantom>()
+               .WithArchetype<ComponentInt32, ComponentPhantom>()
                .WithArchetype<ComponentFloat>()
                .WithArchetype<ComponentFloat, ComponentInt32>()
                .WithArchetype<ComponentInt16, ComponentInt64>()
@@ -317,7 +317,7 @@ public class QueryDescriptionTests
 
         var q = new QueryBuilder()
                .Include<ComponentInt32>()
-               .Include<Phantom>()
+               .Include<ComponentPhantom>()
                .Build(w);
 
         var matches = q.GetArchetypes();
@@ -330,7 +330,7 @@ public class QueryDescriptionTests
             Assert.IsNotNull(match);
             Assert.IsTrue(match.ExactlyOne == null);
 
-            Assert.IsTrue(match.Archetype.Components.Contains(ComponentID<ComponentInt32>.ID));
+            Assert.IsTrue(match.Archetype.Components.Contains(ComponentId<ComponentInt32>.Id));
         }
     }
 

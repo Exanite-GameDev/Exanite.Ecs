@@ -20,7 +20,7 @@ public class PhantomTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            eb.Set(new Phantom());
+            eb.Set(new ComponentPhantom());
         });
     }
 
@@ -37,7 +37,7 @@ public class PhantomTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            cmd.Set(e, new Phantom());
+            cmd.Set(e, new ComponentPhantom());
         });
     }
 
@@ -58,7 +58,7 @@ public class PhantomTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            cmd.Remove<Phantom>(e);
+            cmd.Remove<ComponentPhantom>(e);
         });
     }
 
@@ -252,8 +252,8 @@ public class PhantomTests
     {
         var w = new WorldBuilder().Build();
 
-        Assert.IsTrue(ComponentID<PhantomNotifier>.ID.IsPhantomNotifierComponent);
-        Assert.IsFalse(ComponentID<PhantomNotifier>.ID.IsPhantomComponent);
+        Assert.IsTrue(ComponentId<PhantomNotifier>.Id.IsPhantomNotifierComponent);
+        Assert.IsFalse(ComponentId<PhantomNotifier>.Id.IsPhantomComponent);
 
         // Create an entity with a phantom component
         var list = new List<EntityId>();
@@ -312,8 +312,8 @@ public class PhantomTests
     {
         var w = new WorldBuilder().Build();
 
-        Assert.IsTrue(ComponentID<PhantomNotifier>.ID.IsPhantomNotifierComponent);
-        Assert.IsFalse(ComponentID<PhantomNotifier>.ID.IsPhantomComponent);
+        Assert.IsTrue(ComponentId<PhantomNotifier>.Id.IsPhantomNotifierComponent);
+        Assert.IsFalse(ComponentId<PhantomNotifier>.Id.IsPhantomComponent);
 
         // Create an entity **without** a phantom component
         var list = new List<EntityId>();

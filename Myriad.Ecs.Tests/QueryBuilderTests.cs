@@ -23,21 +23,21 @@ public class QueryBuilderTests
 
         Assert.IsTrue(q.IsIncluded<ComponentFloat>());
         Assert.IsTrue(q.IsIncluded(typeof(ComponentFloat)));
-        Assert.IsTrue(q.IsIncluded(ComponentID<ComponentFloat>.ID));
-        CollectionAssert.Contains(q.Included.ToArray(), ComponentID<ComponentFloat>.ID);
+        Assert.IsTrue(q.IsIncluded(ComponentId<ComponentFloat>.Id));
+        CollectionAssert.Contains(q.Included.ToArray(), ComponentId<ComponentFloat>.Id);
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
-        Assert.IsFalse(q.IsIncluded(ComponentID<ComponentInt32>.ID));
-        CollectionAssert.DoesNotContain(q.Included.ToArray(), ComponentID<ComponentInt32>.ID);
+        Assert.IsFalse(q.IsIncluded(ComponentId<ComponentInt32>.Id));
+        CollectionAssert.DoesNotContain(q.Included.ToArray(), ComponentId<ComponentInt32>.Id);
 
         Assert.IsFalse(q.IsExcluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
-        Assert.IsFalse(q.IsIncluded(ComponentID<ComponentInt32>.ID));
+        Assert.IsFalse(q.IsIncluded(ComponentId<ComponentInt32>.Id));
 
         Assert.IsFalse(q.IsExcluded<ComponentFloat>());
         Assert.IsFalse(q.IsExcluded(typeof(ComponentFloat)));
-        Assert.IsFalse(q.IsExcluded(ComponentID<ComponentFloat>.ID));
+        Assert.IsFalse(q.IsExcluded(ComponentId<ComponentFloat>.Id));
     }
 
     [TestMethod]
@@ -87,10 +87,10 @@ public class QueryBuilderTests
            .Exclude<ComponentFloat>();
 
         Assert.IsTrue(q.IsExcluded<ComponentFloat>());
-        CollectionAssert.Contains(q.Excluded.ToArray(), ComponentID<ComponentFloat>.ID);
+        CollectionAssert.Contains(q.Excluded.ToArray(), ComponentId<ComponentFloat>.Id);
 
         Assert.IsFalse(q.IsExcluded<ComponentInt32>());
-        CollectionAssert.DoesNotContain(q.Excluded.ToArray(), ComponentID<ComponentInt32>.ID);
+        CollectionAssert.DoesNotContain(q.Excluded.ToArray(), ComponentId<ComponentInt32>.Id);
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded<ComponentFloat>());
@@ -130,13 +130,13 @@ public class QueryBuilderTests
 
         Assert.IsTrue(q.IsAtLeastOneOf<ComponentFloat>());
         Assert.IsTrue(q.IsAtLeastOneOf(typeof(ComponentFloat)));
-        Assert.IsTrue(q.IsAtLeastOneOf(ComponentID<ComponentFloat>.ID));
-        CollectionAssert.Contains(q.AtLeastOnes.ToArray(), ComponentID<ComponentFloat>.ID);
+        Assert.IsTrue(q.IsAtLeastOneOf(ComponentId<ComponentFloat>.Id));
+        CollectionAssert.Contains(q.AtLeastOnes.ToArray(), ComponentId<ComponentFloat>.Id);
 
         Assert.IsFalse(q.IsAtLeastOneOf<ComponentInt32>());
         Assert.IsFalse(q.IsAtLeastOneOf(typeof(ComponentInt32)));
-        Assert.IsFalse(q.IsAtLeastOneOf(ComponentID<ComponentInt32>.ID));
-        CollectionAssert.DoesNotContain(q.AtLeastOnes.ToArray(), ComponentID<ComponentInt32>.ID);
+        Assert.IsFalse(q.IsAtLeastOneOf(ComponentId<ComponentInt32>.Id));
+        CollectionAssert.DoesNotContain(q.AtLeastOnes.ToArray(), ComponentId<ComponentInt32>.Id);
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
@@ -178,13 +178,13 @@ public class QueryBuilderTests
 
         Assert.IsTrue(q.IsExactlyOneOf<ComponentFloat>());
         Assert.IsTrue(q.IsExactlyOneOf(typeof(ComponentFloat)));
-        Assert.IsTrue(q.IsExactlyOneOf(ComponentID<ComponentFloat>.ID));
-        CollectionAssert.Contains(q.ExactlyOnes.ToArray(), ComponentID<ComponentFloat>.ID);
+        Assert.IsTrue(q.IsExactlyOneOf(ComponentId<ComponentFloat>.Id));
+        CollectionAssert.Contains(q.ExactlyOnes.ToArray(), ComponentId<ComponentFloat>.Id);
 
         Assert.IsFalse(q.IsExactlyOneOf<ComponentInt32>());
         Assert.IsFalse(q.IsExactlyOneOf(typeof(ComponentInt32)));
-        Assert.IsFalse(q.IsExactlyOneOf(ComponentID<ComponentInt32>.ID));
-        CollectionAssert.DoesNotContain(q.ExactlyOnes.ToArray(), ComponentID<ComponentInt32>.ID);
+        Assert.IsFalse(q.IsExactlyOneOf(ComponentId<ComponentInt32>.Id));
+        CollectionAssert.DoesNotContain(q.ExactlyOnes.ToArray(), ComponentId<ComponentInt32>.Id);
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
         Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
