@@ -14,7 +14,7 @@ namespace Myriad.Ecs.Queries;
 public sealed partial class QueryBuilder
 {
     internal static readonly FrozenOrderedListSet<ComponentID> SetWithJustPhantom = FrozenOrderedListSet<ComponentID>.Create(
-        new[] { ComponentID<Phantom>.ID }
+        new[] { ComponentID<ComponentPhantom>.ID }
     );
 
     private readonly ComponentSet _include;
@@ -68,8 +68,8 @@ public sealed partial class QueryBuilder
         }
 
         // Automatically exclude all Phantom entities, unless specifically requested.
-        if (!_include.Contains(ComponentID<Phantom>.ID))
-            Exclude<Phantom>();
+        if (!_include.Contains(ComponentID<ComponentPhantom>.ID))
+            Exclude<ComponentPhantom>();
 
         return new QueryDescription(
             world,
@@ -370,7 +370,7 @@ public sealed partial class QueryBuilder
                 case 0:
                     return FrozenOrderedListSet<ComponentID>.Empty;
 
-                case 1 when Items.Contains(ComponentID<Phantom>.ID):
+                case 1 when Items.Contains(ComponentID<ComponentPhantom>.ID):
                     return SetWithJustPhantom;
 
                 default:

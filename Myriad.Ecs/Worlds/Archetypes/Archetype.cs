@@ -85,7 +85,7 @@ public sealed partial class Archetype
     public bool HasPhantomComponents { get; }
 
     /// <summary>
-    /// Indicates if any of the components in this Archetype is <see cref="Phantom"/>
+    /// Indicates if any of the components in this Archetype is <see cref="ComponentPhantom"/>
     /// </summary>
     public bool IsPhantom { get; }
 
@@ -139,7 +139,7 @@ public sealed partial class Archetype
         // Gather flags for special components
         foreach (var component in components)
         {
-            IsPhantom |= component == ComponentID<Phantom>.ID;
+            IsPhantom |= component == ComponentID<ComponentPhantom>.ID;
             HasPhantomComponents |= component.IsPhantomComponent;
             HasRelationComponents |= component.IsRelationComponent;
             HasDisposableComponents |= component.IsDisposableComponent;
@@ -159,7 +159,7 @@ public sealed partial class Archetype
         {
             var c = new OrderedListSet<ComponentID>(components)
             {
-                ComponentID<Phantom>.ID
+                ComponentID<ComponentPhantom>.ID
             };
             _phantomDestination = World.GetOrCreateArchetype(c);
         }

@@ -18,7 +18,7 @@ public abstract class SystemState<TComponent, TAssociated>(World world)
 {
     private readonly QueryDescription _addQuery = new QueryBuilder().Include<TComponent>().Exclude<TAssociated>().Build(world);
     private readonly QueryDescription _removeQuery = new QueryBuilder().Exclude<TComponent>().Include<TAssociated>().Build(world);
-    private readonly QueryDescription _removeQueryPhantom = new QueryBuilder().Include<TAssociated>().Include<Phantom>().Build(world);
+    private readonly QueryDescription _removeQueryPhantom = new QueryBuilder().Include<TAssociated>().Include<ComponentPhantom>().Build(world);
 
     /// <summary>
     /// Indicates if <typeparamref name="TAssociated"/> is an <see cref="IPhantomComponent"/>

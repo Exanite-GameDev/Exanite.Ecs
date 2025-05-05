@@ -140,7 +140,7 @@ public sealed partial class CommandBuffer
             if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.
-                InternalSet(delete, new Phantom());
+                InternalSet(delete, new ComponentPhantom());
             }
             else
             {
@@ -232,7 +232,7 @@ public sealed partial class CommandBuffer
                 var destHasPhantomComponents = _tempComponentIdSet.Any(static a => a.IsPhantomComponent);
 
                 // Entity must be auto deleted if, after the change, it will be a `Phantom` but not have any phantom components
-                var autodelete = _tempComponentIdSet.Contains(ComponentID<Phantom>.ID) && !destHasPhantomComponents;
+                var autodelete = _tempComponentIdSet.Contains(ComponentID<ComponentPhantom>.ID) && !destHasPhantomComponents;
                 if (autodelete)
                 {
                     World.DeleteImmediate(entity.ID, ref lazy);
@@ -409,7 +409,7 @@ public sealed partial class CommandBuffer
     {
         Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in SetBuffered");
 
-        if (typeof(T) == typeof(Phantom))
+        if (typeof(T) == typeof(ComponentPhantom))
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
 
         var bufferedData = _bufferedSets[(int)id];
@@ -474,7 +474,7 @@ public sealed partial class CommandBuffer
     public void Set<T>(Entity entity, T value)
         where T : IComponent
     {
-        if (typeof(T) == typeof(Phantom))
+        if (typeof(T) == typeof(ComponentPhantom))
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
 
         InternalSet(entity, value);
@@ -550,7 +550,7 @@ public sealed partial class CommandBuffer
     public void Remove<T>(Entity entity)
         where T : IComponent
     {
-        if (typeof(T) == typeof(Phantom))
+        if (typeof(T) == typeof(ComponentPhantom))
             throw new InvalidOperationException("Cannot remove `Phantom` component from an entity");
 
         var mod = GetModificationData(entity, false, true);

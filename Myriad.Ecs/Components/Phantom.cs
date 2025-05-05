@@ -4,10 +4,10 @@
 /// <para>
 /// A phantom component acts like a normal component until the entity is destroyed. At
 /// that point instead of being destroyed the entity will automatically have a
-/// <see cref="Phantom"/> component added.
+/// <see cref="ComponentPhantom"/> component added.
 /// </para>
 /// <para>
-/// If an entity with a <see cref="Phantom"/> entity is destroyed, it will
+/// If an entity with a <see cref="ComponentPhantom"/> entity is destroyed, it will
 /// actually be destroyed. It will also automatically be destroyed if it has no more
 /// <see cref="IPhantomComponent"/> components attached.
 /// </para>
@@ -36,9 +36,9 @@ public interface IPhantomNotifierComponent : IComponent
 /// <see cref="IPhantomComponent"/> components attached.
 /// </para>
 /// <para>
-/// If an entity with a <see cref="Phantom"/> component is destroyed, it will
+/// If an entity with a <see cref="ComponentPhantom"/> component is destroyed, it will
 /// actually be destroyed. It will automatically be destroyed if it has no more
 /// <see cref="IPhantomComponent"/> components attached.
 /// </para>
 /// </summary>
-public struct Phantom : IComponent;
+public struct ComponentPhantom : IComponent;

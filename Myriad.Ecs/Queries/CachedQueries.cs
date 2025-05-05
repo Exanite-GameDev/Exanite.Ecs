@@ -20,7 +20,7 @@ namespace Myriad.Ecs.Worlds;
 public partial class World
 {
     internal static FrozenOrderedListSet<ComponentID> ExcludePhantom = FrozenOrderedListSet<ComponentID>.Create(
-        (ReadOnlySpan<ComponentID>)[ ComponentID<Phantom>.ID ]
+        (ReadOnlySpan<ComponentID>)[ ComponentID<ComponentPhantom>.ID ]
     );
 
     internal QueryDescription? TryGetCachedQuery(OrderedListSet<ComponentID> components)
@@ -223,7 +223,7 @@ public partial class World
         try
         {
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0 });
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -287,7 +287,7 @@ public partial class World
         try
         {
             var include = FrozenOrderedListSet<ComponentID>.Create(stackalloc ComponentID[] { id0, id1 });
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -382,7 +382,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -485,7 +485,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -592,7 +592,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -703,7 +703,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -818,7 +818,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -937,7 +937,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1060,7 +1060,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1187,7 +1187,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1318,7 +1318,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1453,7 +1453,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1592,7 +1592,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1735,7 +1735,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1882,7 +1882,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -2033,7 +2033,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentID<Phantom>.ID)
+            var exclude = include.Contains(ComponentID<ComponentPhantom>.ID)
                 ? FrozenOrderedListSet<ComponentID>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
