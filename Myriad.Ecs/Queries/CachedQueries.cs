@@ -9,10 +9,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-#if NETSTANDARD2_1
-using Myriad.Ecs.Extensions;
-#endif
-
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
 // ReSharper disable LoopCanBeConvertedToQuery

@@ -57,14 +57,6 @@ internal struct ComponentBloomFilter
         // Therefore if _any_ of the sets do not intersect, then the overall
         // set does not intersect.
 
-#if NETSTANDARD2_1
-        var fail = (_a & other._a) == 0
-                || (_b & other._b) == 0
-                || (_c & other._c) == 0
-                || (_d & other._d) == 0
-                || (_e & other._e) == 0
-                || (_f & other._f) == 0;
-#else
         // Bitwise & each matching element in the two sets together
         var abcd = System.Runtime.Intrinsics.Vector256.Create(_a, _b, _c, _d)
                  & System.Runtime.Intrinsics.Vector256.Create(other._a, other._b, other._c, other._d);
@@ -76,7 +68,6 @@ internal struct ComponentBloomFilter
         var efz = System.Runtime.Intrinsics.Vector128.EqualsAny(ef, System.Runtime.Intrinsics.Vector128<ulong>.Zero);
 
         var fail = abz | efz;
-#endif
 
         return !fail;
     }
