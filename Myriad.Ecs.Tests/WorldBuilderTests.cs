@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Myriad.Ecs.Threading;
+﻿using Myriad.Ecs.Threading;
 using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;

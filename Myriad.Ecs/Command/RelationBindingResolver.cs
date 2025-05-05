@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Myriad.Ecs;
 using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.IDs;
