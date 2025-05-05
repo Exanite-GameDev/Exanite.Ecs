@@ -18,18 +18,8 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex))
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -45,24 +35,9 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex))
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -79,30 +54,10 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex))
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -120,36 +75,11 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex))
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -168,42 +98,12 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex))
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -223,48 +123,13 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex))
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -285,54 +150,14 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex))
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -354,60 +179,15 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex))
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -430,66 +210,16 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex)),
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T9>(ref entityInfo.Chunk.GetRef<T9>(entityInfo.RowIndex))
-#else
-            new RefT<T9>(entityInfo.Chunk.GetComponentArray<T9>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -513,72 +243,17 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex)),
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T9>(ref entityInfo.Chunk.GetRef<T9>(entityInfo.RowIndex)),
-#else
-            new RefT<T9>(entityInfo.Chunk.GetComponentArray<T9>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T10>(ref entityInfo.Chunk.GetRef<T10>(entityInfo.RowIndex))
-#else
-            new RefT<T10>(entityInfo.Chunk.GetComponentArray<T10>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -603,78 +278,18 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex)),
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T9>(ref entityInfo.Chunk.GetRef<T9>(entityInfo.RowIndex)),
-#else
-            new RefT<T9>(entityInfo.Chunk.GetComponentArray<T9>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T10>(ref entityInfo.Chunk.GetRef<T10>(entityInfo.RowIndex)),
-#else
-            new RefT<T10>(entityInfo.Chunk.GetComponentArray<T10>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T11>(ref entityInfo.Chunk.GetRef<T11>(entityInfo.RowIndex))
-#else
-            new RefT<T11>(entityInfo.Chunk.GetComponentArray<T11>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -700,84 +315,19 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex)),
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T9>(ref entityInfo.Chunk.GetRef<T9>(entityInfo.RowIndex)),
-#else
-            new RefT<T9>(entityInfo.Chunk.GetComponentArray<T9>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T10>(ref entityInfo.Chunk.GetRef<T10>(entityInfo.RowIndex)),
-#else
-            new RefT<T10>(entityInfo.Chunk.GetComponentArray<T10>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T11>(ref entityInfo.Chunk.GetRef<T11>(entityInfo.RowIndex)),
-#else
-            new RefT<T11>(entityInfo.Chunk.GetComponentArray<T11>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T12>(ref entityInfo.Chunk.GetRef<T12>(entityInfo.RowIndex))
-#else
-            new RefT<T12>(entityInfo.Chunk.GetComponentArray<T12>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -804,90 +354,20 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex)),
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T9>(ref entityInfo.Chunk.GetRef<T9>(entityInfo.RowIndex)),
-#else
-            new RefT<T9>(entityInfo.Chunk.GetComponentArray<T9>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T10>(ref entityInfo.Chunk.GetRef<T10>(entityInfo.RowIndex)),
-#else
-            new RefT<T10>(entityInfo.Chunk.GetComponentArray<T10>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T11>(ref entityInfo.Chunk.GetRef<T11>(entityInfo.RowIndex)),
-#else
-            new RefT<T11>(entityInfo.Chunk.GetComponentArray<T11>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T12>(ref entityInfo.Chunk.GetRef<T12>(entityInfo.RowIndex)),
-#else
-            new RefT<T12>(entityInfo.Chunk.GetComponentArray<T12>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T13>(ref entityInfo.Chunk.GetRef<T13>(entityInfo.RowIndex))
-#else
-            new RefT<T13>(entityInfo.Chunk.GetComponentArray<T13>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -915,96 +395,21 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex)),
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T9>(ref entityInfo.Chunk.GetRef<T9>(entityInfo.RowIndex)),
-#else
-            new RefT<T9>(entityInfo.Chunk.GetComponentArray<T9>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T10>(ref entityInfo.Chunk.GetRef<T10>(entityInfo.RowIndex)),
-#else
-            new RefT<T10>(entityInfo.Chunk.GetComponentArray<T10>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T11>(ref entityInfo.Chunk.GetRef<T11>(entityInfo.RowIndex)),
-#else
-            new RefT<T11>(entityInfo.Chunk.GetComponentArray<T11>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T12>(ref entityInfo.Chunk.GetRef<T12>(entityInfo.RowIndex)),
-#else
-            new RefT<T12>(entityInfo.Chunk.GetComponentArray<T12>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T13>(ref entityInfo.Chunk.GetRef<T13>(entityInfo.RowIndex)),
-#else
-            new RefT<T13>(entityInfo.Chunk.GetComponentArray<T13>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T14>(ref entityInfo.Chunk.GetRef<T14>(entityInfo.RowIndex))
-#else
-            new RefT<T14>(entityInfo.Chunk.GetComponentArray<T14>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 
@@ -1033,102 +438,22 @@ public readonly partial record struct EntityId
 
         return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
             ToEntity(world),
-#if NET6_0_OR_GREATER
             new RefT<T0>(ref entityInfo.Chunk.GetRef<T0>(entityInfo.RowIndex)),
-#else
-            new RefT<T0>(entityInfo.Chunk.GetComponentArray<T0>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T1>(ref entityInfo.Chunk.GetRef<T1>(entityInfo.RowIndex)),
-#else
-            new RefT<T1>(entityInfo.Chunk.GetComponentArray<T1>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T2>(ref entityInfo.Chunk.GetRef<T2>(entityInfo.RowIndex)),
-#else
-            new RefT<T2>(entityInfo.Chunk.GetComponentArray<T2>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T3>(ref entityInfo.Chunk.GetRef<T3>(entityInfo.RowIndex)),
-#else
-            new RefT<T3>(entityInfo.Chunk.GetComponentArray<T3>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T4>(ref entityInfo.Chunk.GetRef<T4>(entityInfo.RowIndex)),
-#else
-            new RefT<T4>(entityInfo.Chunk.GetComponentArray<T4>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T5>(ref entityInfo.Chunk.GetRef<T5>(entityInfo.RowIndex)),
-#else
-            new RefT<T5>(entityInfo.Chunk.GetComponentArray<T5>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T6>(ref entityInfo.Chunk.GetRef<T6>(entityInfo.RowIndex)),
-#else
-            new RefT<T6>(entityInfo.Chunk.GetComponentArray<T6>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T7>(ref entityInfo.Chunk.GetRef<T7>(entityInfo.RowIndex)),
-#else
-            new RefT<T7>(entityInfo.Chunk.GetComponentArray<T7>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T8>(ref entityInfo.Chunk.GetRef<T8>(entityInfo.RowIndex)),
-#else
-            new RefT<T8>(entityInfo.Chunk.GetComponentArray<T8>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T9>(ref entityInfo.Chunk.GetRef<T9>(entityInfo.RowIndex)),
-#else
-            new RefT<T9>(entityInfo.Chunk.GetComponentArray<T9>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T10>(ref entityInfo.Chunk.GetRef<T10>(entityInfo.RowIndex)),
-#else
-            new RefT<T10>(entityInfo.Chunk.GetComponentArray<T10>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T11>(ref entityInfo.Chunk.GetRef<T11>(entityInfo.RowIndex)),
-#else
-            new RefT<T11>(entityInfo.Chunk.GetComponentArray<T11>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T12>(ref entityInfo.Chunk.GetRef<T12>(entityInfo.RowIndex)),
-#else
-            new RefT<T12>(entityInfo.Chunk.GetComponentArray<T12>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T13>(ref entityInfo.Chunk.GetRef<T13>(entityInfo.RowIndex)),
-#else
-            new RefT<T13>(entityInfo.Chunk.GetComponentArray<T13>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T14>(ref entityInfo.Chunk.GetRef<T14>(entityInfo.RowIndex)),
-#else
-            new RefT<T14>(entityInfo.Chunk.GetComponentArray<T14>(), entityInfo.RowIndex),
-#endif
-
-#if NET6_0_OR_GREATER
             new RefT<T15>(ref entityInfo.Chunk.GetRef<T15>(entityInfo.RowIndex))
-#else
-            new RefT<T15>(entityInfo.Chunk.GetComponentArray<T15>(), entityInfo.RowIndex)
-#endif
-
         );
     }
 

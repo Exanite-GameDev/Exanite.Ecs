@@ -69,11 +69,7 @@ public sealed class Chunk
     {
         Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
 
-#if NET6_0_OR_GREATER
         return new RefT<T>(ref GetRef<T>(rowIndex));
-#else
-        return new RefT<T>(GetComponentArray<T>(), rowIndex);
-#endif
     }
 
     internal ref T GetRef<T>(int rowIndex)

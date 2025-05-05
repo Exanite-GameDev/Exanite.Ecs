@@ -282,7 +282,6 @@ internal class OrderedListSet<TItem>
         if (Count != other.Count)
             return false;
 
-#if NET6_0_OR_GREATER
         var a = CollectionsMarshal.AsSpan(_items);
         var b = CollectionsMarshal.AsSpan(other._items);
 
@@ -296,15 +295,6 @@ internal class OrderedListSet<TItem>
         }
 
         return a.SequenceEqual(b);
-#else
-
-        // Both sets are in order, so lists should be identical
-        for (var i = 0; i < _items.Count; i++)
-            if (_items[i].CompareTo(other._items[i]) != 0)
-                return false;
-
-        return true;
-#endif
     }
 
     public bool SetEquals<TV>(Dictionary<TItem, TV> other)

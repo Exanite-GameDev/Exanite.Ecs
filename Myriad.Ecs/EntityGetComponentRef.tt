@@ -1,6 +1,7 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Worlds;
 
@@ -29,12 +30,7 @@ public readonly partial record struct EntityId
 {
     var comma = (j == (i - 1)) ? "" : ",";
 #>
-#if NET6_0_OR_GREATER
             new RefT<T<#= j #>>(ref entityInfo.Chunk.GetRef<T<#= j #>>(entityInfo.RowIndex))<#= comma #>
-#else
-            new RefT<T<#= j #>>(entityInfo.Chunk.GetComponentArray<T<#= j #>>(), entityInfo.RowIndex)<#= comma #>
-#endif
-
 <#
 }
 #>

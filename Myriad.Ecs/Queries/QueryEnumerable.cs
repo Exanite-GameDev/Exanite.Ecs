@@ -6,7 +6,6 @@ using Myriad.Ecs.IDs;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Worlds.Chunks;
 using System.Diagnostics.CodeAnalysis;
-using Myriad.Ecs;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global
@@ -19,9 +18,9 @@ using Myriad.Ecs;
 
 namespace Myriad.Ecs.Queries
 {
-
+    
     public readonly struct QueryResultEnumerable0
-
+        
     {
         private readonly QueryDescription _query;
 
@@ -38,9 +37,9 @@ namespace Myriad.Ecs.Queries
         }
     }
 
-
+    
     public ref struct QueryResultEnumerator0
-
+        
     {
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
@@ -60,7 +59,6 @@ namespace Myriad.Ecs.Queries
             get
             {
                 return SpanEntities[_entityIndex];
-
             }
         }
 
@@ -139,7 +137,7 @@ namespace Myriad.Ecs.Worlds
 
 namespace Myriad.Ecs.Queries
 {
-
+    
     public readonly struct QueryResultEnumerable1<T0>
         where T0 : IComponent
     {
@@ -158,7 +156,7 @@ namespace Myriad.Ecs.Queries
         }
     }
 
-
+    
     public ref struct QueryResultEnumerator1<T0>
         where T0 : IComponent
     {
@@ -183,13 +181,8 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -257,14 +250,14 @@ namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
-
+        
         public QueryResultEnumerable1<T0> Query<T0>(QueryDescription? query = null)
             where T0 : IComponent
         {
             return Query<T0>(ref query);
         }
 
-
+        
         public QueryResultEnumerable1<T0> Query<T0>(ref QueryDescription? query)
             where T0 : IComponent
         {
@@ -329,15 +322,9 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -484,17 +471,10 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -648,19 +628,11 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
                     new RefT<T3>(ref Components3![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -821,21 +793,12 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
                     new RefT<T3>(ref Components3![_entityIndex]),
                     new RefT<T4>(ref Components4![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -1003,23 +966,13 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
                     new RefT<T3>(ref Components3![_entityIndex]),
                     new RefT<T4>(ref Components4![_entityIndex]),
                     new RefT<T5>(ref Components5![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -1194,7 +1147,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -1202,17 +1154,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T4>(ref Components4![_entityIndex]),
                     new RefT<T5>(ref Components5![_entityIndex]),
                     new RefT<T6>(ref Components6![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -1394,7 +1336,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -1403,18 +1344,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T5>(ref Components5![_entityIndex]),
                     new RefT<T6>(ref Components6![_entityIndex]),
                     new RefT<T7>(ref Components7![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -1603,7 +1533,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -1613,19 +1542,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T6>(ref Components6![_entityIndex]),
                     new RefT<T7>(ref Components7![_entityIndex]),
                     new RefT<T8>(ref Components8![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -1821,7 +1738,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -1832,20 +1748,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T7>(ref Components7![_entityIndex]),
                     new RefT<T8>(ref Components8![_entityIndex]),
                     new RefT<T9>(ref Components9![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex),
-                    new RefT<T9>(Components9!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -2048,7 +1951,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -2060,21 +1962,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T8>(ref Components8![_entityIndex]),
                     new RefT<T9>(ref Components9![_entityIndex]),
                     new RefT<T10>(ref Components10![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex),
-                    new RefT<T9>(Components9!, _entityIndex),
-                    new RefT<T10>(Components10!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -2284,7 +2172,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -2297,22 +2184,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T9>(ref Components9![_entityIndex]),
                     new RefT<T10>(ref Components10![_entityIndex]),
                     new RefT<T11>(ref Components11![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex),
-                    new RefT<T9>(Components9!, _entityIndex),
-                    new RefT<T10>(Components10!, _entityIndex),
-                    new RefT<T11>(Components11!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -2529,7 +2401,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -2543,23 +2414,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T10>(ref Components10![_entityIndex]),
                     new RefT<T11>(ref Components11![_entityIndex]),
                     new RefT<T12>(ref Components12![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex),
-                    new RefT<T9>(Components9!, _entityIndex),
-                    new RefT<T10>(Components10!, _entityIndex),
-                    new RefT<T11>(Components11!, _entityIndex),
-                    new RefT<T12>(Components12!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -2783,7 +2638,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -2798,24 +2652,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T11>(ref Components11![_entityIndex]),
                     new RefT<T12>(ref Components12![_entityIndex]),
                     new RefT<T13>(ref Components13![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex),
-                    new RefT<T9>(Components9!, _entityIndex),
-                    new RefT<T10>(Components10!, _entityIndex),
-                    new RefT<T11>(Components11!, _entityIndex),
-                    new RefT<T12>(Components12!, _entityIndex),
-                    new RefT<T13>(Components13!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -3046,7 +2883,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -3062,25 +2898,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T12>(ref Components12![_entityIndex]),
                     new RefT<T13>(ref Components13![_entityIndex]),
                     new RefT<T14>(ref Components14![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex),
-                    new RefT<T9>(Components9!, _entityIndex),
-                    new RefT<T10>(Components10!, _entityIndex),
-                    new RefT<T11>(Components11!, _entityIndex),
-                    new RefT<T12>(Components12!, _entityIndex),
-                    new RefT<T13>(Components13!, _entityIndex),
-                    new RefT<T14>(Components14!, _entityIndex)
-#endif
                 );
-
             }
         }
 
@@ -3318,7 +3136,6 @@ namespace Myriad.Ecs.Queries
             {
                 return new RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
                     SpanEntities[_entityIndex],
-#if NET6_0_OR_GREATER
                     new RefT<T0>(ref Components0![_entityIndex]),
                     new RefT<T1>(ref Components1![_entityIndex]),
                     new RefT<T2>(ref Components2![_entityIndex]),
@@ -3335,26 +3152,7 @@ namespace Myriad.Ecs.Queries
                     new RefT<T13>(ref Components13![_entityIndex]),
                     new RefT<T14>(ref Components14![_entityIndex]),
                     new RefT<T15>(ref Components15![_entityIndex])
-#else
-                    new RefT<T0>(Components0!, _entityIndex),
-                    new RefT<T1>(Components1!, _entityIndex),
-                    new RefT<T2>(Components2!, _entityIndex),
-                    new RefT<T3>(Components3!, _entityIndex),
-                    new RefT<T4>(Components4!, _entityIndex),
-                    new RefT<T5>(Components5!, _entityIndex),
-                    new RefT<T6>(Components6!, _entityIndex),
-                    new RefT<T7>(Components7!, _entityIndex),
-                    new RefT<T8>(Components8!, _entityIndex),
-                    new RefT<T9>(Components9!, _entityIndex),
-                    new RefT<T10>(Components10!, _entityIndex),
-                    new RefT<T11>(Components11!, _entityIndex),
-                    new RefT<T12>(Components12!, _entityIndex),
-                    new RefT<T13>(Components13!, _entityIndex),
-                    new RefT<T14>(Components14!, _entityIndex),
-                    new RefT<T15>(Components15!, _entityIndex)
-#endif
                 );
-
             }
         }
 

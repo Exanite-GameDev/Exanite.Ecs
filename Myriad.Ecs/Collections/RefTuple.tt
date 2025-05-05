@@ -1,6 +1,7 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
 <#
 	const int PARAM_COUNT = 16;
 #>
@@ -17,8 +18,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Myriad.Ecs.Collections;
-
-#if NET6_0_OR_GREATER
 
 public readonly ref struct RefT<T>
 {
@@ -40,36 +39,6 @@ public readonly ref struct RefT<T>
 		return reference.Ref;
     }
 }
-
-#else
-
-public readonly struct RefT<T>
-{
-	private readonly T[] _arr;
-	private readonly int _index;
-
-	public ref T Ref
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	    get
-	    {
-			return ref _arr[_index];
-	    }
-	}
-
-	internal RefT(T[] a, int i)
-	{
-		_arr = a;
-		_index = i;
-	}
-
-	public static implicit operator T(RefT<T> reference)
-    {
-		return reference.Ref;
-    }
-}
-
-#endif
 
 <# for (var i = 1; i <= PARAM_COUNT; i++)
 {
@@ -128,7 +97,6 @@ public readonly ref struct RefTuple<<#= tparams #>>
 <#
 }
 #>
-
 
 <#+
 	static string CoverageAttribute(int index)

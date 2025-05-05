@@ -12,8 +12,6 @@ using System.Runtime.CompilerServices;
 
 namespace Myriad.Ecs.Collections;
 
-#if NET6_0_OR_GREATER
-
 public readonly ref struct RefT<T>
 {
 	private readonly ref T _ref;
@@ -34,36 +32,6 @@ public readonly ref struct RefT<T>
 		return reference.Ref;
     }
 }
-
-#else
-
-public readonly struct RefT<T>
-{
-	private readonly T[] _arr;
-	private readonly int _index;
-
-	public ref T Ref
-	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	    get
-	    {
-			return ref _arr[_index];
-	    }
-	}
-
-	internal RefT(T[] a, int i)
-	{
-		_arr = a;
-		_index = i;
-	}
-
-	public static implicit operator T(RefT<T> reference)
-    {
-		return reference.Ref;
-    }
-}
-
-#endif
 
 
 
@@ -1545,5 +1513,4 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		item15 = _item15;
 	}
 }
-
 
