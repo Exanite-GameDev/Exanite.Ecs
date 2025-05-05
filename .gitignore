@@ -14,3 +14,5 @@
 
 /ParallelTasks/obj
 /ParallelTasks/bin
+
+*.DotSettings.user
