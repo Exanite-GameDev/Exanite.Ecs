@@ -9,10 +9,10 @@ namespace Myriad.Ecs.Threading;
 public class DefaultThreadPool
     : IThreadPool
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int Threads { get; } = Math.Max(4, Math.Min(64, Environment.ProcessorCount) - 3);
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void QueueUserWorkItem(IThreadPoolWorkItem callback)
     {
         ThreadPool.UnsafeQueueUserWorkItem(callback, false);

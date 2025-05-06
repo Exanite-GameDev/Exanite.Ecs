@@ -63,7 +63,7 @@ public readonly struct LocalPool<T>
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         foreach (var item in _items)

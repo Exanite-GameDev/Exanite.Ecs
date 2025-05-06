@@ -31,7 +31,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Min
                 : IQueryReduce<<#= type.Name #>>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
                 {
                     return Math.Min(a, b);
@@ -42,7 +42,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Max
                 : IQueryReduce<<#= type.Name #>>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
                 {
                     return Math.Max(a, b);
@@ -53,7 +53,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Add
                 : IQueryReduce<<#= type.Name #>>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
                 {
                     return a + b;
@@ -64,7 +64,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Mul
                 : IQueryReduce<<#= type.Name #>>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
                 {
                     return a * b;
@@ -81,7 +81,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Xor
                 : IQueryReduce<<#= type.Name #>>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
                 {
                     return a ^ b;
@@ -92,7 +92,7 @@ namespace Myriad.Ecs.Queries
 		    public struct And
                 : IQueryReduce<<#= type.Name #>>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
                 {
                     return a & b;
@@ -103,7 +103,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Or
                 : IQueryReduce<<#= type.Name #>>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public <#= type.Name #> Reduce(<#= type.Name #> a, <#= type.Name #> b)
                 {
                     return a | b;

@@ -385,7 +385,7 @@ public sealed class QueryDescription
     public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne)
         : IComparable<ArchetypeMatch>
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public int CompareTo(ArchetypeMatch other)
         {
             return Archetype.Hash.CompareTo(other.Archetype.Hash);

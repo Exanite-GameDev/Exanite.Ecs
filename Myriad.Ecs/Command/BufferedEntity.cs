@@ -56,58 +56,6 @@ public sealed partial class EcsCommandBuffer
         {
             CheckIsMutable();
 
-            // Redirect to bind to self
-            if (typeof(T) == typeof(SelfReference))
-            {
-                return Set(new SelfReference(), this);
-            }
-
-            _buffer.SetBuffered(_id, value);
-            return this;
-        }
-
-        /// <summary>
-        /// Add a relational component to this entity
-        /// </summary>
-        /// <typeparam name="T">The type of component to add</typeparam>
-        /// <param name="value">The value of the component to add</param>
-        /// <param name="relation">When the command buffer is played back the target entity will automatically be resolved and set into the relational component</param>
-        /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, BufferedEntity relation)
-            where T : IEntityRelationComponent
-        {
-            CheckIsMutable();
-
-            if (typeof(T) == typeof(SelfReference))
-            {
-                if (relation != this)
-                {
-                    throw new InvalidOperationException("Cannot bind `SelfReference` to another Entity");
-                }
-            }
-
-            _buffer.SetBuffered(_id, value, relation);
-            return this;
-        }
-
-        /// <summary>
-        /// Add a relational component to this entity
-        /// </summary>
-        /// <typeparam name="T">The type of component to add</typeparam>
-        /// <param name="value">The value of the component to add</param>
-        /// <param name="relation"></param>
-        /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, Entity relation)
-            where T : IEntityRelationComponent
-        {
-            CheckIsMutable();
-
-            if (typeof(T) == typeof(SelfReference))
-            {
-                throw new InvalidOperationException("Cannot bind `SelfReference` to another Entity");
-            }
-
-            value.Target = relation;
             _buffer.SetBuffered(_id, value);
             return this;
         }

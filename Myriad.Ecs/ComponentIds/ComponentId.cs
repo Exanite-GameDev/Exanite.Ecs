@@ -11,12 +11,9 @@ namespace Myriad.Ecs.ComponentIds;
 public readonly record struct ComponentId
     : IComparable<ComponentId>
 {
-    internal const int SpecialBitsCount = 4;
+    internal const int SpecialBitsCount = 1;
     internal const int SpecialBitsMask  = ~(~0 << SpecialBitsCount);
     internal const int IsPhantomComponentMask         = 0b0001;
-    internal const int IsRelationComponentMask        = 0b0010;
-    internal const int IsDisposableComponentMask      = 0b0100;
-    internal const int IsPhantomNotifierComponentMask = 0b1000;
 
     /// <summary>
     /// Get the raw value of this ID
@@ -33,44 +30,26 @@ public readonly record struct ComponentId
     /// </summary>
     public bool IsPhantomComponent => (Value & IsPhantomComponentMask) == IsPhantomComponentMask;
 
-    /// <summary>
-    /// Indicates if this component implements <see cref="IEntityRelationComponent"/>
-    /// </summary>
-    public bool IsRelationComponent => (Value & IsRelationComponentMask) == IsRelationComponentMask;
-
-    /// <summary>
-    /// Indicates if this component implements <see cref="IDisposableComponent"/>
-    /// </summary>
-    public bool IsDisposableComponent => (Value & IsDisposableComponentMask) == IsDisposableComponentMask;
-
-    /// <summary>
-    /// Indicates if this component implements <see cref="IDisposableComponent"/>
-    /// </summary>
-    public bool IsPhantomNotifierComponent => (Value & IsPhantomNotifierComponentMask) == IsPhantomNotifierComponentMask;
-
     internal ComponentId(int value)
     {
         Value = value;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int CompareTo(ComponentId other)
     {
         return Value.CompareTo(other.Value);
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
-        var p = IsPhantomComponent ? " (phantom)" : "";
-        var d = IsDisposableComponent ? " (dispose)" : "";
-        return $"C{Value}{p}{d}";
+        return $"{Type.Name} ({Value}{(IsPhantomComponent ? "; Phantom" : "")})";
     }
 
     /// <summary>
     /// Get the component ID for the given type
     /// </summary>
-    /// <param name="type"></param>
     /// <exception cref="ArgumentException">Thrown if 'type' does not implement <see cref="IComponent"/></exception>
     public static ComponentId Get(Type type)
     {
@@ -80,7 +59,6 @@ public readonly record struct ComponentId
     /// <summary>
     /// Get the component ID for the given type
     /// </summary>
-    /// <param name="type"></param>
     public static ComponentId Get<T>() where T : IComponent
     {
         return ComponentRegistry.Get<T>();

@@ -13,7 +13,7 @@ namespace Myriad.Ecs.Worlds.Archetypes;
 /// <summary>
 /// An archetype contains all entities which share exactly the same set of components.
 /// </summary>
-public sealed partial class Archetype
+public sealed class Archetype
 {
     /// <summary>
     /// Number of entities in a single chunk
@@ -67,8 +67,6 @@ public sealed partial class Archetype
 
     private readonly ComponentId[] _componentIDs;
     private readonly Type[] _componentTypes;
-    private readonly ArchetypeComponentDisposal? _disposer;
-    private readonly ArchetypePhantomComponentNotifier? _phantomNotifier;
 
     /// <summary>
     /// The archetype that entities should be moved to when deleted. Only non-null if <code>HasPhantomComponents &amp; !IsPhantom</code>
@@ -144,21 +142,6 @@ public sealed partial class Archetype
         {
             IsPhantom |= component == ComponentId.Get<ComponentPhantom>();
             HasPhantomComponents |= component.IsPhantomComponent;
-            HasRelationComponents |= component.IsRelationComponent;
-            HasDisposableComponents |= component.IsDisposableComponent;
-            HasPhantomNotifierComponents |= component.IsPhantomNotifierComponent;
-        }
-
-        // Create a disposer if it's needed
-        if (HasDisposableComponents)
-        {
-            _disposer = new ArchetypeComponentDisposal(components);
-        }
-
-        // Create a notifier if it's needed
-        if (HasPhantomNotifierComponents && !IsPhantom)
-        {
-            _phantomNotifier = new ArchetypePhantomComponentNotifier(components);
         }
 
         // Get the destination archetype for deleted entities, if they become phantoms
@@ -169,21 +152,6 @@ public sealed partial class Archetype
                 ComponentId.Get<ComponentPhantom>()
             };
             _phantomDestination = World.GetOrCreateArchetype(c);
-        }
-    }
-
-    internal void Dispose(ref LazyCommandBuffer buffer)
-    {
-        DisposeAllDisposableComponents(ref buffer);
-    }
-
-    private void DisposeAllDisposableComponents(ref LazyCommandBuffer buffer)
-    {
-        if (_disposer != null)
-        {
-            foreach (var chunk in _chunks)
-                for (var i = 0; i < chunk.EntityCount; i++)
-                    _disposer.DisposeEntity(ref buffer, chunk, i);
         }
     }
 
@@ -224,12 +192,6 @@ public sealed partial class Archetype
         }
         else
         {
-            // Dispose all disposables on any entity in this archetype
-            if (HasDisposableComponents)
-            {
-                DisposeAllDisposableComponents(ref lazy);
-            }
-
             // Clear all the chunks
             foreach (var chunk in _chunks)
                 chunk.Clear();
@@ -287,12 +249,6 @@ public sealed partial class Archetype
 
     internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy)
     {
-        // Run disposal for all IDisposableComponent components
-        if (HasDisposableComponents)
-        {
-            _disposer?.DisposeEntity(ref lazy, info);
-        }
-
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
 
@@ -306,15 +262,6 @@ public sealed partial class Archetype
         if (to == this)
         {
             return info.GetRow(entity);
-        }
-
-        // Handle disposable components which are being removed
-        _disposer?.DisposeRemoved(ref lazy, info, to.Components);
-
-        // Inform entity it is becoming a phantom
-        if (to.IsPhantom)
-        {
-            _phantomNotifier?.Notify(entity, info);
         }
 
         // Do the actual copying
@@ -354,7 +301,7 @@ public sealed partial class Archetype
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return Hash.GetHashCode();

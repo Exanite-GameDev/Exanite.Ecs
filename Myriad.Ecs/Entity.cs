@@ -41,7 +41,7 @@ public readonly partial record struct Entity
         World = world;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return ID.ToString();
@@ -66,7 +66,7 @@ public readonly partial record struct Entity
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
     public bool IsPhantom() => ID.IsPhantom(World);
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int CompareTo(Entity other)
     {
         return ID.CompareTo(other.ID);

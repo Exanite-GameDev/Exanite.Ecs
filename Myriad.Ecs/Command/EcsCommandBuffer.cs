@@ -38,9 +38,6 @@ public sealed partial class EcsCommandBuffer
 
     private readonly OrderedListSet<ComponentId> _tempComponentIdSet = [ ];
 
-    private readonly BufferedRelationBinder _bufferedRelationBindings = new();
-    private readonly UnbufferedRelationBinder _unbufferedRelationBindings = new();
-
     private Resolver _nextResolver;
 
     /// <summary>
@@ -78,9 +75,6 @@ public sealed partial class EcsCommandBuffer
         // Structural changes (add/remove components)
         ApplyStructuralChanges(ref lazy);
 
-        // Dispose all disposable components which were enqueued but were never attached to an Entity
-        _setters.DisposeAllOverwritten(ref lazy);
-
         // Clear all temporary state
         _maybeAddingPhantomComponent.Clear();
         _setters.Clear();
@@ -90,12 +84,6 @@ public sealed partial class EcsCommandBuffer
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { _version++; }
-
-        // Apply all late-bound relationships (this requires using the resolver, so must be done after the version bump)
-        _bufferedRelationBindings.Apply(resolver);
-        _bufferedRelationBindings.Clear();
-        _unbufferedRelationBindings.Apply(resolver);
-        _unbufferedRelationBindings.Clear();
 
         // Apply any changes caused by these changes
         if (lazy.TryGetBuffer(out var lazyBuffer))
@@ -130,12 +118,6 @@ public sealed partial class EcsCommandBuffer
 
         foreach (var delete in _deletes)
         {
-            // If there are any modifications enqueue for this entity, delete them
-            if (_entityModifications.TryGetValue(delete, out var mods))
-            {
-                _setters.Dispose(mods.Sets, ref lazy);
-            }
-
             // Skip deleted entities
             if (!delete.Exists())
             {
@@ -195,13 +177,6 @@ public sealed partial class EcsCommandBuffer
             // Calculate the new archetype for the entity
             foreach (var (entity, mod) in _entityModifications)
             {
-                // Skip entities that have been deleted since this was enqueued
-                if (!entity.Exists())
-                {
-                    _setters.Dispose(mod.Sets, ref lazy);
-                    continue;
-                }
-
                 var currentArchetype = World.GetArchetype(entity.ID);
 
                 // Set all of the current archetype components
@@ -389,8 +364,6 @@ public sealed partial class EcsCommandBuffer
         _archetypeDeletes.Clear();
         _maybeAddingPhantomComponent.Clear();
         _tempComponentIdSet.Clear();
-        _bufferedRelationBindings.Clear();
-        _unbufferedRelationBindings.Clear();
 
         unchecked { _version++; }
         _nextResolver.Dispose();
@@ -459,18 +432,6 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void SetBuffered<T>(uint id, T value, BufferedEntity relation)
-        where T : IEntityRelationComponent
-    {
-        if (relation._buffer != this)
-        {
-            throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
-        }
-
-        SetBuffered(id, value);
-        _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this, _nextResolver), relation);
-    }
-
     /// <summary>
     /// Add or overwrite a component attached to an entity
     /// </summary>
@@ -485,33 +446,6 @@ public sealed partial class EcsCommandBuffer
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
         }
 
-        InternalSet(entity, value);
-    }
-
-    /// <summary>
-    /// Add or overwrite a component attached to an entity
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="entity"></param>
-    /// <param name="value"></param>
-    /// <param name="relation">When this buffer is played back the given buffered entity will be set into the component</param>
-    public void Set<T>(Entity entity, T value, BufferedEntity relation)
-        where T : IEntityRelationComponent
-    {
-        InternalSet(entity, value, relation);
-    }
-
-    /// <summary>
-    /// Add or overwrite a component attached to an entity
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="entity"></param>
-    /// <param name="value"></param>
-    /// <param name="relation"></param>
-    public void Set<T>(Entity entity, T value, Entity relation)
-        where T : IEntityRelationComponent
-    {
-        value.Target = relation;
         InternalSet(entity, value);
     }
 
@@ -540,18 +474,6 @@ public sealed partial class EcsCommandBuffer
 
         // Remove it from the "remove" set. In case it was previously removed
         mod.Removes?.Remove(id);
-    }
-
-    private void InternalSet<T>(Entity entity, T value, BufferedEntity relation)
-        where T : IEntityRelationComponent
-    {
-        if (relation._buffer != this)
-        {
-            throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
-        }
-
-        InternalSet(entity, value);
-        _unbufferedRelationBindings.Create<T>(entity, relation);
     }
 
     /// <summary>

@@ -35,7 +35,7 @@ public sealed partial class EcsCommandBuffer
             Version = buffer._version;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Dispose()
         {
             if (Parent == null)

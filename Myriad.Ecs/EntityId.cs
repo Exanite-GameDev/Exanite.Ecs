@@ -29,7 +29,7 @@ public readonly partial record struct EntityId
         Version = version;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"{ID}v{Version}";
@@ -77,7 +77,7 @@ public readonly partial record struct EntityId
             && world.GetArchetype(this).IsPhantom;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int CompareTo(EntityId other)
     {
         var idc = ID.CompareTo(other.ID);

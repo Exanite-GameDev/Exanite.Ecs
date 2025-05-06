@@ -40,18 +40,10 @@ public sealed partial class World
         ThreadPool = pool;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
-        var lazy = new LazyCommandBuffer(this);
 
-        foreach (var archetype in _archetypes)
-            archetype.Dispose(ref lazy);
-
-        if (lazy.TryGetBuffer(out var buffer))
-        {
-            buffer.Playback().Dispose();
-        }
     }
 
     #region command buffer pool

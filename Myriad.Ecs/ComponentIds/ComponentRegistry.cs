@@ -110,24 +110,6 @@ internal static class ComponentRegistry
                     id |= ComponentId.IsPhantomComponentMask;
                 }
 
-                // Set the bit indicating that this component implements IEntityRelationComponent
-                if (typeof(IEntityRelationComponent).IsAssignableFrom(type))
-                {
-                    id |= ComponentId.IsRelationComponentMask;
-                }
-
-                // Set the bit indicating that this component implements IDisposableComponent
-                if (typeof(IDisposableComponent).IsAssignableFrom(type))
-                {
-                    id |= ComponentId.IsDisposableComponentMask;
-                }
-
-                // Set the bit indicating that this component implements IPhantomNotifierComponent
-                if (typeof(IPhantomNotifierComponent).IsAssignableFrom(type))
-                {
-                    id |= ComponentId.IsPhantomNotifierComponentMask;
-                }
-
                 // Store it for future lookups
                 value = new ComponentId(id);
                 IDLookup[type] = value;

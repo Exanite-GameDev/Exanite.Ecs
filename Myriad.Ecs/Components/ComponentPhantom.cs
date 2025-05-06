@@ -15,19 +15,6 @@
 public interface IComponentPhantom : IComponent;
 
 /// <summary>
-/// This component received a notification when the entity it is attached to becomes a phantom.
-/// </summary>
-/// <remarks>Note that this component is <b>not</b> an <see cref="IComponentPhantom"/>.</remarks>
-public interface IPhantomNotifierComponent : IComponent
-{
-    /// <summary>
-    /// Called when the entity this component is attached to becomes a phantom.
-    /// </summary>
-    /// <param name="self">A reference to the entity this component is attached to</param>
-    void OnBecomePhantom(EntityId self);
-}
-
-/// <summary>
 /// <para>
 /// Indicates that the entity this is attached to is a "phantom". Phantom entities
 /// are automatically excluded from queries and must be specifically requested.

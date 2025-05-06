@@ -98,7 +98,7 @@ public static class Pool<T>
         /// </summary>
         public T Value { get; } = value;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Dispose()
         {
             Return(Value);

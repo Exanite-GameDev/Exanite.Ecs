@@ -21,7 +21,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Min
                 : IQueryReduce<int>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public int Reduce(int a, int b)
                 {
                     return Math.Min(a, b);
@@ -32,7 +32,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Max
                 : IQueryReduce<int>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public int Reduce(int a, int b)
                 {
                     return Math.Max(a, b);
@@ -43,7 +43,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Add
                 : IQueryReduce<int>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public int Reduce(int a, int b)
                 {
                     return a + b;
@@ -54,7 +54,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Mul
                 : IQueryReduce<int>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public int Reduce(int a, int b)
                 {
                     return a * b;
@@ -65,7 +65,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Xor
                 : IQueryReduce<int>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public int Reduce(int a, int b)
                 {
                     return a ^ b;
@@ -76,7 +76,7 @@ namespace Myriad.Ecs.Queries
 		    public struct And
                 : IQueryReduce<int>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public int Reduce(int a, int b)
                 {
                     return a & b;
@@ -87,7 +87,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Or
                 : IQueryReduce<int>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public int Reduce(int a, int b)
                 {
                     return a | b;
@@ -110,7 +110,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Min
                 : IQueryReduce<uint>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public uint Reduce(uint a, uint b)
                 {
                     return Math.Min(a, b);
@@ -121,7 +121,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Max
                 : IQueryReduce<uint>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public uint Reduce(uint a, uint b)
                 {
                     return Math.Max(a, b);
@@ -132,7 +132,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Add
                 : IQueryReduce<uint>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public uint Reduce(uint a, uint b)
                 {
                     return a + b;
@@ -143,7 +143,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Mul
                 : IQueryReduce<uint>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public uint Reduce(uint a, uint b)
                 {
                     return a * b;
@@ -154,7 +154,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Xor
                 : IQueryReduce<uint>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public uint Reduce(uint a, uint b)
                 {
                     return a ^ b;
@@ -165,7 +165,7 @@ namespace Myriad.Ecs.Queries
 		    public struct And
                 : IQueryReduce<uint>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public uint Reduce(uint a, uint b)
                 {
                     return a & b;
@@ -176,7 +176,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Or
                 : IQueryReduce<uint>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public uint Reduce(uint a, uint b)
                 {
                     return a | b;
@@ -199,7 +199,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Min
                 : IQueryReduce<long>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public long Reduce(long a, long b)
                 {
                     return Math.Min(a, b);
@@ -210,7 +210,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Max
                 : IQueryReduce<long>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public long Reduce(long a, long b)
                 {
                     return Math.Max(a, b);
@@ -221,7 +221,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Add
                 : IQueryReduce<long>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public long Reduce(long a, long b)
                 {
                     return a + b;
@@ -232,7 +232,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Mul
                 : IQueryReduce<long>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public long Reduce(long a, long b)
                 {
                     return a * b;
@@ -243,7 +243,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Xor
                 : IQueryReduce<long>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public long Reduce(long a, long b)
                 {
                     return a ^ b;
@@ -254,7 +254,7 @@ namespace Myriad.Ecs.Queries
 		    public struct And
                 : IQueryReduce<long>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public long Reduce(long a, long b)
                 {
                     return a & b;
@@ -265,7 +265,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Or
                 : IQueryReduce<long>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public long Reduce(long a, long b)
                 {
                     return a | b;
@@ -288,7 +288,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Min
                 : IQueryReduce<ulong>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public ulong Reduce(ulong a, ulong b)
                 {
                     return Math.Min(a, b);
@@ -299,7 +299,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Max
                 : IQueryReduce<ulong>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public ulong Reduce(ulong a, ulong b)
                 {
                     return Math.Max(a, b);
@@ -310,7 +310,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Add
                 : IQueryReduce<ulong>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public ulong Reduce(ulong a, ulong b)
                 {
                     return a + b;
@@ -321,7 +321,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Mul
                 : IQueryReduce<ulong>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public ulong Reduce(ulong a, ulong b)
                 {
                     return a * b;
@@ -332,7 +332,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Xor
                 : IQueryReduce<ulong>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public ulong Reduce(ulong a, ulong b)
                 {
                     return a ^ b;
@@ -343,7 +343,7 @@ namespace Myriad.Ecs.Queries
 		    public struct And
                 : IQueryReduce<ulong>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public ulong Reduce(ulong a, ulong b)
                 {
                     return a & b;
@@ -354,7 +354,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Or
                 : IQueryReduce<ulong>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public ulong Reduce(ulong a, ulong b)
                 {
                     return a | b;
@@ -377,7 +377,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Min
                 : IQueryReduce<float>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public float Reduce(float a, float b)
                 {
                     return Math.Min(a, b);
@@ -388,7 +388,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Max
                 : IQueryReduce<float>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public float Reduce(float a, float b)
                 {
                     return Math.Max(a, b);
@@ -399,7 +399,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Add
                 : IQueryReduce<float>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public float Reduce(float a, float b)
                 {
                     return a + b;
@@ -410,7 +410,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Mul
                 : IQueryReduce<float>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public float Reduce(float a, float b)
                 {
                     return a * b;
@@ -434,7 +434,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Min
                 : IQueryReduce<double>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public double Reduce(double a, double b)
                 {
                     return Math.Min(a, b);
@@ -445,7 +445,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Max
                 : IQueryReduce<double>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public double Reduce(double a, double b)
                 {
                     return Math.Max(a, b);
@@ -456,7 +456,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Add
                 : IQueryReduce<double>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public double Reduce(double a, double b)
                 {
                     return a + b;
@@ -467,7 +467,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Mul
                 : IQueryReduce<double>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public double Reduce(double a, double b)
                 {
                     return a * b;
@@ -492,7 +492,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Xor
                 : IQueryReduce<bool>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public bool Reduce(bool a, bool b)
                 {
                     return a ^ b;
@@ -503,7 +503,7 @@ namespace Myriad.Ecs.Queries
 		    public struct And
                 : IQueryReduce<bool>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public bool Reduce(bool a, bool b)
                 {
                     return a & b;
@@ -514,7 +514,7 @@ namespace Myriad.Ecs.Queries
 		    public struct Or
                 : IQueryReduce<bool>
             {
-			    /// <inheritdoc />
+			    /// <inheritdoc/>
                 public bool Reduce(bool a, bool b)
                 {
                     return a | b;

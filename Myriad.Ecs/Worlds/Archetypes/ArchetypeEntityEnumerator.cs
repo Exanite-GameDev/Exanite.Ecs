@@ -94,7 +94,7 @@ public struct ArchetypeEntityEnumerator
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         _chunksEnumerator.Dispose();
