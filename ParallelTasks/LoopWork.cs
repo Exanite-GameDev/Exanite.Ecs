@@ -83,7 +83,9 @@ internal class ForEachLoopWork<T>
             }
 
             if (haveValue)
+            {
                 _action!(item!);
+            }
         }
     }
 

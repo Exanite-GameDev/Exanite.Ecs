@@ -26,7 +26,10 @@ internal class ComponentSetterCollection
         foreach (var (cid, components) in _components)
         {
             if (!cid.IsDisposableComponent)
+            {
                 continue;
+            }
+
             components.DisposeAll(ref buffer);
         }
 
@@ -79,7 +82,9 @@ internal class ComponentSetterCollection
             foreach (var (cid, sid) in sets)
             {
                 if (!cid.IsDisposableComponent)
+                {
                     continue;
+                }
 
                 var list = _components[sid.ID];
                 list.Dispose(sid.Index, ref buffer);
@@ -157,7 +162,9 @@ internal class ComponentSetterCollection
         public void Overwrite(SetterId index, T value)
         {
             if (index.ID.IsDisposableComponent)
+            {
                 _overwrittenDisposableValues.Add(_values[index.Index]);
+            }
 
             _values[index.Index] = value;
         }
@@ -165,7 +172,9 @@ internal class ComponentSetterCollection
         public void Discard(T value)
         {
             if (_disposer.Component.IsDisposableComponent)
+            {
                 _overwrittenDisposableValues.Add(value);
+            }
         }
 
         public void Recycle()

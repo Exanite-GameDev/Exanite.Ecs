@@ -17,7 +17,10 @@ internal class ArchetypePhantomComponentNotifier
         foreach (var component in components)
         {
             if (!component.IsPhantomNotifierComponent)
+            {
                 continue;
+            }
+
             _notifiers.Add(PhantomNotifier.Get(component));
         }
     }
@@ -67,7 +70,9 @@ internal class ArchetypePhantomComponentNotifier
         {
             var id = ComponentId.Get<T>();
             if (!id.IsPhantomNotifierComponent)
+            {
                 throw new ArgumentException("Cannot get notifier for component which does not implement IPhantomNotifierComponent");
+            }
 
             return (IPhantomNotifier)Activator.CreateInstance(typeof(NotifierImpl<>).MakeGenericType(typeof(T), typeof(T)))!;
         }

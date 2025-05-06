@@ -216,7 +216,9 @@ public sealed class QueryDescription
         try
         {
             if (_result != null && !_result.Value.IsStale(World))
+            {
                 return _result.Value.Archetypes;
+            }
         }
         finally
         {
@@ -234,7 +236,9 @@ public sealed class QueryDescription
                 var matches = new List<ArchetypeMatch>();
                 foreach (var item in World.Archetypes)
                     if (TryMatch(item) is ArchetypeMatch m)
+                    {
                         matches.Add(m);
+                    }
 
                 // Store result for next time
                 _result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(matches));
@@ -254,7 +258,9 @@ public sealed class QueryDescription
                 {
                     var m = TryMatch(World.Archetypes[i]);
                     if (m == null)
+                    {
                         continue;
+                    }
 
                     // Lazy copy the set now that we know we need it
                     copy ??= new OrderedListSet<ArchetypeMatch>(_result.Value.Archetypes);
@@ -288,18 +294,24 @@ public sealed class QueryDescription
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
         if (Include.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in _includeBloom))
+        {
             return null;
+        }
 
         // Do the full set check for included components
         if (!archetype.Components.IsSupersetOf(Include))
+        {
             return null;
+        }
 
         // If this is false it means there is definitely _not_ an intersection, which means we can skip
         // the inner check.
         if (Exclude.Count > 0 && _excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
         {
             if (archetype.Components.Overlaps(Exclude))
+            {
                 return null;
+            }
         }
 
         // Use the temp hashset to do this
@@ -402,7 +414,10 @@ public sealed class QueryDescription
     {
         foreach (var archetype in GetArchetypes())
             if (archetype.Archetype.EntityCount > 0)
+            {
                 return true;
+            }
+
         return false;
     }
 
@@ -427,13 +442,17 @@ public sealed class QueryDescription
         foreach (var archetype in GetArchetypes())
         {
             if (archetype.Archetype.EntityCount == 0)
+            {
                 continue;
+            }
 
             for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
             {
                 var chunk = archetype.Archetype.Chunks[i];
                 if (chunk.EntityCount > 0)
+                {
                     return chunk.Entities.Span[0];
+                }
             }
         }
 
@@ -463,16 +482,22 @@ public sealed class QueryDescription
         foreach (var archetype in GetArchetypes())
         {
             if (archetype.Archetype.EntityCount == 0)
+            {
                 continue;
+            }
 
             for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
             {
                 var chunk = archetype.Archetype.Chunks[i];
                 if (chunk.EntityCount == 0)
+                {
                     continue;
+                }
 
                 if (chunk.EntityCount > 1 || result.HasValue)
+                {
                     throw new InvalidOperationException("QueryDescription.SingleOrDefault() found more than one matching entity");
+                }
 
                 result = chunk.Entities.Span[0];
             }
@@ -503,7 +528,9 @@ public sealed class QueryDescription
         // Get total entity count
         var count = Count();
         if (count == 0)
+        {
             return default;
+        }
 
         // Choose the index of the entity
         var choice = random.Next(0, count);
@@ -556,13 +583,17 @@ public sealed class QueryDescription
 
         // Can't do any work if this item is specifically not in this query
         if (IsExcluded(id))
+        {
             return 0;
+        }
 
         var count = 0;
         foreach (var archetype in GetArchetypes())
         {
             if (!archetype.Archetype.Components.Contains(id))
+            {
                 continue;
+            }
 
             count += archetype.Archetype.EntityCount;
 

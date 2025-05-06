@@ -39,7 +39,9 @@ public sealed partial class EcsCommandBuffer
         public void Dispose()
         {
             if (Parent == null)
+            {
                 throw new ObjectDisposedException(nameof(Resolver));
+            }
 
             unchecked
             {

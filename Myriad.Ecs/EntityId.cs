@@ -82,7 +82,9 @@ public readonly partial record struct EntityId
     {
         var idc = ID.CompareTo(other.ID);
         if (idc != 0)
+        {
             return idc;
+        }
 
         return Version.CompareTo(other.Version);
     }
@@ -178,9 +180,14 @@ public readonly partial record struct EntityId
     public object? GetBoxedComponent(World world, ComponentId id)
     {
         if (!Exists(world))
+        {
             return null;
+        }
+
         if (!GetComponents(world).Contains(id))
+        {
             return null;
+        }
 
         ref var entityInfo = ref world.GetEntityInfo(this);
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);

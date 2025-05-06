@@ -342,8 +342,10 @@ namespace Myriad.Ecs.Worlds
 	static string CoverageAttribute(int index)
 	{
 		if (index < 2)
-			return "";
-		return "[ExcludeFromCodeCoverage]";
+		{
+		    return "";
+		}
+        return "[ExcludeFromCodeCoverage]";
 	}
 
 	static string DocsQueryDescription()

@@ -65,7 +65,9 @@ public struct ArchetypeEntityEnumerator
     private bool NextChunk()
     {
         if (!_chunksEnumerator.MoveNext())
+        {
             return false;
+        }
 
         _chunk = _chunksEnumerator.Current;
         _entityIndex = 0;
@@ -80,10 +82,14 @@ public struct ArchetypeEntityEnumerator
     {
         _entityIndex++;
         if (_chunk != null && _entityIndex < _chunk.EntityCount)
+        {
             return true;
+        }
 
         if (!NextChunk())
+        {
             return false;
+        }
 
         return true;
     }

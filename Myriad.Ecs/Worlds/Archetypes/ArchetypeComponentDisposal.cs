@@ -17,7 +17,10 @@ internal class ArchetypeComponentDisposal
         foreach (var component in components)
         {
             if (!component.IsDisposableComponent)
+            {
                 continue;
+            }
+
             _disposers.Add(Disposer.Get(component));
         }
     }
@@ -43,6 +46,8 @@ internal class ArchetypeComponentDisposal
     {
         foreach (var disposer in _disposers)
             if (!to.Contains(disposer.Component))
+            {
                 disposer.Dispose(info.Chunk, info.RowIndex, ref buffer);
+            }
     }
 }

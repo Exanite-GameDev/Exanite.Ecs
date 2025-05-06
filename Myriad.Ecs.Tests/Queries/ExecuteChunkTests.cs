@@ -79,9 +79,13 @@ public class ExecuteChunkTests
         foreach (var (e, i) in w.Query<ComponentInt32>())
         {
             if (e.HasComponent<ComponentFloat>())
+            {
                 Assert.AreEqual(0, i.Ref.Value);
+            }
             else
+            {
                 Assert.AreEqual(1, i.Ref.Value);
+            }
         }
     }
 

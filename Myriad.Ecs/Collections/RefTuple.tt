@@ -102,8 +102,10 @@ public readonly ref struct RefTuple<<#= tparams #>>
 	static string CoverageAttribute(int index)
 	{
 		if (index < 3)
-			return "";
-		return "[ExcludeFromCodeCoverage]";
+		{
+		    return "";
+		}
+        return "[ExcludeFromCodeCoverage]";
 	}
 
 	static string Constraints(int count, int spaces = 4)

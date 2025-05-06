@@ -18,9 +18,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.Ecs.Queries
 {
-    
+
     public readonly struct QueryResultEnumerable0
-        
+
     {
         private readonly QueryDescription _query;
 
@@ -37,9 +37,9 @@ namespace Myriad.Ecs.Queries
         }
     }
 
-    
+
     public ref struct QueryResultEnumerator0
-        
+
     {
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
@@ -75,13 +75,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -90,7 +94,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -101,20 +107,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -137,7 +152,7 @@ namespace Myriad.Ecs.Worlds
 
 namespace Myriad.Ecs.Queries
 {
-    
+
     public readonly struct QueryResultEnumerable1<T0>
         where T0 : IComponent
     {
@@ -156,7 +171,7 @@ namespace Myriad.Ecs.Queries
         }
     }
 
-    
+
     public ref struct QueryResultEnumerator1<T0>
         where T0 : IComponent
     {
@@ -200,13 +215,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -215,7 +234,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -226,20 +247,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -250,14 +280,14 @@ namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
-        
+
         public QueryResultEnumerable1<T0> Query<T0>(QueryDescription? query = null)
             where T0 : IComponent
         {
             return Query<T0>(ref query);
         }
 
-        
+
         public QueryResultEnumerable1<T0> Query<T0>(ref QueryDescription? query)
             where T0 : IComponent
         {
@@ -343,13 +373,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -358,7 +392,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -369,20 +405,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -494,13 +539,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -509,7 +558,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -520,20 +571,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -653,13 +713,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -668,7 +732,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -679,20 +745,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -820,13 +895,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -835,7 +914,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -846,20 +927,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -995,13 +1085,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -1010,7 +1104,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -1021,20 +1117,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -1178,13 +1283,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -1193,7 +1302,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -1204,20 +1315,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -1369,13 +1489,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -1384,7 +1508,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -1395,20 +1521,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -1568,13 +1703,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -1583,7 +1722,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -1594,20 +1735,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -1775,13 +1925,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -1790,7 +1944,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -1801,20 +1957,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -1990,13 +2155,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -2005,7 +2174,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -2016,20 +2187,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -2213,13 +2393,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -2228,7 +2412,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -2239,20 +2425,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -2444,13 +2639,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -2459,7 +2658,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -2470,20 +2671,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -2683,13 +2893,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -2698,7 +2912,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -2709,20 +2925,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -2930,13 +3155,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -2945,7 +3174,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -2956,20 +3187,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -3185,13 +3425,17 @@ namespace Myriad.Ecs.Queries
             {
                 // If there are no archetypes exit with false
                 if (!_archetypesEnumerator.MoveNext())
+                {
                     return false;
+                }
 
                 // Try to move to the next (first) chunk of this archetype. Might fail if there
                 // are no chunks in this archetype.
                 _chunksEnumerator = _archetypesEnumerator.Current.Archetype.GetChunkEnumerator();
                 if (NextChunk())
+                {
                     break;
+                }
             }
 
             return true;
@@ -3200,7 +3444,9 @@ namespace Myriad.Ecs.Queries
         private bool NextChunk()
         {
             if (!_chunksEnumerator.MoveNext())
+            {
                 return false;
+            }
 
             GetChunkSpans();
             _entityIndex = 0;
@@ -3211,20 +3457,29 @@ namespace Myriad.Ecs.Queries
         {
             _entityIndex++;
             if (_entityIndex < SpanEntities.Length)
+            {
                 return true;
+            }
 
             if (!_initialized)
             {
                 _initialized = true;
 
                 if (!NextArchetype())
+                {
                     return false;
+                }
+
                 return true;
             }
 
             if (!NextChunk())
+            {
                 if (!NextArchetype())
+                {
                     return false;
+                }
+            }
 
             return true;
         }

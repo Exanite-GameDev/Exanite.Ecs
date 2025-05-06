@@ -49,9 +49,13 @@ internal class Worker
         while (true)
         {
             if (_tasks.TryTake(out var task))
+            {
                 task.DoWork();
+            }
             else
+            {
                 FindWork();
+            }
         }
 
         // ReSharper disable once FunctionNeverReturns
@@ -64,7 +68,9 @@ internal class Worker
         do
         {
             if (_scheduler.TryGetTask(out task))
+            {
                 break;
+            }
 
             var replicable = WorkItem.Replicable;
             if (replicable.HasValue)
@@ -81,7 +87,9 @@ internal class Worker
             {
                 var worker = _scheduler.Workers[i];
                 if (worker == this)
+                {
                     continue;
+                }
 
                 if (worker._tasks.TryTake(out task))
                 {

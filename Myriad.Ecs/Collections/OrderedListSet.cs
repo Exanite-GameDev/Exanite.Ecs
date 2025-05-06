@@ -73,7 +73,9 @@ internal class OrderedListSet<TItem>
     {
         var index = _items.BinarySearch(item);
         if (index >= 0)
+        {
             return false;
+        }
 
         _items.Insert(~index, item);
         return true;
@@ -118,14 +120,18 @@ internal class OrderedListSet<TItem>
     {
         for (var i = _items.Count - 1; i >= 0; i--)
             if (!other.Contains(_items[i]))
+            {
                 _items.RemoveAt(i);
+            }
     }
 
     public bool Remove(TItem item)
     {
         var index = _items.BinarySearch(item);
         if (index < 0)
+        {
             return false;
+        }
 
         _items.RemoveAt(index);
         return true;
@@ -203,7 +209,9 @@ internal class OrderedListSet<TItem>
     public bool IsSupersetOf(OrderedListSet<TItem> other)
     {
         if (other.Count > Count)
+        {
             return false;
+        }
 
         // Move forward through both lists, checking that all items in `other` are in `this`
         var i = 0;
@@ -239,9 +247,14 @@ internal class OrderedListSet<TItem>
     public bool Overlaps(OrderedListSet<TItem> other)
     {
         if (Count == 0)
+        {
             return false;
+        }
+
         if (other.Count == 0)
+        {
             return false;
+        }
 
         // Move forward through both lists, checking if any item in `other` is in `this`
         var i = 0;
@@ -251,11 +264,17 @@ internal class OrderedListSet<TItem>
             var cmp = _items[i].CompareTo(other._items[j]);
 
             if (cmp < 0)
+            {
                 i++;
+            }
             else if (cmp > 0)
+            {
                 j++;
+            }
             else
+            {
                 return true;
+            }
         }
 
         return false;
@@ -267,12 +286,16 @@ internal class OrderedListSet<TItem>
     {
         // Can't be equal if counts are different
         if (other.Count != Count)
+        {
             return false;
+        }
 
         // Ensure every item in this is in other
         foreach (var item in _items)
             if (!other.Contains(item))
+            {
                 return false;
+            }
 
         return true;
     }
@@ -280,7 +303,9 @@ internal class OrderedListSet<TItem>
     public bool SetEquals(OrderedListSet<TItem> other)
     {
         if (Count != other.Count)
+        {
             return false;
+        }
 
         var a = CollectionsMarshal.AsSpan(_items);
         var b = CollectionsMarshal.AsSpan(other._items);
@@ -301,12 +326,16 @@ internal class OrderedListSet<TItem>
     {
         // Can't be equal if counts are different
         if (other.Count != Count)
+        {
             return false;
+        }
 
         // Ensure every item in this is in other
         foreach (var item in other.Keys)
             if (_items.BinarySearch(item) < 0)
+            {
                 return false;
+            }
 
         return true;
     }
@@ -321,7 +350,9 @@ internal class OrderedListSet<TItem>
     internal TItem Single()
     {
         if (_items.Count != 1)
+        {
             throw new InvalidOperationException($"Cannot get single item, there are {_items.Count} items");
+        }
 
         return _items[0];
     }
@@ -330,7 +361,9 @@ internal class OrderedListSet<TItem>
     {
         foreach (var item in _items)
             if (predicate(item))
+            {
                 return true;
+            }
 
         return false;
     }

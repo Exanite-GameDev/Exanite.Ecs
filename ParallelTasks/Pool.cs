@@ -24,7 +24,10 @@ internal class Pool<T>
     public T Get()
     {
         if (_bag.TryTake(out var item))
+        {
             return item;
+        }
+
         return new T();
     }
 

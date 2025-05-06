@@ -19,7 +19,9 @@ public class CollectQueryTests
         {
             cb.Create().Set(new ComponentInt64(1));
             if (i % 2 == 0)
+            {
                 cb.Create().Set(new ComponentFloat(2));
+            }
         }
         cb.Playback().Dispose();
 

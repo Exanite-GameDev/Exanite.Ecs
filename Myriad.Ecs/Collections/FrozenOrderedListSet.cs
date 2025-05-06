@@ -31,7 +31,9 @@ public class FrozenOrderedListSet<TItem>
     internal static FrozenOrderedListSet<TItem> Create(List<TItem> items)
     {
         if (items.Count == 0)
+        {
             return Empty;
+        }
 
         return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
@@ -39,7 +41,9 @@ public class FrozenOrderedListSet<TItem>
     internal static FrozenOrderedListSet<TItem> Create(ReadOnlySpan<TItem> items)
     {
         if (items.Length == 0)
+        {
             return Empty;
+        }
 
         return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
@@ -47,7 +51,9 @@ public class FrozenOrderedListSet<TItem>
     internal static FrozenOrderedListSet<TItem> Create(HashSet<TItem> items)
     {
         if (items.Count == 0)
+        {
             return Empty;
+        }
 
         return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
@@ -55,7 +61,9 @@ public class FrozenOrderedListSet<TItem>
     internal static FrozenOrderedListSet<TItem> Create(OrderedListSet<TItem> items)
     {
         if (items.Count == 0)
+        {
             return Empty;
+        }
 
         return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
     }
@@ -63,7 +71,9 @@ public class FrozenOrderedListSet<TItem>
     internal static FrozenOrderedListSet<TItem> Create<TV>(Dictionary<TItem, TV> items)
     {
         if (items.Count == 0)
+        {
             return Empty;
+        }
 
         var set = new OrderedListSet<TItem>();
         set.AddRange(items.Keys);

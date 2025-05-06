@@ -218,7 +218,9 @@ public sealed class Chunk
 
             // Check if the component is not in the destination, in which case just don't copy it
             if (id >= destChunk._componentIndexLookup.Length || destChunk._componentIndexLookup[id] == -1)
+            {
                 continue;
+            }
 
             // Get the two arrays
             var srcArr = _components[i];

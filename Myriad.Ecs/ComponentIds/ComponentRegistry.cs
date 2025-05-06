@@ -27,7 +27,9 @@ internal static class ComponentRegistry
         using (var locker = _lock.EnterReadLock())
         {
             if (locker.Value.TryGet(type, out var value))
+            {
                 return value;
+            }
         }
 
         using (var locker = _lock.EnterWriteLock())
@@ -48,7 +50,9 @@ internal static class ComponentRegistry
         using (var locker = _lock.EnterReadLock())
         {
             if (locker.Value.TryGet(type, out var value))
+            {
                 return value;
+            }
         }
 
         using (var locker = _lock.EnterWriteLock())
@@ -67,7 +71,9 @@ internal static class ComponentRegistry
         using var locker = _lock.EnterReadLock();
 
         if (!locker.Value.TryGet(id, out var type))
+        {
             throw new InvalidOperationException("Unknown component ID");
+        }
 
         return type;
     }
@@ -75,7 +81,9 @@ internal static class ComponentRegistry
     private static void TypeCheck(Type type)
     {
         if (!typeof(IComponent).IsAssignableFrom(type))
+        {
             throw new ArgumentException($"Type `{type.FullName}` is not assignable to `{nameof(IComponent)}`)");
+        }
     }
 
     private class State
@@ -98,19 +106,27 @@ internal static class ComponentRegistry
 
                 // Set the bit indicating that this component implements IPhantomComponent
                 if (typeof(IComponentPhantom).IsAssignableFrom(type))
+                {
                     id |= ComponentId.IsPhantomComponentMask;
+                }
 
                 // Set the bit indicating that this component implements IEntityRelationComponent
                 if (typeof(IEntityRelationComponent).IsAssignableFrom(type))
+                {
                     id |= ComponentId.IsRelationComponentMask;
+                }
 
                 // Set the bit indicating that this component implements IDisposableComponent
                 if (typeof(IDisposableComponent).IsAssignableFrom(type))
+                {
                     id |= ComponentId.IsDisposableComponentMask;
+                }
 
                 // Set the bit indicating that this component implements IPhantomNotifierComponent
                 if (typeof(IPhantomNotifierComponent).IsAssignableFrom(type))
+                {
                     id |= ComponentId.IsPhantomNotifierComponentMask;
+                }
 
                 // Store it for future lookups
                 value = new ComponentId(id);

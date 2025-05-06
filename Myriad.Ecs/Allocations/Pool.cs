@@ -47,7 +47,9 @@ public static class Pool<T>
 
         // Every hit of the pool slightly reduces pressure
         if (_pressure > 0)
+        {
             _pressure--;
+        }
 
         var item = _items[^1];
         _items.RemoveAt(_items.Count - 1);
@@ -79,7 +81,9 @@ public static class Pool<T>
         }
 
         if (_items.Count < _maxSize)
+        {
             _items.Add(item);
+        }
     }
 
     /// <summary>

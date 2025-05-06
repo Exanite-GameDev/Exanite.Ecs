@@ -121,7 +121,9 @@ public sealed partial class Archetype
         {
             Hash = Hash.Toggle(component);
             if (component.Value > maxComponentId)
+            {
                 maxComponentId = component.Value;
+            }
         }
 
         // Build an array where the number at a given index is the index of the component with that ID
@@ -149,11 +151,15 @@ public sealed partial class Archetype
 
         // Create a disposer if it's needed
         if (HasDisposableComponents)
+        {
             _disposer = new ArchetypeComponentDisposal(components);
+        }
 
         // Create a notifier if it's needed
         if (HasPhantomNotifierComponents && !IsPhantom)
+        {
             _phantomNotifier = new ArchetypePhantomComponentNotifier(components);
+        }
 
         // Get the destination archetype for deleted entities, if they become phantoms
         if (HasPhantomComponents && !IsPhantom)
@@ -174,9 +180,11 @@ public sealed partial class Archetype
     private void DisposeAllDisposableComponents(ref LazyCommandBuffer buffer)
     {
         if (_disposer != null)
+        {
             foreach (var chunk in _chunks)
                 for (var i = 0; i < chunk.EntityCount; i++)
                     _disposer.DisposeEntity(ref buffer, chunk, i);
+        }
     }
 
     internal Row CreateEntity()
@@ -218,7 +226,9 @@ public sealed partial class Archetype
         {
             // Dispose all disposables on any entity in this archetype
             if (HasDisposableComponents)
+            {
                 DisposeAllDisposableComponents(ref lazy);
+            }
 
             // Clear all the chunks
             foreach (var chunk in _chunks)
@@ -228,9 +238,13 @@ public sealed partial class Archetype
             foreach (var chunk in _chunks)
             {
                 if (_spareChunks.Count < CHUNK_HOT_SPARES)
+                {
                     _spareChunks.Push(chunk);
+                }
                 else
+                {
                     break;
+                }
             }
             _chunksWithSpace.Clear();
             _chunks.Clear();
@@ -258,7 +272,9 @@ public sealed partial class Archetype
 
         // If there's one with space, use it
         if (_chunksWithSpace.Count > 0)
+        {
             return _chunksWithSpace[0].AddEntity(entity, ref info);
+        }
 
         // No space in any chunks, create a new chunk
         var newChunk = _spareChunks.Count > 0 ? _spareChunks.Pop() : new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);
@@ -273,7 +289,9 @@ public sealed partial class Archetype
     {
         // Run disposal for all IDisposableComponent components
         if (HasDisposableComponents)
+        {
             _disposer?.DisposeEntity(ref lazy, info);
+        }
 
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
@@ -286,14 +304,18 @@ public sealed partial class Archetype
     {
         // Early exit if we're migrating to where we already are!
         if (to == this)
+        {
             return info.GetRow(entity);
+        }
 
         // Handle disposable components which are being removed
         _disposer?.DisposeRemoved(ref lazy, info, to.Components);
 
         // Inform entity it is becoming a phantom
         if (to.IsPhantom)
+        {
             _phantomNotifier?.Notify(entity, info);
+        }
 
         // Do the actual copying
         var chunk = info.Chunk;
@@ -318,7 +340,10 @@ public sealed partial class Archetype
                 _chunksWithSpace.Remove(chunk);
                 _chunks.Remove(chunk);
                 if (_spareChunks.Count < CHUNK_HOT_SPARES)
+                {
                     _spareChunks.Push(chunk);
+                }
+
                 break;
             }
 

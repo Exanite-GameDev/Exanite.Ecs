@@ -30,7 +30,9 @@ public sealed partial class EcsCommandBuffer
         {
             // Limit the number of edges to prevent explosive growth in some edge cases.
             if (_archetypeEdges.Count >= MaxAggregationEdges)
+            {
                 return -1;
+            }
 
             value = _archetypeEdges.Count + 1;
             _archetypeEdges.Add((currentKey, added), value);

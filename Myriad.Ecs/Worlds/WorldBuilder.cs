@@ -18,7 +18,9 @@ public sealed partial class WorldBuilder
     private bool AddArchetype(HashSet<ComponentId> ids)
     {
         if (_archetypes.Any(a => a.SetEquals(ids)))
+        {
             return false;
+        }
 
         _archetypes.Add(new OrderedListSet<ComponentId>(ids));
         return true;
@@ -34,7 +36,9 @@ public sealed partial class WorldBuilder
 
         foreach (var type in types)
             if (!set.Add(ComponentId.Get(type)))
+            {
                 throw new ArgumentException($"Duplicate component type: {type.Name}");
+            }
 
         AddArchetype(set);
 
@@ -50,7 +54,10 @@ public sealed partial class WorldBuilder
     public WorldBuilder WithThreadPool(IThreadPool pool)
     {
         if (_pool != null)
+        {
             throw new InvalidOperationException("Cannot call 'WithThreadPool' twice");
+        }
+
         _pool = pool;
 
         return this;

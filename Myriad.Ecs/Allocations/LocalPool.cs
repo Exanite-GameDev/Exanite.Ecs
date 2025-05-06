@@ -38,7 +38,9 @@ public readonly struct LocalPool<T>
     public T Get()
     {
         if (_items.Count == 0)
+        {
             return Pool<T>.Get();
+        }
 
         var item = _items[^1];
         _items.RemoveAt(_items.Count - 1);
@@ -52,9 +54,13 @@ public readonly struct LocalPool<T>
     public void Return(T item)
     {
         if (_items.Count < _maxSize)
+        {
             _items.Add(item);
+        }
         else
+        {
             Pool<T>.Return(item);
+        }
     }
 
     /// <inheritdoc />

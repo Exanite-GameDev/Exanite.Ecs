@@ -120,7 +120,10 @@ public class EcsCommandBufferTests
             for (var j = 0; j < 1000; j++)
             {
                 if (alive.Count == 0)
+                {
                     break;
+                }
+
                 var idx = rng.Next(0, alive.Count);
                 var ent = alive[idx];
                 Assert.IsTrue(ent.Exists());
@@ -173,7 +176,9 @@ public class EcsCommandBufferTests
             {
                 // Apply to 10% of entities
                 if (rng.NextSingle() > 0.1f)
+                {
                     continue;
+                }
 
                 // Do some random ops
                 var count = rng.Next(1, 5);
@@ -214,9 +219,13 @@ public class EcsCommandBufferTests
             where T : struct, IComponent
         {
             if (e.HasComponent<T>() && !update)
+            {
                 b.Remove<T>(e);
+            }
             else
+            {
                 b.Set(e, default(T));
+            }
         }
     }
 
@@ -561,9 +570,13 @@ public class EcsCommandBufferTests
         {
             var box = new BoxedInt();
             if (e.HasComponent<ComponentInt32>())
+            {
                 shouldNotDispose.Add(box);
+            }
             else
+            {
                 shouldDispose.Add(box);
+            }
 
             buffer.Set(e, new TestDisposable(box));
         }

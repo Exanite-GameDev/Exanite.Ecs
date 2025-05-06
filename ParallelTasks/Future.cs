@@ -35,7 +35,9 @@ public readonly struct Future<T>
     public T GetResult()
     {
         if (_work == null || _work.ID != _id)
+        {
             throw new InvalidOperationException("The result of a future can only be retrieved once.");
+        }
 
         _task.Wait();
         var result = _work.Result!;

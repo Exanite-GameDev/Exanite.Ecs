@@ -72,7 +72,10 @@ internal class ParallelQueryWorker<TWork>
 
                     // Steal work
                     if (sibling == null || !sibling.Steal(out var work))
+                    {
                         continue;
+                    }
+
                     DoWorkItem(counter, ref work);
                 }
             }

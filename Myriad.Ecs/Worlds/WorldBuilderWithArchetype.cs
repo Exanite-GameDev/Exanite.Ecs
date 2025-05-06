@@ -18,7 +18,9 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(1);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
 
         AddArchetype(set);
 
@@ -36,9 +38,14 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(2);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
 
         AddArchetype(set);
 
@@ -57,11 +64,19 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(3);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
 
         AddArchetype(set);
 
@@ -81,13 +96,24 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(4);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
 
         AddArchetype(set);
 
@@ -108,15 +134,29 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(5);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
 
         AddArchetype(set);
 
@@ -138,17 +178,34 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(6);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
 
         AddArchetype(set);
 
@@ -171,19 +228,39 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(7);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
 
         AddArchetype(set);
 
@@ -207,21 +284,44 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(8);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
 
         AddArchetype(set);
 
@@ -246,23 +346,49 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(9);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
 
         AddArchetype(set);
 
@@ -288,25 +414,54 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(10);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
 
         AddArchetype(set);
 
@@ -333,27 +488,59 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(11);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
 
         AddArchetype(set);
 
@@ -381,29 +568,64 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(12);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
 
         AddArchetype(set);
 
@@ -432,31 +654,69 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(13);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
 
         AddArchetype(set);
 
@@ -486,33 +746,74 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(14);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
 
         AddArchetype(set);
 
@@ -543,35 +844,79 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(15);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
 
         AddArchetype(set);
 
@@ -603,37 +948,84 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(16);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
 
         AddArchetype(set);
 
@@ -666,39 +1058,89 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(17);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
 
         AddArchetype(set);
 
@@ -732,41 +1174,94 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(18);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
 
         AddArchetype(set);
 
@@ -801,43 +1296,99 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(19);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
 
         AddArchetype(set);
 
@@ -873,45 +1424,104 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(20);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
 
         AddArchetype(set);
 
@@ -948,47 +1558,109 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(21);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1026,49 +1698,114 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(22);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1107,51 +1844,119 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(23);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1191,53 +1996,124 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(24);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1278,55 +2154,129 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(25);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1368,57 +2318,134 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(26);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T25>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1461,59 +2488,139 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(27);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T25>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T26>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1557,61 +2664,144 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(28);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T25>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T26>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T27>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1656,63 +2846,149 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(29);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T25>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T26>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T27>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T28>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1758,65 +3034,154 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(30);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T25>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T26>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T27>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T28>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T29>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T29).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1863,67 +3228,159 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(31);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T25>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T26>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T27>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T28>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T29>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T29).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T30>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T30).Name}");
+        }
 
         AddArchetype(set);
 
@@ -1971,69 +3428,164 @@ public sealed partial class WorldBuilder
         var set = new HashSet<ComponentId>(32);
 
         if (!set.Add(ComponentId.Get<T0>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T0).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T1>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T1).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T2>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T2).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T3>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T3).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T4>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T4).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T5>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T5).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T6>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T6).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T7>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T7).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T8>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T8).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T9>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T9).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T10>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T10).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T11>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T11).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T12>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T12).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T13>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T13).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T14>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T14).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T15>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T15).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T16>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T16).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T17>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T17).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T18>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T18).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T19>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T19).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T20>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T20).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T21>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T21).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T22>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T22).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T23>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T23).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T24>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T24).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T25>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T25).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T26>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T26).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T27>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T27).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T28>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T28).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T29>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T29).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T30>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T30).Name}");
+        }
+
         if (!set.Add(ComponentId.Get<T31>()))
+        {
             throw new ArgumentException($"Duplicate component type: {typeof(T31).Name}");
+        }
 
         AddArchetype(set);
 

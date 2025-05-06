@@ -205,9 +205,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -228,8 +230,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -240,9 +244,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -259,8 +265,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -309,8 +318,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -549,9 +561,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -572,8 +586,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -584,9 +600,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -603,8 +621,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -653,8 +674,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -912,9 +936,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -935,8 +961,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -947,9 +975,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -966,8 +996,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -1016,8 +1049,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -1294,9 +1330,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1317,8 +1355,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -1329,9 +1369,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -1348,8 +1390,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -1398,8 +1443,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -1695,9 +1743,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -1718,8 +1768,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -1730,9 +1782,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -1749,8 +1803,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -1799,8 +1856,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -2115,9 +2175,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -2138,8 +2200,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -2150,9 +2214,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -2169,8 +2235,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -2219,8 +2288,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -2554,9 +2626,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -2577,8 +2651,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -2589,9 +2665,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -2608,8 +2686,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -2658,8 +2739,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -3012,9 +3096,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3035,8 +3121,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -3047,9 +3135,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -3066,8 +3156,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -3116,8 +3209,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -3489,9 +3585,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -3512,8 +3610,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -3524,9 +3624,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -3543,8 +3645,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -3593,8 +3698,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -3985,9 +4093,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -4008,8 +4118,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -4020,9 +4132,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -4039,8 +4153,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -4089,8 +4206,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -4500,9 +4620,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -4523,8 +4645,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -4535,9 +4659,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -4554,8 +4680,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -4604,8 +4733,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -5034,9 +5166,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -5057,8 +5191,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -5069,9 +5205,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -5088,8 +5226,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -5138,8 +5279,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -5587,9 +5731,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -5610,8 +5756,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -5622,9 +5770,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -5641,8 +5791,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -5691,8 +5844,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -6159,9 +6315,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -6182,8 +6340,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -6194,9 +6354,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -6213,8 +6375,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -6263,8 +6428,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -6750,9 +6918,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -6773,8 +6943,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -6785,9 +6957,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -6804,8 +6978,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -6854,8 +7031,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}
@@ -7360,9 +7540,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Early exit if there is no work to do, avoiding the cost of setting up the worker pool
 			if (archetypes.Count == 0 || !query.Any())
-				return 0;
+            {
+                return 0;
+            }
 
-			#region Parallel Work Loop Setup
+            #region Parallel Work Loop Setup
 			// Borrow a counter which will be used to keep track of all in-progress work
 			using var workCounterRental = Pool<CountdownEventContainer>.Rent();
 			var workCounter = workCounterRental.Value.Event;
@@ -7383,8 +7565,10 @@ namespace Myriad.Ecs.Worlds
 			foreach (var item in workersArr)
 			{
 				if (item != null)
-					ThreadPool.QueueUserWorkItem(item);
-			}
+                {
+                    ThreadPool.QueueUserWorkItem(item);
+                }
+            }
 
 			// Enqueue work to this index
 			var workerEnqueueIdx = 0;
@@ -7395,9 +7579,11 @@ namespace Myriad.Ecs.Worlds
 			{
 				var archetype = archetypeMatch.Archetype;
 				if (archetype.EntityCount == 0)
-					continue;
+                {
+                    continue;
+                }
 
-				count += archetype.EntityCount;
+                count += archetype.EntityCount;
 
 				// Inrement work counter for all of the chunk we're about to enqueue
 				workCounter.AddCount(archetype.Chunks.Count);
@@ -7414,8 +7600,11 @@ namespace Myriad.Ecs.Worlds
 
 						workerEnqueueIdx++;
 						if (workerEnqueueIdx >= workers.Length)
-							workerEnqueueIdx = 0;
-						#endregion
+                        {
+                            workerEnqueueIdx = 0;
+                        }
+
+                        #endregion
 				}
 			}
 
@@ -7464,8 +7653,11 @@ namespace Myriad.Ecs.Worlds
 
 			// Throw collected exceptions
 			if (exceptions is { Count: > 0 })
-				throw new AggregateException(exceptions);
-			#endregion
+            {
+                throw new AggregateException(exceptions);
+            }
+
+            #endregion
 
 			return count;
 		}

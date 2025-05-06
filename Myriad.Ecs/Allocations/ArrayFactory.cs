@@ -18,7 +18,9 @@ internal static class ArrayFactory
         _factories ??= [ ];
 
         if (!_factories.ContainsKey(typeof(T)))
+        {
             _factories.Add(typeof(T), Create<T>);
+        }
     }
 
     /// <summary>
@@ -40,7 +42,9 @@ internal static class ArrayFactory
     public static Array Create(Type type, int capacity)
     {
         if (_factories != null && _factories.TryGetValue(type, out var factory))
+        {
             return factory(capacity);
+        }
 
         return Array.CreateInstance(type, capacity);
     }

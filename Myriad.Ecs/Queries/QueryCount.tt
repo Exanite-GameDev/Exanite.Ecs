@@ -84,14 +84,18 @@ for (var i = 1; i <= PARAM_COUNT; i++)
     static string CoverageAttribute(int index)
 	{
 		if (index < 3)
-			return "";
-		return "[ExcludeFromCodeCoverage]";
+		{
+		    return "";
+		}
+        return "[ExcludeFromCodeCoverage]";
 	}
 
     static string Constraints(int count, int spaces = 4)
     {
         if (count == 0)
+        {
             return "";
+        }
 
         var prefix = new string(' ', spaces);
         var str = "where " + string.Join(

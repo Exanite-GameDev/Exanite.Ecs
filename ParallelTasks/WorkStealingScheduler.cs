@@ -81,7 +81,9 @@ internal class WorkStealingScheduler
         }
 
         if (threads > 1)
+        {
             WorkItem.Replicable = task;
+        }
 
         for (var i = 0; i < Workers.Count; i++)
         {

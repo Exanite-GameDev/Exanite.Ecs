@@ -118,7 +118,10 @@ public class ParallelQueryTests
             for (var i = 0; i < t0.Length; i++)
             {
                 if (i == 21)
+                {
                     throw new Exception("Expected");
+                }
+
                 t0[i].Value++;
             }
         }

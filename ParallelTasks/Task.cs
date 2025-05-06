@@ -48,7 +48,10 @@ public readonly struct Task
         {
             var currentTask = WorkItem.CurrentTask;
             if (currentTask.HasValue && currentTask.Value.Item == Item && currentTask.Value.ID == ID)
+            {
                 throw new InvalidOperationException("A task cannot wait on itself.");
+            }
+
             Item.Wait(ID);
         }
     }
@@ -56,6 +59,8 @@ public readonly struct Task
     internal void DoWork()
     {
         if (valid)
+        {
             Item.DoWork(ID);
+        }
     }
 }

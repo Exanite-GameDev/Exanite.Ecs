@@ -40,7 +40,9 @@ public sealed partial class EcsCommandBuffer
         private void CheckIsMutable()
         {
             if (_version != _buffer._version)
+            {
                 throw new InvalidOperationException("Cannot use `BufferedEntity` after `CommandBuffer` has been played");
+            }
         }
 
         /// <summary>
@@ -57,7 +59,9 @@ public sealed partial class EcsCommandBuffer
 
             // Redirect to bind to self
             if (typeof(T) == typeof(SelfReference))
+            {
                 return Set(new SelfReference(), this, duplicateMode);
+            }
 
             _buffer.SetBuffered(_id, value, duplicateMode);
             return this;
@@ -77,8 +81,12 @@ public sealed partial class EcsCommandBuffer
             CheckIsMutable();
 
             if (typeof(T) == typeof(SelfReference))
+            {
                 if (relation != this)
+                {
                     throw new InvalidOperationException("Cannot bind `SelfReference` to another Entity");
+                }
+            }
 
             _buffer.SetBuffered(_id, value, relation, duplicateMode);
             return this;
@@ -98,7 +106,9 @@ public sealed partial class EcsCommandBuffer
             CheckIsMutable();
 
             if (typeof(T) == typeof(SelfReference))
+            {
                 throw new InvalidOperationException("Cannot bind `SelfReference` to another Entity");
+            }
 
             value.Target = relation;
             _buffer.SetBuffered(_id, value, duplicateMode);
@@ -112,11 +122,19 @@ public sealed partial class EcsCommandBuffer
         public Entity Resolve()
         {
             if (_resolver.Parent == null)
+            {
                 throw new ObjectDisposedException("Resolver has already been disposed");
+            }
+
             if (_resolver.Parent != _buffer)
+            {
                 throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
+            }
+
             if (_resolver.Version != _version)
+            {
                 throw new ObjectDisposedException("Resolver has already been disposed");
+            }
 
             return _resolver.Lookup[_id].ToEntity(_resolver.World);
         }

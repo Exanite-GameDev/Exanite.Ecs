@@ -20,7 +20,9 @@ public class ArchetypeTests
             var e = cb.Create();
             e.Set(new ComponentInt32(i)).Set(new ComponentInt64(i));
             if (i % 7 == 0)
+            {
                 e.Set(new ComponentFloat(i));
+            }
         }
         cb.Playback().Dispose();
 

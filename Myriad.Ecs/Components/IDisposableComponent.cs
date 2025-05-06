@@ -97,7 +97,9 @@ internal static class Disposer<T>
         var id = ComponentId.Get<T>();
 
         if (!id.IsDisposableComponent)
+        {
             return new EmptyImpl();
+        }
 
         return (IDisposer)Activator.CreateInstance(typeof(DisposerImpl<>).MakeGenericType(typeof(T), typeof(T)))!;
     }

@@ -24,7 +24,9 @@ public static class Parallel
     public static Task Start(IWork work)
     {
         if (work.Options.MaximumThreads < 1)
+        {
             throw new ArgumentException("work.Options.MaximumThreads cannot be less than one.");
+        }
 
         var workItem = WorkItem.Get();
         var task = workItem.PrepareStart(work);
@@ -51,7 +53,9 @@ public static class Parallel
     public static Task Start(Action action, WorkOptions options)
     {
         if (options.MaximumThreads < 1)
+        {
             throw new ArgumentOutOfRangeException(nameof(options), "options.MaximumThreads cannot be less than 1.");
+        }
 
         var work = ActionWork.GetInstance();
         work.Action = action;
@@ -80,7 +84,9 @@ public static class Parallel
     public static Future<T> Start<T>(Func<T> function, WorkOptions options)
     {
         if (options.MaximumThreads < 1)
+        {
             throw new ArgumentOutOfRangeException(nameof(options), "options.MaximumThreads cannot be less than 1.");
+        }
 
         var work = FutureWork<T>.GetInstance();
         work.Function = function;

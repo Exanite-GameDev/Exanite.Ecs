@@ -38,7 +38,9 @@ internal class WorkItem
             finally
             {
                 if (taken)
+                {
                     Monitor.Exit(replicablesLock);
+                }
             }
         }
         set
@@ -82,19 +84,27 @@ internal class WorkItem
                     {
                         var replicable = replicables.Peek();
                         if (replicable.ID == task.Value.ID && replicable.Item == task.Value.Item)
+                        {
                             replicables.Pop();
+                        }
 
                         if (replicables.Count > 0)
+                        {
                             topReplicable = replicables.Peek();
+                        }
                         else
+                        {
                             topReplicable = null;
+                        }
                     }
                 }
             }
             finally
             {
                 if (taken)
+                {
                     Monitor.Exit(replicablesLock);
+                }
             }
         }
     }
@@ -122,7 +132,9 @@ internal class WorkItem
             if (_runningTasks.TryGetValue(Thread.CurrentThread, out var tasks))
             {
                 if (tasks.Count > 0)
+                {
                     return tasks.Peek();
+                }
             }
             return null;
         }
@@ -137,7 +149,9 @@ internal class WorkItem
         var task = new Task(this);
         var currentTask = CurrentTask;
         if (currentTask.HasValue && currentTask.Value.Item == this)
+        {
             throw new InvalidOperationException("Task does not have an assigned WorkItem");
+        }
 
         return task;
     }
@@ -147,9 +161,15 @@ internal class WorkItem
         lock (_executionLock)
         {
             if (expectedID < runCount)
+            {
                 return true;
+            }
+
             if (executing == Work.Options.MaximumThreads)
+            {
                 return false;
+            }
+
             Interlocked.Increment(ref executing);
         }
 
@@ -176,7 +196,9 @@ internal class WorkItem
         }
 
         if (tasks != null)
+        {
             tasks.Pop();
+        }
 
         lock (_executionLock)
         {
@@ -185,7 +207,9 @@ internal class WorkItem
             if (executing == 0)
             {
                 if (exceptionBuffer != null)
+                {
                     Exceptions[runCount] = [..exceptionBuffer];
+                }
 
                 Interlocked.Increment(ref runCount);
 
@@ -209,7 +233,9 @@ internal class WorkItem
         // requeue the WorkItem for reuse, but only if the runCount hasnt reached the maximum value
         // dont requeue if an exception has been caught, to stop potential memory leaks.
         if (runCount < int.MaxValue && exceptionBuffer == null)
+        {
             _idleWorkItems.Return(this);
+        }
     }
 
     public void Wait(int id)
@@ -217,16 +243,22 @@ internal class WorkItem
         WaitOrExecute(id);
 
         if (Exceptions.TryGetValue(id, out var e))
+        {
             throw new TaskException(e);
+        }
     }
 
     private void WaitOrExecute(int id)
     {
         if (runCount != id)
+        {
             return;
+        }
 
         if (DoWork(id))
+        {
             return;
+        }
 
         try
         {
@@ -235,9 +267,14 @@ internal class WorkItem
             while (runCount == id)
             {
                 if (i > 1000)
+                {
                     _resetEvent.WaitOne();
+                }
                 else
+                {
                     Thread.Sleep(0);
+                }
+
                 i++;
             }
         }

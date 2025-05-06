@@ -119,7 +119,9 @@ public sealed partial class EcsCommandBuffer
             foreach (var match in query.GetArchetypes())
             {
                 if (match.Archetype.EntityCount == 0)
+                {
                     continue;
+                }
 
                 World.DeleteImmediate(match.Archetype, ref lazy);
             }
@@ -130,11 +132,15 @@ public sealed partial class EcsCommandBuffer
         {
             // If there are any modifications enqueue for this entity, delete them
             if (_entityModifications.TryGetValue(delete, out var mods))
+            {
                 _setters.Dispose(mods.Sets, ref lazy);
+            }
 
             // Skip deleted entities
             if (!delete.Exists())
+            {
                 continue;
+            }
 
             var archetype = World.GetArchetype(delete.ID);
             if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
@@ -170,9 +176,13 @@ public sealed partial class EcsCommandBuffer
         bool IsAddingPhantomComponent(Entity entity)
         {
             if (_maybeAddingPhantomComponent.Contains(entity) && _entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
+            {
                 foreach (var key in mod.Sets.Keys)
                     if (key.IsPhantomComponent)
+                    {
                         return true;
+                    }
+            }
 
             return false;
         }
@@ -256,8 +266,10 @@ public sealed partial class EcsCommandBuffer
 
                     // Run all setters
                     if (mod.Sets != null)
+                    {
                         foreach (var set in mod.Sets.Values)
                             _setters.Write(set, row);
+                    }
                 }
 
                 // Recycle setters
@@ -317,7 +329,9 @@ public sealed partial class EcsCommandBuffer
         {
             var a = archetypeLookup[entityData.ArchetypeKey];
             if (a != null)
+            {
                 return a;
+            }
         }
 
         // Get the archetype
@@ -325,7 +339,9 @@ public sealed partial class EcsCommandBuffer
 
         // If the node ID is positive, cache it
         if (entityData.ArchetypeKey >= 0)
+        {
             archetypeLookup[entityData.ArchetypeKey] = archetype;
+        }
 
         return archetype;
     }
@@ -382,7 +398,9 @@ public sealed partial class EcsCommandBuffer
         _nextResolver.Configure(this);
 
         if (lazy.TryGetBuffer(out var cmd))
+        {
             cmd.Clear();
+        }
     }
     #endregion
 
@@ -410,7 +428,9 @@ public sealed partial class EcsCommandBuffer
         Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in SetBuffered");
 
         if (typeof(T) == typeof(ComponentPhantom))
+        {
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
+        }
 
         var bufferedData = _bufferedSets[(int)id];
         var setters = bufferedData.Setters;
@@ -426,7 +446,10 @@ public sealed partial class EcsCommandBuffer
                     break;
                 case DuplicateSet.Discard:
                     if (key.IsDisposableComponent)
+                    {
                         _setters.Discard(value);
+                    }
+
                     break;
                 case DuplicateSet.Throw:
                     throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
@@ -459,7 +482,9 @@ public sealed partial class EcsCommandBuffer
         where T : IEntityRelationComponent
     {
         if (relation._buffer != this)
+        {
             throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
+        }
 
         SetBuffered(id, value, duplicateMode);
         _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this, _nextResolver), relation);
@@ -475,7 +500,9 @@ public sealed partial class EcsCommandBuffer
         where T : IComponent
     {
         if (typeof(T) == typeof(ComponentPhantom))
+        {
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
+        }
 
         InternalSet(entity, value);
     }
@@ -526,7 +553,9 @@ public sealed partial class EcsCommandBuffer
 
         // Check if this is a phantom component being added
         if (id.IsPhantomComponent)
+        {
             _maybeAddingPhantomComponent.Add(entity);
+        }
 
         // Remove it from the "remove" set. In case it was previously removed
         mod.Removes?.Remove(id);
@@ -536,7 +565,9 @@ public sealed partial class EcsCommandBuffer
         where T : IEntityRelationComponent
     {
         if (relation._buffer != this)
+        {
             throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
+        }
 
         InternalSet(entity, value);
         _unbufferedRelationBindings.Create<T>(entity, relation);
@@ -551,7 +582,9 @@ public sealed partial class EcsCommandBuffer
         where T : IComponent
     {
         if (typeof(T) == typeof(ComponentPhantom))
+        {
             throw new InvalidOperationException("Cannot remove `Phantom` component from an entity");
+        }
 
         var mod = GetModificationData(entity, false, true);
 
@@ -588,7 +621,9 @@ public sealed partial class EcsCommandBuffer
     public void Delete(QueryDescription entities)
     {
         if (entities.World != World)
+        {
             throw new ArgumentException("Cannot use QueryDescription from one World with CommandBuffer for another World");
+        }
 
         _archetypeDeletes.Add(entities);
     }
@@ -628,7 +663,9 @@ public sealed partial class EcsCommandBuffer
             }
 
             if (overwrite)
+            {
                 _entityModifications[entity] = mod;
+            }
 
             return mod;
         }

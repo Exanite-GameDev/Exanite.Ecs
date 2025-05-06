@@ -143,7 +143,9 @@ public class QueryEnumerableTests
             }
 
             if (hasFloat && hasInt32 && hasInt64)
+            {
                 expectedIndices.Add(i);
+            }
         }
         using var r = cb.Playback();
 

@@ -49,7 +49,9 @@ public sealed partial class World
             archetype.Dispose(ref lazy);
 
         if (lazy.TryGetBuffer(out var buffer))
+        {
             buffer.Playback().Dispose();
+        }
     }
 
     #region command buffer pool
@@ -60,7 +62,9 @@ public sealed partial class World
     public EcsCommandBuffer GetCommandBuffer()
     {
         if (!_commandBufferPool.TryTake(out var buffer))
+        {
             buffer = new EcsCommandBuffer(this);
+        }
 
         return buffer;
     }
@@ -116,7 +120,9 @@ public sealed partial class World
         // Check this is still a valid entity reference. Early exit if the entity
         // is already dead.
         if (entityInfo.Version != delete.Version)
+        {
             return;
+        }
 
         // Notify archetype this entity is dead
         entityInfo.Chunk.Archetype.RemoveEntity(entityInfo, ref lazy);
@@ -154,7 +160,9 @@ public sealed partial class World
     internal Archetype GetArchetype(EntityId entity)
     {
         if (entity.ID < 0 || entity.ID >= _entities.TotalCapacity)
+        {
             throw new ArgumentException("Invalid entity ID", nameof(entity));
+        }
 
         return GetEntityInfo(entity).Chunk.Archetype;
     }
@@ -167,7 +175,10 @@ public sealed partial class World
     internal uint GetVersion(int entityId)
     {
         if (entityId <= 0 || entityId >= _entities.TotalCapacity)
+        {
             return 0;
+        }
+
         return _entities[entityId].Version;
     }
 
@@ -190,7 +201,9 @@ public sealed partial class World
         // Check if any of the candidates are the one we need
         foreach (var archetype in candidates)
             if (archetype.SetEquals(components))
+            {
                 return archetype;
+            }
 
         // Didn't find one, create the new archetype
         var a = new Archetype(this, FrozenOrderedListSet<ComponentId>.Create(components));
@@ -214,7 +227,9 @@ public sealed partial class World
         // Check if any of the candidates are the one we need
         foreach (var archetype in candidates)
             if (archetype.SetEquals(components))
+            {
                 return archetype;
+            }
 
         // Didn't find one, create the new archetype
         var set = FrozenOrderedListSet<ComponentId>.Create(components);
@@ -255,7 +270,9 @@ public sealed partial class World
 
             // Ensure ID 0 is not assigned even after wrapping around 2^32 entities
             if (v == 0)
+            {
                 v += 1;
+            }
 
             entity = new EntityId(prev.ID, v);
         }
@@ -266,7 +283,9 @@ public sealed partial class World
 
             // Check if the collection of all entities needs to grow
             if (entity.ID >= _entities.TotalCapacity)
+            {
                 _entities.Grow();
+            }
         }
 
         // Update the version
@@ -287,7 +306,9 @@ public sealed partial class World
         ref var info = ref _entities[entity.ID];
 
         if (info.Version != entity.Version)
+        {
             throw new ArgumentException("entity is not alive", nameof(entity));
+        }
 
         return ref info;
     }

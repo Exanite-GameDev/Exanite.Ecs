@@ -64,12 +64,16 @@ public sealed partial class QueryBuilder
         {
             var cached = world.TryGetCachedQuery(_include.Items);
             if (cached != null)
+            {
                 return cached;
+            }
         }
 
         // Automatically exclude all Phantom entities, unless specifically requested.
         if (!_include.Contains(ComponentId.Get<ComponentPhantom>()))
+        {
             Exclude<ComponentPhantom>();
+        }
 
         return new QueryDescription(
             world,
@@ -83,13 +87,24 @@ public sealed partial class QueryBuilder
     private void ContainsComponent(ComponentId id, int index, string caller)
     {
         if (index != _include.Index && _include.Contains(id))
+        {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already included");
+        }
+
         if (index != _exclude.Index && _exclude.Contains(id))
+        {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already excluded");
+        }
+
         if (index != _atLeastOne.Index && _atLeastOne.Contains(id))
+        {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already included (at least one)");
+        }
+
         if (index != _exactlyOne.Index && _exactlyOne.Contains(id))
+        {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already included (exactly one)");
+        }
     }
 
     #region include
@@ -363,7 +378,9 @@ public sealed partial class QueryBuilder
         public FrozenOrderedListSet<ComponentId> ToFrozenSet()
         {
             if (_frozenCache != null)
+            {
                 return _frozenCache;
+            }
 
             switch (Items.Count)
             {
