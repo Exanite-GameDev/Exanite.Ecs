@@ -69,7 +69,7 @@ namespace Myriad.Ecs.Queries
 <# for (var k = 0; k < i; k++)
 {
 #>
-        private static readonly ComponentId C<#= k #> = ComponentId<T<#= k #>>.ID;
+        private static readonly ComponentId C<#= k #> = ComponentId<T<#= k #>>.Id;
 <#
 }
 #>

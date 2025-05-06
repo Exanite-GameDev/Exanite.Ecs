@@ -2,6 +2,8 @@
 <#@ assembly name="System.Core" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
+using System;
+using System.Collections.Generic;
 using Myriad.Ecs.ComponentIds;
 
 namespace Myriad.Ecs.Worlds;
@@ -25,7 +27,7 @@ public sealed partial class WorldBuilder
 <# for (var j = 0; j < i; j++)
 {
 #>
-        if (!set.Add(ComponentId<<#= $"T{j}" #>>.ID))
+        if (!set.Add(ComponentId<<#= $"T{j}" #>>.Id))
             throw new ArgumentException($"Duplicate component type: {typeof(<#= $"T{j}" #>).Name}");
 <#
 }

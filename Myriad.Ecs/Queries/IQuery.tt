@@ -211,7 +211,7 @@ namespace Myriad.Ecs.Worlds
 <# for (var k = 0; k < i; k++)
 {
 #>
-			var c<#= k #> = ComponentId<T<#= k #>>.ID;
+			var c<#= k #> = ComponentId<T<#= k #>>.Id;
 <#
 }
 #>
@@ -295,7 +295,7 @@ namespace Myriad.Ecs.Worlds
 <# for (var k = 0; k < i; k++)
 {
 #>
-			var c<#= k #> = ComponentId<T<#= k #>>.ID;
+			var c<#= k #> = ComponentId<T<#= k #>>.Id;
 <#
 }
 #>
