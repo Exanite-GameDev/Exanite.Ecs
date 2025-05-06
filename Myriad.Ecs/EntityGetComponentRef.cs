@@ -1,5 +1,4 @@
 ﻿using Myriad.Ecs.Collections;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs;
 

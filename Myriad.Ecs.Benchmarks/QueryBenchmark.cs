@@ -3,7 +3,6 @@ using BenchmarkDotNet.Attributes;
 using Myriad.Ecs.Benchmarks.Components;
 using Myriad.Ecs.Command;
 using Myriad.Ecs.Queries;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Benchmarks;
 

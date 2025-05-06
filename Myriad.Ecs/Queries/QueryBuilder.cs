@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Myriad.Ecs.ComponentIds;
-using Myriad.Ecs.Worlds;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 

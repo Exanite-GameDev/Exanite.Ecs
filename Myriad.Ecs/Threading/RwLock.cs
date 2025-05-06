@@ -1,37 +1,37 @@
 ﻿using System.Threading;
 
-namespace Myriad.Ecs.Locks;
+namespace Myriad.Ecs.Threading;
 
 internal class RwLock<T>(T value) where T : class
 {
-    private readonly ReaderWriterLockSlim @lock = new(LockRecursionPolicy.SupportsRecursion);
+    private readonly ReaderWriterLockSlim rwLock = new(LockRecursionPolicy.SupportsRecursion);
 
     public ReadLockHandle EnterReadLock()
     {
-        @lock.EnterReadLock();
-        return new ReadLockHandle(@lock, value);
+        rwLock.EnterReadLock();
+        return new ReadLockHandle(rwLock, value);
     }
 
     public WriteLockHandle EnterWriteLock()
     {
-        @lock.EnterWriteLock();
-        return new WriteLockHandle(@lock, value);
+        rwLock.EnterWriteLock();
+        return new WriteLockHandle(rwLock, value);
     }
 
     public readonly ref struct ReadLockHandle
     {
-        private readonly ReaderWriterLockSlim @lock;
+        private readonly ReaderWriterLockSlim rwLock;
         public readonly T Value;
 
-        internal ReadLockHandle(ReaderWriterLockSlim @lock, T value)
+        internal ReadLockHandle(ReaderWriterLockSlim rwLock, T value)
         {
-            this.@lock = @lock;
+            this.rwLock = rwLock;
             Value = value;
         }
 
         public void Dispose()
         {
-            @lock.ExitReadLock();
+            rwLock.ExitReadLock();
         }
     }
 

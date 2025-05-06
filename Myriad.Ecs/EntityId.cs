@@ -1,8 +1,7 @@
 ﻿using System;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.ComponentIds;
-using Myriad.Ecs.Worlds;
 using System.Diagnostics;
+using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs;
 

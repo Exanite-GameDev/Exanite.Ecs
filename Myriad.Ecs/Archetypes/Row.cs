@@ -1,6 +1,6 @@
-﻿using Myriad.Ecs.Worlds.Chunks;
+﻿using Myriad.Ecs.Chunks;
 
-namespace Myriad.Ecs.Worlds.Archetypes;
+namespace Myriad.Ecs.Archetypes;
 
 internal readonly record struct Row
 {

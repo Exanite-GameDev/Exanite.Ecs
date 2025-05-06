@@ -3,12 +3,10 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Myriad.Ecs.Allocations;
+using Myriad.Ecs.Archetypes;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
-using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Queries;
-using Myriad.Ecs.Worlds;
-using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Command;
 

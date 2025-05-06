@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.Ecs.Allocations;
-using Myriad.Ecs.Components;
-using Myriad.Ecs.Locks;
+using Myriad.Ecs.Threading;
 
-namespace Myriad.Ecs.ComponentIds;
+namespace Myriad.Ecs.Components;
 
 /// <summary>
 /// Store a lookup from component type to unique 32 bit ID.

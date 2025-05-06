@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Myriad.Ecs.Allocations;
-using Myriad.Ecs.ComponentIds;
-using Myriad.Ecs.Worlds.Archetypes;
+using Myriad.Ecs.Archetypes;
+using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Command;
 

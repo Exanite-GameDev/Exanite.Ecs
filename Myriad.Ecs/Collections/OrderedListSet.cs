@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Myriad.Ecs.ComponentIds;
+using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Collections;
 

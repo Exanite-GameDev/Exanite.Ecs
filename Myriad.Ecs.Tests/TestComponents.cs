@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using Myriad.Ecs.Command;
-using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Tests;
 

@@ -2,8 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.ComponentIds;
-using Myriad.Ecs.Worlds;
+using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs;
 

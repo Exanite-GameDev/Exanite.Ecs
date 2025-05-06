@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.ComponentIds;
+using Myriad.Ecs.Components;
 using Myriad.Ecs.xxHash;
 
-namespace Myriad.Ecs.Worlds.Archetypes;
+namespace Myriad.Ecs.Archetypes;
 
 /// <summary>
 /// An archetype hash is made by mixing all of the components in an archetype.
