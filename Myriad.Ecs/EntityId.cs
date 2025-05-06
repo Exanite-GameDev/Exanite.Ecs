@@ -30,7 +30,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{Id}v{Version}";
+        return $"{Id} v{Version}";
     }
 
     /// <summary>
