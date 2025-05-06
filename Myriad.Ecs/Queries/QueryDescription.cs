@@ -568,45 +568,4 @@ public sealed class QueryDescription
         return default;
     }
     #endregion
-
-    #region bulk write
-    /// <summary>
-    /// Overwrite a component for every entity which matches this query
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="item"></param>
-    /// <returns>The number of entities written to</returns>
-    public int Overwrite<T>(T item)
-        where T : IComponent
-    {
-        var id = ComponentId.Get<T>();
-
-        // Can't do any work if this item is specifically not in this query
-        if (IsExcluded(id))
-        {
-            return 0;
-        }
-
-        var count = 0;
-        foreach (var archetype in GetArchetypes())
-        {
-            if (!archetype.Archetype.Components.Contains(id))
-            {
-                continue;
-            }
-
-            count += archetype.Archetype.EntityCount;
-
-            using var chunks = archetype.Archetype.GetChunkEnumerator();
-            while (chunks.MoveNext())
-            {
-                var chunk = chunks.Current;
-                var arr = chunk!.GetSpan<T>(id);
-                arr.Fill(item);
-            }
-        }
-
-        return count;
-    }
-    #endregion
 }

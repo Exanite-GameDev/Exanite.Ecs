@@ -83,35 +83,6 @@ public sealed partial class World
     }
     #endregion
 
-    #region bulk write
-    /// <summary>
-    /// Overwrite the value of a specific component on every entity which matches the given query
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="item"></param>
-    /// <param name="query"></param>
-    /// <returns></returns>
-    public int Overwrite<T>(T item, QueryDescription? query = null)
-        where T : IComponent
-    {
-        return Overwrite(item, ref query);
-    }
-
-    /// <summary>
-    /// Overwrite the value of a specific component on every entity which matches the given query
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="item"></param>
-    /// <param name="query"></param>
-    /// <returns></returns>
-    public int Overwrite<T>(T item, ref QueryDescription? query)
-        where T : IComponent
-    {
-        query ??= GetCachedQuery<T>();
-        return query.Overwrite(item);
-    }
-    #endregion
-
     internal void DeleteImmediate(EntityId delete, ref LazyCommandBuffer lazy)
     {
         // Get the entityinfo for this entity
