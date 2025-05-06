@@ -285,7 +285,7 @@ internal class OrderedListSet<TItem>
         var a = CollectionsMarshal.AsSpan(_items);
         var b = CollectionsMarshal.AsSpan(other._items);
 
-        // Add a specialization for ComponentID. This allows it to be compared with fast SIMD equality
+        // Add a specialization for ComponentId. This allows it to be compared with fast SIMD equality
         // instead of calling the equality implementation for every item individually.
         if (typeof(TItem) == typeof(ComponentId))
         {

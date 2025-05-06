@@ -8,7 +8,7 @@ using Myriad.Ecs.Worlds.Archetypes;
 namespace Myriad.Ecs.Command;
 
 /// <summary>
-/// Collection of components of all different types, keyed by ComponentID, involves no boxing
+/// Collection of components of all different types, keyed by ComponentId, involves no boxing
 /// </summary>
 internal class ComponentSetterCollection
 {
