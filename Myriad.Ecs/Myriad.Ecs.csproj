@@ -15,12 +15,4 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <WarningsAsErrors>true</WarningsAsErrors>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Update="Queries\Filters\QueryFilter.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>QueryFilter.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>
