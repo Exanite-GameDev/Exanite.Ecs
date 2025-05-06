@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Myriad.Ecs.Collections;
@@ -6,7 +7,7 @@ namespace Myriad.Ecs.Collections;
 /// <summary>
 /// An immutable set of objects.
 /// </summary>
-public class ImmutableOrderedListSet<T> where T : struct, IComparable<T>, IEquatable<T>
+public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<T>, IEquatable<T>
 {
     /// <summary>
     /// An empty set
@@ -15,7 +16,7 @@ public class ImmutableOrderedListSet<T> where T : struct, IComparable<T>, IEquat
 
     private readonly OrderedListSet<T> items;
 
-    public IReadOnlyList<T> Items => items.Items;
+    public T this[int i] => items[i];
 
     public int Count => items.Count;
 
@@ -90,22 +91,31 @@ public class ImmutableOrderedListSet<T> where T : struct, IComparable<T>, IEquat
     }
 
     #region GetEnumerator
+
     /// <summary>
     /// Get an enumerator over the items in this set
     /// </summary>
-    /// <returns></returns>
     public List<T>.Enumerator GetEnumerator()
     {
         // ReSharper disable once NotDisposedResourceIsReturned
         return items.GetEnumerator();
     }
+
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
     #endregion
 
     /// <summary>
     /// Check if this set contains the given item
     /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
     public bool Contains(T item)
     {
         return items.Contains(item);

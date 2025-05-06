@@ -13,8 +13,6 @@ public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<
 {
     private readonly List<T> items = [];
 
-    public IReadOnlyList<T> Items => items;
-
     public int Count => items.Count;
 
     public T this[int i] => items[i];

@@ -42,7 +42,7 @@ public readonly record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
     /// </summary>
-    public object[] BoxedComponents => ComponentTypes.Items.Select(GetBoxedComponent).ToArray()!;
+    public object[] BoxedComponents => ComponentTypes.Select(GetBoxedComponent).ToArray()!;
 
     internal Entity(EntityId id, World world)
     {
