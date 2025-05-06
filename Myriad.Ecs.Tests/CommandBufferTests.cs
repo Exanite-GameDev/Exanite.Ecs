@@ -107,11 +107,11 @@ public class EcsCommandBufferTests
                 {
                     switch (rng.Next(0, 6))
                     {
-                        case 0: b.Set(new ComponentByte((byte)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                        case 1: b.Set(new ComponentInt16((short)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                        case 2: b.Set(new ComponentFloat(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                        case 3: b.Set(new ComponentInt32(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                        case 4: b.Set(new ComponentInt64(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                        case 0: b.Set(new ComponentByte((byte)i)); break;
+                        case 1: b.Set(new ComponentInt16((short)i)); break;
+                        case 2: b.Set(new ComponentFloat(i)); break;
+                        case 3: b.Set(new ComponentInt32(i)); break;
+                        case 4: b.Set(new ComponentInt64(i)); break;
                     }
                 }
             }
@@ -348,7 +348,7 @@ public class EcsCommandBufferTests
         var eb = buffer.Create();
 
         eb.Set(new ComponentFloat(1));
-        eb.Set(new ComponentFloat(2), EcsCommandBuffer.DuplicateSet.Overwrite);
+        eb.Set(new ComponentFloat(2));
     }
 
     [TestMethod]
@@ -893,24 +893,24 @@ public class EcsCommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: eb.Set(new Component0(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 1: eb.Set(new Component1(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 2: eb.Set(new Component2(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 3: eb.Set(new Component3(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 4: eb.Set(new Component4(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 5: eb.Set(new Component5(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 6: eb.Set(new Component6(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 7: eb.Set(new Component7(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 8: eb.Set(new Component8(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 9: eb.Set(new Component9(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 10: eb.Set(new Component10(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 11: eb.Set(new Component11(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 12: eb.Set(new Component12(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 13: eb.Set(new Component13(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 14: eb.Set(new Component14(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 15: eb.Set(new Component15(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 16: eb.Set(new Component16(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 17: eb.Set(new Component17(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 0: eb.Set(new Component0()); break;
+                    case 1: eb.Set(new Component1()); break;
+                    case 2: eb.Set(new Component2()); break;
+                    case 3: eb.Set(new Component3()); break;
+                    case 4: eb.Set(new Component4()); break;
+                    case 5: eb.Set(new Component5()); break;
+                    case 6: eb.Set(new Component6()); break;
+                    case 7: eb.Set(new Component7()); break;
+                    case 8: eb.Set(new Component8()); break;
+                    case 9: eb.Set(new Component9()); break;
+                    case 10: eb.Set(new Component10()); break;
+                    case 11: eb.Set(new Component11()); break;
+                    case 12: eb.Set(new Component12()); break;
+                    case 13: eb.Set(new Component13()); break;
+                    case 14: eb.Set(new Component14()); break;
+                    case 15: eb.Set(new Component15()); break;
+                    case 16: eb.Set(new Component16()); break;
+                    case 17: eb.Set(new Component17()); break;
                 }
             }
         }

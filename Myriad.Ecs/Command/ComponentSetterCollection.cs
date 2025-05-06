@@ -58,12 +58,6 @@ internal class ComponentSetterCollection
         ((GenericComponentList<T>)_components[id]).Overwrite(index, value);
     }
 
-    public void Discard<T>(T value) where T : IComponent
-    {
-        var id = ComponentId.Get<T>();
-        ((GenericComponentList<T>)_components[id]).Discard(value);
-    }
-
     public void Write(SetterId id, Row row)
     {
         var list = _components[id.ID];
@@ -167,14 +161,6 @@ internal class ComponentSetterCollection
             }
 
             _values[index.Index] = value;
-        }
-
-        public void Discard(T value)
-        {
-            if (_disposer.Component.IsDisposableComponent)
-            {
-                _overwrittenDisposableValues.Add(value);
-            }
         }
 
         public void Recycle()

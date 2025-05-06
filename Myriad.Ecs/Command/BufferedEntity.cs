@@ -52,7 +52,7 @@ public sealed partial class EcsCommandBuffer
         /// <param name="value">The value of the component to add</param>
         /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, DuplicateSet duplicateMode = DuplicateSet.Throw)
+        public BufferedEntity Set<T>(T value)
             where T : IComponent
         {
             CheckIsMutable();
@@ -60,10 +60,10 @@ public sealed partial class EcsCommandBuffer
             // Redirect to bind to self
             if (typeof(T) == typeof(SelfReference))
             {
-                return Set(new SelfReference(), this, duplicateMode);
+                return Set(new SelfReference(), this);
             }
 
-            _buffer.SetBuffered(_id, value, duplicateMode);
+            _buffer.SetBuffered(_id, value);
             return this;
         }
 
@@ -73,9 +73,8 @@ public sealed partial class EcsCommandBuffer
         /// <typeparam name="T">The type of component to add</typeparam>
         /// <param name="value">The value of the component to add</param>
         /// <param name="relation">When the command buffer is played back the target entity will automatically be resolved and set into the relational component</param>
-        /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, BufferedEntity relation, DuplicateSet duplicateMode = DuplicateSet.Throw)
+        public BufferedEntity Set<T>(T value, BufferedEntity relation)
             where T : IEntityRelationComponent
         {
             CheckIsMutable();
@@ -88,7 +87,7 @@ public sealed partial class EcsCommandBuffer
                 }
             }
 
-            _buffer.SetBuffered(_id, value, relation, duplicateMode);
+            _buffer.SetBuffered(_id, value, relation);
             return this;
         }
 
@@ -98,9 +97,8 @@ public sealed partial class EcsCommandBuffer
         /// <typeparam name="T">The type of component to add</typeparam>
         /// <param name="value">The value of the component to add</param>
         /// <param name="relation"></param>
-        /// <param name="duplicateMode">Indicates how duplicates sets of this component for this entity in this buffer should be handled</param>
         /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value, Entity relation, DuplicateSet duplicateMode = DuplicateSet.Throw)
+        public BufferedEntity Set<T>(T value, Entity relation)
             where T : IEntityRelationComponent
         {
             CheckIsMutable();
@@ -111,7 +109,7 @@ public sealed partial class EcsCommandBuffer
             }
 
             value.Target = relation;
-            _buffer.SetBuffered(_id, value, duplicateMode);
+            _buffer.SetBuffered(_id, value);
             return this;
         }
 

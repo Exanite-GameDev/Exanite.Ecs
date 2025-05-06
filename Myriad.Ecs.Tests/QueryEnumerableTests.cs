@@ -122,21 +122,21 @@ public class QueryEnumerableTests
             {
                 switch (rng.Next(0, 5))
                 {
-                    case 0: entity.Set(new ComponentByte((byte)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
-                    case 1: entity.Set(new ComponentInt16((short)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 0: entity.Set(new ComponentByte((byte)i)); break;
+                    case 1: entity.Set(new ComponentInt16((short)i)); break;
 
                     case 2:
-                        entity.Set(new ComponentFloat(i), EcsCommandBuffer.DuplicateSet.Overwrite);
+                        entity.Set(new ComponentFloat(i));
                         hasFloat = true;
                         break;
 
                     case 3:
-                        entity.Set(new ComponentInt32(i), EcsCommandBuffer.DuplicateSet.Overwrite);
+                        entity.Set(new ComponentInt32(i));
                         hasInt32 = true;
                         break;
 
                     case 4:
-                        entity.Set(new ComponentInt64(i), EcsCommandBuffer.DuplicateSet.Overwrite);
+                        entity.Set(new ComponentInt64(i));
                         hasInt64 = true;
                         break;
                 }

@@ -260,7 +260,7 @@ public class DisposableComponentTests
 
         // Enqueue attachment of a disposal component, twice. To an entity that doesn't exist yet.
         be.Set(new TestDisposable(box1));
-        be.Set(new TestDisposable(box2), EcsCommandBuffer.DuplicateSet.Overwrite);
+        be.Set(new TestDisposable(box2));
 
         // Nothing has been disposed yet
         Assert.AreEqual(0, box1.Value);
@@ -291,7 +291,7 @@ public class DisposableComponentTests
         // Enqueue attachment of a disposal component, twice. To an entity that doesn't exist yet.
         // The second one will be discarded because there's already one attached to the entity
         be.Set(new TestDisposable(box1));
-        be.Set(new TestDisposable(box2), EcsCommandBuffer.DuplicateSet.Discard);
+        be.Set(new TestDisposable(box2));
 
         // Nothing has been disposed yet
         Assert.AreEqual(0, box1.Value);

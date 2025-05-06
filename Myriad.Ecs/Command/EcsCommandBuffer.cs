@@ -422,7 +422,7 @@ public sealed partial class EcsCommandBuffer
         return new BufferedEntity(id, this, _nextResolver);
     }
 
-    private void SetBuffered<T>(uint id, T value, DuplicateSet duplicateMode)
+    private void SetBuffered<T>(uint id, T value)
         where T : IComponent
     {
         Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in SetBuffered");
@@ -439,26 +439,7 @@ public sealed partial class EcsCommandBuffer
 
         if (setters.TryGetValue(key, out var existing))
         {
-            switch (duplicateMode)
-            {
-                case DuplicateSet.Overwrite:
-                    _setters.Overwrite(existing, value);
-                    break;
-                case DuplicateSet.Discard:
-                    if (key.IsDisposableComponent)
-                    {
-                        _setters.Discard(value);
-                    }
-
-                    break;
-                case DuplicateSet.Throw:
-                    throw new InvalidOperationException("Cannot set the same component twice onto a buffered entity");
-
-                /* dotcover disable */
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(duplicateMode), duplicateMode, null);
-                /* dotcover enable */
-            }
+            _setters.Overwrite(existing, value);
         }
         else
         {
@@ -478,7 +459,7 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void SetBuffered<T>(uint id, T value, BufferedEntity relation, DuplicateSet duplicateMode)
+    private void SetBuffered<T>(uint id, T value, BufferedEntity relation)
         where T : IEntityRelationComponent
     {
         if (relation._buffer != this)
@@ -486,7 +467,7 @@ public sealed partial class EcsCommandBuffer
             throw new ArgumentException("Target of relation must be BufferedEntity from the same CommandBuffer", nameof(relation));
         }
 
-        SetBuffered(id, value, duplicateMode);
+        SetBuffered(id, value);
         _bufferedRelationBindings.Create<T>(new BufferedEntity(id, this, _nextResolver), relation);
     }
 
@@ -698,29 +679,4 @@ public sealed partial class EcsCommandBuffer
     }
 
     private record struct EntityModificationData(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
-
-    /// <summary>
-    /// Indicates how multiple Set operations enqueued for the same entity in this buffer should that be handled
-    /// </summary>
-    public enum DuplicateSet
-    {
-        /// <summary>
-        /// The later set value should overwrite the earlier one.<br />
-        /// <code>Set(A); Set(B);</code>
-        /// Would result in `B`
-        /// </summary>
-        Overwrite,
-
-        /// <summary>
-        /// The later set value should be discarded.<br />
-        /// <code>Set(A); Set(B);</code>
-        /// Would result in `A`
-        /// </summary>
-        Discard,
-
-        /// <summary>
-        /// The later set value should throw an exception.
-        /// </summary>
-        Throw,
-    }
 }
