@@ -1,9 +1,9 @@
 ﻿using Myriad.Ecs.Collections;
 using Myriad.Ecs.ComponentIds;
 
-namespace Myriad.Ecs.Extensions;
+namespace Myriad.Ecs.Utilities;
 
-internal static class FrozenOrderedListSetExtensions
+internal static class FrozenOrderedListSetUtility
 {
     public static ComponentBloomFilter ToBloomFilter(this FrozenOrderedListSet<ComponentId> set)
     {

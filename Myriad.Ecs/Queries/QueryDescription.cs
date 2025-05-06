@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.ComponentIds;
+using Myriad.Ecs.Utilities;
 using Myriad.Ecs.Worlds;
 using Myriad.Ecs.Worlds.Archetypes;
 
