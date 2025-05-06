@@ -97,7 +97,7 @@ internal static class ComponentRegistry
                 id <<= ComponentId.SpecialBitsCount;
 
                 // Set the bit indicating that this component implements IPhantomComponent
-                if (typeof(IPhantomComponent).IsAssignableFrom(type))
+                if (typeof(IComponentPhantom).IsAssignableFrom(type))
                     id |= ComponentId.IsPhantomComponentMask;
 
                 // Set the bit indicating that this component implements IEntityRelationComponent

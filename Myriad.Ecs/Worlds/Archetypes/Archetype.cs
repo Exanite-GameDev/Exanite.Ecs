@@ -80,7 +80,7 @@ public sealed partial class Archetype
     public int EntityCount { get; private set; }
 
     /// <summary>
-    /// Indicates if any of the components in this Archetype implement <see cref="IPhantomComponent"/>;
+    /// Indicates if any of the components in this Archetype implement <see cref="IComponentPhantom"/>;
     /// </summary>
     public bool HasPhantomComponents { get; }
 

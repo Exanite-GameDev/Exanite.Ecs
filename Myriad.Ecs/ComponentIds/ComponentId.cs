@@ -29,7 +29,7 @@ public readonly record struct ComponentId
     public Type Type => ComponentRegistry.Get(this);
 
     /// <summary>
-    /// Indicates if this component implements <see cref="IPhantomComponent"/>
+    /// Indicates if this component implements <see cref="IComponentPhantom"/>
     /// </summary>
     public bool IsPhantomComponent => (Value & IsPhantomComponentMask) == IsPhantomComponentMask;
 

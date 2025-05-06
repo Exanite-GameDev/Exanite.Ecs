@@ -31,9 +31,9 @@ public record struct Component15 : IComponent;
 public record struct Component16 : IComponent;
 public record struct Component17 : IComponent;
 
-public record struct TestPhantom0 : IPhantomComponent;
-public record struct TestPhantom1 : IPhantomComponent;
-public record struct TestPhantom2 : IPhantomComponent;
+public record struct TestPhantom0 : IComponentPhantom;
+public record struct TestPhantom1 : IComponentPhantom;
+public record struct TestPhantom2 : IComponentPhantom;
 
 public record struct PhantomNotifier : IPhantomNotifierComponent
 {
@@ -83,7 +83,7 @@ public record struct TestDisposableParent
 }
 
 public readonly record struct TestDisposablePhantom
-    : IDisposableComponent, IPhantomComponent
+    : IDisposableComponent, IComponentPhantom
 {
     private readonly BoxedInt _box;
 

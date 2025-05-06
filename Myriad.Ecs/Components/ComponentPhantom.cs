@@ -9,15 +9,15 @@
 /// <para>
 /// If an entity with a <see cref="ComponentPhantom"/> entity is destroyed, it will
 /// actually be destroyed. It will also automatically be destroyed if it has no more
-/// <see cref="IPhantomComponent"/> components attached.
+/// <see cref="IComponentPhantom"/> components attached.
 /// </para>
 /// </summary>
-public interface IPhantomComponent : IComponent;
+public interface IComponentPhantom : IComponent;
 
 /// <summary>
 /// This component received a notification when the entity it is attached to becomes a phantom.
 /// </summary>
-/// <remarks>Note that this component is <b>not</b> an <see cref="IPhantomComponent"/>.</remarks>
+/// <remarks>Note that this component is <b>not</b> an <see cref="IComponentPhantom"/>.</remarks>
 public interface IPhantomNotifierComponent : IComponent
 {
     /// <summary>
@@ -33,12 +33,12 @@ public interface IPhantomNotifierComponent : IComponent
 /// are automatically excluded from queries and must be specifically requested.
 /// </para>
 /// <para>An entity will automatically become a phantom if it is destroyed, but still has
-/// <see cref="IPhantomComponent"/> components attached.
+/// <see cref="IComponentPhantom"/> components attached.
 /// </para>
 /// <para>
 /// If an entity with a <see cref="ComponentPhantom"/> component is destroyed, it will
 /// actually be destroyed. It will automatically be destroyed if it has no more
-/// <see cref="IPhantomComponent"/> components attached.
+/// <see cref="IComponentPhantom"/> components attached.
 /// </para>
 /// </summary>
 public struct ComponentPhantom : IComponent;
