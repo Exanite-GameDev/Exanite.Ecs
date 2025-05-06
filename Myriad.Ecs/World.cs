@@ -273,31 +273,4 @@ public sealed class World : IDisposable
 
         return ref info;
     }
-
-    /// <summary>
-    /// Get the info for the given entity, if the entity is dead returns a reference to dummy
-    /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="dummy"></param>
-    /// <param name="isDummy"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    internal ref EntityInfo GetEntityInfo(EntityId entity, ref EntityInfo dummy, out bool isDummy)
-    {
-        if (entity.Id <= 0 || entity.Id >= entities.TotalCapacity)
-        {
-            isDummy = true;
-            return ref dummy;
-        }
-
-        ref var info = ref entities[entity.Id];
-        if (info.Version != entity.Version)
-        {
-            isDummy = true;
-            return ref dummy;
-        }
-
-        isDummy = false;
-        return ref info;
-    }
 }
