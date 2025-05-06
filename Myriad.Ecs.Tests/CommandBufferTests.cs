@@ -535,7 +535,7 @@ public class EcsCommandBufferTests
                       select (archetype, archetype.EntityCount)).ToArray();
 
         // Query to delete
-        var q = new QueryBuilder().Include<Component0, Component1>().Exclude<ComponentInt32>().Build(world);
+        var q = new QueryBuilder().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world);
 
         // Get an entity we're going to delete
         var dead = q.FirstOrDefault()!.Value;
@@ -595,7 +595,7 @@ public class EcsCommandBufferTests
                       select (archetype, archetype.EntityCount)).ToArray();
 
         // Delete it
-        buffer.Delete(new QueryBuilder().Include<Component0, Component1>().Exclude<ComponentInt32>().Build(world));
+        buffer.Delete(new QueryBuilder().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world));
         buffer.Playback().Dispose();
 
         // Check the archetypes
@@ -657,7 +657,7 @@ public class EcsCommandBufferTests
         }
 
         // Delete it
-        buffer.Delete(new QueryBuilder().Include<Component0, Component1>().Exclude<ComponentInt32>().Build(world));
+        buffer.Delete(new QueryBuilder().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world));
         buffer.Playback().Dispose();
 
         // Check the archetypes
