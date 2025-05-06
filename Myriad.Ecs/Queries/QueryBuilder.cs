@@ -59,16 +59,6 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public QueryDescription Build(World world)
     {
-        // In the special case when it's only an include query try to get an item from the cache
-        if (_exclude.Items.Count == 0 && _atLeastOne.Items.Count == 0 && _exactlyOne.Items.Count == 0)
-        {
-            var cached = world.TryGetCachedQuery(_include.Items);
-            if (cached != null)
-            {
-                return cached;
-            }
-        }
-
         // Automatically exclude all Phantom entities, unless specifically requested.
         if (!_include.Contains(ComponentId.Get<ComponentPhantom>()))
         {

@@ -22,51 +22,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Queries\IQueryCollect.cs">
-      <DependentUpon>IQueryCollect.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\IVectorChunkQuery.cs">
-      <DependentUpon>IVectorChunkQuery.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\QueryCount.cs">
-      <DependentUpon>QueryCount.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\IChunkQuery.cs">
-      <DependentUpon>IChunkQuery.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\CachedQueries.cs">
-      <DependentUpon>CachedQueries.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\QueryMapReduceReducers.cs">
-      <DependentUpon>QueryMapReduceReducers.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\QueryMapReduce.cs">
-      <DependentUpon>QueryMapReduce.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\QueryDelegate.cs">
-      <DependentUpon>QueryDelegate.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Queries\QueryEnumerable.cs">
-      <DependentUpon>QueryEnumerable.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="EntityGetComponentRef.cs">
       <DependentUpon>EntityGetComponentRef.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -82,55 +37,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>QueryFilter.tt</DependentUpon>
     </Compile>
-    <Compile Update="Queries\IQuery.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IQuery.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Collections\RefTuple.tt">
       <LastGenOutput>RefTuple.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\IQueryCollect.tt">
-      <LastGenOutput>IQueryCollect.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\QueryMapReduceReducers.tt">
-      <LastGenOutput>QueryMapReduceReducers.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\TemplateHeaders\ParallelWorkLoopSetup.t4">
-      <Generator></Generator>
-    </None>
-    <None Update="Queries\IVectorChunkQuery.tt">
-      <LastGenOutput>IVectorChunkQuery.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\QueryCount.tt">
-      <LastGenOutput>QueryCount.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\IChunkQuery.tt">
-      <LastGenOutput>IChunkQuery.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\CachedQueries.tt">
-      <LastGenOutput>CachedQueries.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\QueryMapReduce.tt">
-      <LastGenOutput>QueryMapReduce.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\QueryDelegate.tt">
-      <LastGenOutput>QueryDelegate.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\QueryEnumerable.tt">
-      <LastGenOutput>QueryEnumerable.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="EntityGetComponentRef.tt">
@@ -139,10 +50,6 @@
     </None>
     <None Update="Worlds\WorldBuilderWithArchetype.tt">
       <LastGenOutput>WorldBuilderWithArchetype.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Queries\IQuery.tt">
-      <LastGenOutput>IQuery.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
