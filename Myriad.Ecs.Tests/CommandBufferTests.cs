@@ -77,7 +77,7 @@ public class EcsCommandBufferTests
             Assert.IsTrue(entity.Exists());
             Assert.AreEqual(1, world.Archetypes.Count);
             Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
-            Assert.AreEqual(i, entity.GetComponentRef<ComponentInt32>().Value);
+            Assert.AreEqual(i, entity.GetComponent<ComponentInt32>().Value);
         }
     }
 
@@ -387,8 +387,8 @@ public class EcsCommandBufferTests
         Assert.IsFalse(entities[1].Exists());
         Assert.IsTrue(entities[2].Exists());
 
-        Assert.AreEqual(1, entities[0].GetComponentRef<ComponentFloat>().Value);
-        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>().Value);
+        Assert.AreEqual(1, entities[0].GetComponent<ComponentFloat>().Value);
+        Assert.AreEqual(3, entities[2].GetComponent<ComponentFloat>().Value);
     }
 
     [TestMethod]
@@ -502,7 +502,7 @@ public class EcsCommandBufferTests
         Assert.IsFalse(entities[1].Exists());
         Assert.IsTrue(entities[2].Exists());
 
-        Assert.AreEqual(3, entities[2].GetComponentRef<ComponentFloat>().Value);
+        Assert.AreEqual(3, entities[2].GetComponent<ComponentFloat>().Value);
     }
 
     [TestMethod]
@@ -612,7 +612,7 @@ public class EcsCommandBufferTests
         buffer.Remove<ComponentInt16>(entity);
         buffer.Playback();
 
-        Assert.AreEqual(123, entity.GetComponentRef<ComponentFloat>().Value);
+        Assert.AreEqual(123, entity.GetComponent<ComponentFloat>().Value);
         Assert.IsFalse(entity.HasComponent<ComponentInt16>());
     }
 
@@ -661,7 +661,7 @@ public class EcsCommandBufferTests
         // Check the value has changed
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
         Assert.IsTrue(entity.HasComponent<ComponentInt16>());
-        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>().Value);
+        Assert.AreEqual(789, entity.GetComponent<ComponentInt16>().Value);
     }
 
     [TestMethod]
@@ -686,7 +686,7 @@ public class EcsCommandBufferTests
         // Check the value has changed to the latest value
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
         Assert.IsTrue(entity.HasComponent<ComponentInt16>());
-        Assert.AreEqual(987, entity.GetComponentRef<ComponentInt16>().Value);
+        Assert.AreEqual(987, entity.GetComponent<ComponentInt16>().Value);
     }
 
     [TestMethod]
@@ -769,7 +769,7 @@ public class EcsCommandBufferTests
         Assert.IsFalse(entity.HasComponent<ComponentInt32>());
 
         // Check value is correct
-        Assert.AreEqual(789, entity.GetComponentRef<ComponentInt16>().Value);
+        Assert.AreEqual(789, entity.GetComponent<ComponentInt16>().Value);
     }
 
     [TestMethod]
@@ -885,27 +885,27 @@ public class EcsCommandBufferTests
 
         // Check 1 has everything expected
         Assert.AreEqual(4, entity0.ComponentTypes.Count);
-        entity0.GetComponentRef<Component0>();
-        entity0.GetComponentRef<Component1>();
-        entity0.GetComponentRef<Component2>();
-        entity0.GetComponentRef<Component3>();
+        entity0.GetComponent<Component0>();
+        entity0.GetComponent<Component1>();
+        entity0.GetComponent<Component2>();
+        entity0.GetComponent<Component3>();
 
         // Check 2 has everything expected
         Assert.AreEqual(2, entity1.ComponentTypes.Count);
-        entity1.GetComponentRef<Component1>();
-        entity1.GetComponentRef<Component2>();
+        entity1.GetComponent<Component1>();
+        entity1.GetComponent<Component2>();
 
         // Check 3 has everything expected
         Assert.AreEqual(3, entity2.ComponentTypes.Count);
-        entity2.GetComponentRef<Component1>();
-        entity2.GetComponentRef<Component2>();
-        entity2.GetComponentRef<Component4>();
+        entity2.GetComponent<Component1>();
+        entity2.GetComponent<Component2>();
+        entity2.GetComponent<Component4>();
 
         // Check other is unchanged
         Assert.AreEqual(3, entity3.ComponentTypes.Count);
-        entity3.GetComponentRef<Component0>();
-        entity3.GetComponentRef<Component1>();
-        entity3.GetComponentRef<Component2>();
+        entity3.GetComponent<Component0>();
+        entity3.GetComponent<Component1>();
+        entity3.GetComponent<Component2>();
     }
 
     [TestMethod]

@@ -86,7 +86,7 @@ public class EntityTests
         using var resolver = b.Playback();
         var entity = e.Resolve();
 
-        ref var c = ref entity.GetComponentRef<ComponentInt16>();
+        ref var c = ref entity.GetComponent<ComponentInt16>();
         Assert.AreEqual(7, c.Value);
     }
 

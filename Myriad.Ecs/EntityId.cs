@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 
@@ -28,6 +29,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     }
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString()
     {
         return $"{Id} v{Version}";
@@ -37,7 +39,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// Create a new <see cref="Ecs.Entity"/> struct that represents this Entity
     /// </summary>
     /// <param name="world"></param>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Entity ToEntity(World world)
     {
         return new Entity(this, world);
@@ -46,21 +48,19 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// <summary>
     /// Check if this Entity still exists.
     /// </summary>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Exists(World world)
     {
-        return Id != 0
-            && world.GetVersion(Id) == Version;
+        return Id != 0 && world.GetVersion(Id) == Version;
     }
 
     /// <summary>
     /// Check if this Entity still exists and is not a phantom.
     /// </summary>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsAlive(World world)
     {
-        return Exists(world)
-            && !IsPhantom(world);
+        return Exists(world) && !IsPhantom(world);
     }
 
     /// <summary>
@@ -68,14 +68,14 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// and automatically deleted when the last IPhantomComponent component is removed.
     /// </summary>
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsPhantom(World world)
     {
-        return Id != 0
-            && Exists(world)
-            && world.GetArchetype(this).IsPhantom;
+        return Id != 0 && Exists(world) && world.GetArchetype(this).IsPhantom;
     }
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int CompareTo(EntityId other)
     {
         var idc = Id.CompareTo(other.Id);
@@ -90,7 +90,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// <summary>
     /// Get a unique 64 bit ID for this entity
     /// </summary>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public long UniqueId()
     {
         // Set the entity ID and version into the hi and lo 32 bits
@@ -126,7 +126,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// <summary>
     /// Get the set of components which this entity currently has
     /// </summary>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public FrozenOrderedListSet<ComponentId> GetComponents(World world)
     {
         var info = world.GetEntityInfo(this);
@@ -136,10 +136,8 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// <summary>
     /// Check if this entity has a component
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public bool HasComponent<T>(World world)
-        where T : IComponent
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool HasComponent<T>(World world) where T : IComponent
     {
         return GetComponents(world).Contains(ComponentId.Get<T>());
     }
@@ -148,22 +146,18 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// Get a reference to a component of the given type. If the entity
     /// does not have this component an exception will be thrown.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref T GetComponentRef<T>(World world)
-        where T : IComponent
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref T GetComponent<T>(World world) where T : IComponent
     {
-        return ref GetComponentRefT<T>(world).Value;
+        return ref GetComponentRef<T>(world).Value;
     }
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
     /// does not have this component an exception will be thrown.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public Ref<T> GetComponentRefT<T>(World world)
-        where T : IComponent
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Ref<T> GetComponentRef<T>(World world) where T : IComponent
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
         return entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
@@ -172,9 +166,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
-    /// <param name="world"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object? GetBoxedComponent(World world, ComponentId id)
     {
         if (!Exists(world))

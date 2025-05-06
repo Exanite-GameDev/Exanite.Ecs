@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 
@@ -50,6 +51,7 @@ public readonly record struct Entity : IComparable<Entity>
     }
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString()
     {
         return EntityId.ToString();
@@ -58,13 +60,13 @@ public readonly record struct Entity : IComparable<Entity>
     /// <summary>
     /// Check if this Entity still exists.
     /// </summary>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Exists() => EntityId.Exists(World);
 
     /// <summary>
     /// Check if this Entity still exists and is not a phantom.
     /// </summary>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsAlive() => EntityId.IsAlive(World);
 
     /// <summary>
@@ -72,9 +74,11 @@ public readonly record struct Entity : IComparable<Entity>
     /// and automatically deleted when the last IPhantomComponent component is removed.
     /// </summary>
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsPhantom() => EntityId.IsPhantom(World);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int CompareTo(Entity other)
     {
         return EntityId.CompareTo(other.EntityId);
@@ -83,36 +87,32 @@ public readonly record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get a unique 64 bit ID for this entity
     /// </summary>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public long UniqueId() => EntityId.UniqueId();
 
     /// <summary>
     /// Check if this entity has a component
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool HasComponent<T>() where T : IComponent => EntityId.HasComponent<T>(World);
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
     /// does not have this component an exception will be thrown.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref T GetComponentRef<T>() where T : IComponent => ref EntityId.GetComponentRef<T>(World);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref T GetComponent<T>() where T : IComponent => ref EntityId.GetComponent<T>(World);
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
     /// does not have this component an exception will be thrown.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public Ref<T> GetComponentRefT<T>() where T : IComponent => EntityId.GetComponentRefT<T>(World);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Ref<T> GetComponentRef<T>() where T : IComponent => EntityId.GetComponentRef<T>(World);
 
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object? GetBoxedComponent(ComponentId id) => EntityId.GetBoxedComponent(World, id);
 }
