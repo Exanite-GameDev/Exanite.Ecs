@@ -22,26 +22,5 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>QueryFilter.tt</DependentUpon>
     </Compile>
-    <Compile Update="Collections\RefTuple.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RefTuple.tt</DependentUpon>
-    </Compile>
-    <Compile Update="EntityGetComponentRef.cs">
-      <DependentUpon>EntityGetComponentRef.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Collections\RefTuple.tt">
-      <LastGenOutput>RefTuple.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="EntityGetComponentRef.tt">
-      <LastGenOutput>EntityGetComponentRef.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
   </ItemGroup>
 </Project>
