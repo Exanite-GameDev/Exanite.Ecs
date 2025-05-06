@@ -15,39 +15,39 @@ public sealed class QueryBuilder
         new[] { ComponentId.Get<ComponentPhantom>() }
     );
 
-    private readonly ComponentSet include;
     /// <summary>
     /// An Entity must include all of these components to be matched by this query
     /// </summary>
     public IReadOnlyList<ComponentId> Included => include.Items;
+    private readonly ComponentSet include;
 
-    private readonly ComponentSet exclude;
     /// <summary>
     /// Entities with these components will not be matched by this query
     /// </summary>
     public IReadOnlyList<ComponentId> Excluded => exclude.Items;
+    private readonly ComponentSet exclude;
 
-    private readonly ComponentSet atLeastOne;
     /// <summary>
     /// At least one of all these components must be on an Entity for it to be matched by this query
     /// </summary>
     public IReadOnlyList<ComponentId> AtLeastOnes => atLeastOne.Items;
+    private readonly ComponentSet atLeastOne;
 
-    private readonly ComponentSet exactlyOne;
     /// <summary>
     /// Exactly one of all these components must be on an Entity for it to be matched by this query
     /// </summary>
     public IReadOnlyList<ComponentId> ExactlyOnes => exactlyOne.Items;
+    private readonly ComponentSet exactlyOne;
 
     /// <summary>
     /// Create a new <see cref="QueryBuilder"/>
     /// </summary>
     public QueryBuilder()
     {
-        include = new(ContainsComponent, 0);
-        exclude = new(ContainsComponent, 1);
-        atLeastOne = new(ContainsComponent, 2);
-        exactlyOne = new(ContainsComponent, 3);
+        include = new ComponentSet(ContainsComponent, 0);
+        exclude = new ComponentSet(ContainsComponent, 1);
+        atLeastOne = new ComponentSet(ContainsComponent, 2);
+        exactlyOne = new ComponentSet(ContainsComponent, 3);
     }
 
     /// <summary>
