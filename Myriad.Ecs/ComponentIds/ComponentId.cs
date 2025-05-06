@@ -8,8 +8,7 @@ namespace Myriad.Ecs.ComponentIds;
 /// Unique numeric ID for a type which implements IComponent
 /// </summary>
 [DebuggerDisplay("{Type} ({Value})")]
-public readonly record struct ComponentId
-    : IComparable<ComponentId>
+public readonly record struct ComponentId : IComparable<ComponentId>
 {
     internal const int SpecialBitsCount = 1;
     internal const int SpecialBitsMask  = ~(~0 << SpecialBitsCount);

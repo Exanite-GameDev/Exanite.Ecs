@@ -10,8 +10,7 @@ namespace Myriad.Ecs;
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)
 /// </summary>
 [DebuggerDisplay("{Id}v{Version}")]
-public readonly partial record struct EntityId
-    : IComparable<EntityId>
+public readonly partial record struct EntityId : IComparable<EntityId>
 {
     /// <summary>
     /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.

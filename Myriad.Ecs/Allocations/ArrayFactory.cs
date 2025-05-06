@@ -51,8 +51,6 @@ internal static class ArrayFactory
 
     private static T[] Create<T>(int capacity)
     {
-        return capacity == 0
-             ? []
-             : new T[capacity];
+        return capacity == 0 ? [] : new T[capacity];
     }
 }

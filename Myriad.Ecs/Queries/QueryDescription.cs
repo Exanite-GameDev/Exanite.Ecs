@@ -382,8 +382,7 @@ public sealed class QueryDescription
     /// <param name="Archetype">The archetype</param>
     /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query)</param>
     /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query)</param>
-    public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne)
-        : IComparable<ArchetypeMatch>
+    public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne) : IComparable<ArchetypeMatch>
     {
         /// <inheritdoc/>
         public int CompareTo(ArchetypeMatch other)

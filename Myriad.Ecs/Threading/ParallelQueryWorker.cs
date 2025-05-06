@@ -7,9 +7,7 @@ using Myriad.Ecs.Queries;
 
 namespace Myriad.Ecs.Threading;
 
-internal class ParallelQueryWorker<TWork>
-    : IThreadPoolWorkItem
-    where TWork : struct, IWorkItem
+internal class ParallelQueryWorker<TWork> : IThreadPoolWorkItem where TWork : struct, IWorkItem
 {
     private ParallelQueryWorker<TWork>?[]? siblings;
     private CountdownEvent? counter;

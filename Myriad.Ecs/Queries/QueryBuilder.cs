@@ -11,7 +11,7 @@ namespace Myriad.Ecs.Queries;
 /// <summary>
 /// Build a new <see cref="QueryDescription"/> object
 /// </summary>
-public sealed partial class QueryBuilder
+public sealed class QueryBuilder
 {
     internal static readonly FrozenOrderedListSet<ComponentId> SetWithJustPhantom = FrozenOrderedListSet<ComponentId>.Create(
         new[] { ComponentId.Get<ComponentPhantom>() }

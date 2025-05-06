@@ -10,9 +10,7 @@ namespace Myriad.Ecs.Collections;
 /// A set built out of an ordered list. This allows allocation free enumeration of the set.
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
-internal class OrderedListSet<TItem>
-    : IReadOnlyList<TItem>
-    where TItem : struct, IComparable<TItem>, IEquatable<TItem>
+internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
     private readonly List<TItem> items = [];
     public int Count => items.Count;

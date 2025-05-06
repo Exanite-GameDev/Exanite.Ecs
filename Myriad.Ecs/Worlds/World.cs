@@ -12,8 +12,7 @@ namespace Myriad.Ecs.Worlds;
 /// <summary>
 /// A world contains all entities.
 /// </summary>
-public sealed partial class World
-    : IDisposable
+public sealed class World : IDisposable
 {
     internal IThreadPool ThreadPool { get; }
 

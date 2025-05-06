@@ -90,8 +90,7 @@ public static class Pool<T>
     /// Contains an object borrowed from a pool, returns it when disposed
     /// </summary>
     /// <param name="value"></param>
-    public readonly struct Rental(T value)
-        : IDisposable
+    public readonly struct Rental(T value) : IDisposable
     {
         /// <summary>
         /// The borrowed object

@@ -10,8 +10,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Provides a way to resolve created entities. Must be disposed once finished with!
     /// </summary>
-    public sealed class Resolver
-        : IDisposable
+    public sealed class Resolver : IDisposable
     {
         internal SortedList<uint, EntityId> Lookup { get; } = [];
         internal EcsCommandBuffer? Parent { get; private set; }

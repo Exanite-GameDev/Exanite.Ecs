@@ -7,9 +7,7 @@ namespace Myriad.Ecs.Allocations;
 /// A non-thread safe pool, backed by the global thread safe pool.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public readonly struct LocalPool<T>
-    : IDisposable
-    where T : class, new()
+public readonly struct LocalPool<T> : IDisposable where T : class, new()
 {
     private readonly List<T> items = Pool<List<T>>.Get();
     private readonly int maxSize;
@@ -17,8 +15,7 @@ public readonly struct LocalPool<T>
     /// <summary>
     /// Create a new <see cref="LocalPool{T}"/>
     /// </summary>
-    public LocalPool()
-        : this(16)
+    public LocalPool() : this(16)
     {
     }
 

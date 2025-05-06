@@ -10,8 +10,7 @@ namespace Myriad.Ecs.Worlds.Archetypes;
 /// An archetype hash is made by mixing all of the components in an archetype.
 /// Components can be "toggled" to update the hash to a new value for an archetype with/without those components.
 /// </summary>
-internal readonly record struct ArchetypeHash
-    : IComparable<ArchetypeHash>
+internal readonly record struct ArchetypeHash : IComparable<ArchetypeHash>
 {
     public long Value { get; private init; }
 
