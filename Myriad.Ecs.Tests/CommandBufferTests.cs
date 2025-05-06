@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
 using Myriad.Ecs.Tests.Queries;
@@ -65,7 +65,7 @@ public class EcsCommandBufferTests
         using var resolver = buffer.Playback();
 
         // Resolve results
-        var entities = new List<Entity>();
+        var entities = new List<World.Entity>();
         foreach (var b in buffered)
         {
             entities.Add(b.Resolve());
@@ -90,8 +90,8 @@ public class EcsCommandBufferTests
         var rng = new Random(46576);
 
         // keep track ofevery single entity ever created
-        var alive = new List<Entity>();
-        var dead = new List<Entity>();
+        var alive = new List<World.Entity>();
+        var dead = new List<World.Entity>();
 
         // Do lots of rounds of creation and destruction
         for (var i = 0; i < 20; i++)
@@ -163,7 +163,7 @@ public class EcsCommandBufferTests
     public void ChurnStructural()
     {
         var world = new WorldBuilder().Build();
-        var entities = new List<Entity>();
+        var entities = new List<World.Entity>();
         using (var setupResolver = TestHelpers.SetupRandomEntities(world, 10_000).Playback())
         {
             for (var i = 0; i < setupResolver.Count; i++)
@@ -217,7 +217,7 @@ public class EcsCommandBufferTests
             buffer.Playback().Dispose();
         }
 
-        void ChangeComponent<T>(Entity e, EcsCommandBuffer b, bool update)
+        void ChangeComponent<T>(World.Entity e, EcsCommandBuffer b, bool update)
             where T : struct, IComponent
         {
             if (e.HasComponent<T>() && !update)

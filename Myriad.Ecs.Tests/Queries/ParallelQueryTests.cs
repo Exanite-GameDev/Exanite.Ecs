@@ -6,7 +6,7 @@ namespace Myriad.Ecs.Tests.Queries;
 [TestClass]
 public class ParallelQueryTests
 {
-    private static void SetupRandomEntities(World world, int count = 1_000_000)
+    private static void SetupRandomEntities(World.World world, int count = 1_000_000)
     {
         TestHelpers.SetupRandomEntities(world, 5, count).Playback().Dispose();
     }
@@ -39,12 +39,12 @@ public class ParallelQueryTests
         }
 
         // check they're 128 in a different way
-        w.Query((Entity _, ref ComponentInt32 c) => Assert.AreEqual(128, c.Value));
-        w.QueryParallel((Entity _, ref ComponentInt32 c) => Assert.AreEqual(128, c.Value));
+        w.Query((World.Entity _, ref ComponentInt32 c) => Assert.AreEqual(128, c.Value));
+        w.QueryParallel((World.Entity _, ref ComponentInt32 c) => Assert.AreEqual(128, c.Value));
 
         // check they're 128 in a different way
-        w.Query(128, (int data, Entity _, ref ComponentInt32 c) => Assert.AreEqual(data, c.Value));
-        w.QueryParallel(128, (int data, Entity _, ref ComponentInt32 c) => Assert.AreEqual(data, c.Value));
+        w.Query(128, (int data, World.Entity _, ref ComponentInt32 c) => Assert.AreEqual(data, c.Value));
+        w.QueryParallel(128, (int data, World.Entity _, ref ComponentInt32 c) => Assert.AreEqual(data, c.Value));
 
         // check they're 128 in a different way
         w.Query(128, (int data, ref ComponentInt32 c) => Assert.AreEqual(data, c.Value));
@@ -132,7 +132,7 @@ public class ParallelQueryTests
     private readonly struct IncrementInt
         : IChunkQuery<ComponentInt32>
     {
-        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<World.Entity> e, Span<ComponentInt32> t0)
         {
             for (var i = 0; i < t0.Length; i++)
                 t0[i].Value++;
@@ -142,7 +142,7 @@ public class ParallelQueryTests
     private readonly struct SometimesThrowOtherwiseIncrement
         : IChunkQuery<ComponentInt32>
     {
-        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<World.Entity> e, Span<ComponentInt32> t0)
         {
             for (var i = 0; i < t0.Length; i++)
             {

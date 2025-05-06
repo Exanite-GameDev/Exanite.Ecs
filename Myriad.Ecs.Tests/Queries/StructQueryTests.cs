@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
+using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
 
 namespace Myriad.Ecs.Tests.Queries;
@@ -18,7 +19,7 @@ public class StructQueryTests
         cb.Create().Set(new ComponentObject(new object()));
         cb.Playback().Dispose();
 
-        var l = new List<Entity>();
+        var l = new List<World.Entity>();
         w.Execute<PutEntitiesInList1<ComponentObject>, ComponentObject>(new PutEntitiesInList1<ComponentObject>(l));
 
         Assert.AreEqual(1, l.Count);
@@ -37,7 +38,7 @@ public class StructQueryTests
 
         var q = new QueryBuilder().Include<ComponentObject>().Build(w);
 
-        var l = new List<Entity>();
+        var l = new List<World.Entity>();
         w.ExecuteChunk(new PutEntitiesInList0(l), q);
 
         Assert.AreEqual(1, l.Count);
@@ -83,12 +84,12 @@ public class StructQueryTests
         Assert.AreEqual(0, q.AtLeastOneOf.Count);
     }
 
-    private readonly struct PutEntitiesInList0(List<Entity> entities)
+    private readonly struct PutEntitiesInList0(List<World.Entity> entities)
         : IChunkQuery
     {
-        public readonly List<Entity> Entities = entities;
+        public readonly List<World.Entity> Entities = entities;
 
-        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e)
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<World.Entity> e)
         {
             Entities.AddRange(e);
 
@@ -106,13 +107,13 @@ public class StructQueryTests
         }
     }
 
-    private readonly struct PutEntitiesInList1<T>(List<Entity> entities)
+    private readonly struct PutEntitiesInList1<T>(List<World.Entity> entities)
         : IQuery<T>
         where T : IComponent
     {
-        public readonly List<Entity> Entities = entities;
+        public readonly List<World.Entity> Entities = entities;
 
-        public void Execute(Entity e, ref T t0)
+        public void Execute(World.Entity e, ref T t0)
         {
             Entities.Add(e);
         }
@@ -121,7 +122,7 @@ public class StructQueryTests
     private readonly struct SetComponentInt32
         : IQuery<ComponentInt32>
     {
-        public void Execute(Entity e, ref ComponentInt32 t0)
+        public void Execute(World.Entity e, ref ComponentInt32 t0)
         {
             t0.Value = 42;
         }

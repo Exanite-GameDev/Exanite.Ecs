@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
 
 namespace Myriad.Ecs.Tests.Queries;
@@ -15,7 +16,7 @@ public class DelegateQuery
         var q = default(QueryDescription);
 
         // Set all to entity ID
-        w.Query((Entity e, ref ComponentInt32 i) =>
+        w.Query((World.Entity e, ref ComponentInt32 i) =>
         {
             i.Value = e.Id.Id;
         }, ref q);
@@ -45,7 +46,7 @@ public class DelegateQuery
         var q = default(QueryDescription);
 
         // Set all to entity ID
-        w.Query(9, (int data, Entity e, ref ComponentInt32 i) =>
+        w.Query(9, (int data, World.Entity e, ref ComponentInt32 i) =>
         {
             Assert.AreEqual(9, data);
             i.Value = e.Id.Id;

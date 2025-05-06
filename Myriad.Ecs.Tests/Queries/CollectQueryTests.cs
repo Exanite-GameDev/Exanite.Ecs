@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Queries;
 
 namespace Myriad.Ecs.Tests.Queries;
@@ -26,9 +26,9 @@ public class CollectQueryTests
 
         // Collect entities with ComponentInt64, without ComponentFloat
         var filter = new QueryBuilder().Include<ComponentInt64>().Exclude<ComponentFloat>().Build(w);
-        var listWithComponents = new List<(Entity, ComponentInt64)>();
-        var listOnlyEntities = new List<Entity>();
-        var listOnlyEntitiesGeneric = new List<Entity>();
+        var listWithComponents = new List<(World.Entity, ComponentInt64)>();
+        var listOnlyEntities = new List<World.Entity>();
+        var listOnlyEntitiesGeneric = new List<World.Entity>();
         w.Collect(listWithComponents, filter);
         w.Collect(listOnlyEntities, filter);
         w.Collect<ComponentInt64>(listOnlyEntitiesGeneric, filter);

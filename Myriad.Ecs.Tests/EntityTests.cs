@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Tests;
@@ -11,15 +11,15 @@ public class EntityTests
     public void DefaultEntityIsNotAlive()
     {
         var w = new WorldBuilder().Build();
-        Assert.IsFalse(default(Entity).Exists());
-        Assert.IsFalse(default(Entity).IsAlive());
-        Assert.IsFalse(default(Entity).IsPhantom());
+        Assert.IsFalse(default(World.Entity).Exists());
+        Assert.IsFalse(default(World.Entity).IsAlive());
+        Assert.IsFalse(default(World.Entity).IsPhantom());
     }
 
     [TestMethod]
     public void CompareDefaultEntity()
     {
-        Assert.AreEqual(0, default(Entity).CompareTo(default));
+        Assert.AreEqual(0, default(World.Entity).CompareTo(default));
     }
 
     [TestMethod]

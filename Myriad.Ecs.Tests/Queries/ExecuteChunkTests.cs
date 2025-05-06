@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
 
@@ -93,7 +93,7 @@ public class ExecuteChunkTests
     private struct InstantFail
         : IChunkQuery<Component0>
     {
-        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Component0> t0)
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<World.Entity> e, Span<Component0> t0)
         {
             Assert.Fail();
         }
@@ -102,7 +102,7 @@ public class ExecuteChunkTests
     private struct SetValueToOne
         : IChunkQuery<ComponentInt32>
     {
-        public void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<ComponentInt32> t0)
+        public void Execute(ChunkHandle chunk, ReadOnlySpan<World.Entity> e, Span<ComponentInt32> t0)
         {
             for (var i = 0; i < t0.Length; i++)
                 t0[i].Value = 1;

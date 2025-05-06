@@ -1,6 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Myriad.Ecs.Benchmarks.Components;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
 
 namespace Myriad.Ecs.Benchmarks;
 
@@ -10,7 +10,7 @@ public class EntityCreateBenchmark
 {
     private const int Count = 1_000_000;
 
-    private World world = null!;
+    private World.World world = null!;
 
     [GlobalSetup]
     public void Setup()

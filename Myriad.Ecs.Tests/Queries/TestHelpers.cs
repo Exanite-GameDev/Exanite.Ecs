@@ -1,10 +1,10 @@
-﻿using Myriad.Ecs.Command;
+﻿using Myriad.Ecs.CommandBuffers;
 
 namespace Myriad.Ecs.Tests.Queries;
 
 public static class TestHelpers
 {
-    public static EcsCommandBuffer SetupRandomEntities(World world, uint uniqueComponents = 7, int count = 1_000_000)
+    public static EcsCommandBuffer SetupRandomEntities(World.World world, uint uniqueComponents = 7, int count = 1_000_000)
     {
         uniqueComponents = Math.Clamp(uniqueComponents, 0, 7);
 
