@@ -7,10 +7,10 @@ using Myriad.Ecs.xxHash;
 namespace Myriad.Ecs.Collections;
 
 /// <summary>
-/// Probabilistic set of component IDs. Can be used to check if two sets intersect.<br />
+/// Probabilistic set of component IDs. Can be used to check if two sets intersect.<br/>
 ///
-/// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br />
-/// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br />
+/// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br/>
+/// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br/>
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Pack = 0)]
 internal struct ComponentBloomFilter
@@ -45,9 +45,9 @@ internal struct ComponentBloomFilter
 
     /// <summary>
     /// Check if this bloom filter <b>might</b> intersect with another.
-    /// <br /><br />
-    /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br />
-    /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br />
+    /// <br/><br/>
+    /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br/>
+    /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br/>
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
