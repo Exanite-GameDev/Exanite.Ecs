@@ -128,7 +128,7 @@ public sealed partial class EcsCommandBuffer
             if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.
-                InternalSet(delete, new ComponentPhantom());
+                SetInternal(delete, new ComponentPhantom());
             }
             else
             {
@@ -446,10 +446,10 @@ public sealed partial class EcsCommandBuffer
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
         }
 
-        InternalSet(entity, value);
+        SetInternal(entity, value);
     }
 
-    private void InternalSet<T>(Entity entity, T value)
+    private void SetInternal<T>(Entity entity, T value)
         where T : IComponent
     {
         var mod = GetModificationData(entity, true, false);
