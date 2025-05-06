@@ -159,7 +159,7 @@ public sealed class Archetype
         {
             Debug.Assert(phantomDestination != null);
 
-            // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookeeping like chunk management and entity count.
+            // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookkeeping like chunk management and entity count.
             // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
             while (chunks.Count > 0)
             {
