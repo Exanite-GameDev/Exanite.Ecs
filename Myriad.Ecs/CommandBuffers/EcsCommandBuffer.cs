@@ -122,7 +122,7 @@ public sealed partial class EcsCommandBuffer
                 continue;
             }
 
-            var archetype = World.GetArchetype(delete.Id);
+            var archetype = World.GetArchetype(delete.EntityId);
             if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.
@@ -130,7 +130,7 @@ public sealed partial class EcsCommandBuffer
             }
             else
             {
-                World.DeleteImmediate(delete.Id, ref lazy);
+                World.DeleteImmediate(delete.EntityId, ref lazy);
 
                 // Return objects to pools
                 if (entityModifications.Remove(delete, out var mod))
@@ -177,7 +177,7 @@ public sealed partial class EcsCommandBuffer
             // Calculate the new archetype for the entity
             foreach (var (entity, mod) in entityModifications)
             {
-                var currentArchetype = World.GetArchetype(entity.Id);
+                var currentArchetype = World.GetArchetype(entity.EntityId);
 
                 // Set all of the current archetype components
                 tempComponentIdSet.Clear();
@@ -220,7 +220,7 @@ public sealed partial class EcsCommandBuffer
                 var autodelete = tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
                 if (autodelete)
                 {
-                    World.DeleteImmediate(entity.Id, ref lazy);
+                    World.DeleteImmediate(entity.EntityId, ref lazy);
                 }
                 else
                 {
@@ -232,11 +232,11 @@ public sealed partial class EcsCommandBuffer
                         var newArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity.Id, newArchetype, ref lazy);
+                        row = World.MigrateEntity(entity.EntityId, newArchetype, ref lazy);
                     }
                     else
                     {
-                        row = World.GetRow(entity.Id);
+                        row = World.GetRow(entity.EntityId);
                     }
 
                     // Run all setters

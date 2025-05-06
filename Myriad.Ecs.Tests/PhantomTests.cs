@@ -284,7 +284,7 @@ public class PhantomTests
         Assert.IsTrue(e.Exists());
         Assert.IsTrue(e.IsPhantom());
         Assert.AreEqual(1, list.Count);
-        Assert.AreEqual(e.Id, list.Single());
+        Assert.AreEqual(e.EntityId, list.Single());
 
         // Remove a component, triggering a migration
         cmd.Remove<TestPhantom1>(e);
@@ -294,7 +294,7 @@ public class PhantomTests
         Assert.IsTrue(e.Exists());
         Assert.IsTrue(e.IsPhantom());
         Assert.AreEqual(1, list.Count);
-        Assert.AreEqual(e.Id, list.Single());
+        Assert.AreEqual(e.EntityId, list.Single());
 
         // Delete it again
         cmd.Delete(e);
@@ -303,7 +303,7 @@ public class PhantomTests
         // Entity should no longer exist at all
         Assert.IsFalse(e.Exists());
         Assert.AreEqual(1, list.Count);
-        Assert.AreEqual(e.Id, list.Single());
+        Assert.AreEqual(e.EntityId, list.Single());
     }
 
     [TestMethod]

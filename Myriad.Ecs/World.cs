@@ -99,13 +99,13 @@ public sealed class World : IDisposable
                 foreach (var entity in chunk.Entities.Span)
                 {
                     // Get the entityinfo for this entity
-                    ref var entityInfo = ref entities[entity.Id.Id];
+                    ref var entityInfo = ref entities[entity.EntityId.Id];
 
                     // Increment version, this will invalidate the handle
                     entityInfo.Version++;
 
                     // Store this ID for re-use later
-                    deadEntities.Add(entity.Id);
+                    deadEntities.Add(entity.EntityId);
                 }
             }
         }

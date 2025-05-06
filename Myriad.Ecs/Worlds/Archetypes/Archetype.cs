@@ -167,7 +167,7 @@ public sealed class Archetype
 
                 while (chunk.EntityCount > 0)
                 {
-                    var entity = chunk.Entities.Span[^1].Id;
+                    var entity = chunk.Entities.Span[^1].EntityId;
                     ref var info = ref World.GetEntityInfo(entity);
 
                     MigrateTo(entity, ref info, phantomDestination, ref lazy);

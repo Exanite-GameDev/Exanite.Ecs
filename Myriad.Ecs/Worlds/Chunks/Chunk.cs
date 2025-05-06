@@ -49,37 +49,30 @@ public sealed class Chunk
     }
 
     #region get component
-    //public ref T GetRef<T>(Entity entity)
-    //    where T : IComponent
-    //{
-    //    var index = Archetype.World.GetEntityInfo(entity).RowIndex;
-    //    return ref GetRef<T>(entity, index);
-    //}
-
-    internal ref T GetRef<T>(EntityId entityId, int rowIndex) where T : IComponent
+    internal ref T Get<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
-        Debug.Assert(entities[rowIndex].Id == entityId, "Mismatched entities in chunk");
-        return ref GetRef<T>(rowIndex);
+        Debug.Assert(entities[rowIndex].EntityId == entityId, "Mismatched entities in chunk");
+        return ref Get<T>(rowIndex);
     }
 
-    public Ref<T> GetRefT<T>(EntityId entityId, int rowIndex) where T : IComponent
+    internal Ref<T> GetRef<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
-        Debug.Assert(entities[rowIndex].Id == entityId, "Mismatched entities in chunk");
+        Debug.Assert(entities[rowIndex].EntityId == entityId, "Mismatched entities in chunk");
 
-        return new Ref<T>(ref GetRef<T>(rowIndex));
+        return new Ref<T>(ref Get<T>(rowIndex));
     }
 
-    internal ref T GetRef<T>(int rowIndex) where T : IComponent
+    internal ref T Get<T>(int rowIndex) where T : IComponent
     {
-        return ref GetRef<T>(rowIndex, ComponentId.Get<T>());
+        return ref Get<T>(rowIndex, ComponentId.Get<T>());
     }
 
-    internal ref T GetRef<T>(int rowIndex, ComponentId id) where T : IComponent
+    internal ref T Get<T>(int rowIndex, ComponentId id) where T : IComponent
     {
         return ref GetSpan<T>(id)[rowIndex];
     }
 
-    internal Span<T> GetSpan<T>() where T : IComponent
+    public Span<T> GetSpan<T>() where T : IComponent
     {
         return GetSpan<T>(ComponentId.Get<T>());
     }
@@ -176,7 +169,7 @@ public sealed class Chunk
         {
             var lastEntity = entities[EntityCount];
             var lastEntityIndex = EntityCount;
-            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity.Id);
+            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity.EntityId);
             entities[index] = lastEntity;
             entities[lastEntityIndex] = default;
             lastInfo.RowIndex = index;

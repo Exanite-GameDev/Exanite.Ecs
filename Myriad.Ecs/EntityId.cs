@@ -9,7 +9,7 @@ namespace Myriad.Ecs;
 /// The ID of an <see cref="Ecs.Entity"/> (not carrying a reference to a <see cref="World"/>)
 /// </summary>
 [DebuggerDisplay("{Id}v{Version}")]
-public readonly record struct EntityId : IComparable<EntityId>
+internal readonly record struct EntityId : IComparable<EntityId>
 {
     /// <summary>
     /// The <see cref="Ecs.Entity"/> of an entity, may be re-used very quickly once an <see cref="Ecs.Entity"/> is destroyed.
@@ -166,7 +166,7 @@ public readonly record struct EntityId : IComparable<EntityId>
         where T : IComponent
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
-        return entityInfo.Chunk.GetRefT<T>(this, entityInfo.RowIndex);
+        return entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
     }
 
     /// <summary>
