@@ -2,6 +2,7 @@
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Queries;
 
@@ -11,7 +12,7 @@ public class ExecuteChunkTests
     [TestMethod]
     public void ExecuteChunkNone()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, 0, 10000).Playback().Dispose();
 
         var count = w.ExecuteChunk<InstantFail, Component0>();
@@ -21,7 +22,7 @@ public class ExecuteChunkTests
     [TestMethod]
     public void ExecuteChunkNoneRefQuery()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, 0, 10000).Playback().Dispose();
 
         QueryDescription? q = null;
@@ -43,7 +44,7 @@ public class ExecuteChunkTests
     [TestMethod]
     public void ExecuteChunkNoneRefAction()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, 0, 10000).Playback().Dispose();
 
         InstantFail i;
@@ -54,7 +55,7 @@ public class ExecuteChunkTests
     [TestMethod]
     public void ExecuteChunkSetInt()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count:100000).Playback().Dispose();
 
         // Destroy all of these specific entities, to ensure at least one archetype matches the query but is empty

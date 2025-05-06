@@ -3,6 +3,7 @@ using Myriad.Ecs.Collections;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Tests;
@@ -13,7 +14,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsIncluded()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         var q = new QueryBuilder()
                .Include<ComponentFloat>()
@@ -28,7 +29,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsExcluded()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         var q = new QueryBuilder()
                .Exclude<ComponentFloat>()
@@ -43,7 +44,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsExactlyOneOf()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         var q = new QueryBuilder()
                .ExactlyOneOf<ComponentFloat>()
@@ -59,7 +60,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsAtLeastOneOf()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         var q = new QueryBuilder()
                .AtLeastOneOf<ComponentFloat>()

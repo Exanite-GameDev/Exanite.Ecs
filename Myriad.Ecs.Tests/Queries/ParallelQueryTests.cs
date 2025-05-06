@@ -15,7 +15,7 @@ public class ParallelQueryTests
     [TestMethod]
     public void IncrementValues()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         SetupRandomEntities(w, count:100_000);
 
         // Increment just the int32s
@@ -76,7 +76,7 @@ public class ParallelQueryTests
     [TestMethod]
     public void ChunkIncrementValues()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         SetupRandomEntities(w, count:150_000);
 
         // Increment just the int32s
@@ -120,7 +120,7 @@ public class ParallelQueryTests
     [TestMethod]
     public void ChunkExceptions()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         SetupRandomEntities(w, 10_000);
 
         // Increment just the int32s

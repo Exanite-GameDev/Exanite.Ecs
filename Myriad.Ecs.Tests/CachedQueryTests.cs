@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;
 
@@ -24,7 +25,7 @@ public class CachedQueryTests
     [TestMethod]
     public void GetQuery1()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Run two queries, which should return identical cached query objects
         var q1 = default(QueryDescription);
@@ -50,7 +51,7 @@ public class CachedQueryTests
     [TestMethod]
     public void GetQuery2()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Run two queries, which should return identical cached query objects
         var q1 = default(QueryDescription);
@@ -71,7 +72,7 @@ public class CachedQueryTests
     [TestMethod]
     public void GetQuery3()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Run two queries, which should return identical cached query objects
         var q1 = default(QueryDescription);

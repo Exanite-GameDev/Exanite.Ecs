@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;
 
@@ -9,9 +10,7 @@ public class ArchetypeTests
     [TestMethod]
     public void EnumerateManyEntities()
     {
-        var w = new WorldBuilder()
-               .WithArchetype<ComponentInt32>()
-               .Build();
+        var w = new World();
 
         var cb = new EcsCommandBuffer(w);
         for (var i = 0; i < 10000; i++)

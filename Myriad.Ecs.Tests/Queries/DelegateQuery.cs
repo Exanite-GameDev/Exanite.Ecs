@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Queries;
 
@@ -10,7 +11,7 @@ public class DelegateQuery
     [TestMethod]
     public void RefQueryEntity()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count:10_000).Playback().Dispose();
 
         var q = default(QueryDescription);
@@ -40,7 +41,7 @@ public class DelegateQuery
     [TestMethod]
     public void RefQueryEntityWithData()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
 
         var q = default(QueryDescription);
@@ -71,7 +72,7 @@ public class DelegateQuery
     [TestMethod]
     public void RefQueryNoEntity()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
 
         var q = default(QueryDescription);
@@ -101,7 +102,7 @@ public class DelegateQuery
     [TestMethod]
     public void RefQueryNoEntityWithData()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
 
         var q = default(QueryDescription);
@@ -131,7 +132,7 @@ public class DelegateQuery
     [TestMethod]
     public void QueryNoEntity()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
 
         // Set all to 123
@@ -150,7 +151,7 @@ public class DelegateQuery
     [TestMethod]
     public void QueryNoEntityWithData()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
 
         // Set all to 142

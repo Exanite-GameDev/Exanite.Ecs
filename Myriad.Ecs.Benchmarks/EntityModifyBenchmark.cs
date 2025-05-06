@@ -18,7 +18,7 @@ public class EntityModifyBenchmark
     [GlobalSetup]
     public void Setup()
     {
-        world = new WorldBuilder().Build();
+        world = new World();
 
         // Create initial entities
         var rng = new Random(1);

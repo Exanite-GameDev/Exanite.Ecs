@@ -12,9 +12,9 @@ public class RefTests
         var i = 1;
         var r = new RefT<int>(ref i);
 
-        r.Ref++;
+        r.Value++;
 
-        Assert.AreEqual(i, r.Ref);
+        Assert.AreEqual(i, r.Value);
         Assert.AreEqual(2, i);
     }
 
@@ -23,9 +23,9 @@ public class RefTests
     {
         var i = 1;
         var r = new RefT<int>(ref i);
-        r.Ref++;
+        r.Value++;
 
-        var j = (int)r;
+        var j = r.Value;
 
         Assert.AreEqual(i, j);
         Assert.AreEqual(2, j);

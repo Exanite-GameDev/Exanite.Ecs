@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;
 
@@ -220,7 +221,7 @@ public class QueryBuilderTests
     [TestMethod]
     public void ConvertQueryToBuilder()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
 
         var query = new QueryBuilder()
              .Include<ComponentInt16>()
@@ -255,7 +256,7 @@ public class QueryBuilderTests
     [TestMethod]
     public void BuildTwiceSharesParts()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
 
         var builder = new QueryBuilder()
                      .Include<ComponentInt16>()

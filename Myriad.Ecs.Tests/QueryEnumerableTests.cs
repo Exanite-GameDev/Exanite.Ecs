@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;
 
@@ -10,9 +11,7 @@ public class QueryEnumerableTests
     [TestMethod]
     public void MatchNothingInEmptyWorld()
     {
-        var w = new WorldBuilder()
-           .WithArchetype<ComponentInt32>()
-           .Build();
+        var w = new World();
 
         var q = new QueryBuilder()
                .Include<ComponentInt64>()
@@ -28,9 +27,7 @@ public class QueryEnumerableTests
     [TestMethod]
     public void MatchNothingInWorld()
     {
-        var w = new WorldBuilder()
-               .WithArchetype<ComponentInt32>()
-               .Build();
+        var w = new World();
 
         var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64());
@@ -51,9 +48,7 @@ public class QueryEnumerableTests
     [TestMethod]
     public void MatchEntityInWorld()
     {
-        var w = new WorldBuilder()
-               .WithArchetype<ComponentInt32>()
-               .Build();
+        var w = new World();
 
         var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64(1));
@@ -78,9 +73,7 @@ public class QueryEnumerableTests
     [TestMethod]
     public void MatchMultipleEntitiesInWorld()
     {
-        var w = new WorldBuilder()
-               .WithArchetype<ComponentInt32>()
-               .Build();
+        var w = new World();
 
         var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentFloat(1)).Set(new ComponentInt64(2));
@@ -106,9 +99,7 @@ public class QueryEnumerableTests
     [TestMethod]
     public void MatchManyEntitiesInWorld()
     {
-        var w = new WorldBuilder()
-               .WithArchetype<ComponentInt32>()
-               .Build();
+        var w = new World();
 
         // Create lots of random entities, keeping track of how many _should_ match the query
         var expectedIndices = new HashSet<int>();

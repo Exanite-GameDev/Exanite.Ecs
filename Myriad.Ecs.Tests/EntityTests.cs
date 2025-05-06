@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;
 
@@ -10,7 +11,7 @@ public class EntityTests
     [TestMethod]
     public void DefaultEntityIsNotAlive()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         Assert.IsFalse(default(Worlds.Entity).Exists());
         Assert.IsFalse(default(Worlds.Entity).IsAlive());
         Assert.IsFalse(default(Worlds.Entity).IsPhantom());
@@ -25,7 +26,7 @@ public class EntityTests
     [TestMethod]
     public void CompareEntityWithSelf()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var eb = b.Create();
@@ -38,7 +39,7 @@ public class EntityTests
     [TestMethod]
     public void CompareEntityWithAnother()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var eb1 = b.Create();
@@ -60,7 +61,7 @@ public class EntityTests
     [TestMethod]
     public void EntityUniqueId()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var eb1 = b.Create();
@@ -78,7 +79,7 @@ public class EntityTests
     [TestMethod]
     public void GetComponent()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create()
@@ -93,7 +94,7 @@ public class EntityTests
     [TestMethod]
     public void GetComponents()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
@@ -107,7 +108,7 @@ public class EntityTests
     [TestMethod]
     public void GetComponentDead()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
@@ -127,7 +128,7 @@ public class EntityTests
     [TestMethod]
     public void GetBoxedComponents()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
@@ -141,7 +142,7 @@ public class EntityTests
     [TestMethod]
     public void GetBoxedComponent()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create()

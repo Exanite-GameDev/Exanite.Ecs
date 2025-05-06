@@ -22,7 +22,7 @@ public class QueryBenchmark
     [GlobalSetup]
     public void Setup()
     {
-        world = new WorldBuilder().Build();
+        world = new World();
 
         var buffer = new EcsCommandBuffer(world);
         var rng = new Random(2);

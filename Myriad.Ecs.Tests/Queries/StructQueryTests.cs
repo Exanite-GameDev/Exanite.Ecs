@@ -2,6 +2,7 @@
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Queries;
 
@@ -11,7 +12,7 @@ public class StructQueryTests
     [TestMethod]
     public void MatchesWithManagedObject()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64(1));
@@ -28,7 +29,7 @@ public class StructQueryTests
     [TestMethod]
     public void Query0MatchesEntities()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64(1));
@@ -47,7 +48,7 @@ public class StructQueryTests
     [TestMethod]
     public void ExecuteWithQueryDescription()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
 
         w.Execute<SetComponentInt32, ComponentInt32>();
@@ -62,7 +63,7 @@ public class StructQueryTests
     [TestMethod]
     public void ExecuteWithRefQueryDescription()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
         TestHelpers.SetupRandomEntities(w, count: 10_000).Playback().Dispose();
 
         var q = default(QueryDescription);

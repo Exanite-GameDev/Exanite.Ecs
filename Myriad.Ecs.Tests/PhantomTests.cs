@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;
 
@@ -10,7 +11,7 @@ public class PhantomTests
     [TestMethod]
     public void CannotExplicitlyAttachPhantomBuffered()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -26,7 +27,7 @@ public class PhantomTests
     [TestMethod]
     public void CannotExplicitlyAttachPhantom()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -43,7 +44,7 @@ public class PhantomTests
     [TestMethod]
     public void CannotExplicitlyRemovePhantom()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -64,7 +65,7 @@ public class PhantomTests
     [TestMethod]
     public void DeletePhantom()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -96,7 +97,7 @@ public class PhantomTests
     [TestMethod]
     public void CanRemoveNonPhantomComponents()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -131,7 +132,7 @@ public class PhantomTests
     [TestMethod]
     public void AutoDeletePhantom()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -173,7 +174,7 @@ public class PhantomTests
     [TestMethod]
     public void AddPhantomComponentAndDelete()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity without a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -200,7 +201,7 @@ public class PhantomTests
     [TestMethod]
     public void DeleteAndAddPhantomComponent()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity without a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -227,7 +228,7 @@ public class PhantomTests
     [TestMethod]
     public void SimultaneousRemoveAndDelete()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
@@ -249,7 +250,7 @@ public class PhantomTests
     [TestMethod]
     public void PhantomNotification()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         Assert.IsTrue(ComponentId.Get<PhantomNotifier>().IsPhantomNotifierComponent);
         Assert.IsFalse(ComponentId.Get<PhantomNotifier>().IsPhantomComponent);
@@ -309,7 +310,7 @@ public class PhantomTests
     [TestMethod]
     public void NoNotification()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         Assert.IsTrue(ComponentId.Get<PhantomNotifier>().IsPhantomNotifierComponent);
         Assert.IsFalse(ComponentId.Get<PhantomNotifier>().IsPhantomComponent);

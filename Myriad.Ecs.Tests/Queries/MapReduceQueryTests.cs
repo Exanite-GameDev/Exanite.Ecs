@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Queries
 {
@@ -9,7 +10,7 @@ namespace Myriad.Ecs.Tests.Queries
         [TestMethod]
         public void MapReduceNone()
         {
-            var world = new WorldBuilder().Build();
+            var world = new World();
 
             var result = world.ExecuteMapReduce<MapGetInteger, Reduce.I32.Mul, int, ComponentInt32>(new MapGetInteger(), new Reduce.I32.Mul(), 2);
 
@@ -19,7 +20,7 @@ namespace Myriad.Ecs.Tests.Queries
         [TestMethod]
         public void MapReduceOne()
         {
-            var world = new WorldBuilder().Build();
+            var world = new World();
 
             var cmd = new EcsCommandBuffer(world);
             cmd.Create().Set(new ComponentInt32(7));
@@ -33,7 +34,7 @@ namespace Myriad.Ecs.Tests.Queries
         [TestMethod]
         public void MapReduceManyAdd()
         {
-            var world = new WorldBuilder().Build();
+            var world = new World();
 
             var cmd = new EcsCommandBuffer(world);
             var sum = 0;
@@ -52,7 +53,7 @@ namespace Myriad.Ecs.Tests.Queries
         [TestMethod]
         public void MapReduceManyMul()
         {
-            var world = new WorldBuilder().Build();
+            var world = new World();
 
             var cmd = new EcsCommandBuffer(world);
             var prod = 0;
@@ -71,7 +72,7 @@ namespace Myriad.Ecs.Tests.Queries
         [TestMethod]
         public void MapReduceManyMinMax()
         {
-            var world = new WorldBuilder().Build();
+            var world = new World();
 
             var cmd = new EcsCommandBuffer(world);
             for (var i = 0; i < 9999; i++)
@@ -88,7 +89,7 @@ namespace Myriad.Ecs.Tests.Queries
         [TestMethod]
         public void MapReduceManyBitwise()
         {
-            var world = new WorldBuilder().Build();
+            var world = new World();
 
             var cmd = new EcsCommandBuffer(world);
             var rng = new Random(346534);

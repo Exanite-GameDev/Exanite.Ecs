@@ -16,7 +16,7 @@ public class EntityCreateBenchmark
     [GlobalSetup]
     public void Setup()
     {
-        world = new WorldBuilder().Build();
+        world = new World();
     }
 
     private static void AddEntity(EcsCommandBuffer buffer, Random random)

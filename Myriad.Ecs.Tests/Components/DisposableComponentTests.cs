@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Components;
 
@@ -9,7 +10,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void DoNotDisposeWhileAlive()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
@@ -25,7 +26,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void DisposeWhenDead()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
@@ -47,7 +48,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void CombinedPhantomDispose()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
@@ -78,7 +79,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void DisposeWhenRemoved()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
@@ -100,7 +101,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void DisposeWhenWorldDisposed()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
@@ -120,7 +121,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void DisposableMakesBufferedChanges()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
@@ -145,7 +146,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void LeakFromCommandBufferSetDeleteConflict()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // boxed int will be incremented when dispose happens
         var box = new BoxedInt();
@@ -177,7 +178,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void LeakFromCommandBufferSetDoubleDeleteConflict()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // boxed int will be incremented when dispose happens
         var box = new BoxedInt();
@@ -213,7 +214,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void LeakFromCommandBufferSetSetConflict()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // boxed int will be incremented when dispose happens
         var box1 = new BoxedInt();
@@ -246,7 +247,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void LeakFromCommandBufferBufferedSetSetConflict()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // boxed int will be incremented when dispose happens
         var box1 = new BoxedInt();
@@ -276,7 +277,7 @@ public class DisposableComponentTests
     [TestMethod]
     public void LeakFromCommandBufferBufferedSetSetDiscardConflict()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // boxed int will be incremented when dispose happens
         var box1 = new BoxedInt { Id = "box1" };

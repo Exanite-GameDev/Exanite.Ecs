@@ -28,7 +28,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindBufferedMixup()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer1 = new EcsCommandBuffer(world);
         var buffer2 = new EcsCommandBuffer(world);
 
@@ -45,7 +45,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindBufferedMixup2()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer1 = new EcsCommandBuffer(world);
         var buffer2 = new EcsCommandBuffer(world);
 
@@ -64,7 +64,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindBufferedBuffered()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
         var ab = buffer.Create().Set(new ComponentInt32(17));
@@ -84,7 +84,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindUnbufferedBuffered()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -109,7 +109,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindBufferedUnbuffered()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -128,7 +128,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindUnbufferedUnbuffered()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
         // Create two entities
@@ -150,7 +150,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindSelfReference()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
@@ -166,7 +166,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindSelfReferenceToOtherBuffered()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
         var eb1 = buffer.Create();
@@ -181,7 +181,7 @@ public class RelationshipComponentTests
     [TestMethod]
     public void BindSelfReferenceToOther()
     {
-        var world = new WorldBuilder().Build();
+        var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
         var eb1 = buffer.Create();

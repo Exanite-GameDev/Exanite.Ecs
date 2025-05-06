@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Queries;
 
@@ -10,7 +11,7 @@ public class CollectQueryTests
     [TestMethod]
     public void CollectMatched()
     {
-        var w = new WorldBuilder().Build();
+        var w = new World();
 
         // Create entities, all with ComponentInt64, some with ComponentFloat
         var cb = new EcsCommandBuffer(w);
