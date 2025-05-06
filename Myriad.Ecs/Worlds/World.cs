@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Command;
 using Myriad.Ecs.ComponentIds;
-using Myriad.Ecs.Threading;
 using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Worlds;
@@ -14,8 +13,6 @@ namespace Myriad.Ecs.Worlds;
 /// </summary>
 public sealed class World : IDisposable
 {
-    internal IThreadPool ThreadPool { get; }
-
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
@@ -32,11 +29,6 @@ public sealed class World : IDisposable
     internal int ArchetypesCount => archetypes.Count;
 
     private readonly ConcurrentBag<EcsCommandBuffer> commandBufferPool = [];
-
-    internal World(IThreadPool pool)
-    {
-        ThreadPool = pool;
-    }
 
     /// <inheritdoc/>
     public void Dispose()

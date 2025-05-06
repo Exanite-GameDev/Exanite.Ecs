@@ -22,11 +22,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Worlds\WorldBuilderWithArchetype.cs">
-      <DependentUpon>WorldBuilderWithArchetype.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Queries\Filters\QueryFilter.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -46,10 +41,6 @@
     </None>
     <None Update="EntityGetComponentRef.tt">
       <LastGenOutput>EntityGetComponentRef.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-    <None Update="Worlds\WorldBuilderWithArchetype.tt">
-      <LastGenOutput>WorldBuilderWithArchetype.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
