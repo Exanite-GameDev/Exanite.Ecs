@@ -58,7 +58,7 @@ public sealed class QueryBuilder
     public QueryDescription Build(World world)
     {
         // Automatically exclude all Phantom entities, unless specifically requested.
-        if (!IsIncluded<ComponentPhantom>() || !IsAtLeastOneOf<ComponentPhantom>() || !IsExactlyOneOf<ComponentPhantom>())
+        if (!IsIncluded<ComponentPhantom>() && !IsAtLeastOneOf<ComponentPhantom>() && !IsExactlyOneOf<ComponentPhantom>())
         {
             Exclude<ComponentPhantom>();
         }

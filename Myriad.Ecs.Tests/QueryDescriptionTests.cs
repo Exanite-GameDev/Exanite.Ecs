@@ -106,6 +106,8 @@ public class QueryDescriptionTests
     public void IncludeMatchOne()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
 
         var q = new QueryBuilder()
            .Include<ComponentFloat>()
@@ -123,6 +125,8 @@ public class QueryDescriptionTests
     public void IncludeMatchCaching()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
 
         // Query that matches just one of the archetypes in the world
         var q = new QueryBuilder()
@@ -161,6 +165,9 @@ public class QueryDescriptionTests
     public void IncludeMatchMultiple()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
         var q = new QueryBuilder()
            .Include<ComponentFloat>()
@@ -178,6 +185,9 @@ public class QueryDescriptionTests
     public void IncludeExclude()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
         var q = new QueryBuilder()
             .Include<ComponentFloat>()
@@ -200,6 +210,10 @@ public class QueryDescriptionTests
     public void ExactlyOne()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
         var q = new QueryBuilder()
                 .ExactlyOneOf<ComponentFloat>()
@@ -224,6 +238,11 @@ public class QueryDescriptionTests
     public void AtLeastOne()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
 
         var q = new QueryBuilder()
             .AtLeastOneOf<ComponentFloat>()
@@ -249,6 +268,11 @@ public class QueryDescriptionTests
     public void ExcludePhantoms()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentPhantom>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
 
         var q = new QueryBuilder()
                .Include<ComponentInt32>()
@@ -272,6 +296,11 @@ public class QueryDescriptionTests
     public void IncludePhantoms()
     {
         var w = new World();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentPhantom>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
 
         var q = new QueryBuilder()
                .Include<ComponentInt32>()
