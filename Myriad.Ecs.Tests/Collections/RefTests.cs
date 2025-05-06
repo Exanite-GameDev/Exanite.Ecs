@@ -10,7 +10,7 @@ public class RefTests
     public void RefItem()
     {
         var i = 1;
-        var r = new RefT<int>(ref i);
+        var r = new Ref<int>(ref i);
 
         r.Value++;
 
@@ -22,7 +22,7 @@ public class RefTests
     public void RefItemCast()
     {
         var i = 1;
-        var r = new RefT<int>(ref i);
+        var r = new Ref<int>(ref i);
         r.Value++;
 
         var j = r.Value;

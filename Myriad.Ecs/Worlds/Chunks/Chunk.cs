@@ -62,11 +62,11 @@ public sealed class Chunk
         return ref GetRef<T>(rowIndex);
     }
 
-    public RefT<T> GetRefT<T>(EntityId entityId, int rowIndex) where T : IComponent
+    public Ref<T> GetRefT<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
         Debug.Assert(entities[rowIndex].Id == entityId, "Mismatched entities in chunk");
 
-        return new RefT<T>(ref GetRef<T>(rowIndex));
+        return new Ref<T>(ref GetRef<T>(rowIndex));
     }
 
     internal ref T GetRef<T>(int rowIndex) where T : IComponent

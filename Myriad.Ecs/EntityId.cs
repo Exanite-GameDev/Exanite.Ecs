@@ -162,7 +162,7 @@ public readonly record struct EntityId : IComparable<EntityId>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public RefT<T> GetComponentRefT<T>(World world)
+    public Ref<T> GetComponentRefT<T>(World world)
         where T : IComponent
     {
         ref var entityInfo = ref world.GetEntityInfo(this);

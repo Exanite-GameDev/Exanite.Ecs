@@ -1,10 +1,10 @@
 namespace Myriad.Ecs.Collections;
 
-public readonly ref struct RefT<T>
+public readonly ref struct Ref<T>
 {
     public readonly ref T Value;
 
-    public RefT(ref T r)
+    public Ref(ref T r)
     {
         Value = ref r;
     }

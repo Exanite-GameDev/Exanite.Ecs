@@ -97,7 +97,7 @@ public readonly record struct Entity : IComparable<Entity>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public RefT<T> GetComponentRefT<T>() where T : IComponent => Id.GetComponentRefT<T>(World);
+    public Ref<T> GetComponentRefT<T>() where T : IComponent => Id.GetComponentRefT<T>(World);
 
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
