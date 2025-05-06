@@ -88,21 +88,6 @@ public sealed class Archetype
     /// </summary>
     public bool IsPhantom { get; }
 
-    /// <summary>
-    /// Indicates if any of the components in this Archetype im[lement <see cref="IEntityRelationComponent"/>
-    /// </summary>
-    public bool HasRelationComponents { get; }
-
-    /// <summary>
-    /// Indicates if any of the components in this Archetype im[lement <see cref="IDisposableComponent"/>
-    /// </summary>
-    public bool HasDisposableComponents { get; }
-
-    /// <summary>
-    /// Indicates if any of the components in this Archetype im[lement <see cref="IPhantomNotifierComponent"/>
-    /// </summary>
-    public bool HasPhantomNotifierComponents { get; }
-
     internal Archetype(World world, FrozenOrderedListSet<ComponentId> components)
     {
         World = world;
@@ -325,9 +310,4 @@ public sealed class Archetype
     {
         return Components.SetEquals(query);
     }
-
-    /// <summary>
-    /// Get an enumerable of all entities in this <see cref="Archetype"/>, in an arbitrary order.
-    /// </summary>
-    public ArchetypeEntityEnumerable Entities => new(this);
 }

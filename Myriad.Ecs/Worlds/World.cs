@@ -102,16 +102,19 @@ public sealed partial class World
         if (archetype is { HasPhantomComponents: false, IsPhantom: false })
         {
             deadEntities.EnsureCapacity(deadEntities.Count + archetype.EntityCount);
-            foreach (var entity in archetype.Entities)
+            foreach (var chunk in archetype.Chunks)
             {
-                // Get the entityinfo for this entity
-                ref var entityInfo = ref entities[entity.Id.Id];
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    // Get the entityinfo for this entity
+                    ref var entityInfo = ref entities[entity.Id.Id];
 
-                // Increment version, this will invalidate the handle
-                entityInfo.Version++;
+                    // Increment version, this will invalidate the handle
+                    entityInfo.Version++;
 
-                // Store this ID for re-use later
-                deadEntities.Add(entity.Id);
+                    // Store this ID for re-use later
+                    deadEntities.Add(entity.Id);
+                }
             }
         }
 
