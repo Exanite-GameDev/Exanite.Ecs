@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
+using Myriad.Ecs.Queries;
 
 namespace Myriad.Ecs.Tests;
 
@@ -34,13 +35,21 @@ public class ArchetypeTests
             Assert.AreEqual(archetype.EntityCount, entityCount);
         }
 
-        var count = 0;
-        foreach (var (_, i32, i64) in w.Query<ComponentInt32, ComponentInt64>())
-        {
-            count++;
-            Assert.AreEqual(i32.Ref.Value, (int)i64.Ref.Value);
-        }
+        var query = new QueryBuilder().Include<ComponentInt32>().Include<ComponentInt64>().Build(w);
+        Assert.AreEqual(10000, query.Count());
 
-        Assert.AreEqual(10000, count);
+        foreach (var archetypeMatch in query.GetArchetypes())
+        {
+            foreach (var chunk in archetypeMatch.Archetype.Chunks)
+            {
+                var a = chunk.GetSpan<ComponentInt32>();
+                var b = chunk.GetSpan<ComponentInt64>();
+
+                for (var i = 0; i < chunk.EntityCount; i++)
+                {
+                    Assert.AreEqual(a[i].Value, (int)b[i].Value);
+                }
+            }
+        }
     }
 }

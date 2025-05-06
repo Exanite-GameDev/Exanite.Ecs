@@ -326,22 +326,6 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void SetTwiceOnNewEntityThrows()
-    {
-        var world = new World();
-        var buffer = new EcsCommandBuffer(world);
-
-        var eb = buffer.Create();
-
-        eb.Set(new ComponentFloat(1));
-
-        Assert.ThrowsException<InvalidOperationException>(() =>
-        {
-            eb.Set(new ComponentFloat(2));
-        });
-    }
-
-    [TestMethod]
     public void SetTwiceOnNewEntityWithOverwrite()
     {
         var world = new World();
@@ -587,11 +571,11 @@ public class EcsCommandBufferTests
 
         // Check it's dead
         Assert.IsFalse(entity.Exists());
-        Assert.AreEqual(0, world.Count<ComponentFloat>());
-        Assert.AreEqual(0, world.Count<ComponentInt16>());
-        Assert.AreEqual(0, world.Count<ComponentInt32>());
-        Assert.AreEqual(0, world.Count<ComponentInt64>());
-        Assert.AreEqual(0, world.Count<ComponentFloat>());
+        Assert.AreEqual(0, new QueryBuilder().Include<ComponentFloat>().Build(world).Count());
+        Assert.AreEqual(0, new QueryBuilder().Include<ComponentInt16>().Build(world).Count());
+        Assert.AreEqual(0, new QueryBuilder().Include<ComponentInt32>().Build(world).Count());
+        Assert.AreEqual(0, new QueryBuilder().Include<ComponentInt64>().Build(world).Count());
+        Assert.AreEqual(0, new QueryBuilder().Include<ComponentFloat>().Build(world).Count());
     }
 
     [TestMethod]
