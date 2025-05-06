@@ -102,14 +102,14 @@ public sealed partial class EcsCommandBuffer
     {
         foreach (var query in archetypeDeletes)
         {
-            foreach (var match in query.GetArchetypeMatches())
+            foreach (var archetype in query.GetArchetypes())
             {
-                if (match.Archetype.EntityCount == 0)
+                if (archetype.EntityCount == 0)
                 {
                     continue;
                 }
 
-                World.DeleteImmediate(match.Archetype, ref lazy);
+                World.DeleteImmediate(archetype, ref lazy);
             }
         }
         archetypeDeletes.Clear();

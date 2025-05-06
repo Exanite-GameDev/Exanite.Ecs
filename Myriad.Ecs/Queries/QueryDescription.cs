@@ -5,6 +5,7 @@ using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Utilities;
 using Myriad.Ecs.Worlds.Archetypes;
+using Myriad.Ecs.Worlds.Chunks;
 
 namespace Myriad.Ecs.Queries;
 
@@ -445,9 +446,9 @@ public sealed class QueryDescription
     public int Count()
     {
         var count = 0;
-        foreach (var archetype in GetArchetypeMatches())
+        foreach (var archetype in GetArchetypes())
         {
-            count += archetype.Archetype.EntityCount;
+            count += archetype.EntityCount;
         }
 
         return count;
@@ -459,9 +460,9 @@ public sealed class QueryDescription
     /// <returns></returns>
     public bool Any()
     {
-        foreach (var archetype in GetArchetypeMatches())
+        foreach (var archetype in GetArchetypes())
         {
-            if (archetype.Archetype.EntityCount > 0)
+            if (archetype.EntityCount > 0)
             {
                 return true;
             }
@@ -488,16 +489,15 @@ public sealed class QueryDescription
     /// <returns></returns>
     public Entity? FirstOrDefault()
     {
-        foreach (var archetype in GetArchetypeMatches())
+        foreach (var archetype in GetArchetypes())
         {
-            if (archetype.Archetype.EntityCount == 0)
+            if (archetype.EntityCount == 0)
             {
                 continue;
             }
 
-            for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
+            foreach (var chunk in archetype.Chunks)
             {
-                var chunk = archetype.Archetype.Chunks[i];
                 if (chunk.EntityCount > 0)
                 {
                     return chunk.Entities.Span[0];
@@ -526,18 +526,16 @@ public sealed class QueryDescription
     /// <exception cref="InvalidOperationException">Thrown if there are more than one matches</exception>
     public Entity? SingleOrDefault()
     {
-        Entity? result = default;
-
-        foreach (var archetype in GetArchetypeMatches())
+        Entity? result = null;
+        foreach (var archetype in GetArchetypes())
         {
-            if (archetype.Archetype.EntityCount == 0)
+            if (archetype.EntityCount == 0)
             {
                 continue;
             }
 
-            for (var i = 0; i < archetype.Archetype.Chunks.Count; i++)
+            foreach (var chunk in archetype.Chunks)
             {
-                var chunk = archetype.Archetype.Chunks[i];
                 if (chunk.EntityCount == 0)
                 {
                     continue;
@@ -550,7 +548,6 @@ public sealed class QueryDescription
 
                 result = chunk.Entities.Span[0];
             }
-
         }
 
         return result;
@@ -585,21 +582,18 @@ public sealed class QueryDescription
         var choice = random.Next(0, count);
 
         // Find that entity
-        foreach (var archetype in GetArchetypeMatches())
+        foreach (var archetype in GetArchetypes())
         {
             // Check if it's within this archetype, if not move to the next archetype
-            if (choice - archetype.Archetype.EntityCount >= 0)
+            if (choice - archetype.EntityCount >= 0)
             {
-                choice -= archetype.Archetype.EntityCount;
+                choice -= archetype.EntityCount;
             }
             else
             {
                 // Step through chunks
-                var chunks = archetype.Archetype.Chunks;
-                for (var i = 0; i < chunks.Count; i++)
+                foreach (var chunk in archetype.Chunks)
                 {
-                    var chunk = chunks[i];
-
                     // Check if it's within this chunk, if not move to next chunk
                     if (choice - chunk.EntityCount >= 0)
                     {
