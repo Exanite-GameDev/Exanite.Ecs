@@ -31,7 +31,7 @@ public class QueryEnumerableTests
                .WithArchetype<ComponentInt32>()
                .Build();
 
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64());
         cb.Create().Set(new ComponentFloat());
         using var r = cb.Playback();
@@ -52,7 +52,7 @@ public class QueryEnumerableTests
                .WithArchetype<ComponentInt32>()
                .Build();
 
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64(1));
         cb.Create().Set(new ComponentFloat(2));
         cb.Create().Set(new ComponentObject(new object()));
@@ -79,7 +79,7 @@ public class QueryEnumerableTests
                .WithArchetype<ComponentInt32>()
                .Build();
 
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentFloat(1)).Set(new ComponentInt64(2));
         cb.Create().Set(new ComponentFloat(3)).Set(new ComponentInt64(6));
         cb.Create().Set(new ComponentFloat(4)).Set(new ComponentInt64(8));
@@ -110,7 +110,7 @@ public class QueryEnumerableTests
         // Create lots of random entities, keeping track of how many _should_ match the query
         var expectedIndices = new HashSet<int>();
         var rng = new Random(235);
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         for (var i = 0; i < 100_000; i++)
         {
             var entity = cb.Create();
@@ -122,21 +122,21 @@ public class QueryEnumerableTests
             {
                 switch (rng.Next(0, 5))
                 {
-                    case 0: entity.Set(new ComponentByte((byte)i), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 1: entity.Set(new ComponentInt16((short)i), CommandBuffer.DuplicateSet.Overwrite); break;
+                    case 0: entity.Set(new ComponentByte((byte)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 1: entity.Set(new ComponentInt16((short)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
 
                     case 2:
-                        entity.Set(new ComponentFloat(i), CommandBuffer.DuplicateSet.Overwrite);
+                        entity.Set(new ComponentFloat(i), EcsCommandBuffer.DuplicateSet.Overwrite);
                         hasFloat = true;
                         break;
 
                     case 3:
-                        entity.Set(new ComponentInt32(i), CommandBuffer.DuplicateSet.Overwrite);
+                        entity.Set(new ComponentInt32(i), EcsCommandBuffer.DuplicateSet.Overwrite);
                         hasInt32 = true;
                         break;
 
                     case 4:
-                        entity.Set(new ComponentInt64(i), CommandBuffer.DuplicateSet.Overwrite);
+                        entity.Set(new ComponentInt64(i), EcsCommandBuffer.DuplicateSet.Overwrite);
                         hasInt64 = true;
                         break;
                 }

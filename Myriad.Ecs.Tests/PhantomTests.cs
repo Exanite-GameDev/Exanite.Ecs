@@ -15,7 +15,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity with a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
 
@@ -31,7 +31,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity with a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
         var e = cmd.Playback()[0];
@@ -48,7 +48,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity with a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
         var e = cmd.Playback()[0];
@@ -69,7 +69,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity with a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
         var resolver = cmd.Playback();
         var e = eb.Resolve();
@@ -101,7 +101,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity with a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new ComponentInt32(42)).Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
         var e = eb.Resolve();
@@ -136,7 +136,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity with a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new ComponentInt32(42)).Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
         var e = eb.Resolve();
@@ -178,7 +178,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity without a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
         var e = eb.Resolve();
@@ -205,7 +205,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity without a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42));
         var resolver = cmd.Playback();
         var e = eb.Resolve();
@@ -232,7 +232,7 @@ public class PhantomTests
         var w = new WorldBuilder().Build();
 
         // Create an entity with a phantom component
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42)).Set(new TestPhantom0());
         var resolver = cmd.Playback();
         var e = eb.Resolve();
@@ -258,7 +258,7 @@ public class PhantomTests
 
         // Create an entity with a phantom component
         var list = new List<EntityId>();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new PhantomNotifier { CalledWith = list });
         var resolver = cmd.Playback();
         var e = eb.Resolve();
@@ -318,7 +318,7 @@ public class PhantomTests
 
         // Create an entity **without** a phantom component
         var list = new List<EntityId>();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentInt32()).Set(new PhantomNotifier { CalledWith = list });
         var resolver = cmd.Playback();
         var e = eb.Resolve();

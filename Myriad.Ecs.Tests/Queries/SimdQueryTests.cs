@@ -16,7 +16,7 @@ public class SimdQueryTests
                .WithArchetype<ComponentInt32>()
                .Build();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         for (var i = 0; i < 23; i++)
             cmd.Create().Set(new ComponentInt32(i)).Set(new ComponentInt64(i));
         cmd.Playback().Dispose();

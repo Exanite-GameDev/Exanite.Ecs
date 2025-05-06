@@ -14,7 +14,7 @@ public class DisposableComponentTests
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         cmd.Create().Set(new ComponentInt32(7)).Set(new TestDisposable(box));
         cmd.Playback().Dispose();
 
@@ -30,7 +30,7 @@ public class DisposableComponentTests
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentInt32(7)).Set(new TestDisposable(box));
         using var resolver = cmd.Playback();
         var entity = eb.Resolve();
@@ -52,7 +52,7 @@ public class DisposableComponentTests
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestDisposablePhantom(box));
         using var resolver = cmd.Playback();
         var entity = eb.Resolve();
@@ -83,7 +83,7 @@ public class DisposableComponentTests
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentInt32(7)).Set(new TestDisposable(box));
         using var resolver = cmd.Playback();
         var entity = eb.Resolve();
@@ -105,7 +105,7 @@ public class DisposableComponentTests
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         cmd.Create().Set(new ComponentInt32(7)).Set(new TestDisposable(box));
         cmd.Create().Set(new TestDisposable(box));
         cmd.Create().Set(new Component0()).Set(new TestDisposable(box));
@@ -125,7 +125,7 @@ public class DisposableComponentTests
 
         // Create an entity with a disposable test component. boxed integer will be incrmented every time it is disposed
         var box = new BoxedInt();
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         // Create two entities. Entity b is setup to delet entity a when it is disposed
         var ab = cmd.Create().Set(new TestDisposable(box));
@@ -151,7 +151,7 @@ public class DisposableComponentTests
         // boxed int will be incremented when dispose happens
         var box = new BoxedInt();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         // Create an entity
         var be = cmd.Create();
@@ -183,7 +183,7 @@ public class DisposableComponentTests
         // boxed int will be incremented when dispose happens
         var box = new BoxedInt();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         // Create an entity
         var be = cmd.Create();
@@ -195,7 +195,7 @@ public class DisposableComponentTests
         cmd.Delete(entity);
 
         // Setup a disposable in another buffer
-        var cmd2 = new CommandBuffer(w);
+        var cmd2 = new EcsCommandBuffer(w);
         cmd2.Set(entity, new TestDisposable(box));
 
         // Delete entity
@@ -220,7 +220,7 @@ public class DisposableComponentTests
         var box1 = new BoxedInt();
         var box2 = new BoxedInt();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         // Create an entity
         var be = cmd.Create();
@@ -253,14 +253,14 @@ public class DisposableComponentTests
         var box1 = new BoxedInt();
         var box2 = new BoxedInt();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         // Create an entity
         var be = cmd.Create();
 
         // Enqueue attachment of a disposal component, twice. To an entity that doesn't exist yet.
         be.Set(new TestDisposable(box1));
-        be.Set(new TestDisposable(box2), CommandBuffer.DuplicateSet.Overwrite);
+        be.Set(new TestDisposable(box2), EcsCommandBuffer.DuplicateSet.Overwrite);
 
         // Nothing has been disposed yet
         Assert.AreEqual(0, box1.Value);
@@ -283,7 +283,7 @@ public class DisposableComponentTests
         var box1 = new BoxedInt { ID = "box1" };
         var box2 = new BoxedInt { ID = "box2" };
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
 
         // Create an entity
         var be = cmd.Create();
@@ -291,7 +291,7 @@ public class DisposableComponentTests
         // Enqueue attachment of a disposal component, twice. To an entity that doesn't exist yet.
         // The second one will be discarded because there's already one attached to the entity
         be.Set(new TestDisposable(box1));
-        be.Set(new TestDisposable(box2), CommandBuffer.DuplicateSet.Discard);
+        be.Set(new TestDisposable(box2), EcsCommandBuffer.DuplicateSet.Discard);
 
         // Nothing has been disposed yet
         Assert.AreEqual(0, box1.Value);

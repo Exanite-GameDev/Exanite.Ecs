@@ -14,7 +14,7 @@ public class StructQueryTests
     {
         var w = new WorldBuilder().Build();
 
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64(1));
         cb.Create().Set(new ComponentFloat(2));
         cb.Create().Set(new ComponentObject(new object()));
@@ -31,7 +31,7 @@ public class StructQueryTests
     {
         var w = new WorldBuilder().Build();
 
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         cb.Create().Set(new ComponentInt64(1));
         cb.Create().Set(new ComponentFloat(2));
         cb.Create().Set(new ComponentObject(new object()));

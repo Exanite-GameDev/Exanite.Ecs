@@ -23,7 +23,7 @@ namespace Myriad.Ecs.Tests.Queries
         {
             var world = new WorldBuilder().Build();
 
-            var cmd = new CommandBuffer(world);
+            var cmd = new EcsCommandBuffer(world);
             cmd.Create().Set(new ComponentInt32(7));
             cmd.Playback().Dispose();
 
@@ -37,7 +37,7 @@ namespace Myriad.Ecs.Tests.Queries
         {
             var world = new WorldBuilder().Build();
 
-            var cmd = new CommandBuffer(world);
+            var cmd = new EcsCommandBuffer(world);
             var sum = 0;
             for (var i = 0; i < 9999; i++)
             {
@@ -56,7 +56,7 @@ namespace Myriad.Ecs.Tests.Queries
         {
             var world = new WorldBuilder().Build();
 
-            var cmd = new CommandBuffer(world);
+            var cmd = new EcsCommandBuffer(world);
             var prod = 0;
             for (var i = 1; i < 9999; i++)
             {
@@ -75,7 +75,7 @@ namespace Myriad.Ecs.Tests.Queries
         {
             var world = new WorldBuilder().Build();
 
-            var cmd = new CommandBuffer(world);
+            var cmd = new EcsCommandBuffer(world);
             for (var i = 0; i < 9999; i++)
             {
                 cmd.Create().Set(new ComponentInt32(i));
@@ -92,7 +92,7 @@ namespace Myriad.Ecs.Tests.Queries
         {
             var world = new WorldBuilder().Build();
 
-            var cmd = new CommandBuffer(world);
+            var cmd = new EcsCommandBuffer(world);
             var rng = new Random(346534);
 
             var xor = 0;

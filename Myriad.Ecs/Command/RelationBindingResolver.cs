@@ -5,7 +5,7 @@ using Myriad.Ecs.ComponentIds;
 
 namespace Myriad.Ecs.Command;
 
-public partial class CommandBuffer
+public partial class EcsCommandBuffer
 {
     private abstract class BaseRelationBinder<TKey>
         where TKey : struct

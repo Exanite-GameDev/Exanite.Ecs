@@ -13,7 +13,7 @@ public class WorldTests
     {
         var w = new WorldBuilder().Build();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var ab = cmd.Create().Set(new ComponentInt32(1));
         var bb = cmd.Create().Set(new ComponentInt32(2)).Set(new ComponentFloat(10));
         var cb = cmd.Create().Set(new ComponentFloat(10));
@@ -38,7 +38,7 @@ public class WorldTests
     {
         var w = new WorldBuilder().Build();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var ab = cmd.Create().Set(new ComponentInt32(1));
         var bb = cmd.Create().Set(new ComponentInt32(2)).Set(new ComponentFloat(10));
         var cb = cmd.Create().Set(new ComponentFloat(10));
@@ -63,7 +63,7 @@ public class WorldTests
     {
         var w = new WorldBuilder().Build();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var ab = cmd.Create().Set(new ComponentInt32(1));
         var bb = cmd.Create().Set(new ComponentInt32(2)).Set(new ComponentFloat(10));
         var cb = cmd.Create().Set(new ComponentFloat(10));
@@ -88,7 +88,7 @@ public class WorldTests
     {
         var w = new WorldBuilder().Build();
 
-        var cmd = new CommandBuffer(w);
+        var cmd = new EcsCommandBuffer(w);
         var ab = cmd.Create().Set(new ComponentInt32(1));
         var bb = cmd.Create().Set(new ComponentInt32(2)).Set(new ComponentFloat(10));
         var cb = cmd.Create().Set(new ComponentFloat(10));

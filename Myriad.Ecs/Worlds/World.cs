@@ -33,7 +33,7 @@ public sealed partial class World
     public IReadOnlyList<Archetype> Archetypes => _archetypes;
     internal int ArchetypesCount => _archetypes.Count;
 
-    private readonly ConcurrentBag<CommandBuffer> _commandBufferPool = [ ];
+    private readonly ConcurrentBag<EcsCommandBuffer> _commandBufferPool = [ ];
 
     internal World(IThreadPool pool)
     {
@@ -54,22 +54,22 @@ public sealed partial class World
 
     #region command buffer pool
     /// <summary>
-    /// Get a <see cref="CommandBuffer"/> from the pool or create a new one
+    /// Get a <see cref="EcsCommandBuffer"/> from the pool or create a new one
     /// </summary>
     /// <returns></returns>
-    public CommandBuffer GetCommandBuffer()
+    public EcsCommandBuffer GetCommandBuffer()
     {
         if (!_commandBufferPool.TryTake(out var buffer))
-            buffer = new CommandBuffer(this);
+            buffer = new EcsCommandBuffer(this);
 
         return buffer;
     }
 
     /// <summary>
-    /// Return a <see cref="CommandBuffer"/> to the internal pool
+    /// Return a <see cref="EcsCommandBuffer"/> to the internal pool
     /// </summary>
     /// <param name="buffer"></param>
-    public void ReturnCommandBuffer(CommandBuffer buffer)
+    public void ReturnCommandBuffer(EcsCommandBuffer buffer)
     {
         if (_commandBufferPool.Count < 32)
         {

@@ -10,13 +10,13 @@ using Myriad.Ecs.Worlds;
 namespace Myriad.Ecs.Tests;
 
 [TestClass]
-public class CommandBufferTests
+public class EcsCommandBufferTests
 {
     [TestMethod]
     public void CreateCommandBuffer()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
         Assert.IsNotNull(buffer);
     }
 
@@ -24,7 +24,7 @@ public class CommandBufferTests
     public void DisposeResolverTwiceThrows()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var r = buffer.Playback();
         r.Dispose();
@@ -39,7 +39,7 @@ public class CommandBufferTests
     public void CreateEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
         Assert.AreEqual(buffer, eb.CommandBuffer);
@@ -56,10 +56,10 @@ public class CommandBufferTests
     public void CreateManyEntities()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create lots of entities
-        var buffered = new List<CommandBuffer.BufferedEntity>();
+        var buffered = new List<EcsCommandBuffer.BufferedEntity>();
         for (var i = 0; i < 50000; i++)
             buffered.Add(buffer.Create().Set(new ComponentInt32(i)));
 
@@ -85,7 +85,7 @@ public class CommandBufferTests
     public void ChurnCreateDestroy()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var rng = new Random(46576);
 
@@ -97,7 +97,7 @@ public class CommandBufferTests
         for (var i = 0; i < 20; i++)
         {
             // Create lots of entities
-            var buffered = new List<CommandBuffer.BufferedEntity>();
+            var buffered = new List<EcsCommandBuffer.BufferedEntity>();
             for (var j = 0; j < 10000; j++)
             {
                 var b = buffer.Create().Set(new ComponentInt32(j));
@@ -107,11 +107,11 @@ public class CommandBufferTests
                 {
                     switch (rng.Next(0, 6))
                     {
-                        case 0: b.Set(new ComponentByte((byte)i), CommandBuffer.DuplicateSet.Overwrite); break;
-                        case 1: b.Set(new ComponentInt16((short)i), CommandBuffer.DuplicateSet.Overwrite); break;
-                        case 2: b.Set(new ComponentFloat(i), CommandBuffer.DuplicateSet.Overwrite); break;
-                        case 3: b.Set(new ComponentInt32(i), CommandBuffer.DuplicateSet.Overwrite); break;
-                        case 4: b.Set(new ComponentInt64(i), CommandBuffer.DuplicateSet.Overwrite); break;
+                        case 0: b.Set(new ComponentByte((byte)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                        case 1: b.Set(new ComponentInt16((short)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                        case 2: b.Set(new ComponentFloat(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                        case 3: b.Set(new ComponentInt32(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                        case 4: b.Set(new ComponentInt64(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
                     }
                 }
             }
@@ -165,7 +165,7 @@ public class CommandBufferTests
                 entities.Add(setupResolver[i]);
         }
 
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
         var rng = new Random(551514);
         for (var i = 0; i < 16; i++)
         {
@@ -210,7 +210,7 @@ public class CommandBufferTests
             buffer.Playback().Dispose();
         }
 
-        void ChangeComponent<T>(Entity e, CommandBuffer b, bool update)
+        void ChangeComponent<T>(Entity e, EcsCommandBuffer b, bool update)
             where T : struct, IComponent
         {
             if (e.HasComponent<T>() && !update)
@@ -224,7 +224,7 @@ public class CommandBufferTests
     public void CreateEntityLateResolveThrows()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
 
@@ -241,8 +241,8 @@ public class CommandBufferTests
     public void CreateEntityCannotResolveFromAnotherBuffer()
     {
         var world = new WorldBuilder().Build();
-        var buffer1 = new CommandBuffer(world);
-        var buffer2 = new CommandBuffer(world);
+        var buffer1 = new EcsCommandBuffer(world);
+        var buffer2 = new EcsCommandBuffer(world);
 
         // Create the entity
         var eb1 = buffer1.Create();
@@ -262,7 +262,7 @@ public class CommandBufferTests
     public void CreateEntityCannotResolveFromPreviousPlayback()
     {
         var world = new WorldBuilder().Build();
-        var buffer1 = new CommandBuffer(world);
+        var buffer1 = new EcsCommandBuffer(world);
 
         // Create the entity
         var eb1 = buffer1.Create();
@@ -282,7 +282,7 @@ public class CommandBufferTests
     public void ModifyBufferedEntityAfterPlaybackThrows()
     {
         var world = new WorldBuilder().Build();
-        var buffer1 = new CommandBuffer(world);
+        var buffer1 = new EcsCommandBuffer(world);
 
         // Create the entity
         var eb1 = buffer1.Create();
@@ -299,7 +299,7 @@ public class CommandBufferTests
     public void CreateEntityAndSet()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer
                 .Create()
@@ -318,7 +318,7 @@ public class CommandBufferTests
     public void SetTwiceOnNewEntityThrows()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
 
@@ -334,19 +334,19 @@ public class CommandBufferTests
     public void SetTwiceOnNewEntityWithOverwrite()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
 
         eb.Set(new ComponentFloat(1));
-        eb.Set(new ComponentFloat(2), CommandBuffer.DuplicateSet.Overwrite);
+        eb.Set(new ComponentFloat(2), EcsCommandBuffer.DuplicateSet.Overwrite);
     }
 
     [TestMethod]
     public void DeleteEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var buffered = new[]
         {
@@ -382,7 +382,7 @@ public class CommandBufferTests
     public void DeleteEntityTwice()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Playback();
@@ -403,7 +403,7 @@ public class CommandBufferTests
     public void DeleteEntityTwice_Phantom()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var buffered = buffer.Create().Set(new TestPhantom0());
         using var resolver = buffer.Playback();
@@ -432,7 +432,7 @@ public class CommandBufferTests
     public void DeleteDeadEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
@@ -444,7 +444,7 @@ public class CommandBufferTests
         buffer.Delete(entity);
 
         // Delete that entity before playing back the first buffer
-        var buffer2 = new CommandBuffer(world);
+        var buffer2 = new EcsCommandBuffer(world);
         buffer2.Delete(entity);
         buffer2.Playback().Dispose();
         Assert.IsFalse(entity.Exists());
@@ -459,7 +459,7 @@ public class CommandBufferTests
     public void DeleteEntities()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var buffered = new[]
         {
@@ -496,7 +496,7 @@ public class CommandBufferTests
         var world1 = new WorldBuilder().Build();
         var world2 = new WorldBuilder().Build();
 
-        var cmd = new CommandBuffer(world1);
+        var cmd = new EcsCommandBuffer(world1);
 
         var q = new QueryBuilder().Include<Component0>().Build(world2);
 
@@ -532,7 +532,7 @@ public class CommandBufferTests
         var dead = q.FirstOrDefault()!.Value;
 
         // Delete it
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
         buffer.Delete(q);
         buffer.Playback().Dispose();
 
@@ -556,7 +556,7 @@ public class CommandBufferTests
         // Attach a disposable thing to a load of entities, some we're deleting and some we're not
         var shouldDispose = new List<BoxedInt>();
         var shouldNotDispose = new List<BoxedInt>();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
         foreach (var (e, _, _) in world.Query<Component0, Component1>())
         {
             var box = new BoxedInt();
@@ -606,7 +606,7 @@ public class CommandBufferTests
         TestHelpers.SetupRandomEntities(world, count: 100000).Playback().Dispose();
 
         // Attach a phantom to a load of entities
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
         foreach (var (e, _, _) in world.Query<Component0, Component1>())
             buffer.Set(e, new TestPhantom0());
         buffer.Playback().Dispose();
@@ -658,7 +658,7 @@ public class CommandBufferTests
     public void ModifyThenDelete()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
@@ -686,7 +686,7 @@ public class CommandBufferTests
     public void RemoveFromEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
         var eb = buffer
@@ -708,7 +708,7 @@ public class CommandBufferTests
     public void AddToEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
         var eb = buffer
@@ -732,7 +732,7 @@ public class CommandBufferTests
     public void SetOnEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
         var eb = buffer
@@ -756,7 +756,7 @@ public class CommandBufferTests
     public void SetTwiceOnEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
         var eb = buffer
@@ -781,7 +781,7 @@ public class CommandBufferTests
     public void SetThenRemoveOnEntity()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
         var eb = buffer
@@ -808,7 +808,7 @@ public class CommandBufferTests
     public void RemoveInvalidComponent()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
         var eb = buffer
@@ -833,7 +833,7 @@ public class CommandBufferTests
     public void RemoveAndSetComponent()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
         var eb = buffer
@@ -864,12 +864,12 @@ public class CommandBufferTests
     public void CreateManyArchetypes()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create entities in lots of different archetypes. The idea is to
         // create so many the entity runs out of aggregation buffers.
 
-        var buffered = new List<CommandBuffer.BufferedEntity>();
+        var buffered = new List<EcsCommandBuffer.BufferedEntity>();
         var rng = new Random(17);
         for (var i = 0; i < 1024; i++)
         {
@@ -880,24 +880,24 @@ public class CommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: eb.Set(new Component0(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 1: eb.Set(new Component1(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 2: eb.Set(new Component2(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 3: eb.Set(new Component3(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 4: eb.Set(new Component4(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 5: eb.Set(new Component5(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 6: eb.Set(new Component6(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 7: eb.Set(new Component7(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 8: eb.Set(new Component8(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 9: eb.Set(new Component9(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 10: eb.Set(new Component10(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 11: eb.Set(new Component11(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 12: eb.Set(new Component12(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 13: eb.Set(new Component13(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 14: eb.Set(new Component14(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 15: eb.Set(new Component15(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 16: eb.Set(new Component16(), CommandBuffer.DuplicateSet.Overwrite); break;
-                    case 17: eb.Set(new Component17(), CommandBuffer.DuplicateSet.Overwrite); break;
+                    case 0: eb.Set(new Component0(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 1: eb.Set(new Component1(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 2: eb.Set(new Component2(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 3: eb.Set(new Component3(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 4: eb.Set(new Component4(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 5: eb.Set(new Component5(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 6: eb.Set(new Component6(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 7: eb.Set(new Component7(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 8: eb.Set(new Component8(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 9: eb.Set(new Component9(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 10: eb.Set(new Component10(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 11: eb.Set(new Component11(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 12: eb.Set(new Component12(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 13: eb.Set(new Component13(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 14: eb.Set(new Component14(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 15: eb.Set(new Component15(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 16: eb.Set(new Component16(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                    case 17: eb.Set(new Component17(), EcsCommandBuffer.DuplicateSet.Overwrite); break;
                 }
             }
         }
@@ -942,7 +942,7 @@ public class CommandBufferTests
     public void StructuralChanges()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create some entities
         buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
@@ -1000,7 +1000,7 @@ public class CommandBufferTests
     public void AvrilRelationalBug()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         var p1 = cmd.Create();
         cmd.Create().Set(default(Relational1), p1);
@@ -1015,7 +1015,7 @@ public class CommandBufferTests
     public void ClearSet()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -1036,7 +1036,7 @@ public class CommandBufferTests
     public void ClearBufferedSet()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -1056,7 +1056,7 @@ public class CommandBufferTests
     public void ResolveClearedEntity()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -1073,7 +1073,7 @@ public class CommandBufferTests
     public void ClearBufferSetDisposable()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -1096,7 +1096,7 @@ public class CommandBufferTests
     public void ClearBufferSetOverwriteDisposable()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -1122,7 +1122,7 @@ public class CommandBufferTests
     public void ClearBufferRemove()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());
@@ -1143,7 +1143,7 @@ public class CommandBufferTests
     public void ClearBufferDelete()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());
@@ -1165,7 +1165,7 @@ public class CommandBufferTests
     public void ClearBufferDeleteArchetype()
     {
         var world = new WorldBuilder().Build();
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());

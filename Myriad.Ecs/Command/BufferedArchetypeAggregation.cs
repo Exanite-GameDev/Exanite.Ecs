@@ -3,7 +3,7 @@ using Myriad.Ecs.ComponentIds;
 
 namespace Myriad.Ecs.Command;
 
-public sealed partial class CommandBuffer
+public sealed partial class EcsCommandBuffer
 {
     // Keep track of a fixed number of aggregation nodes. The root node (0) is the node for a new entity
     // with no components. Nodes store a list of "edges" leading to other nodes. Edges indicate

@@ -14,7 +14,7 @@ public class CollectQueryTests
         var w = new WorldBuilder().Build();
 
         // Create entities, all with ComponentInt64, some with ComponentFloat
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         for (var i = 0; i < 128; i++)
         {
             cb.Create().Set(new ComponentInt64(1));

@@ -9,14 +9,14 @@ namespace Myriad.Ecs.Benchmarks;
 public class EntityChurnBenchmark
 {
     private World _world = null!;
-    private CommandBuffer _buffer = null!;
-    private readonly List<CommandBuffer.BufferedEntity> _buffered = [ ];
+    private EcsCommandBuffer _buffer = null!;
+    private readonly List<EcsCommandBuffer.BufferedEntity> _buffered = [ ];
 
     [GlobalSetup]
     public void Setup()
     {
         _world = new WorldBuilder().Build();
-        _buffer = new CommandBuffer(_world);
+        _buffer = new EcsCommandBuffer(_world);
     }
 
     [Benchmark]

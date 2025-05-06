@@ -11,7 +11,7 @@ public class RelationshipComponentTests
 {
     private static Entity CreateEntity(World world)
     {
-        var cmd = new CommandBuffer(world);
+        var cmd = new EcsCommandBuffer(world);
 
         var buffered = cmd.Create();
         using var resolver = cmd.Playback();
@@ -30,8 +30,8 @@ public class RelationshipComponentTests
     public void BindBufferedMixup()
     {
         var world = new WorldBuilder().Build();
-        var buffer1 = new CommandBuffer(world);
-        var buffer2 = new CommandBuffer(world);
+        var buffer1 = new EcsCommandBuffer(world);
+        var buffer2 = new EcsCommandBuffer(world);
 
         // Create entity in buffer 1
         var ab = buffer1.Create().Set(new ComponentInt32(17));
@@ -47,8 +47,8 @@ public class RelationshipComponentTests
     public void BindBufferedMixup2()
     {
         var world = new WorldBuilder().Build();
-        var buffer1 = new CommandBuffer(world);
-        var buffer2 = new CommandBuffer(world);
+        var buffer1 = new EcsCommandBuffer(world);
+        var buffer2 = new EcsCommandBuffer(world);
 
         var entity = CreateEntity(world);
 
@@ -66,7 +66,7 @@ public class RelationshipComponentTests
     public void BindBufferedBuffered()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var ab = buffer.Create().Set(new ComponentInt32(17));
         var bb = buffer.Create().Set(new ComponentInt32(18));
@@ -86,7 +86,7 @@ public class RelationshipComponentTests
     public void BindUnbufferedBuffered()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity
         var cb = buffer.Create();
@@ -111,7 +111,7 @@ public class RelationshipComponentTests
     public void BindBufferedUnbuffered()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create an entity
         var ab = buffer.Create();
@@ -130,7 +130,7 @@ public class RelationshipComponentTests
     public void BindUnbufferedUnbuffered()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         // Create two entities
         var ab = buffer.Create();
@@ -152,7 +152,7 @@ public class RelationshipComponentTests
     public void BindSelfReference()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
         eb.Set(new SelfReference());
@@ -168,7 +168,7 @@ public class RelationshipComponentTests
     public void BindSelfReferenceToOtherBuffered()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb1 = buffer.Create();
         var eb2 = buffer.Create();
@@ -183,7 +183,7 @@ public class RelationshipComponentTests
     public void BindSelfReferenceToOther()
     {
         var world = new WorldBuilder().Build();
-        var buffer = new CommandBuffer(world);
+        var buffer = new EcsCommandBuffer(world);
 
         var eb1 = buffer.Create();
         using var _ = buffer.Playback();

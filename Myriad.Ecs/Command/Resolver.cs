@@ -5,7 +5,7 @@ using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Command;
 
-public sealed partial class CommandBuffer
+public sealed partial class EcsCommandBuffer
 {
     /// <summary>
     /// Provides a way to resolve created entities. Must be disposed once finished with!
@@ -14,7 +14,7 @@ public sealed partial class CommandBuffer
         : IDisposable
     {
         internal SortedList<uint, EntityId> Lookup { get; } = [];
-        internal CommandBuffer? Parent { get; private set; }
+        internal EcsCommandBuffer? Parent { get; private set; }
 
         internal uint Version { get; private set; }
 
@@ -28,7 +28,7 @@ public sealed partial class CommandBuffer
         /// </summary>
         public World World => Parent!.World;
 
-        internal void Configure(CommandBuffer buffer)
+        internal void Configure(EcsCommandBuffer buffer)
         {
             Lookup.Clear();
             Parent = buffer;

@@ -358,7 +358,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -376,7 +376,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
         using var _ = c.Playback();
@@ -409,7 +409,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -427,7 +427,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
         using var _ = c.Playback();
@@ -460,7 +460,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
         c.Playback().Dispose();
@@ -478,7 +478,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -496,7 +496,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
         c.Playback().Dispose();
@@ -527,7 +527,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -545,7 +545,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -576,7 +576,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -594,7 +594,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create();
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -627,7 +627,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
         using var _ = c.Playback();
         var e = eb.Resolve();
@@ -647,7 +647,7 @@ public class QueryDescriptionTests
                .Include<ComponentInt32>()
                .Build(w);
 
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         for (var i = 0; i < 10000; i++)
             c.Create().Set(new ComponentInt32(i));
         for (var i = 0; i < 10000; i++)

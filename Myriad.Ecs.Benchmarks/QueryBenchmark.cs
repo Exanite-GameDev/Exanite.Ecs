@@ -24,7 +24,7 @@ public class QueryBenchmark
     {
         _world = new WorldBuilder().Build();
 
-        var buffer = new CommandBuffer(_world);
+        var buffer = new EcsCommandBuffer(_world);
         var rng = new Random(2);
         for (var i = 0; i < EntityCount; i++)
             AddEntity(buffer, rng);
@@ -39,7 +39,7 @@ public class QueryBenchmark
         Console.WriteLine("Setup Complete");
     }
 
-    private static void AddEntity(CommandBuffer buffer, Random random)
+    private static void AddEntity(EcsCommandBuffer buffer, Random random)
     {
         var entity = buffer.Create();
 
@@ -50,11 +50,11 @@ public class QueryBenchmark
         {
             switch (random.Next(0, 5))
             {
-                case 0: entity.Set(new ComponentByte((byte)i), CommandBuffer.DuplicateSet.Overwrite); break;
-                case 1: entity.Set(new ComponentInt16((short)i), CommandBuffer.DuplicateSet.Overwrite); break;
-                case 2: entity.Set(new ComponentFloat(i), CommandBuffer.DuplicateSet.Overwrite); break;
-                case 3: entity.Set(new ComponentInt32(i), CommandBuffer.DuplicateSet.Overwrite); break;
-                case 4: entity.Set(new ComponentInt64(i), CommandBuffer.DuplicateSet.Overwrite); break;
+                case 0: entity.Set(new ComponentByte((byte)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                case 1: entity.Set(new ComponentInt16((short)i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                case 2: entity.Set(new ComponentFloat(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                case 3: entity.Set(new ComponentInt32(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
+                case 4: entity.Set(new ComponentInt64(i), EcsCommandBuffer.DuplicateSet.Overwrite); break;
             }
         }
     }

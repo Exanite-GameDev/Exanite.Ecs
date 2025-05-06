@@ -15,12 +15,12 @@ namespace Myriad.Ecs.Command;
 /// <summary>
 /// Buffers up modifications to entities and replays them all at once.
 /// </summary>
-public sealed partial class CommandBuffer
+public sealed partial class EcsCommandBuffer
 {
     private uint _version;
 
     /// <summary>
-    /// The <see cref="World"/> this <see cref="CommandBuffer"/> is modifying
+    /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying
     /// </summary>
     public World World { get; }
 
@@ -44,10 +44,10 @@ public sealed partial class CommandBuffer
     private Resolver _nextResolver;
 
     /// <summary>
-    /// Create a new <see cref="CommandBuffer"/> for the given <see cref="World"/>
+    /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>
     /// </summary>
     /// <param name="world"></param>
-    public CommandBuffer(World world)
+    public EcsCommandBuffer(World world)
     {
         World = world;
 
@@ -333,7 +333,7 @@ public sealed partial class CommandBuffer
 
     #region clear
     /// <summary>
-    /// Clear this <see cref="CommandBuffer"/>
+    /// Clear this <see cref="EcsCommandBuffer"/>
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
     public void Clear()

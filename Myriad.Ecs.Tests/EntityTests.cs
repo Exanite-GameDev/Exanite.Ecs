@@ -27,7 +27,7 @@ public class EntityTests
     public void CompareEntityWithSelf()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var eb = b.Create();
         using var resolver = b.Playback();
@@ -40,7 +40,7 @@ public class EntityTests
     public void CompareEntityWithAnother()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var eb1 = b.Create();
         var eb2 = b.Create();
@@ -62,7 +62,7 @@ public class EntityTests
     public void EntityUniqueID()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var eb1 = b.Create();
         var eb2 = b.Create();
@@ -80,7 +80,7 @@ public class EntityTests
     public void GetComponent()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var e = b.Create()
                  .Set(new ComponentInt16(7));
@@ -95,7 +95,7 @@ public class EntityTests
     public void GetComponents()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
         using var resolver = b.Playback();
@@ -109,7 +109,7 @@ public class EntityTests
     public void GetComponentDead()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
         var resolver = b.Playback();
@@ -129,7 +129,7 @@ public class EntityTests
     public void GetBoxedComponents()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
         using var resolver = b.Playback();
@@ -143,7 +143,7 @@ public class EntityTests
     public void GetBoxedComponent()
     {
         var w = new WorldBuilder().Build();
-        var b = new CommandBuffer(w);
+        var b = new EcsCommandBuffer(w);
 
         var e = b.Create()
                  .Set(new ComponentInt16(7));

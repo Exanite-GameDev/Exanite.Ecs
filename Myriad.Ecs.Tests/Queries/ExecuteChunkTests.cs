@@ -60,7 +60,7 @@ public class ExecuteChunkTests
         TestHelpers.SetupRandomEntities(w, count:100000).Playback().Dispose();
 
         // Destroy all of these specific entities, to ensure at least one archetype matches the query but is empty
-        var c = new CommandBuffer(w);
+        var c = new EcsCommandBuffer(w);
         foreach (var (e, _, _) in w.Query<ComponentInt32, ComponentByte>())
             c.Delete(e);
         c.Playback().Dispose();

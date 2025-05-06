@@ -3,7 +3,7 @@ using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Command;
 
-public sealed partial class CommandBuffer
+public sealed partial class EcsCommandBuffer
 {
     /// <summary>
     /// An entity that has been created in a command buffer, but not yet created. Can be used to add components.
@@ -13,13 +13,13 @@ public sealed partial class CommandBuffer
         private readonly uint _id;
         private readonly uint _version;
 
-        internal readonly CommandBuffer _buffer;
+        internal readonly EcsCommandBuffer _buffer;
         private readonly Resolver _resolver;
 
         /// <summary>
         /// Get the <see cref="CommandBuffer"/> which this <see cref="BufferedEntity"/> is from.
         /// </summary>
-        public CommandBuffer CommandBuffer
+        public EcsCommandBuffer CommandBuffer
         {
             get
             {
@@ -28,7 +28,7 @@ public sealed partial class CommandBuffer
             }
         }
 
-        internal BufferedEntity(uint id, CommandBuffer buffer, Resolver resolver)
+        internal BufferedEntity(uint id, EcsCommandBuffer buffer, Resolver resolver)
         {
             _id = id;
             _buffer = buffer;

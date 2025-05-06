@@ -14,7 +14,7 @@ public class ArchetypeTests
                .WithArchetype<ComponentInt32>()
                .Build();
 
-        var cb = new CommandBuffer(w);
+        var cb = new EcsCommandBuffer(w);
         for (var i = 0; i < 10000; i++)
         {
             var e = cb.Create();
