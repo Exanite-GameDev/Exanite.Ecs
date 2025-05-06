@@ -271,7 +271,7 @@ namespace Myriad.Ecs.Worlds
 <# for (var k = 0; k < sumij; k++)
 {
 #>
-			var c<#= k #> = ComponentId<T<#= k #>>.Id;
+			var c<#= k #> = ComponentId.Get<T<#= k #>>();
 <#
 }
 #>

@@ -72,22 +72,17 @@ public readonly record struct ComponentId
     /// </summary>
     /// <param name="type"></param>
     /// <exception cref="ArgumentException">Thrown if 'type' does not implement <see cref="IComponent"/></exception>
-    /// <returns></returns>
     public static ComponentId Get(Type type)
     {
         return ComponentRegistry.Get(type);
     }
-}
 
-/// <summary>
-/// Retrieve the component ID for a type
-/// </summary>
-/// <typeparam name="TComponent"></typeparam>
-public static class ComponentId<TComponent>
-    where TComponent : IComponent
-{
     /// <summary>
-    /// The ID for <typeparamref name="TComponent" />
+    /// Get the component ID for the given type
     /// </summary>
-    public static readonly ComponentId Id = ComponentRegistry.Get<TComponent>();
+    /// <param name="type"></param>
+    public static ComponentId Get<T>() where T : IComponent
+    {
+        return ComponentRegistry.Get<T>();
+    }
 }

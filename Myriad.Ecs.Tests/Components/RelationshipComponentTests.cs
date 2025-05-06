@@ -22,8 +22,8 @@ public class RelationshipComponentTests
     [TestMethod]
     public void ComponentIdFlag()
     {
-        Assert.IsFalse(ComponentId<ComponentInt32>.Id.IsRelationComponent);
-        Assert.IsTrue(ComponentId<Relational1>.Id.IsRelationComponent);
+        Assert.IsFalse(ComponentId.Get<ComponentInt32>().IsRelationComponent);
+        Assert.IsTrue(ComponentId.Get<Relational1>().IsRelationComponent);
     }
 
     [TestMethod]

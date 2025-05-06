@@ -20,16 +20,16 @@ public class ComponentBloomFilterTests
     public void DisjointNotIntersect()
     {
         var a = new ComponentBloomFilter();
-        a.Add(ComponentId<Component0>.Id);
-        a.Add(ComponentId<Component1>.Id);
-        a.Add(ComponentId<Component2>.Id);
-        a.Add(ComponentId<Component3>.Id);
+        a.Add(ComponentId.Get<Component0>());
+        a.Add(ComponentId.Get<Component1>());
+        a.Add(ComponentId.Get<Component2>());
+        a.Add(ComponentId.Get<Component3>());
 
         var b = new ComponentBloomFilter();
-        b.Add(ComponentId<Component8>.Id);
-        b.Add(ComponentId<Component9>.Id);
-        b.Add(ComponentId<Component10>.Id);
-        b.Add(ComponentId<Component11>.Id);
+        b.Add(ComponentId.Get<Component8>());
+        b.Add(ComponentId.Get<Component9>());
+        b.Add(ComponentId.Get<Component10>());
+        b.Add(ComponentId.Get<Component11>());
 
         var i = a.MaybeIntersects(ref b);
         Assert.IsFalse(i);
@@ -41,14 +41,14 @@ public class ComponentBloomFilterTests
     public void IntersectingIntersect()
     {
         var a = new ComponentBloomFilter();
-        a.Add(ComponentId<Component0>.Id);
-        a.Add(ComponentId<Component1>.Id);
-        a.Add(ComponentId<Component4>.Id);
+        a.Add(ComponentId.Get<Component0>());
+        a.Add(ComponentId.Get<Component1>());
+        a.Add(ComponentId.Get<Component4>());
 
         var b = new ComponentBloomFilter();
-        b.Add(ComponentId<Component2>.Id);
-        b.Add(ComponentId<Component3>.Id);
-        b.Add(ComponentId<Component4>.Id);
+        b.Add(ComponentId.Get<Component2>());
+        b.Add(ComponentId.Get<Component3>());
+        b.Add(ComponentId.Get<Component4>());
 
         Assert.IsTrue(a.MaybeIntersects(ref b));
     }
@@ -57,17 +57,17 @@ public class ComponentBloomFilterTests
     public void UnionIntersects()
     {
         var a = new ComponentBloomFilter();
-        a.Add(ComponentId<Component0>.Id);
-        a.Add(ComponentId<Component1>.Id);
-        a.Add(ComponentId<Component2>.Id);
+        a.Add(ComponentId.Get<Component0>());
+        a.Add(ComponentId.Get<Component1>());
+        a.Add(ComponentId.Get<Component2>());
 
         var b = new ComponentBloomFilter();
-        b.Add(ComponentId<Component3>.Id);
-        b.Add(ComponentId<Component4>.Id);
-        b.Add(ComponentId<Component5>.Id);
+        b.Add(ComponentId.Get<Component3>());
+        b.Add(ComponentId.Get<Component4>());
+        b.Add(ComponentId.Get<Component5>());
 
         var c = new ComponentBloomFilter();
-        c.Add(ComponentId<Component0>.Id);
+        c.Add(ComponentId.Get<Component0>());
 
         Assert.IsFalse(a.MaybeIntersects(ref b));
         Assert.IsFalse(b.MaybeIntersects(ref c));

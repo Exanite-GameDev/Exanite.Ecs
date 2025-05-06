@@ -253,8 +253,8 @@ public class PhantomTests
     {
         var w = new WorldBuilder().Build();
 
-        Assert.IsTrue(ComponentId<PhantomNotifier>.Id.IsPhantomNotifierComponent);
-        Assert.IsFalse(ComponentId<PhantomNotifier>.Id.IsPhantomComponent);
+        Assert.IsTrue(ComponentId.Get<PhantomNotifier>().IsPhantomNotifierComponent);
+        Assert.IsFalse(ComponentId.Get<PhantomNotifier>().IsPhantomComponent);
 
         // Create an entity with a phantom component
         var list = new List<EntityId>();
@@ -313,8 +313,8 @@ public class PhantomTests
     {
         var w = new WorldBuilder().Build();
 
-        Assert.IsTrue(ComponentId<PhantomNotifier>.Id.IsPhantomNotifierComponent);
-        Assert.IsFalse(ComponentId<PhantomNotifier>.Id.IsPhantomComponent);
+        Assert.IsTrue(ComponentId.Get<PhantomNotifier>().IsPhantomNotifierComponent);
+        Assert.IsFalse(ComponentId.Get<PhantomNotifier>().IsPhantomComponent);
 
         // Create an entity **without** a phantom component
         var list = new List<EntityId>();

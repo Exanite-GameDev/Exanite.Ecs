@@ -141,7 +141,7 @@ public readonly partial record struct EntityId
     public bool HasComponent<T>(World world)
         where T : IComponent
     {
-        return GetComponents(world).Contains(ComponentId<T>.Id);
+        return GetComponents(world).Contains(ComponentId.Get<T>());
     }
 
     /// <summary>

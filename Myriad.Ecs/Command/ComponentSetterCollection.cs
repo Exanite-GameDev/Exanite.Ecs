@@ -36,7 +36,7 @@ internal class ComponentSetterCollection
     public SetterId Add<T>(T value)
         where T : IComponent
     {
-        var id = ComponentId<T>.Id;
+        var id = ComponentId.Get<T>();
 
         if (!_components.TryGetValue(id, out var list))
         {
@@ -51,13 +51,13 @@ internal class ComponentSetterCollection
 
     public void Overwrite<T>(SetterId index, T value) where T : IComponent
     {
-        var id = ComponentId<T>.Id;
+        var id = ComponentId.Get<T>();
         ((GenericComponentList<T>)_components[id]).Overwrite(index, value);
     }
 
     public void Discard<T>(T value) where T : IComponent
     {
-        var id = ComponentId<T>.Id;
+        var id = ComponentId.Get<T>();
         ((GenericComponentList<T>)_components[id]).Discard(value);
     }
 

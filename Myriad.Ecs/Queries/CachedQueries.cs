@@ -20,7 +20,7 @@ namespace Myriad.Ecs.Worlds;
 public partial class World
 {
     internal static FrozenOrderedListSet<ComponentId> ExcludePhantom = FrozenOrderedListSet<ComponentId>.Create(
-        (ReadOnlySpan<ComponentId>)[ ComponentId<ComponentPhantom>.Id ]
+        (ReadOnlySpan<ComponentId>)[ ComponentId.Get<ComponentPhantom>() ]
     );
 
     internal QueryDescription? TryGetCachedQuery(OrderedListSet<ComponentId> components)
@@ -223,7 +223,7 @@ public partial class World
         try
         {
             var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] { id0 });
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -254,7 +254,7 @@ public partial class World
     public QueryDescription GetCachedQuery<T0>()
         where T0 : IComponent
     {
-        return GetCachedQuery(ComponentId<T0>.Id);
+        return GetCachedQuery(ComponentId.Get<T0>());
     }
 
     // Cache of all queries with 2 included components. Key is the 2 component IDs combined together
@@ -287,7 +287,7 @@ public partial class World
         try
         {
             var include = FrozenOrderedListSet<ComponentId>.Create(stackalloc ComponentId[] { id0, id1 });
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -319,7 +319,7 @@ public partial class World
         where T0 : IComponent
         where T1 : IComponent
     {
-        return GetCachedQuery(ComponentId<T0>.Id, ComponentId<T1>.Id);
+        return GetCachedQuery(ComponentId.Get<T0>(), ComponentId.Get<T1>());
     }
 
 
@@ -382,7 +382,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -417,9 +417,9 @@ public partial class World
         where T2 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>()
         );
     }
 
@@ -485,7 +485,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -521,10 +521,10 @@ public partial class World
         where T3 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>()
         );
     }
 
@@ -592,7 +592,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -629,11 +629,11 @@ public partial class World
         where T4 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>()
         );
     }
 
@@ -703,7 +703,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -741,12 +741,12 @@ public partial class World
         where T5 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>()
         );
     }
 
@@ -818,7 +818,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -857,13 +857,13 @@ public partial class World
         where T6 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>()
         );
     }
 
@@ -937,7 +937,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -977,14 +977,14 @@ public partial class World
         where T7 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>()
         );
     }
 
@@ -1060,7 +1060,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1101,15 +1101,15 @@ public partial class World
         where T8 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>()
         );
     }
 
@@ -1187,7 +1187,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1229,16 +1229,16 @@ public partial class World
         where T9 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id,
-            ComponentId<T9>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>(),
+            ComponentId.Get<T9>()
         );
     }
 
@@ -1318,7 +1318,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1361,17 +1361,17 @@ public partial class World
         where T10 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id,
-            ComponentId<T9>.Id,
-            ComponentId<T10>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>(),
+            ComponentId.Get<T9>(),
+            ComponentId.Get<T10>()
         );
     }
 
@@ -1453,7 +1453,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1497,18 +1497,18 @@ public partial class World
         where T11 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id,
-            ComponentId<T9>.Id,
-            ComponentId<T10>.Id,
-            ComponentId<T11>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>(),
+            ComponentId.Get<T9>(),
+            ComponentId.Get<T10>(),
+            ComponentId.Get<T11>()
         );
     }
 
@@ -1592,7 +1592,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1637,19 +1637,19 @@ public partial class World
         where T12 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id,
-            ComponentId<T9>.Id,
-            ComponentId<T10>.Id,
-            ComponentId<T11>.Id,
-            ComponentId<T12>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>(),
+            ComponentId.Get<T9>(),
+            ComponentId.Get<T10>(),
+            ComponentId.Get<T11>(),
+            ComponentId.Get<T12>()
         );
     }
 
@@ -1735,7 +1735,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1781,20 +1781,20 @@ public partial class World
         where T13 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id,
-            ComponentId<T9>.Id,
-            ComponentId<T10>.Id,
-            ComponentId<T11>.Id,
-            ComponentId<T12>.Id,
-            ComponentId<T13>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>(),
+            ComponentId.Get<T9>(),
+            ComponentId.Get<T10>(),
+            ComponentId.Get<T11>(),
+            ComponentId.Get<T12>(),
+            ComponentId.Get<T13>()
         );
     }
 
@@ -1882,7 +1882,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -1929,21 +1929,21 @@ public partial class World
         where T14 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id,
-            ComponentId<T9>.Id,
-            ComponentId<T10>.Id,
-            ComponentId<T11>.Id,
-            ComponentId<T12>.Id,
-            ComponentId<T13>.Id,
-            ComponentId<T14>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>(),
+            ComponentId.Get<T9>(),
+            ComponentId.Get<T10>(),
+            ComponentId.Get<T11>(),
+            ComponentId.Get<T12>(),
+            ComponentId.Get<T13>(),
+            ComponentId.Get<T14>()
         );
     }
 
@@ -2033,7 +2033,7 @@ public partial class World
             });
 
             // Auto exclude phantoms, unless specifically included
-            var exclude = include.Contains(ComponentId<ComponentPhantom>.Id)
+            var exclude = include.Contains(ComponentId.Get<ComponentPhantom>())
                 ? FrozenOrderedListSet<ComponentId>.Empty
                 : QueryBuilder.SetWithJustPhantom;
 
@@ -2081,22 +2081,22 @@ public partial class World
         where T15 : IComponent
     {
         return GetCachedQuery(
-            ComponentId<T0>.Id,
-            ComponentId<T1>.Id,
-            ComponentId<T2>.Id,
-            ComponentId<T3>.Id,
-            ComponentId<T4>.Id,
-            ComponentId<T5>.Id,
-            ComponentId<T6>.Id,
-            ComponentId<T7>.Id,
-            ComponentId<T8>.Id,
-            ComponentId<T9>.Id,
-            ComponentId<T10>.Id,
-            ComponentId<T11>.Id,
-            ComponentId<T12>.Id,
-            ComponentId<T13>.Id,
-            ComponentId<T14>.Id,
-            ComponentId<T15>.Id
+            ComponentId.Get<T0>(),
+            ComponentId.Get<T1>(),
+            ComponentId.Get<T2>(),
+            ComponentId.Get<T3>(),
+            ComponentId.Get<T4>(),
+            ComponentId.Get<T5>(),
+            ComponentId.Get<T6>(),
+            ComponentId.Get<T7>(),
+            ComponentId.Get<T8>(),
+            ComponentId.Get<T9>(),
+            ComponentId.Get<T10>(),
+            ComponentId.Get<T11>(),
+            ComponentId.Get<T12>(),
+            ComponentId.Get<T13>(),
+            ComponentId.Get<T14>(),
+            ComponentId.Get<T15>()
         );
     }
 

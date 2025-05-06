@@ -27,7 +27,7 @@ public sealed partial class WorldBuilder
 <# for (var j = 0; j < i; j++)
 {
 #>
-        if (!set.Add(ComponentId<<#= $"T{j}" #>>.Id))
+        if (!set.Add(ComponentId.Get<<#= $"T{j}" #>>()))
             throw new ArgumentException($"Duplicate component type: {typeof(<#= $"T{j}" #>).Name}");
 <#
 }

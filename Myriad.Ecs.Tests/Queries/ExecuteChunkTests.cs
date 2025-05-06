@@ -33,10 +33,10 @@ public class ExecuteChunkTests
         Assert.IsNotNull(q);
 
         Assert.AreEqual(1, q.Include.Count);
-        Assert.IsTrue(q.Include.Contains(ComponentId<Component0>.Id));
+        Assert.IsTrue(q.Include.Contains(ComponentId.Get<Component0>()));
 
         Assert.AreEqual(1, q.Exclude.Count);
-        Assert.IsTrue(q.Exclude.Contains(ComponentId<ComponentPhantom>.Id));
+        Assert.IsTrue(q.Exclude.Contains(ComponentId.Get<ComponentPhantom>()));
 
         Assert.AreEqual(0, q.ExactlyOneOf.Count);
         Assert.AreEqual(0, q.AtLeastOneOf.Count);

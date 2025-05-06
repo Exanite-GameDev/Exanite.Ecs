@@ -311,7 +311,7 @@ public class CommandBufferTests
         Assert.IsTrue(entity.Exists());
         Assert.AreEqual(1, world.Archetypes.Count);
         Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
-        Assert.IsTrue(world.Archetypes.Single().Components.Contains(ComponentId<ComponentFloat>.Id));
+        Assert.IsTrue(world.Archetypes.Single().Components.Contains(ComponentId.Get<ComponentFloat>()));
     }
 
     [TestMethod]
@@ -515,9 +515,9 @@ public class CommandBufferTests
 
         // Get the archetypes we're about to delete
         var deleting = (from archetype in world.Archetypes
-                        where archetype.Components.Contains(ComponentId<Component0>.Id)
-                        where archetype.Components.Contains(ComponentId<Component1>.Id)
-                        where !archetype.Components.Contains(ComponentId<ComponentInt32>.Id)
+                        where archetype.Components.Contains(ComponentId.Get<Component0>())
+                        where archetype.Components.Contains(ComponentId.Get<Component1>())
+                        where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
                         select archetype).ToArray();
 
         // Get all other archetypes
@@ -571,9 +571,9 @@ public class CommandBufferTests
 
         // Get the archetypes we're about to delete
         var deleting = (from archetype in world.Archetypes
-                        where archetype.Components.Contains(ComponentId<Component0>.Id)
-                        where archetype.Components.Contains(ComponentId<Component1>.Id)
-                        where !archetype.Components.Contains(ComponentId<ComponentInt32>.Id)
+                        where archetype.Components.Contains(ComponentId.Get<Component0>())
+                        where archetype.Components.Contains(ComponentId.Get<Component1>())
+                        where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
                         select archetype).ToArray();
 
         // Get all other archetypes
@@ -613,30 +613,30 @@ public class CommandBufferTests
 
         // Get the archetypes we're about to delete
         var deleting = (from archetype in world.Archetypes
-                        where archetype.Components.Contains(ComponentId<Component0>.Id)
-                        where archetype.Components.Contains(ComponentId<Component1>.Id)
-                        where !archetype.Components.Contains(ComponentId<ComponentInt32>.Id)
-                        where !archetype.Components.Contains(ComponentId<ComponentPhantom>.Id)
+                        where archetype.Components.Contains(ComponentId.Get<Component0>())
+                        where archetype.Components.Contains(ComponentId.Get<Component1>())
+                        where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
+                        where !archetype.Components.Contains(ComponentId.Get<ComponentPhantom>())
                         select archetype).ToArray();
 
         // Get all other archetypes
         var others = (from archetype in world.Archetypes
                       where !deleting.Contains(archetype)
-                      where !archetype.Components.Contains(ComponentId<ComponentPhantom>.Id)
+                      where !archetype.Components.Contains(ComponentId.Get<ComponentPhantom>())
                       select (archetype, archetype.EntityCount)).ToList();
 
         // Get archetypes that are being deleted, and add their phantom partners to the list to check
         var phantomsDeleting = (from archetype in world.Archetypes
-                                where archetype.Components.Contains(ComponentId<Component0>.Id)
-                                where archetype.Components.Contains(ComponentId<Component1>.Id)
-                                where archetype.Components.Contains(ComponentId<TestPhantom0>.Id)
-                                where !archetype.Components.Contains(ComponentId<ComponentInt32>.Id)
-                                where !archetype.Components.Contains(ComponentId<ComponentPhantom>.Id)
+                                where archetype.Components.Contains(ComponentId.Get<Component0>())
+                                where archetype.Components.Contains(ComponentId.Get<Component1>())
+                                where archetype.Components.Contains(ComponentId.Get<TestPhantom0>())
+                                where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
+                                where !archetype.Components.Contains(ComponentId.Get<ComponentPhantom>())
                                 select archetype).ToArray();
         foreach (var archetype in phantomsDeleting)
         {
             var c = new OrderedListSet<ComponentId>(archetype.Components);
-            c.Add(ComponentId<ComponentPhantom>.Id);
+            c.Add(ComponentId.Get<ComponentPhantom>());
             var pa = world.GetOrCreateArchetype(c);
 
             // All entities from the original archetype should be transferred to the phantom one.

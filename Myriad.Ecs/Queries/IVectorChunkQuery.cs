@@ -59,7 +59,7 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
+		    var c0 = ComponentId.Get<T0>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -180,8 +180,8 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -319,9 +319,9 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -476,10 +476,10 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -651,11 +651,11 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -844,12 +844,12 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -1055,13 +1055,13 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -1284,14 +1284,14 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -1531,15 +1531,15 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -1796,16 +1796,16 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
+		    var c9 = ComponentId.Get<T9>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -2079,17 +2079,17 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
+		    var c9 = ComponentId.Get<T9>();
+		    var c10 = ComponentId.Get<T10>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -2380,18 +2380,18 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
+		    var c9 = ComponentId.Get<T9>();
+		    var c10 = ComponentId.Get<T10>();
+		    var c11 = ComponentId.Get<T11>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -2699,19 +2699,19 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
+		    var c9 = ComponentId.Get<T9>();
+		    var c10 = ComponentId.Get<T10>();
+		    var c11 = ComponentId.Get<T11>();
+		    var c12 = ComponentId.Get<T12>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -3036,20 +3036,20 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
-		    var c13 = ComponentId<T13>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
+		    var c9 = ComponentId.Get<T9>();
+		    var c10 = ComponentId.Get<T10>();
+		    var c11 = ComponentId.Get<T11>();
+		    var c12 = ComponentId.Get<T12>();
+		    var c13 = ComponentId.Get<T13>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -3391,21 +3391,21 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
-		    var c13 = ComponentId<T13>.Id;
-		    var c14 = ComponentId<T14>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
+		    var c9 = ComponentId.Get<T9>();
+		    var c10 = ComponentId.Get<T10>();
+		    var c11 = ComponentId.Get<T11>();
+		    var c12 = ComponentId.Get<T12>();
+		    var c13 = ComponentId.Get<T13>();
+		    var c14 = ComponentId.Get<T14>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];
@@ -3764,22 +3764,22 @@ namespace Myriad.Ecs.Worlds
 			if (archetypes.Count == 0)
 				return 0;
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
-		    var c13 = ComponentId<T13>.Id;
-		    var c14 = ComponentId<T14>.Id;
-		    var c15 = ComponentId<T15>.Id;
+		    var c0 = ComponentId.Get<T0>();
+		    var c1 = ComponentId.Get<T1>();
+		    var c2 = ComponentId.Get<T2>();
+		    var c3 = ComponentId.Get<T3>();
+		    var c4 = ComponentId.Get<T4>();
+		    var c5 = ComponentId.Get<T5>();
+		    var c6 = ComponentId.Get<T6>();
+		    var c7 = ComponentId.Get<T7>();
+		    var c8 = ComponentId.Get<T8>();
+		    var c9 = ComponentId.Get<T9>();
+		    var c10 = ComponentId.Get<T10>();
+		    var c11 = ComponentId.Get<T11>();
+		    var c12 = ComponentId.Get<T12>();
+		    var c13 = ComponentId.Get<T13>();
+		    var c14 = ComponentId.Get<T14>();
+		    var c15 = ComponentId.Get<T15>();
 
 			// Allocate some spans we need to copy the "leftover" values
 			Span<TV0> lvs0 = stackalloc TV0[Vector<TV0>.Count];

@@ -75,7 +75,7 @@ public sealed class Chunk
     internal ref T GetRef<T>(int rowIndex)
         where T : IComponent
     {
-        return ref GetRef<T>(rowIndex, ComponentId<T>.Id);
+        return ref GetRef<T>(rowIndex, ComponentId.Get<T>());
     }
 
     internal ref T GetRef<T>(int rowIndex, ComponentId id)
@@ -87,7 +87,7 @@ public sealed class Chunk
     internal Span<T> GetSpan<T>()
         where T : IComponent
     {
-        return GetSpan<T>(ComponentId<T>.Id);
+        return GetSpan<T>(ComponentId.Get<T>());
     }
 
     [NonPublic]
@@ -100,7 +100,7 @@ public sealed class Chunk
     internal T[] GetComponentArray<T>()
         where T : IComponent
     {
-        return GetComponentArray<T>(ComponentId<T>.Id);
+        return GetComponentArray<T>(ComponentId.Get<T>());
     }
 
     /// <summary>

@@ -91,7 +91,7 @@ public sealed class QueryDescription
     public bool IsIncluded<T>()
         where T : IComponent
     {
-        return IsIncluded(ComponentId<T>.Id);
+        return IsIncluded(ComponentId.Get<T>());
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public sealed class QueryDescription
     public bool IsExcluded<T>()
         where T : IComponent
     {
-        return IsExcluded(ComponentId<T>.Id);
+        return IsExcluded(ComponentId.Get<T>());
     }
 
     /// <summary>
@@ -151,7 +151,7 @@ public sealed class QueryDescription
     public bool IsAtLeastOneOf<T>()
         where T : IComponent
     {
-        return IsAtLeastOneOf(ComponentId<T>.Id);
+        return IsAtLeastOneOf(ComponentId.Get<T>());
     }
 
     /// <summary>
@@ -181,7 +181,7 @@ public sealed class QueryDescription
     public bool IsExactlyOneOf<T>()
         where T : IComponent
     {
-        return IsExactlyOneOf(ComponentId<T>.Id);
+        return IsExactlyOneOf(ComponentId.Get<T>());
     }
 
     /// <summary>
@@ -551,7 +551,7 @@ public sealed class QueryDescription
     public int Overwrite<T>(T item)
         where T : IComponent
     {
-        var id = ComponentId<T>.Id;
+        var id = ComponentId.Get<T>();
 
         // Can't do any work if this item is specifically not in this query
         if (IsExcluded(id))
