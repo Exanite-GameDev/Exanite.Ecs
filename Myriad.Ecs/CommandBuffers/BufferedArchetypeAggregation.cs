@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.Command;
+namespace Myriad.Ecs.CommandBuffers;
 
 public sealed partial class EcsCommandBuffer
 {

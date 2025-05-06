@@ -16,7 +16,7 @@ public class DelegateQuery
         var q = default(QueryDescription);
 
         // Set all to entity ID
-        w.Query((World.Entity e, ref ComponentInt32 i) =>
+        w.Query((Worlds.Entity e, ref ComponentInt32 i) =>
         {
             i.Value = e.Id.Id;
         }, ref q);
@@ -46,7 +46,7 @@ public class DelegateQuery
         var q = default(QueryDescription);
 
         // Set all to entity ID
-        w.Query(9, (int data, World.Entity e, ref ComponentInt32 i) =>
+        w.Query(9, (int data, Worlds.Entity e, ref ComponentInt32 i) =>
         {
             Assert.AreEqual(9, data);
             i.Value = e.Id.Id;

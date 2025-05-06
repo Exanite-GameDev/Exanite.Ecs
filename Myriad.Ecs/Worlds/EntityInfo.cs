@@ -1,7 +1,7 @@
-﻿using Myriad.Ecs.Archetypes;
-using Myriad.Ecs.Chunks;
+﻿using Myriad.Ecs.Worlds.Archetypes;
+using Myriad.Ecs.Worlds.Chunks;
 
-namespace Myriad.Ecs;
+namespace Myriad.Ecs.Worlds;
 
 internal struct EntityInfo
 {

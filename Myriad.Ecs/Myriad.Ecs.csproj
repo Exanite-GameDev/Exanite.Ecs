@@ -17,11 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="EntityGetComponentRef.cs">
-      <DependentUpon>EntityGetComponentRef.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Queries\Filters\QueryFilter.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -32,6 +27,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RefTuple.tt</DependentUpon>
     </Compile>
+    <Compile Update="Worlds\EntityGetComponentRef.cs">
+      <DependentUpon>EntityGetComponentRef.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +39,7 @@
       <LastGenOutput>RefTuple.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-    <None Update="EntityGetComponentRef.tt">
+    <None Update="Worlds\EntityGetComponentRef.tt">
       <LastGenOutput>EntityGetComponentRef.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>

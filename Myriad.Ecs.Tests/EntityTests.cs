@@ -11,15 +11,15 @@ public class EntityTests
     public void DefaultEntityIsNotAlive()
     {
         var w = new WorldBuilder().Build();
-        Assert.IsFalse(default(World.Entity).Exists());
-        Assert.IsFalse(default(World.Entity).IsAlive());
-        Assert.IsFalse(default(World.Entity).IsPhantom());
+        Assert.IsFalse(default(Worlds.Entity).Exists());
+        Assert.IsFalse(default(Worlds.Entity).IsAlive());
+        Assert.IsFalse(default(Worlds.Entity).IsPhantom());
     }
 
     [TestMethod]
     public void CompareDefaultEntity()
     {
-        Assert.AreEqual(0, default(World.Entity).CompareTo(default));
+        Assert.AreEqual(0, default(Worlds.Entity).CompareTo(default));
     }
 
     [TestMethod]

@@ -118,7 +118,7 @@ namespace Myriad.Ecs.Tests.Queries
         private struct MapGetInteger
             : IQueryMap<int, ComponentInt32>
         {
-            public readonly int Execute(World.Entity e, ref ComponentInt32 t0)
+            public readonly int Execute(Worlds.Entity e, ref ComponentInt32 t0)
             {
                 return t0.Value;
             }

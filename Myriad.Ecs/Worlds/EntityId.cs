@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.World;
+namespace Myriad.Ecs.Worlds;
 
 /// <summary>
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)

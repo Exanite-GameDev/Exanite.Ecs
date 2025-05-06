@@ -3,9 +3,9 @@
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.Worlds;
+using Myriad.Ecs.Components;
 
-namespace Myriad.Ecs;
+namespace Myriad.Ecs.Worlds;
 
 /* dotcover disable */
 

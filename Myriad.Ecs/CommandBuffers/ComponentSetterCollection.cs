@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Myriad.Ecs.Allocations;
-using Myriad.Ecs.Archetypes;
 using Myriad.Ecs.Components;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.Ecs.Command;
+namespace Myriad.Ecs.CommandBuffers;
 
 /// <summary>
 /// Collection of components of all different types, keyed by ComponentId, involves no boxing

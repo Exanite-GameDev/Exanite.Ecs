@@ -1,13 +1,14 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Myriad.Ecs.Benchmarks.Components;
 using Myriad.Ecs.CommandBuffers;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Benchmarks;
 
 [MemoryDiagnoser]
 public class EntityChurnBenchmark
 {
-    private World.World world = null!;
+    private World world = null!;
     private EcsCommandBuffer buffer = null!;
     private readonly List<EcsCommandBuffer.BufferedEntity> buffered = [];
 
@@ -22,7 +23,7 @@ public class EntityChurnBenchmark
     public void Churn()
     {
         // keep track of every single entity currently alive
-        var alive = new List<World.Entity>();
+        var alive = new List<Worlds.Entity>();
 
         // Do lots of rounds of creation and destruction
         for (var i = 0; i < 500000; i++)

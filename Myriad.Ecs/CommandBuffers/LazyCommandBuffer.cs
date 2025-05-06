@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Myriad.Ecs.Worlds;
 
-namespace Myriad.Ecs.Command;
+namespace Myriad.Ecs.CommandBuffers;
 
 /// <summary>
 /// Provides a <see cref="CommandBuffer"/>, which is lazily created the first time it is accessed

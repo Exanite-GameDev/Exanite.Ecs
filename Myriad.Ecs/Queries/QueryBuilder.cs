@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Queries;
 

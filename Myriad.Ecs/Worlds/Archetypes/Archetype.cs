@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Myriad.Ecs.Chunks;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Utilities;
+using Myriad.Ecs.Worlds.Chunks;
 
-namespace Myriad.Ecs.Archetypes;
+namespace Myriad.Ecs.Worlds.Archetypes;
 
 /// <summary>
 /// An archetype contains all entities which share exactly the same set of components.

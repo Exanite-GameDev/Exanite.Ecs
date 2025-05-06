@@ -37,17 +37,17 @@ public record struct TestPhantom2 : IComponentPhantom;
 
 public record struct PhantomNotifier : IPhantomNotifierComponent
 {
-    public required List<World.EntityId> CalledWith;
+    public required List<Worlds.EntityId> CalledWith;
 
-    public void OnBecomePhantom(World.EntityId self)
+    public void OnBecomePhantom(Worlds.EntityId self)
     {
         CalledWith.Add(self);
     }
 }
 
-public record struct Relational1(World.Entity Target) : IEntityRelationComponent;
-public record struct Relational2(World.Entity Target, int X) : IEntityRelationComponent;
-public record struct Relational3(World.Entity Target, float Y) : IEntityRelationComponent;
+public record struct Relational1(Worlds.Entity Target) : IEntityRelationComponent;
+public record struct Relational2(Worlds.Entity Target, int X) : IEntityRelationComponent;
+public record struct Relational3(Worlds.Entity Target, float Y) : IEntityRelationComponent;
 
 public class BoxedInt
 {
@@ -74,7 +74,7 @@ public readonly record struct TestDisposable
 public record struct TestDisposableParent
     : IDisposableComponent, IEntityRelationComponent
 {
-    public World.Entity Target { get; set; }
+    public Worlds.Entity Target { get; set; }
 
     public void Dispose(ref LazyCommandBuffer lazy)
     {

@@ -3,7 +3,7 @@ using Myriad.Ecs.Collections;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
-using Myriad.Ecs.World.Archetypes;
+using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Tests;
 
@@ -653,7 +653,7 @@ public class QueryDescriptionTests
         for (var i = 0; i < 10000; i++)
             c.Create().Set(new ComponentInt32(i)).Set(new Component1());
         using var resolver = c.Playback();
-        var entities = new List<World.Entity>();
+        var entities = new List<Worlds.Entity>();
         for (var i = 0; i < resolver.Count; i++)
             entities.Add(resolver[i]);
 

@@ -3,6 +3,7 @@ using BenchmarkDotNet.Attributes;
 using Myriad.Ecs.Benchmarks.Components;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Queries;
+using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Benchmarks;
 
@@ -15,7 +16,7 @@ public class QueryBenchmark
     [Params(100_000, 1_000_000)]
     public int EntityCount = 1_000_000;
 
-    private World.World world = null!;
+    private World world = null!;
     private QueryDescription query = null!;
 
     [GlobalSetup]
@@ -109,7 +110,7 @@ public class QueryBenchmark
     private struct QueryAction
         : IQuery<Position, Velocity>
     {
-        public readonly void Execute(World.Entity e, ref Position pos, ref Velocity vel)
+        public readonly void Execute(Worlds.Entity e, ref Position pos, ref Velocity vel)
         {
             pos.Value += vel.Value;
             //pos.Value += new Vector2(
@@ -122,7 +123,7 @@ public class QueryBenchmark
     private struct ChunkQueryAction
         : IChunkQuery<Position, Velocity>
     {
-        public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<World.Entity> e, Span<Position> pos, Span<Velocity> vel)
+        public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Worlds.Entity> e, Span<Position> pos, Span<Velocity> vel)
         {
             for (var i = 0; i < pos.Length; i++)
             {

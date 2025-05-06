@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
-using Myriad.Ecs.World.Archetypes;
+using Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.Ecs.World;
+namespace Myriad.Ecs.Worlds;
 
 /// <summary>
 /// A world contains all entities.
