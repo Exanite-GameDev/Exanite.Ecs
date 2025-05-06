@@ -33,7 +33,7 @@ public class QueryBenchmark
             .Include<Position>()
             .Include<Velocity>()
             .Build(world);
-        query.GetArchetypes();
+        query.GetArchetypeMatches();
 
         Console.WriteLine("Setup Complete");
     }

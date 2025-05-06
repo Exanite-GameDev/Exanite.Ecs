@@ -14,7 +14,7 @@ namespace Myriad.Ecs.Queries;
 public sealed class QueryDescription
 {
     // Cache of result from last time TryMatch was called
-    private MatchResult? result;
+    private ArchetypeMatchResult? result;
     private readonly ReaderWriterLockSlim resultLock = new();
     private readonly OrderedListSet<ComponentId> temporarySet = [];
 
@@ -93,7 +93,8 @@ public sealed class QueryDescription
         return builder;
     }
 
-    #region is in query
+    #region Is In Query
+
     /// <summary>
     /// Check if this query requires the given component
     /// </summary>
@@ -122,7 +123,6 @@ public sealed class QueryDescription
     {
         return Include.Contains(id);
     }
-
 
     /// <summary>
     /// Check if this query excludes entities with the given component
@@ -153,7 +153,6 @@ public sealed class QueryDescription
         return Exclude.Contains(id);
     }
 
-
     /// <summary>
     /// Check if the given component is one of the components which at least one of must be on the entity
     /// </summary>
@@ -183,7 +182,6 @@ public sealed class QueryDescription
         return AtLeastOneOf.Contains(id);
     }
 
-
     /// <summary>
     /// Check if the given component is one of the components which exactly one of must be on the entity
     /// </summary>
@@ -212,14 +210,28 @@ public sealed class QueryDescription
     {
         return ExactlyOneOf.Contains(id);
     }
+
     #endregion
 
-    #region match
+    #region Archetype Matching
+
     /// <summary>
     /// Get all archetypes which match this query
     /// </summary>
-    /// <returns></returns>
-    public ImmutableOrderedListSet<ArchetypeMatch> GetArchetypes()
+    public IReadOnlyList<Archetype> GetArchetypes()
+    {
+        return GetArchetypeMatchResult().Archetypes;
+    }
+
+    /// <summary>
+    /// Get all archetypes which match this query
+    /// </summary>
+    public ImmutableOrderedListSet<ArchetypeMatch> GetArchetypeMatches()
+    {
+        return GetArchetypeMatchResult().ArchetypesMatches;
+    }
+
+    private ArchetypeMatchResult GetArchetypeMatchResult()
     {
         // Quick check if we already have a non-stale result
         resultLock.EnterReadLock();
@@ -227,7 +239,7 @@ public sealed class QueryDescription
         {
             if (result != null && !result.Value.IsStale(World))
             {
-                return result.Value.Archetypes;
+                return result.Value;
             }
         }
         finally
@@ -253,10 +265,10 @@ public sealed class QueryDescription
                 }
 
                 // Store result for next time
-                result = new MatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
+                result = new ArchetypeMatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
-                return result.Value.Archetypes;
+                return result.Value;
             }
 
             // If the number of archetypes has changed since last time regenerate the cache
@@ -275,7 +287,7 @@ public sealed class QueryDescription
                     }
 
                     // Lazy copy the set now that we know we need it
-                    copy ??= new OrderedListSet<ArchetypeMatch>(result.Value.Archetypes);
+                    copy ??= new OrderedListSet<ArchetypeMatch>(result.Value.ArchetypesMatches);
 
                     // Add the match
                     copy.Add(m.Value);
@@ -284,16 +296,16 @@ public sealed class QueryDescription
                 if (copy == null)
                 {
                     // Copy is null, that means nothing new was found, just use the old result with the new watermark
-                    result = new MatchResult(World.Archetypes.Count, result.Value.Archetypes);
+                    result = new ArchetypeMatchResult(World.Archetypes.Count, result.Value.ArchetypesMatches);
                 }
                 else
                 {
                     // Create a new match result
-                    result = new MatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(copy));
+                    result = new ArchetypeMatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(copy));
                 }
             }
 
-            return result.Value.Archetypes;
+            return result.Value;
         }
         finally
         {
@@ -370,17 +382,36 @@ public sealed class QueryDescription
         return new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
     }
 
-    private readonly struct MatchResult(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypes)
+    private readonly struct ArchetypeMatchResult
     {
         /// <summary>
-        /// The archetypes matching this query
+        /// The archetypes matching this query.
         /// </summary>
-        public ImmutableOrderedListSet<ArchetypeMatch> Archetypes { get; } = archetypes;
+        public ImmutableOrderedListSet<ArchetypeMatch> ArchetypesMatches { get; }
 
         /// <summary>
-        /// The number of archetypes in the world when this cache was created
+        /// The archetypes matching this query.
         /// </summary>
-        public int ArchetypeWatermark { get; } = watermark;
+        public List<Archetype> Archetypes { get; }
+
+        /// <summary>
+        /// The number of archetypes in the world when this cache was created. Used for caching purposes.
+        /// </summary>
+        public int ArchetypeWatermark { get; }
+
+        public ArchetypeMatchResult(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
+        {
+            ArchetypesMatches = archetypesMatches;
+            ArchetypeWatermark = watermark;
+
+            var archetypes = new List<Archetype>(archetypesMatches.Count);
+            foreach (var match in archetypesMatches)
+            {
+                archetypes.Add(match.Archetype);
+            }
+
+            Archetypes = archetypes;
+        }
 
         public bool IsStale(World world)
         {
@@ -402,9 +433,11 @@ public sealed class QueryDescription
             return Archetype.Hash.CompareTo(other.Archetype.Hash);
         }
     }
+
     #endregion
 
-    #region LINQish
+    #region LINQ
+
     /// <summary>
     /// Count how many entities match this query
     /// </summary>
@@ -412,7 +445,7 @@ public sealed class QueryDescription
     public int Count()
     {
         var count = 0;
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in GetArchetypeMatches())
         {
             count += archetype.Archetype.EntityCount;
         }
@@ -426,7 +459,7 @@ public sealed class QueryDescription
     /// <returns></returns>
     public bool Any()
     {
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in GetArchetypeMatches())
         {
             if (archetype.Archetype.EntityCount > 0)
             {
@@ -446,7 +479,7 @@ public sealed class QueryDescription
     {
         var info = entity.World.GetEntityInfo(entity.EntityId);
         var archetype = new ArchetypeMatch(info.Chunk.Archetype, null, null);
-        return GetArchetypes().Contains(archetype);
+        return GetArchetypeMatches().Contains(archetype);
     }
 
     /// <summary>
@@ -455,7 +488,7 @@ public sealed class QueryDescription
     /// <returns></returns>
     public Entity? FirstOrDefault()
     {
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in GetArchetypeMatches())
         {
             if (archetype.Archetype.EntityCount == 0)
             {
@@ -495,7 +528,7 @@ public sealed class QueryDescription
     {
         Entity? result = default;
 
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in GetArchetypeMatches())
         {
             if (archetype.Archetype.EntityCount == 0)
             {
@@ -552,7 +585,7 @@ public sealed class QueryDescription
         var choice = random.Next(0, count);
 
         // Find that entity
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in GetArchetypeMatches())
         {
             // Check if it's within this archetype, if not move to the next archetype
             if (choice - archetype.Archetype.EntityCount >= 0)
@@ -583,5 +616,6 @@ public sealed class QueryDescription
         // This shouldn't happen
         return default;
     }
+
     #endregion
 }

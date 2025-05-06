@@ -81,7 +81,7 @@ public class QueryDescriptionTests
            .Include<ComponentFloat>()
            .Build(w);
 
-        var a = q.GetArchetypes();
+        var a = q.GetArchetypeMatches();
 
         Assert.IsNotNull(a);
         Assert.AreEqual(0, a.Count);
@@ -96,7 +96,7 @@ public class QueryDescriptionTests
            .Include(typeof(ComponentFloat))
            .Build(w);
 
-        var a = q.GetArchetypes();
+        var a = q.GetArchetypeMatches();
 
         Assert.IsNotNull(a);
         Assert.AreEqual(0, a.Count);
@@ -113,7 +113,7 @@ public class QueryDescriptionTests
            .Include<ComponentFloat>()
            .Build(w);
 
-        var a = q.GetArchetypes();
+        var a = q.GetArchetypeMatches();
 
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
@@ -134,7 +134,7 @@ public class QueryDescriptionTests
            .Build(w);
 
         // Match once, check it matches one archetype
-        var a = q.GetArchetypes();
+        var a = q.GetArchetypeMatches();
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
         Assert.IsNull(a.Single().AtLeastOne);
@@ -145,7 +145,7 @@ public class QueryDescriptionTests
         w.GetOrCreateArchetype(c1, ArchetypeHash.Create(c1));
 
         // Check it now matches 2 archetypes
-        var b = q.GetArchetypes();
+        var b = q.GetArchetypeMatches();
         Assert.IsNotNull(b);
         Assert.AreEqual(2, b.Count);
         Assert.IsTrue(a.All(x => x.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>())));
@@ -155,7 +155,7 @@ public class QueryDescriptionTests
         w.GetOrCreateArchetype(c2, ArchetypeHash.Create(c2));
 
         // Check it now matches 2 archetypes
-        var c = q.GetArchetypes();
+        var c = q.GetArchetypeMatches();
         Assert.IsNotNull(c);
         Assert.AreEqual(2, c.Count);
         Assert.IsTrue(c.All(x => x.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>())));
@@ -173,7 +173,7 @@ public class QueryDescriptionTests
            .Include<ComponentFloat>()
            .Build(w);
 
-        var a = q.GetArchetypes();
+        var a = q.GetArchetypeMatches();
 
         Assert.IsNotNull(a);
         Assert.AreEqual(2, a.Count);
@@ -194,7 +194,7 @@ public class QueryDescriptionTests
             .Exclude<ComponentInt32>()
             .Build(w);
 
-        var a = q.GetArchetypes();
+        var a = q.GetArchetypeMatches();
 
         Assert.IsNotNull(a);
         Assert.AreEqual(1, a.Count);
@@ -220,7 +220,7 @@ public class QueryDescriptionTests
                 .ExactlyOneOf<ComponentInt32>()
                 .Build(w);
 
-        var matches = q.GetArchetypes();
+        var matches = q.GetArchetypeMatches();
 
         Assert.IsNotNull(matches);
         Assert.AreEqual(2, matches.Count);
@@ -249,7 +249,7 @@ public class QueryDescriptionTests
             .AtLeastOneOf<ComponentInt32>()
             .Build(w);
 
-        var matches = q.GetArchetypes();
+        var matches = q.GetArchetypeMatches();
 
         Assert.IsNotNull(matches);
         Assert.AreEqual(3, matches.Count);
@@ -278,7 +278,7 @@ public class QueryDescriptionTests
                .Include<ComponentInt32>()
                .Build(w);
 
-        var matches = q.GetArchetypes();
+        var matches = q.GetArchetypeMatches();
 
         Assert.IsNotNull(matches);
         Assert.AreEqual(2, matches.Count);
@@ -307,7 +307,7 @@ public class QueryDescriptionTests
                .Include<ComponentPhantom>()
                .Build(w);
 
-        var matches = q.GetArchetypes();
+        var matches = q.GetArchetypeMatches();
 
         Assert.IsNotNull(matches);
         Assert.AreEqual(1, matches.Count);
