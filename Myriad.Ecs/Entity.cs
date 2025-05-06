@@ -10,7 +10,7 @@ namespace Myriad.Ecs;
 /// <summary>
 /// An <see cref="Entity"/> is an ID in the <see cref="World"/> which has a set of components associated with it.
 /// </summary>
-[DebuggerDisplay("{ID}")]
+[DebuggerDisplay("{Id}")]
 public readonly partial record struct Entity
     : IComparable<Entity>
 {
@@ -22,68 +22,68 @@ public readonly partial record struct Entity
     /// <summary>
     /// The raw ID of this <see cref="Entity"/>
     /// </summary>
-    public readonly EntityId ID;
+    public readonly EntityId Id;
 
     /// <summary>
     /// Get the set of components which this entity currently has
     /// </summary>
     /// <returns></returns>
-    public FrozenOrderedListSet<ComponentId> ComponentTypes => ID.GetComponents(World);
+    public FrozenOrderedListSet<ComponentId> ComponentTypes => Id.GetComponents(World);
 
     /// <summary>
     /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
     /// </summary>
-    public object[] BoxedComponents => ComponentTypes.LINQ().Select(GetBoxedComponent).ToArray()!;
+    public object[] BoxedComponents => ComponentTypes.Linq().Select(GetBoxedComponent).ToArray()!;
 
     internal Entity(EntityId id, World world)
     {
-        ID = id;
+        Id = id;
         World = world;
     }
 
     /// <inheritdoc/>
     public override string ToString()
     {
-        return ID.ToString();
+        return Id.ToString();
     }
 
     /// <summary>
     /// Check if this Entity still exists.
     /// </summary>
     /// <returns></returns>
-    public bool Exists() => ID.Exists(World);
+    public bool Exists() => Id.Exists(World);
 
     /// <summary>
     /// Check if this Entity still exists and is not a phantom.
     /// </summary>
     /// <returns></returns>
-    public bool IsAlive() => ID.IsAlive(World);
+    public bool IsAlive() => Id.IsAlive(World);
 
     /// <summary>
     /// Check if this Entity is in a phantom state. i.e. automatically excluded from queries
     /// and automatically deleted when the last IPhantomComponent component is removed.
     /// </summary>
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
-    public bool IsPhantom() => ID.IsPhantom(World);
+    public bool IsPhantom() => Id.IsPhantom(World);
 
     /// <inheritdoc/>
     public int CompareTo(Entity other)
     {
-        return ID.CompareTo(other.ID);
+        return Id.CompareTo(other.Id);
     }
 
     /// <summary>
     /// Get a unique 64 bit ID for this entity
     /// </summary>
     /// <returns></returns>
-    public long UniqueID() => ID.UniqueID();
+    public long UniqueId() => Id.UniqueId();
 
     /// <summary>
     /// Check if this entity has a component
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public bool HasComponent<T>() where T : IComponent => ID.HasComponent<T>(World);
+    public bool HasComponent<T>() where T : IComponent => Id.HasComponent<T>(World);
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
@@ -91,7 +91,7 @@ public readonly partial record struct Entity
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public ref T GetComponentRef<T>() where T : IComponent => ref ID.GetComponentRef<T>(World);
+    public ref T GetComponentRef<T>() where T : IComponent => ref Id.GetComponentRef<T>(World);
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
@@ -99,12 +99,12 @@ public readonly partial record struct Entity
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public RefT<T> GetComponentRefT<T>() where T : IComponent => ID.GetComponentRefT<T>(World);
+    public RefT<T> GetComponentRefT<T>() where T : IComponent => Id.GetComponentRefT<T>(World);
 
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public object? GetBoxedComponent(ComponentId id) => ID.GetBoxedComponent(World, id);
+    public object? GetBoxedComponent(ComponentId id) => Id.GetBoxedComponent(World, id);
 }

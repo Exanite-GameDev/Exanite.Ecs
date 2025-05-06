@@ -9,14 +9,14 @@ namespace Myriad.Ecs.Benchmarks;
 [ShortRunJob]
 public class EntityCreateBenchmark
 {
-    private const int COUNT = 1_000_000;
+    private const int Count = 1_000_000;
 
-    private World _world = null!;
+    private World world = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        _world = new WorldBuilder().Build();
+        world = new WorldBuilder().Build();
     }
 
     private static void AddEntity(EcsCommandBuffer buffer, Random random)
@@ -40,9 +40,9 @@ public class EntityCreateBenchmark
     public void CreateBuffered()
     {
         var rng = new Random(1);
-        var buffer = new EcsCommandBuffer(_world);
+        var buffer = new EcsCommandBuffer(world);
 
-        for (var i = 0; i < COUNT; i++)
+        for (var i = 0; i < Count; i++)
             AddEntity(buffer, rng);
 
         using var resolver = buffer.Playback();
@@ -52,9 +52,9 @@ public class EntityCreateBenchmark
     public void CreateUnbuffered()
     {
         var rng = new Random(1);
-        var buffer = new EcsCommandBuffer(_world);
+        var buffer = new EcsCommandBuffer(world);
 
-        for (var i = 0; i < COUNT; i++)
+        for (var i = 0; i < Count; i++)
         {
             AddEntity(buffer, rng);
             using var resolver = buffer.Playback();

@@ -17,39 +17,39 @@ public sealed partial class QueryBuilder
         new[] { ComponentId.Get<ComponentPhantom>() }
     );
 
-    private readonly ComponentSet _include;
+    private readonly ComponentSet include;
     /// <summary>
     /// An Entity must include all of these components to be matched by this query
     /// </summary>
-    public IReadOnlyList<ComponentId> Included => _include.Items;
+    public IReadOnlyList<ComponentId> Included => include.Items;
 
-    private readonly ComponentSet _exclude;
+    private readonly ComponentSet exclude;
     /// <summary>
     /// Entities with these components will not be matched by this query
     /// </summary>
-    public IReadOnlyList<ComponentId> Excluded => _exclude.Items;
+    public IReadOnlyList<ComponentId> Excluded => exclude.Items;
 
-    private readonly ComponentSet _atLeastOne;
+    private readonly ComponentSet atLeastOne;
     /// <summary>
     /// At least one of all these components must be on an Entity for it to be matched by this query
     /// </summary>
-    public IReadOnlyList<ComponentId> AtLeastOnes => _atLeastOne.Items;
+    public IReadOnlyList<ComponentId> AtLeastOnes => atLeastOne.Items;
 
-    private readonly ComponentSet _exactlyOne;
+    private readonly ComponentSet exactlyOne;
     /// <summary>
     /// Exactly one of all these components must be on an Entity for it to be matched by this query
     /// </summary>
-    public IReadOnlyList<ComponentId> ExactlyOnes => _exactlyOne.Items;
+    public IReadOnlyList<ComponentId> ExactlyOnes => exactlyOne.Items;
 
     /// <summary>
     /// Create a new <see cref="QueryBuilder"/>
     /// </summary>
     public QueryBuilder()
     {
-        _include = new(ContainsComponent, 0);
-        _exclude = new(ContainsComponent, 1);
-        _atLeastOne = new(ContainsComponent, 2);
-        _exactlyOne = new(ContainsComponent, 3);
+        include = new(ContainsComponent, 0);
+        exclude = new(ContainsComponent, 1);
+        atLeastOne = new(ContainsComponent, 2);
+        exactlyOne = new(ContainsComponent, 3);
     }
 
     /// <summary>
@@ -60,38 +60,38 @@ public sealed partial class QueryBuilder
     public QueryDescription Build(World world)
     {
         // Automatically exclude all Phantom entities, unless specifically requested.
-        if (!_include.Contains(ComponentId.Get<ComponentPhantom>()))
+        if (!include.Contains(ComponentId.Get<ComponentPhantom>()))
         {
             Exclude<ComponentPhantom>();
         }
 
         return new QueryDescription(
             world,
-            _include.ToFrozenSet(),
-            _exclude.ToFrozenSet(),
-            _atLeastOne.ToFrozenSet(),
-            _exactlyOne.ToFrozenSet()
+            include.ToFrozenSet(),
+            exclude.ToFrozenSet(),
+            atLeastOne.ToFrozenSet(),
+            exactlyOne.ToFrozenSet()
         );
     }
 
     private void ContainsComponent(ComponentId id, int index, string caller)
     {
-        if (index != _include.Index && _include.Contains(id))
+        if (index != include.Index && include.Contains(id))
         {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already included");
         }
 
-        if (index != _exclude.Index && _exclude.Contains(id))
+        if (index != exclude.Index && exclude.Contains(id))
         {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already excluded");
         }
 
-        if (index != _atLeastOne.Index && _atLeastOne.Contains(id))
+        if (index != atLeastOne.Index && atLeastOne.Contains(id))
         {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already included (at least one)");
         }
 
-        if (index != _exactlyOne.Index && _exactlyOne.Contains(id))
+        if (index != exactlyOne.Index && exactlyOne.Contains(id))
         {
             throw new InvalidOperationException($"Cannot '{caller}' - component is already included (exactly one)");
         }
@@ -106,7 +106,7 @@ public sealed partial class QueryBuilder
     public QueryBuilder Include<T>()
         where T : IComponent
     {
-        _include.Add<T>();
+        include.Add<T>();
         return this;
     }
 
@@ -117,7 +117,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder Include(Type type)
     {
-        _include.Add(type);
+        include.Add(type);
         return this;
     }
 
@@ -128,7 +128,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder Include(ComponentId id)
     {
-        _include.Add(id);
+        include.Add(id);
         return this;
     }
 
@@ -139,7 +139,7 @@ public sealed partial class QueryBuilder
     /// <returns>true, if the component is included, otherwise false</returns>
     public bool IsIncluded(Type type)
     {
-        return _include.Contains(type);
+        return include.Contains(type);
     }
 
     /// <summary>
@@ -150,7 +150,7 @@ public sealed partial class QueryBuilder
     public bool IsIncluded<T>()
         where T : IComponent
     {
-        return _include.Contains<T>();
+        return include.Contains<T>();
     }
 
     /// <summary>
@@ -160,7 +160,7 @@ public sealed partial class QueryBuilder
     /// <returns>true, if the component is included, otherwise false</returns>
     public bool IsIncluded(ComponentId id)
     {
-        return _include.Contains(id);
+        return include.Contains(id);
     }
     #endregion
 
@@ -173,7 +173,7 @@ public sealed partial class QueryBuilder
     public QueryBuilder Exclude<T>()
         where T : IComponent
     {
-        _exclude.Add<T>();
+        exclude.Add<T>();
         return this;
     }
 
@@ -184,7 +184,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder Exclude(Type type)
     {
-        _exclude.Add(type);
+        exclude.Add(type);
         return this;
     }
 
@@ -195,7 +195,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder Exclude(ComponentId id)
     {
-        _exclude.Add(id);
+        exclude.Add(id);
         return this;
     }
 
@@ -206,7 +206,7 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public bool IsExcluded(Type type)
     {
-        return _exclude.Contains(type);
+        return exclude.Contains(type);
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ public sealed partial class QueryBuilder
     public bool IsExcluded<T>()
         where T : IComponent
     {
-        return _exclude.Contains<T>();
+        return exclude.Contains<T>();
     }
 
     /// <summary>
@@ -225,7 +225,7 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public bool IsExcluded(ComponentId id)
     {
-        return _exclude.Contains(id);
+        return exclude.Contains(id);
     }
     #endregion
 
@@ -238,7 +238,7 @@ public sealed partial class QueryBuilder
     public QueryBuilder AtLeastOneOf<T>()
         where T : IComponent
     {
-        _atLeastOne.Add<T>();
+        atLeastOne.Add<T>();
         return this;
     }
 
@@ -249,7 +249,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder AtLeastOneOf(Type type)
     {
-        _atLeastOne.Add(type);
+        atLeastOne.Add(type);
         return this;
     }
 
@@ -260,7 +260,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder AtLeastOneOf(ComponentId id)
     {
-        _atLeastOne.Add(id);
+        atLeastOne.Add(id);
         return this;
     }
 
@@ -270,7 +270,7 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public bool IsAtLeastOneOf(Type type)
     {
-        return _atLeastOne.Contains(type);
+        return atLeastOne.Contains(type);
     }
 
     /// <summary>
@@ -280,7 +280,7 @@ public sealed partial class QueryBuilder
     public bool IsAtLeastOneOf<T>()
         where T : IComponent
     {
-        return _atLeastOne.Contains<T>();
+        return atLeastOne.Contains<T>();
     }
 
     /// <summary>
@@ -289,7 +289,7 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public bool IsAtLeastOneOf(ComponentId id)
     {
-        return _atLeastOne.Contains(id);
+        return atLeastOne.Contains(id);
     }
     #endregion
 
@@ -302,7 +302,7 @@ public sealed partial class QueryBuilder
     public QueryBuilder ExactlyOneOf<T>()
         where T : IComponent
     {
-        _exactlyOne.Add<T>();
+        exactlyOne.Add<T>();
         return this;
     }
 
@@ -313,7 +313,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder ExactlyOneOf(Type type)
     {
-        _exactlyOne.Add(type);
+        exactlyOne.Add(type);
         return this;
     }
 
@@ -324,7 +324,7 @@ public sealed partial class QueryBuilder
     /// <returns>this builder</returns>
     public QueryBuilder ExactlyOneOf(ComponentId id)
     {
-        _exactlyOne.Add(id);
+        exactlyOne.Add(id);
         return this;
     }
 
@@ -334,7 +334,7 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public bool IsExactlyOneOf(Type type)
     {
-        return _exactlyOne.Contains(type);
+        return exactlyOne.Contains(type);
     }
 
     /// <summary>
@@ -344,7 +344,7 @@ public sealed partial class QueryBuilder
     public bool IsExactlyOneOf<T>()
         where T : IComponent
     {
-        return _exactlyOne.Contains<T>();
+        return exactlyOne.Contains<T>();
     }
 
     /// <summary>
@@ -353,23 +353,23 @@ public sealed partial class QueryBuilder
     /// <returns></returns>
     public bool IsExactlyOneOf(ComponentId id)
     {
-        return _exactlyOne.Contains(id);
+        return exactlyOne.Contains(id);
     }
     #endregion
 
-    private class ComponentSet(Action<ComponentId, int, string> check, int Index)
+    private class ComponentSet(Action<ComponentId, int, string> check, int index)
     {
-        public int Index { get; } = Index;
+        public int Index { get; } = index;
 
         public readonly OrderedListSet<ComponentId> Items = [];
 
-        private FrozenOrderedListSet<ComponentId>? _frozenCache;
+        private FrozenOrderedListSet<ComponentId>? frozenCache;
 
         public FrozenOrderedListSet<ComponentId> ToFrozenSet()
         {
-            if (_frozenCache != null)
+            if (frozenCache != null)
             {
-                return _frozenCache;
+                return frozenCache;
             }
 
             switch (Items.Count)
@@ -381,8 +381,8 @@ public sealed partial class QueryBuilder
                     return SetWithJustPhantom;
 
                 default:
-                    _frozenCache = FrozenOrderedListSet<ComponentId>.Create(Items);
-                    return _frozenCache;
+                    frozenCache = FrozenOrderedListSet<ComponentId>.Create(Items);
+                    return frozenCache;
             }
         }
 
@@ -391,7 +391,7 @@ public sealed partial class QueryBuilder
             check(id, Index, caller);
             if (Items.Add(id))
             {
-                _frozenCache = null;
+                frozenCache = null;
                 return true;
             }
 

@@ -15,17 +15,17 @@ public class FrozenOrderedListSet<TItem>
     /// </summary>
     public static readonly FrozenOrderedListSet<TItem> Empty = new([]);
 
-    private readonly OrderedListSet<TItem> _items;
+    private readonly OrderedListSet<TItem> items;
 
     /// <summary>
     /// Get the number of items in this set
     /// </summary>
-    public int Count => _items.Count;
+    public int Count => items.Count;
 
     #region constructors
     private FrozenOrderedListSet(OrderedListSet<TItem> dangerousItems)
     {
-        _items = dangerousItems;
+        items = dangerousItems;
     }
 
     internal static FrozenOrderedListSet<TItem> Create(List<TItem> items)
@@ -87,16 +87,16 @@ public class FrozenOrderedListSet<TItem>
     /// <param name="dest"></param>
     public void CopyTo(List<TItem> dest)
     {
-        _items.CopyTo(dest);
+        items.CopyTo(dest);
     }
 
     /// <summary>
     /// Get a collection which can be queried by LINQ (only use this for tests)
     /// </summary>
     /// <returns></returns>
-    internal IReadOnlyCollection<TItem> LINQ()
+    internal IReadOnlyCollection<TItem> Linq()
     {
-        return _items.LINQ();
+        return items.Linq();
     }
 
     #region GetEnumerator
@@ -107,7 +107,7 @@ public class FrozenOrderedListSet<TItem>
     public List<TItem>.Enumerator GetEnumerator()
     {
         // ReSharper disable once NotDisposedResourceIsReturned
-        return _items.GetEnumerator();
+        return items.GetEnumerator();
     }
     #endregion
 
@@ -118,7 +118,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     public bool Contains(TItem item)
     {
-        return _items.Contains(item);
+        return items.Contains(item);
     }
 
     //todo: other set methods when needed
@@ -167,7 +167,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     internal bool IsSupersetOf(OrderedListSet<TItem> other)
     {
-        return _items.IsSupersetOf(other);
+        return items.IsSupersetOf(other);
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     public bool IsSupersetOf(FrozenOrderedListSet<TItem> other)
     {
-        return IsSupersetOf(other._items);
+        return IsSupersetOf(other.items);
     }
     #endregion
 
@@ -189,7 +189,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     internal bool Overlaps(OrderedListSet<TItem> other)
     {
-        return _items.Overlaps(other);
+        return items.Overlaps(other);
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     public bool Overlaps(FrozenOrderedListSet<TItem> other)
     {
-        return Overlaps(other._items);
+        return Overlaps(other.items);
     }
     #endregion
 
@@ -211,7 +211,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     internal bool SetEquals(OrderedListSet<TItem> other)
     {
-        return _items.SetEquals(other);
+        return items.SetEquals(other);
     }
 
     /// <summary>
@@ -221,7 +221,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     public bool SetEquals(FrozenOrderedListSet<TItem> other)
     {
-        return SetEquals(other._items);
+        return SetEquals(other.items);
     }
 
     /// <summary>
@@ -231,7 +231,7 @@ public class FrozenOrderedListSet<TItem>
     /// <returns></returns>
     public bool SetEquals<TV>(Dictionary<TItem, TV> other)
     {
-        return _items.SetEquals(other);
+        return items.SetEquals(other);
     }
     #endregion
 }

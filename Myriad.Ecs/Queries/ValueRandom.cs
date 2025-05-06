@@ -6,16 +6,16 @@ namespace Myriad.Ecs.Queries;
 
 internal struct ValueRandom
 {
-    private int _seed;
+    private int seed;
 
     public ValueRandom(int seed)
     {
-        _seed = seed;
+        this.seed = seed;
     }
 
     public int Next()
     {
-        Span<int> seed = stackalloc int[] { _seed };
+        Span<int> seed = stackalloc int[] { this.seed };
 
         // Hash the state, to generate 64 bits
         var byteSpan = MemoryMarshal.Cast<int, byte>(seed);
@@ -26,7 +26,7 @@ internal struct ValueRandom
         var hi = (uint)((hash >> 32) & 0xFFFF_FFFF);
 
         // Next state is the high bits
-        _seed = unchecked((int)hi);
+        this.seed = unchecked((int)hi);
 
         // Result is the low bits
         return unchecked((int)low);

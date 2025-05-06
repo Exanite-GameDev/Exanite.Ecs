@@ -18,12 +18,12 @@ public sealed class Archetype
     /// <summary>
     /// Number of entities in a single chunk
     /// </summary>
-    internal const int CHUNK_SIZE = 1024;
+    internal const int ChunkSize = 1024;
 
     /// <summary>
     /// How many empty chunks to keep as spares
     /// </summary>
-    private const int CHUNK_HOT_SPARES = 4;
+    private const int ChunkHotSpares = 4;
 
     /// <summary>
     /// The world which this archetype belongs to
@@ -48,30 +48,30 @@ public sealed class Archetype
     /// <summary>
     /// Map from component ID (index) to index in chunk
     /// </summary>
-    private readonly int[] _componentIndexLookup;
+    private readonly int[] componentIndexLookup;
 
     /// <summary>
     /// All chunks in this archetype
     /// </summary>
-    private readonly List<Chunk> _chunks = [];
+    private readonly List<Chunk> chunks = [];
 
     /// <summary>
     /// A list of chunks which might have space to put an entity in
     /// </summary>
-    private readonly List<Chunk> _chunksWithSpace = [];
+    private readonly List<Chunk> chunksWithSpace = [];
 
     /// <summary>
     /// A list of empty chunks that have been removed from this archetype
     /// </summary>
-    private readonly Stack<Chunk> _spareChunks = new(CHUNK_HOT_SPARES);
+    private readonly Stack<Chunk> spareChunks = new(ChunkHotSpares);
 
-    private readonly ComponentId[] _componentIDs;
-    private readonly Type[] _componentTypes;
+    private readonly ComponentId[] componentIDs;
+    private readonly Type[] componentTypes;
 
     /// <summary>
     /// The archetype that entities should be moved to when deleted. Only non-null if <code>HasPhantomComponents &amp; !IsPhantom</code>
     /// </summary>
-    private readonly Archetype? _phantomDestination;
+    private readonly Archetype? phantomDestination;
 
     /// <summary>
     /// The total number of entities in this archetype
@@ -110,8 +110,8 @@ public sealed class Archetype
         ComponentsBloomFilter = components.ToBloomFilter();
 
         // Create arrays to fills in below
-        _componentTypes = new Type[components.Count];
-        _componentIDs = new ComponentId[components.Count];
+        componentTypes = new Type[components.Count];
+        componentIDs = new ComponentId[components.Count];
 
         // Calculate archetype hash and also keep track of the max component ID ever seen
         var maxComponentId = int.MinValue;
@@ -125,14 +125,14 @@ public sealed class Archetype
         }
 
         // Build an array where the number at a given index is the index of the component with that ID
-        _componentIndexLookup = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
-        Array.Fill(_componentIndexLookup, -1);
+        componentIndexLookup = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
+        Array.Fill(componentIndexLookup, -1);
         var idx = 0;
         foreach (var component in components)
         {
-            _componentTypes[idx] = component.Type;
-            _componentIndexLookup[component.Value] = idx;
-            _componentIDs[idx] = component;
+            componentTypes[idx] = component.Type;
+            componentIndexLookup[component.Value] = idx;
+            componentIDs[idx] = component;
 
             idx++;
         }
@@ -151,7 +151,7 @@ public sealed class Archetype
             {
                 ComponentId.Get<ComponentPhantom>()
             };
-            _phantomDestination = World.GetOrCreateArchetype(c);
+            phantomDestination = World.GetOrCreateArchetype(c);
         }
     }
 
@@ -173,43 +173,43 @@ public sealed class Archetype
     {
         if (HasPhantomComponents && !IsPhantom)
         {
-            Debug.Assert(_phantomDestination != null);
+            Debug.Assert(phantomDestination != null);
 
             // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookeeping like chunk management and entity count.
             // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
-            while (_chunks.Count > 0)
+            while (chunks.Count > 0)
             {
-                var chunk = _chunks[^1];
+                var chunk = chunks[^1];
 
                 while (chunk.EntityCount > 0)
                 {
-                    var entity = chunk.Entities.Span[^1].ID;
+                    var entity = chunk.Entities.Span[^1].Id;
                     ref var info = ref World.GetEntityInfo(entity);
 
-                    MigrateTo(entity, ref info, _phantomDestination, ref lazy);
+                    MigrateTo(entity, ref info, phantomDestination, ref lazy);
                 }
             }
         }
         else
         {
             // Clear all the chunks
-            foreach (var chunk in _chunks)
+            foreach (var chunk in chunks)
                 chunk.Clear();
 
             // Move some chunks to hot spares and then delete the rest
-            foreach (var chunk in _chunks)
+            foreach (var chunk in chunks)
             {
-                if (_spareChunks.Count < CHUNK_HOT_SPARES)
+                if (spareChunks.Count < ChunkHotSpares)
                 {
-                    _spareChunks.Push(chunk);
+                    spareChunks.Push(chunk);
                 }
                 else
                 {
                     break;
                 }
             }
-            _chunksWithSpace.Clear();
-            _chunks.Clear();
+            chunksWithSpace.Clear();
+            chunks.Clear();
 
             // Done! No entities left.
             EntityCount = 0;
@@ -230,18 +230,18 @@ public sealed class Archetype
         EntityCount++;
 
         // Trim chunks with space collection to remove items
-        _chunksWithSpace.RemoveAll(static c => c.EntityCount == CHUNK_SIZE);
+        chunksWithSpace.RemoveAll(static c => c.EntityCount == ChunkSize);
 
         // If there's one with space, use it
-        if (_chunksWithSpace.Count > 0)
+        if (chunksWithSpace.Count > 0)
         {
-            return _chunksWithSpace[0].AddEntity(entity, ref info);
+            return chunksWithSpace[0].AddEntity(entity, ref info);
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = _spareChunks.Count > 0 ? _spareChunks.Pop() : new Chunk(this, CHUNK_SIZE, _componentIndexLookup, _componentTypes, _componentIDs);
-        _chunks.Add(newChunk);
-        _chunksWithSpace.Add(newChunk);
+        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, ChunkSize, componentIndexLookup, componentTypes, componentIDs);
+        chunks.Add(newChunk);
+        chunksWithSpace.Add(newChunk);
 
         // The chunk obviously has space, so this cannot fail!
         return newChunk.AddEntity(entity, ref info);
@@ -284,19 +284,19 @@ public sealed class Archetype
             // If the chunk is empty remove it from this archetype entirely
             case 0:
             {
-                _chunksWithSpace.Remove(chunk);
-                _chunks.Remove(chunk);
-                if (_spareChunks.Count < CHUNK_HOT_SPARES)
+                chunksWithSpace.Remove(chunk);
+                chunks.Remove(chunk);
+                if (spareChunks.Count < ChunkHotSpares)
                 {
-                    _spareChunks.Push(chunk);
+                    spareChunks.Push(chunk);
                 }
 
                 break;
             }
 
             // If the chunk was previously full and now isn't, add it to the set of chunks with space
-            case CHUNK_SIZE - 1:
-                _chunksWithSpace.Add(chunk);
+            case ChunkSize - 1:
+                chunksWithSpace.Add(chunk);
                 break;
         }
     }
@@ -308,12 +308,12 @@ public sealed class Archetype
     }
 
     [NonPublic]
-    public IReadOnlyList<Chunk> Chunks => _chunks;
+    public IReadOnlyList<Chunk> Chunks => chunks;
 
     //[MustDisposeResource]
     internal List<Chunk>.Enumerator GetChunkEnumerator()
     {
-        return _chunks.GetEnumerator();
+        return chunks.GetEnumerator();
     }
 
     internal bool SetEquals(OrderedListSet<ComponentId> query)

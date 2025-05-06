@@ -14,18 +14,18 @@ namespace Myriad.Ecs.Allocations;
 public static class Pool<T>
     where T : class, new()
 {
-    [ThreadStatic] private static int _maxSize;
-    [ThreadStatic] private static int _pressure;
-    [ThreadStatic] private static List<T>? _items;
+    [ThreadStatic] private static int MaxSize;
+    [ThreadStatic] private static int Pressure;
+    [ThreadStatic] private static List<T>? Items;
 
-    [MemberNotNull(nameof(_items))]
+    [MemberNotNull(nameof(Items))]
     private static void Init()
     {
         // Initialize item. This can't be done in the field initializer for a threadstatic field!
-        if (_items == null)
+        if (Items == null)
         {
-            _items = [];
-            _maxSize = 1024;
+            Items = [];
+            MaxSize = 1024;
         }
     }
 
@@ -36,23 +36,23 @@ public static class Pool<T>
     public static T Get()
     {
         Init();
-        Debug.Assert(_items != null);
+        Debug.Assert(Items != null);
 
-        if (_items.Count == 0)
+        if (Items.Count == 0)
         {
             // Every allocation significantly increases pressure
-            _pressure += 8;
+            Pressure += 8;
             return new();
         }
 
         // Every hit of the pool slightly reduces pressure
-        if (_pressure > 0)
+        if (Pressure > 0)
         {
-            _pressure--;
+            Pressure--;
         }
 
-        var item = _items[^1];
-        _items.RemoveAt(_items.Count - 1);
+        var item = Items[^1];
+        Items.RemoveAt(Items.Count - 1);
         return item;
     }
 
@@ -72,17 +72,17 @@ public static class Pool<T>
     public static void Return(T item)
     {
         Init();
-        Debug.Assert(_items != null);
+        Debug.Assert(Items != null);
 
-        if (_pressure > _maxSize)
+        if (Pressure > MaxSize)
         {
-            _maxSize *= 2;
-            _pressure = 0;
+            MaxSize *= 2;
+            Pressure = 0;
         }
 
-        if (_items.Count < _maxSize)
+        if (Items.Count < MaxSize)
         {
-            _items.Add(item);
+            Items.Add(item);
         }
     }
 

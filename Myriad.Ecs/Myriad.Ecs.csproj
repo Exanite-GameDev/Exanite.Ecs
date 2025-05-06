@@ -17,11 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="Collections\RefTuple.cs">
-      <DependentUpon>RefTuple.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="EntityGetComponentRef.cs">
       <DependentUpon>EntityGetComponentRef.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -36,6 +31,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>QueryFilter.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Collections\RefTuple.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RefTuple.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

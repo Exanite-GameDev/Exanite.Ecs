@@ -8,7 +8,7 @@ namespace Myriad.Ecs.Command;
 /// </summary>
 public struct LazyCommandBuffer
 {
-    private EcsCommandBuffer? _buffer;
+    private EcsCommandBuffer? buffer;
 
     /// <summary>
     /// The <see cref="World"/> which this <see cref="LazyCommandBuffer"/> is for
@@ -22,7 +22,7 @@ public struct LazyCommandBuffer
     public LazyCommandBuffer(World world)
     {
         World = world;
-        _buffer = null;
+        buffer = null;
     }
 
     /// <summary>
@@ -32,8 +32,8 @@ public struct LazyCommandBuffer
     {
         get
         {
-            _buffer ??= World.GetCommandBuffer();
-            return _buffer;
+            buffer ??= World.GetCommandBuffer();
+            return buffer;
         }
     }
 
@@ -44,7 +44,7 @@ public struct LazyCommandBuffer
     /// <returns></returns>
     public readonly bool TryGetBuffer([NotNullWhen(true)] out EcsCommandBuffer? buffer)
     {
-        buffer = _buffer;
+        buffer = this.buffer;
         return buffer != null;
     }
 }

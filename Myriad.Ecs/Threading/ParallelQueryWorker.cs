@@ -11,34 +11,34 @@ internal class ParallelQueryWorker<TWork>
     : IThreadPoolWorkItem
     where TWork : struct, IWorkItem
 {
-    private ParallelQueryWorker<TWork>?[]? _siblings;
-    private CountdownEvent? _counter;
+    private ParallelQueryWorker<TWork>?[]? siblings;
+    private CountdownEvent? counter;
 
-    private readonly ConcurrentQueue<TWork> _work = new();
-    private readonly List<Exception> _exceptions = [];
+    private readonly ConcurrentQueue<TWork> work = new();
+    private readonly List<Exception> exceptions = [];
 
     public ManualResetEventSlim FinishEvent { get; } = new ManualResetEventSlim(false);
 
     public void Configure(ParallelQueryWorker<TWork>?[] siblings, CountdownEvent counter)
     {
-        _siblings = siblings;
-        _counter = counter;
-        _exceptions.Clear();
+        this.siblings = siblings;
+        this.counter = counter;
+        exceptions.Clear();
         FinishEvent.Reset();
     }
 
     public void Clear(ref List<Exception>? exceptions)
     {
-        if (_exceptions.Count > 0)
+        if (this.exceptions.Count > 0)
         {
             exceptions ??= [];
-            exceptions.AddRange(_exceptions);
-            _exceptions.Clear();
+            exceptions.AddRange(this.exceptions);
+            this.exceptions.Clear();
         }
 
-        _counter = null;
-        _siblings = null;
-        _work.Clear();
+        counter = null;
+        siblings = null;
+        work.Clear();
         FinishEvent.Reset();
     }
 
@@ -46,8 +46,8 @@ internal class ParallelQueryWorker<TWork>
     {
         try
         {
-            var counter = _counter;
-            var siblings = _siblings;
+            var counter = this.counter;
+            var siblings = this.siblings;
             Debug.Assert(counter != null && siblings != null, "Cannot execute work - worker not configured");
 
             // Seed an RNG with the index of this worker in the siblings array
@@ -56,13 +56,13 @@ internal class ParallelQueryWorker<TWork>
             while (!counter.IsSet)
             {
                 // Process the entire local queue
-                while (_work.TryDequeue(out var work))
+                while (this.work.TryDequeue(out var work))
                     DoWorkItem(counter, ref work);
 
                 // Do a few rounds of trying to steal work off siblings.
                 // Break out of the loop if there is any local work to do, or if the counter
                 // is set (indicating there is no more work available anywhere).
-                for (var i = 0; i < siblings.Length && _work.IsEmpty && !counter.IsSet; i++)
+                for (var i = 0; i < siblings.Length && work.IsEmpty && !counter.IsSet; i++)
                 {
                     // Choose a random sibling. This prevents all workers starting from the first
                     // worker every time, which would cause unnecessary contention and bias the system
@@ -96,18 +96,18 @@ internal class ParallelQueryWorker<TWork>
         }
         catch (Exception ex)
         {
-            _exceptions.Add(ex);
+            exceptions.Add(ex);
         }
     }
 
     public void Enqueue(TWork work)
     {
-        _work.Enqueue(work);
+        this.work.Enqueue(work);
     }
 
     public bool Steal(out TWork result)
     {
-        return _work.TryDequeue(out result);
+        return work.TryDequeue(out result);
     }
 }
 

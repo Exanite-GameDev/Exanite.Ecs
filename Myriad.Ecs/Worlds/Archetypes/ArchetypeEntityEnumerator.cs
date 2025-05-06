@@ -47,30 +47,30 @@ public readonly struct ArchetypeEntityEnumerable
 public struct ArchetypeEntityEnumerator
     : IDisposable
 {
-    private List<Chunk>.Enumerator _chunksEnumerator;
-    private int _entityIndex = -1;
+    private List<Chunk>.Enumerator chunksEnumerator;
+    private int entityIndex = -1;
 
-    private Chunk? _chunk;
+    private Chunk? chunk;
 
     internal ArchetypeEntityEnumerator(Archetype archetype)
     {
-        _chunksEnumerator = archetype.GetChunkEnumerator();
+        chunksEnumerator = archetype.GetChunkEnumerator();
     }
 
     /// <summary>
     /// Get the current item from this enumerator
     /// </summary>
-    public readonly Entity Current => _chunk!.Entities.Span[_entityIndex];
+    public readonly Entity Current => chunk!.Entities.Span[entityIndex];
 
     private bool NextChunk()
     {
-        if (!_chunksEnumerator.MoveNext())
+        if (!chunksEnumerator.MoveNext())
         {
             return false;
         }
 
-        _chunk = _chunksEnumerator.Current;
-        _entityIndex = 0;
+        chunk = chunksEnumerator.Current;
+        entityIndex = 0;
         return true;
     }
 
@@ -80,8 +80,8 @@ public struct ArchetypeEntityEnumerator
     /// <returns></returns>
     public bool MoveNext()
     {
-        _entityIndex++;
-        if (_chunk != null && _entityIndex < _chunk.EntityCount)
+        entityIndex++;
+        if (chunk != null && entityIndex < chunk.EntityCount)
         {
             return true;
         }
@@ -97,6 +97,6 @@ public struct ArchetypeEntityEnumerator
     /// <inheritdoc/>
     public void Dispose()
     {
-        _chunksEnumerator.Dispose();
+        chunksEnumerator.Dispose();
     }
 }

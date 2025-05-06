@@ -11,13 +11,13 @@ namespace Myriad.Ecs.Command;
 /// </summary>
 internal class ComponentSetterCollection
 {
-    private readonly Dictionary<ComponentId, IComponentList> _components = [];
+    private readonly Dictionary<ComponentId, IComponentList> components = [];
 
     public void Clear()
     {
-        foreach (var (_, value) in _components)
+        foreach (var (_, value) in components)
             value.Recycle();
-        _components.Clear();
+        components.Clear();
     }
 
     public void ClearAndDispose(ref LazyCommandBuffer buffer)
@@ -30,11 +30,11 @@ internal class ComponentSetterCollection
     {
         var id = ComponentId.Get<T>();
 
-        if (!_components.TryGetValue(id, out var list))
+        if (!components.TryGetValue(id, out var list))
         {
             list = Pool<GenericComponentList<T>>.Get();
             list.Clear();
-            _components.Add(id, list);
+            components.Add(id, list);
         }
 
         var idx = ((GenericComponentList<T>)list).Add(value);
@@ -44,12 +44,12 @@ internal class ComponentSetterCollection
     public void Overwrite<T>(SetterId index, T value) where T : IComponent
     {
         var id = ComponentId.Get<T>();
-        ((GenericComponentList<T>)_components[id]).Overwrite(index, value);
+        ((GenericComponentList<T>)components[id]).Overwrite(index, value);
     }
 
     public void Write(SetterId id, Row row)
     {
-        var list = _components[id.Id];
+        var list = components[id.Id];
         list.Write(id.Index, row);
     }
 
@@ -82,25 +82,25 @@ internal class ComponentSetterCollection
         void Write(int index, Row dest);
     }
 
-    [DebuggerDisplay("Count = {_values.Count}")]
+    [DebuggerDisplay("Count = {values.Count}")]
     private class GenericComponentList<T> : IComponentList where T : IComponent
     {
-        private readonly List<T> _values = [];
+        private readonly List<T> values = [];
 
         public void Clear()
         {
-            _values.Clear();
+            values.Clear();
         }
 
         public int Add(T value)
         {
-            _values.Add(value);
-            return _values.Count - 1;
+            values.Add(value);
+            return values.Count - 1;
         }
 
         public void Overwrite(SetterId index, T value)
         {
-            _values[index.Index] = value;
+            values[index.Index] = value;
         }
 
         public void Recycle()
@@ -110,7 +110,7 @@ internal class ComponentSetterCollection
 
         public void Write(int index, Row dest)
         {
-            dest.GetMutable<T>() = _values[index];
+            dest.GetMutable<T>() = values[index];
         }
     }
     #endregion

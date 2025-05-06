@@ -46,28 +46,28 @@ public record struct PhantomNotifier : IPhantomNotifierComponent
 }
 
 public record struct Relational1(Entity Target) : IEntityRelationComponent;
-public record struct Relational2(Entity Target, int x) : IEntityRelationComponent;
-public record struct Relational3(Entity Target, float y) : IEntityRelationComponent;
+public record struct Relational2(Entity Target, int X) : IEntityRelationComponent;
+public record struct Relational3(Entity Target, float Y) : IEntityRelationComponent;
 
 public class BoxedInt
 {
-    public string? ID;
+    public string? Id;
     public int Value;
 }
 
 public readonly record struct TestDisposable
     : IDisposableComponent
 {
-    private readonly BoxedInt _box;
+    private readonly BoxedInt box;
 
     public TestDisposable(BoxedInt box)
     {
-        _box = box;
+        this.box = box;
     }
 
     public void Dispose(ref LazyCommandBuffer lazy)
     {
-        _box.Value++;
+        box.Value++;
     }
 }
 
@@ -85,15 +85,15 @@ public record struct TestDisposableParent
 public readonly record struct TestDisposablePhantom
     : IDisposableComponent, IComponentPhantom
 {
-    private readonly BoxedInt _box;
+    private readonly BoxedInt box;
 
     public TestDisposablePhantom(BoxedInt box)
     {
-        _box = box;
+        this.box = box;
     }
 
     public void Dispose(ref LazyCommandBuffer laz)
     {
-        _box.Value++;
+        box.Value++;
     }
 }

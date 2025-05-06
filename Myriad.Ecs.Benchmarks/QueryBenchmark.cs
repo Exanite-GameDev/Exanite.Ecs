@@ -16,25 +16,25 @@ public class QueryBenchmark
     [Params(100_000, 1_000_000)]
     public int EntityCount = 1_000_000;
 
-    private World _world = null!;
-    private QueryDescription _query = null!;
+    private World world = null!;
+    private QueryDescription query = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        _world = new WorldBuilder().Build();
+        world = new WorldBuilder().Build();
 
-        var buffer = new EcsCommandBuffer(_world);
+        var buffer = new EcsCommandBuffer(world);
         var rng = new Random(2);
         for (var i = 0; i < EntityCount; i++)
             AddEntity(buffer, rng);
         using var resolver = buffer.Playback();
 
-        _query = new QueryBuilder()
+        query = new QueryBuilder()
             .Include<Position>()
             .Include<Velocity>()
-            .Build(_world);
-        _query.GetArchetypes();
+            .Build(world);
+        query.GetArchetypes();
 
         Console.WriteLine("Setup Complete");
     }
@@ -63,14 +63,14 @@ public class QueryBenchmark
     public void Query()
     {
         var q = new QueryAction();
-        _world.Execute<QueryAction, Position, Velocity>(ref q, _query);
+        world.Execute<QueryAction, Position, Velocity>(ref q, query);
     }
 
     [Benchmark]
     public void ChunkQuery()
     {
         var q = new ChunkQueryAction();
-        _world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(ref q, _query);
+        world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(ref q, query);
     }
 
     //[Benchmark]

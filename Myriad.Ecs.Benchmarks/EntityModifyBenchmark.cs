@@ -9,25 +9,25 @@ namespace Myriad.Ecs.Benchmarks;
 //[ShortRunJob]
 public class EntityModifyBenchmark
 {
-    private const int COUNT = 1_000_000;
+    private const int Count = 1_000_000;
 
-    private World _world = null!;
-    private readonly List<Entity> _entities = [];
-    private EcsCommandBuffer _ready = null!;
+    private World world = null!;
+    private readonly List<Entity> entities = [];
+    private EcsCommandBuffer ready = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        _world = new WorldBuilder().Build();
+        world = new WorldBuilder().Build();
 
         // Create initial entities
         var rng = new Random(1);
-        var buffer = new EcsCommandBuffer(_world);
-        for (var i = 0; i < COUNT; i++)
+        var buffer = new EcsCommandBuffer(world);
+        for (var i = 0; i < Count; i++)
             CreateEntity(buffer, rng);
         using var resolver = buffer.Playback();
         for (var i = 0; i < resolver.Count; i++)
-            _entities.Add(resolver[i]);
+            entities.Add(resolver[i]);
     }
 
     private static void CreateEntity(EcsCommandBuffer buffer, Random random)
@@ -68,16 +68,16 @@ public class EntityModifyBenchmark
     {
         // Setup modifications in a buffer
         var rng = new Random();
-        var ready = new EcsCommandBuffer(_world);
-        foreach (var entity in _entities)
+        var ready = new EcsCommandBuffer(world);
+        foreach (var entity in entities)
             ModifyEntity(ready, rng, entity);
 
-        _ready = ready;
+        this.ready = ready;
     }
 
     [Benchmark]
     public void Playback()
     {
-        _ready.Playback().Dispose();
+        ready.Playback().Dispose();
     }
 }

@@ -16,7 +16,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Map from (current_archetype_key, added_component) => new_archetype_key
     /// </summary>
-    private readonly Dictionary<(int, ComponentId), int> _archetypeEdges = new();
+    private readonly Dictionary<(int, ComponentId), int> archetypeEdges = new();
 
     /// <summary>
     /// Given an archetype key and an added component, determine the new archetype key
@@ -26,16 +26,16 @@ public sealed partial class EcsCommandBuffer
     /// <returns></returns>
     private int GetArchetypeKey(int currentKey, ComponentId added)
     {
-        if (!_archetypeEdges.TryGetValue((currentKey, added), out var value))
+        if (!archetypeEdges.TryGetValue((currentKey, added), out var value))
         {
             // Limit the number of edges to prevent explosive growth in some edge cases.
-            if (_archetypeEdges.Count >= MaxAggregationEdges)
+            if (archetypeEdges.Count >= MaxAggregationEdges)
             {
                 return -1;
             }
 
-            value = _archetypeEdges.Count + 1;
-            _archetypeEdges.Add((currentKey, added), value);
+            value = archetypeEdges.Count + 1;
+            archetypeEdges.Add((currentKey, added), value);
         }
 
         return value;

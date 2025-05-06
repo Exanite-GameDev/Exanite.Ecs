@@ -19,7 +19,7 @@ public class DelegateQuery
         // Set all to entity ID
         w.Query((Entity e, ref ComponentInt32 i) =>
         {
-            i.Value = e.ID.ID;
+            i.Value = e.Id.Id;
         }, ref q);
 
         // Check all are correct
@@ -50,7 +50,7 @@ public class DelegateQuery
         w.Query(9, (int data, Entity e, ref ComponentInt32 i) =>
         {
             Assert.AreEqual(9, data);
-            i.Value = e.ID.ID;
+            i.Value = e.Id.Id;
         }, ref q);
 
         // Check all are correct

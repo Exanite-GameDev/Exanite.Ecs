@@ -17,7 +17,7 @@ namespace Myriad.Ecs.Command;
 /// </summary>
 public sealed partial class EcsCommandBuffer
 {
-    private uint _version;
+    private uint version;
 
     /// <summary>
     /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying
@@ -27,18 +27,18 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Collection of all components to be set onto entities
     /// </summary>
-    private readonly ComponentSetterCollection _setters = new();
+    private readonly ComponentSetterCollection setters = new();
 
-    private readonly List<BufferedEntityData> _bufferedSets = [];
+    private readonly List<BufferedEntityData> bufferedSets = [];
 
-    private readonly Dictionary<Entity, EntityModificationData> _entityModifications = [];
-    private readonly List<Entity> _deletes = [];
-    private readonly List<QueryDescription> _archetypeDeletes = [];
-    private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = [];
+    private readonly Dictionary<Entity, EntityModificationData> entityModifications = [];
+    private readonly List<Entity> deletes = [];
+    private readonly List<QueryDescription> archetypeDeletes = [];
+    private readonly OrderedListSet<Entity> maybeAddingPhantomComponent = [];
 
-    private readonly OrderedListSet<ComponentId> _tempComponentIdSet = [];
+    private readonly OrderedListSet<ComponentId> tempComponentIdSet = [];
 
-    private Resolver _nextResolver;
+    private Resolver nextResolver;
 
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>
@@ -48,8 +48,8 @@ public sealed partial class EcsCommandBuffer
     {
         World = world;
 
-        _nextResolver = Pool<Resolver>.Get();
-        _nextResolver.Configure(this);
+        nextResolver = Pool<Resolver>.Get();
+        nextResolver.Configure(this);
     }
 
     #region playback
@@ -60,7 +60,7 @@ public sealed partial class EcsCommandBuffer
     public Resolver Playback()
     {
         // Use this resolver for this playback
-        var resolver = _nextResolver;
+        var resolver = nextResolver;
 
         // Create buffered entities.
         CreateBufferedEntities(resolver);
@@ -76,14 +76,14 @@ public sealed partial class EcsCommandBuffer
         ApplyStructuralChanges(ref lazy);
 
         // Clear all temporary state
-        _maybeAddingPhantomComponent.Clear();
-        _setters.Clear();
-        _entityModifications.Clear();
-        _tempComponentIdSet.Clear();
-        _archetypeEdges.Clear();
+        maybeAddingPhantomComponent.Clear();
+        setters.Clear();
+        entityModifications.Clear();
+        tempComponentIdSet.Clear();
+        archetypeEdges.Clear();
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
-        unchecked { _version++; }
+        unchecked { version++; }
 
         // Apply any changes caused by these changes
         if (lazy.TryGetBuffer(out var lazyBuffer))
@@ -93,8 +93,8 @@ public sealed partial class EcsCommandBuffer
         }
 
         // Create a resolver ready to use in the future
-        _nextResolver = Pool<Resolver>.Get();
-        _nextResolver.Configure(this);
+        nextResolver = Pool<Resolver>.Get();
+        nextResolver.Configure(this);
 
         // Return the resolver
         return resolver;
@@ -102,7 +102,7 @@ public sealed partial class EcsCommandBuffer
 
     private void DeleteEntities(ref LazyCommandBuffer lazy)
     {
-        foreach (var query in _archetypeDeletes)
+        foreach (var query in archetypeDeletes)
         {
             foreach (var match in query.GetArchetypes())
             {
@@ -114,9 +114,9 @@ public sealed partial class EcsCommandBuffer
                 World.DeleteImmediate(match.Archetype, ref lazy);
             }
         }
-        _archetypeDeletes.Clear();
+        archetypeDeletes.Clear();
 
-        foreach (var delete in _deletes)
+        foreach (var delete in deletes)
         {
             // Skip deleted entities
             if (!delete.Exists())
@@ -124,7 +124,7 @@ public sealed partial class EcsCommandBuffer
                 continue;
             }
 
-            var archetype = World.GetArchetype(delete.ID);
+            var archetype = World.GetArchetype(delete.Id);
             if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.
@@ -132,10 +132,10 @@ public sealed partial class EcsCommandBuffer
             }
             else
             {
-                World.DeleteImmediate(delete.ID, ref lazy);
+                World.DeleteImmediate(delete.Id, ref lazy);
 
                 // Return objects to pools
-                if (_entityModifications.Remove(delete, out var mod))
+                if (entityModifications.Remove(delete, out var mod))
                 {
                     if (mod.Sets != null)
                     {
@@ -152,12 +152,12 @@ public sealed partial class EcsCommandBuffer
             }
         }
 
-        _deletes.Clear();
+        deletes.Clear();
 
         // Check if this entity should not be deleted, because a phantom component is being added
         bool IsAddingPhantomComponent(Entity entity)
         {
-            if (_maybeAddingPhantomComponent.Contains(entity) && _entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
+            if (maybeAddingPhantomComponent.Contains(entity) && entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
             {
                 foreach (var key in mod.Sets.Keys)
                     if (key.IsPhantomComponent)
@@ -172,16 +172,16 @@ public sealed partial class EcsCommandBuffer
 
     private void ApplyStructuralChanges(ref LazyCommandBuffer lazy)
     {
-        if (_entityModifications.Count > 0)
+        if (entityModifications.Count > 0)
         {
             // Calculate the new archetype for the entity
-            foreach (var (entity, mod) in _entityModifications)
+            foreach (var (entity, mod) in entityModifications)
             {
-                var currentArchetype = World.GetArchetype(entity.ID);
+                var currentArchetype = World.GetArchetype(entity.Id);
 
                 // Set all of the current archetype components
-                _tempComponentIdSet.Clear();
-                _tempComponentIdSet.UnionWith(currentArchetype.Components);
+                tempComponentIdSet.Clear();
+                tempComponentIdSet.UnionWith(currentArchetype.Components);
                 var moveRequired = false;
 
                 // Calculate the hash and component set of the new archetype
@@ -190,7 +190,7 @@ public sealed partial class EcsCommandBuffer
                 {
                     foreach (var id in mod.Sets.Keys)
                     {
-                        if (_tempComponentIdSet.Add(id))
+                        if (tempComponentIdSet.Add(id))
                         {
                             hash = hash.Toggle(id);
                             moveRequired = true;
@@ -201,7 +201,7 @@ public sealed partial class EcsCommandBuffer
                 {
                     foreach (var remove in mod.Removes)
                     {
-                        if (_tempComponentIdSet.Remove(remove))
+                        if (tempComponentIdSet.Remove(remove))
                         {
                             hash = hash.Toggle(remove);
                             moveRequired = true;
@@ -214,13 +214,13 @@ public sealed partial class EcsCommandBuffer
                 }
 
                 // Check if the entity will have any phantom components after this change
-                var destHasPhantomComponents = _tempComponentIdSet.Any(static a => a.IsPhantomComponent);
+                var destHasPhantomComponents = tempComponentIdSet.Any(static a => a.IsPhantomComponent);
 
                 // Entity must be auto deleted if, after the change, it will be a `Phantom` but not have any phantom components
-                var autodelete = _tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
+                var autodelete = tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
                 if (autodelete)
                 {
-                    World.DeleteImmediate(entity.ID, ref lazy);
+                    World.DeleteImmediate(entity.Id, ref lazy);
                 }
                 else
                 {
@@ -229,21 +229,21 @@ public sealed partial class EcsCommandBuffer
                     if (moveRequired)
                     {
                         // Get the new archetype we're moving to
-                        var newArchetype = World.GetOrCreateArchetype(_tempComponentIdSet, hash);
+                        var newArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity.ID, newArchetype, ref lazy);
+                        row = World.MigrateEntity(entity.Id, newArchetype, ref lazy);
                     }
                     else
                     {
-                        row = World.GetRow(entity.ID);
+                        row = World.GetRow(entity.Id);
                     }
 
                     // Run all setters
                     if (mod.Sets != null)
                     {
                         foreach (var set in mod.Sets.Values)
-                            _setters.Write(set, row);
+                            setters.Write(set, row);
                     }
                 }
 
@@ -259,17 +259,17 @@ public sealed partial class EcsCommandBuffer
 
     private void CreateBufferedEntities(Resolver resolver)
     {
-        _tempComponentIdSet.Clear();
+        tempComponentIdSet.Clear();
 
         // Keep a map from archetype key -> archetype. This means we only need to calculate it once
         // per archetype key.
-        var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(_archetypeEdges.Count + 1);
+        var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(archetypeEdges.Count + 1);
         Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
         try
         {
-            for (var i = 0; i < _bufferedSets.Count; i++)
+            for (var i = 0; i < bufferedSets.Count; i++)
             {
-                var bufferedData = _bufferedSets[i];
+                var bufferedData = bufferedSets[i];
                 var components = bufferedData.Setters;
 
                 var archetype = GetArchetype(bufferedData, archetypeLookup);
@@ -281,15 +281,15 @@ public sealed partial class EcsCommandBuffer
 
                 // Write the components into the entity
                 foreach (var setter in components.Values)
-                    _setters.Write(setter, slot);
+                    setters.Write(setter, slot);
 
                 // Recycle
                 components.Clear();
                 Pool.Return(components);
             }
 
-            _bufferedSets.Clear();
-            _tempComponentIdSet.Clear();
+            bufferedSets.Clear();
+            tempComponentIdSet.Clear();
         }
         finally
         {
@@ -332,17 +332,17 @@ public sealed partial class EcsCommandBuffer
         // We can't actually make any changes, but we do still need the lazy buffer
         var lazy = new LazyCommandBuffer(World);
 
-        _setters.ClearAndDispose(ref lazy);
+        setters.ClearAndDispose(ref lazy);
 
-        for (var i = 0; i < _bufferedSets.Count; i++)
+        for (var i = 0; i < bufferedSets.Count; i++)
         {
-            var setters = _bufferedSets[i].Setters;
+            var setters = bufferedSets[i].Setters;
             setters.Clear();
             Pool.Return(setters);
         }
-        _bufferedSets.Clear();
+        bufferedSets.Clear();
 
-        foreach (var (_, data) in _entityModifications)
+        foreach (var (_, data) in entityModifications)
         {
             if (data.Removes != null)
             {
@@ -356,19 +356,19 @@ public sealed partial class EcsCommandBuffer
                 Pool.Return(data.Sets);
             }
         }
-        _entityModifications.Clear();
+        entityModifications.Clear();
 
-        _archetypeEdges.Clear();
+        archetypeEdges.Clear();
 
-        _deletes.Clear();
-        _archetypeDeletes.Clear();
-        _maybeAddingPhantomComponent.Clear();
-        _tempComponentIdSet.Clear();
+        deletes.Clear();
+        archetypeDeletes.Clear();
+        maybeAddingPhantomComponent.Clear();
+        tempComponentIdSet.Clear();
 
-        unchecked { _version++; }
-        _nextResolver.Dispose();
-        _nextResolver = Pool<Resolver>.Get();
-        _nextResolver.Configure(this);
+        unchecked { version++; }
+        nextResolver.Dispose();
+        nextResolver = Pool<Resolver>.Get();
+        nextResolver.Configure(this);
 
         if (lazy.TryGetBuffer(out var cmd))
         {
@@ -389,35 +389,35 @@ public sealed partial class EcsCommandBuffer
 
         // Store this entity in the collection of entities
         // Put it in aggregate node 0 (i.e. no components)
-        var id = (uint)_bufferedSets.Count;
-        _bufferedSets.Add(new BufferedEntityData(id, set));
+        var id = (uint)bufferedSets.Count;
+        bufferedSets.Add(new BufferedEntityData(id, set));
 
-        return new BufferedEntity(id, this, _nextResolver);
+        return new BufferedEntity(id, this, nextResolver);
     }
 
     private void SetBuffered<T>(uint id, T value)
         where T : IComponent
     {
-        Debug.Assert(id < _bufferedSets.Count, "Unknown entity ID in SetBuffered");
+        Debug.Assert(id < bufferedSets.Count, "Unknown entity ID in SetBuffered");
 
         if (typeof(T) == typeof(ComponentPhantom))
         {
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
         }
 
-        var bufferedData = _bufferedSets[(int)id];
+        var bufferedData = bufferedSets[(int)id];
         var setters = bufferedData.Setters;
 
         var key = ComponentId.Get<T>();
 
         if (setters.TryGetValue(key, out var existing))
         {
-            _setters.Overwrite(existing, value);
+            this.setters.Overwrite(existing, value);
         }
         else
         {
             // Add to global collection of setters
-            var setterIndex = _setters.Add(value);
+            var setterIndex = this.setters.Add(value);
 
             // Store the index in the per-entity collection
             setters.Add(key, setterIndex);
@@ -427,7 +427,7 @@ public sealed partial class EcsCommandBuffer
             if (bufferedData.ArchetypeKey != -1)
             {
                 bufferedData.ArchetypeKey = GetArchetypeKey(bufferedData.ArchetypeKey, key);
-                _bufferedSets[(int)id] = bufferedData;
+                bufferedSets[(int)id] = bufferedData;
             }
         }
     }
@@ -458,18 +458,18 @@ public sealed partial class EcsCommandBuffer
         var id = ComponentId.Get<T>();
         if (mod.Sets!.TryGetValue(id, out var existing))
         {
-            _setters.Overwrite(existing, value);
+            setters.Overwrite(existing, value);
         }
         else
         {
-            var index = _setters.Add(value);
+            var index = setters.Add(value);
             mod.Sets!.Add(id, index);
         }
 
         // Check if this is a phantom component being added
         if (id.IsPhantomComponent)
         {
-            _maybeAddingPhantomComponent.Add(entity);
+            maybeAddingPhantomComponent.Add(entity);
         }
 
         // Remove it from the "remove" set. In case it was previously removed
@@ -505,7 +505,7 @@ public sealed partial class EcsCommandBuffer
     /// <param name="entity"></param>
     public void Delete(Entity entity)
     {
-        _deletes.Add(entity);
+        deletes.Add(entity);
     }
 
     /// <summary>
@@ -514,7 +514,7 @@ public sealed partial class EcsCommandBuffer
     /// <param name="entities"></param>
     public void Delete(List<Entity> entities)
     {
-        _deletes.AddRange(entities);
+        deletes.AddRange(entities);
     }
 
     /// <summary>
@@ -528,13 +528,13 @@ public sealed partial class EcsCommandBuffer
             throw new ArgumentException("Cannot use QueryDescription from one World with CommandBuffer for another World");
         }
 
-        _archetypeDeletes.Add(entities);
+        archetypeDeletes.Add(entities);
     }
 
     private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
     {
         // Add it if it's missing
-        if (!_entityModifications.TryGetValue(entity, out var existing))
+        if (!entityModifications.TryGetValue(entity, out var existing))
         {
             var mod = new EntityModificationData(
                 ensureSet ? Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get() : null,
@@ -543,7 +543,7 @@ public sealed partial class EcsCommandBuffer
             mod.Sets?.Clear();
             mod.Removes?.Clear();
 
-            _entityModifications.Add(entity, mod);
+            entityModifications.Add(entity, mod);
 
             return mod;
         }
@@ -567,7 +567,7 @@ public sealed partial class EcsCommandBuffer
 
             if (overwrite)
             {
-                _entityModifications[entity] = mod;
+                entityModifications[entity] = mod;
             }
 
             return mod;

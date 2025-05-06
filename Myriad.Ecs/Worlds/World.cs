@@ -17,22 +17,22 @@ public sealed partial class World
 {
     internal IThreadPool ThreadPool { get; }
 
-    private readonly List<Archetype> _archetypes = [];
-    private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [];
+    private readonly List<Archetype> archetypes = [];
+    private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
     // Keep track of dead entities so their ID can be re-used
-    private readonly List<EntityId> _deadEntities = [];
-    private int _nextEntityId = 1;
+    private readonly List<EntityId> deadEntities = [];
+    private int nextEntityId = 1;
 
-    private readonly SegmentedList<EntityInfo> _entities = new(1024);
+    private readonly SegmentedList<EntityInfo> entities = new(1024);
 
     /// <summary>
     /// Get a list of all archetypes in this <see cref="World"/>
     /// </summary>
-    public IReadOnlyList<Archetype> Archetypes => _archetypes;
-    internal int ArchetypesCount => _archetypes.Count;
+    public IReadOnlyList<Archetype> Archetypes => archetypes;
+    internal int ArchetypesCount => archetypes.Count;
 
-    private readonly ConcurrentBag<EcsCommandBuffer> _commandBufferPool = [];
+    private readonly ConcurrentBag<EcsCommandBuffer> commandBufferPool = [];
 
     internal World(IThreadPool pool)
     {
@@ -52,7 +52,7 @@ public sealed partial class World
     /// <returns></returns>
     public EcsCommandBuffer GetCommandBuffer()
     {
-        if (!_commandBufferPool.TryTake(out var buffer))
+        if (!commandBufferPool.TryTake(out var buffer))
         {
             buffer = new EcsCommandBuffer(this);
         }
@@ -66,10 +66,10 @@ public sealed partial class World
     /// <param name="buffer"></param>
     public void ReturnCommandBuffer(EcsCommandBuffer buffer)
     {
-        if (_commandBufferPool.Count < 32)
+        if (commandBufferPool.Count < 32)
         {
             buffer.Clear();
-            _commandBufferPool.Add(buffer);
+            commandBufferPool.Add(buffer);
         }
     }
     #endregion
@@ -77,7 +77,7 @@ public sealed partial class World
     internal void DeleteImmediate(EntityId delete, ref LazyCommandBuffer lazy)
     {
         // Get the entityinfo for this entity
-        ref var entityInfo = ref _entities[delete.ID];
+        ref var entityInfo = ref entities[delete.Id];
 
         // Check this is still a valid entity reference. Early exit if the entity
         // is already dead.
@@ -93,7 +93,7 @@ public sealed partial class World
         entityInfo.Version++;
 
         // Store this ID for re-use later
-        _deadEntities.Add(delete);
+        deadEntities.Add(delete);
     }
 
     internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy)
@@ -101,17 +101,17 @@ public sealed partial class World
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         if (archetype is { HasPhantomComponents: false, IsPhantom: false })
         {
-            _deadEntities.EnsureCapacity(_deadEntities.Count + archetype.EntityCount);
+            deadEntities.EnsureCapacity(deadEntities.Count + archetype.EntityCount);
             foreach (var entity in archetype.Entities)
             {
                 // Get the entityinfo for this entity
-                ref var entityInfo = ref _entities[entity.ID.ID];
+                ref var entityInfo = ref entities[entity.Id.Id];
 
                 // Increment version, this will invalidate the handle
                 entityInfo.Version++;
 
                 // Store this ID for re-use later
-                _deadEntities.Add(entity.ID);
+                deadEntities.Add(entity.Id);
             }
         }
 
@@ -121,7 +121,7 @@ public sealed partial class World
 
     internal Archetype GetArchetype(EntityId entity)
     {
-        if (entity.ID < 0 || entity.ID >= _entities.TotalCapacity)
+        if (entity.Id < 0 || entity.Id >= entities.TotalCapacity)
         {
             throw new ArgumentException("Invalid entity ID", nameof(entity));
         }
@@ -136,12 +136,12 @@ public sealed partial class World
     /// <returns>The entity ID, or zero if the entity does not exist</returns>
     internal uint GetVersion(int entityId)
     {
-        if (entityId <= 0 || entityId >= _entities.TotalCapacity)
+        if (entityId <= 0 || entityId >= entities.TotalCapacity)
         {
             return 0;
         }
 
-        return _entities[entityId].Version;
+        return entities[entityId].Version;
     }
 
     #region Get/Create Archetype
@@ -154,10 +154,10 @@ public sealed partial class World
     internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components, ArchetypeHash hash)
     {
         // Get list of all archetypes with this hash
-        if (!_archetypesByHash.TryGetValue(hash, out var candidates))
+        if (!archetypesByHash.TryGetValue(hash, out var candidates))
         {
             candidates = [];
-            _archetypesByHash.Add(hash, candidates);
+            archetypesByHash.Add(hash, candidates);
         }
 
         // Check if any of the candidates are the one we need
@@ -171,7 +171,7 @@ public sealed partial class World
         var a = new Archetype(this, FrozenOrderedListSet<ComponentId>.Create(components));
 
         // Add it to the relevant lists
-        _archetypes.Add(a);
+        archetypes.Add(a);
         candidates.Add(a);
 
         return a;
@@ -180,10 +180,10 @@ public sealed partial class World
     internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentId, TV> components, ArchetypeHash hash)
     {
         // Get list of all archetypes with this hash
-        if (!_archetypesByHash.TryGetValue(hash, out var candidates))
+        if (!archetypesByHash.TryGetValue(hash, out var candidates))
         {
             candidates = [];
-            _archetypesByHash.Add(hash, candidates);
+            archetypesByHash.Add(hash, candidates);
         }
 
         // Check if any of the candidates are the one we need
@@ -198,7 +198,7 @@ public sealed partial class World
         var a = new Archetype(this, set);
 
         // Add it to the relevant lists
-        _archetypes.Add(a);
+        archetypes.Add(a);
         candidates.Add(a);
 
         return a;
@@ -223,10 +223,10 @@ public sealed partial class World
 
     internal ref EntityInfo AllocateEntity(out EntityId entity)
     {
-        if (_deadEntities.Count > 0)
+        if (deadEntities.Count > 0)
         {
-            var prev = _deadEntities[^1];
-            _deadEntities.RemoveAt(_deadEntities.Count - 1);
+            var prev = deadEntities[^1];
+            deadEntities.RemoveAt(deadEntities.Count - 1);
 
             var v = unchecked(prev.Version + 1);
 
@@ -236,22 +236,22 @@ public sealed partial class World
                 v += 1;
             }
 
-            entity = new EntityId(prev.ID, v);
+            entity = new EntityId(prev.Id, v);
         }
         else
         {
             // Allocate a new ID. This **must not** overflow!
-            entity = new EntityId(checked(_nextEntityId++), 1);
+            entity = new EntityId(checked(nextEntityId++), 1);
 
             // Check if the collection of all entities needs to grow
-            if (entity.ID >= _entities.TotalCapacity)
+            if (entity.Id >= entities.TotalCapacity)
             {
-                _entities.Grow();
+                entities.Grow();
             }
         }
 
         // Update the version
-        ref var slot = ref _entities[entity.ID];
+        ref var slot = ref entities[entity.Id];
         slot.Version = entity.Version;
 
         return ref slot;
@@ -265,7 +265,7 @@ public sealed partial class World
 
     internal ref EntityInfo GetEntityInfo(EntityId entity)
     {
-        ref var info = ref _entities[entity.ID];
+        ref var info = ref entities[entity.Id];
 
         if (info.Version != entity.Version)
         {
@@ -285,13 +285,13 @@ public sealed partial class World
     /// <exception cref="ArgumentException"></exception>
     internal ref EntityInfo GetEntityInfo(EntityId entity, ref EntityInfo dummy, out bool isDummy)
     {
-        if (entity.ID <= 0 || entity.ID >= _entities.TotalCapacity)
+        if (entity.Id <= 0 || entity.Id >= entities.TotalCapacity)
         {
             isDummy = true;
             return ref dummy;
         }
 
-        ref var info = ref _entities[entity.ID];
+        ref var info = ref entities[entity.Id];
         if (info.Version != entity.Version)
         {
             isDummy = true;

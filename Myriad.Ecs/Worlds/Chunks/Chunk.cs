@@ -17,15 +17,15 @@ public sealed class Chunk
     public Archetype Archetype { get; }
 
     // Map from component ID (index) to index in chunk
-    private readonly int[] _componentIndexLookup;
+    private readonly int[] componentIndexLookup;
 
     /// <summary>
     /// Map from index to component ID
     /// </summary>
-    private readonly IReadOnlyList<ComponentId> _componentIdLookup;
+    private readonly IReadOnlyList<ComponentId> componentIdLookup;
 
-    private readonly Entity[] _entities;
-    private readonly Array[] _components;
+    private readonly Entity[] entities;
+    private readonly Array[] components;
 
     /// <summary>
     /// Get the number of entities currently in this chunk
@@ -35,18 +35,18 @@ public sealed class Chunk
     /// <summary>
     /// Get all of the entities in this chunk
     /// </summary>
-    public ReadOnlyMemory<Entity> Entities => _entities.AsMemory(0, EntityCount);
+    public ReadOnlyMemory<Entity> Entities => entities.AsMemory(0, EntityCount);
 
     internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentId> ids)
     {
         Archetype = archetype;
-        _componentIndexLookup = componentIndexLookup;
-        _entities = new Entity[size];
-        _componentIdLookup = ids;
+        this.componentIndexLookup = componentIndexLookup;
+        entities = new Entity[size];
+        componentIdLookup = ids;
 
-        _components = new Array[componentTypes.Count];
-        for (var i = 0; i < _components.Length; i++)
-            _components[i] = ArrayFactory.Create(componentTypes[i], size);
+        components = new Array[componentTypes.Count];
+        for (var i = 0; i < components.Length; i++)
+            components[i] = ArrayFactory.Create(componentTypes[i], size);
     }
 
     #region get component
@@ -60,14 +60,14 @@ public sealed class Chunk
     internal ref T GetRef<T>(EntityId entityId, int rowIndex)
         where T : IComponent
     {
-        Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
+        Debug.Assert(entities[rowIndex].Id == entityId, "Mismatched entities in chunk");
         return ref GetRef<T>(rowIndex);
     }
 
     public RefT<T> GetRefT<T>(EntityId entityId, int rowIndex)
         where T : IComponent
     {
-        Debug.Assert(_entities[rowIndex].ID == entityId, "Mismatched entities in chunk");
+        Debug.Assert(entities[rowIndex].Id == entityId, "Mismatched entities in chunk");
 
         return new RefT<T>(ref GetRef<T>(rowIndex));
     }
@@ -117,7 +117,7 @@ public sealed class Chunk
 
     internal Array GetComponentArray(ComponentId id)
     {
-        return _components[_componentIndexLookup[id.Value]];
+        return components[componentIndexLookup[id.Value]];
     }
     #endregion
 
@@ -130,11 +130,11 @@ public sealed class Chunk
 
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
-        foreach (var component in _components)
+        foreach (var component in components)
             Array.Clear(component, 0, component.Length);
 
         // Not strictly necessary, clean up all the IDs so they're default instead of some invalid value.
-        Array.Clear(_entities, 0, _entities.Length);
+        Array.Clear(entities, 0, entities.Length);
 
         EntityCount = 0;
     }
@@ -144,13 +144,13 @@ public sealed class Chunk
         // It is safe to only debug assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
         // below so it still fails in a sensible way.
-        Debug.Assert(EntityCount < _entities.Length, "Cannot add entity to full chunk");
+        Debug.Assert(EntityCount < entities.Length, "Cannot add entity to full chunk");
 
         // Use the next free slot
         var index = EntityCount++;
 
         // Occupy this row
-        _entities[index] = entity.ToEntity(Archetype.World);
+        entities[index] = entity.ToEntity(Archetype.World);
 
         // Update global entity info to refer to this location
         info.RowIndex = index;
@@ -165,14 +165,14 @@ public sealed class Chunk
 
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
-        foreach (var component in _components)
+        foreach (var component in components)
             Array.Clear(component, index, 1);
 
         // No work to do if there are no other entities
         EntityCount -= 1;
         if (EntityCount == 0)
         {
-            _entities[index] = default;
+            entities[index] = default;
             return;
         }
 
@@ -180,15 +180,15 @@ public sealed class Chunk
         // entity down into this slot to keep the chunk continuous.
         if (index != EntityCount)
         {
-            var lastEntity = _entities[EntityCount];
+            var lastEntity = entities[EntityCount];
             var lastEntityIndex = EntityCount;
-            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity.ID);
-            _entities[index] = lastEntity;
-            _entities[lastEntityIndex] = default;
+            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity.Id);
+            entities[index] = lastEntity;
+            entities[lastEntityIndex] = default;
             lastInfo.RowIndex = index;
 
             // Copy top entity components into place
-            foreach (var component in _components)
+            foreach (var component in components)
             {
                 Array.Copy(component, lastEntityIndex, component, index, 1);
 
@@ -212,19 +212,19 @@ public sealed class Chunk
         var destChunk = destRow.Chunk;
 
         // Copy across everything that exists in the destination archetype
-        for (var i = 0; i < _components.Length; i++)
+        for (var i = 0; i < components.Length; i++)
         {
-            var id = _componentIdLookup[i].Value;
+            var id = componentIdLookup[i].Value;
 
             // Check if the component is not in the destination, in which case just don't copy it
-            if (id >= destChunk._componentIndexLookup.Length || destChunk._componentIndexLookup[id] == -1)
+            if (id >= destChunk.componentIndexLookup.Length || destChunk.componentIndexLookup[id] == -1)
             {
                 continue;
             }
 
             // Get the two arrays
-            var srcArr = _components[i];
-            var destArr = destChunk._components[destChunk._componentIndexLookup[id]];
+            var srcArr = components[i];
+            var destArr = destChunk.components[destChunk.componentIndexLookup[id]];
 
             // Copy!
             Array.Copy(srcArr, srcRow.RowIndex, destArr, destRow.RowIndex, 1);

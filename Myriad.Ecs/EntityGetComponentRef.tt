@@ -55,7 +55,7 @@ public readonly partial record struct Entity
     public RefTuple<<#= types #>> GetComponentRef<<#= types #>>()
         where <#= Constraints(i, 8) #>
     {
-        return ID.GetComponentRef<<#= types #>>(World);
+        return Id.GetComponentRef<<#= types #>>(World);
     }
 
 <#

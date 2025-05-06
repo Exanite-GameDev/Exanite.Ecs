@@ -280,8 +280,8 @@ public class DisposableComponentTests
         var w = new WorldBuilder().Build();
 
         // boxed int will be incremented when dispose happens
-        var box1 = new BoxedInt { ID = "box1" };
-        var box2 = new BoxedInt { ID = "box2" };
+        var box1 = new BoxedInt { Id = "box1" };
+        var box2 = new BoxedInt { Id = "box2" };
 
         var cmd = new EcsCommandBuffer(w);
 

@@ -468,7 +468,7 @@ public readonly partial record struct Entity
         where T0 : IComponent
         where T1 : IComponent
     {
-        return ID.GetComponentRef<T0, T1>(World);
+        return Id.GetComponentRef<T0, T1>(World);
     }
 
     /// <summary>
@@ -479,7 +479,7 @@ public readonly partial record struct Entity
         where T1 : IComponent
         where T2 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2>(World);
+        return Id.GetComponentRef<T0, T1, T2>(World);
     }
 
     /// <summary>
@@ -491,7 +491,7 @@ public readonly partial record struct Entity
         where T2 : IComponent
         where T3 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3>(World);
     }
 
     /// <summary>
@@ -504,7 +504,7 @@ public readonly partial record struct Entity
         where T3 : IComponent
         where T4 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4>(World);
     }
 
     /// <summary>
@@ -518,7 +518,7 @@ public readonly partial record struct Entity
         where T4 : IComponent
         where T5 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5>(World);
     }
 
     /// <summary>
@@ -533,7 +533,7 @@ public readonly partial record struct Entity
         where T5 : IComponent
         where T6 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6>(World);
     }
 
     /// <summary>
@@ -549,7 +549,7 @@ public readonly partial record struct Entity
         where T6 : IComponent
         where T7 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>(World);
     }
 
     /// <summary>
@@ -566,7 +566,7 @@ public readonly partial record struct Entity
         where T7 : IComponent
         where T8 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(World);
     }
 
     /// <summary>
@@ -584,7 +584,7 @@ public readonly partial record struct Entity
         where T8 : IComponent
         where T9 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(World);
     }
 
     /// <summary>
@@ -603,7 +603,7 @@ public readonly partial record struct Entity
         where T9 : IComponent
         where T10 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(World);
     }
 
     /// <summary>
@@ -623,7 +623,7 @@ public readonly partial record struct Entity
         where T10 : IComponent
         where T11 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(World);
     }
 
     /// <summary>
@@ -644,7 +644,7 @@ public readonly partial record struct Entity
         where T11 : IComponent
         where T12 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(World);
     }
 
     /// <summary>
@@ -666,7 +666,7 @@ public readonly partial record struct Entity
         where T12 : IComponent
         where T13 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(World);
     }
 
     /// <summary>
@@ -689,7 +689,7 @@ public readonly partial record struct Entity
         where T13 : IComponent
         where T14 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(World);
     }
 
     /// <summary>
@@ -713,7 +713,7 @@ public readonly partial record struct Entity
         where T14 : IComponent
         where T15 : IComponent
     {
-        return ID.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(World);
+        return Id.GetComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(World);
     }
 
 }

@@ -9,14 +9,14 @@ namespace Myriad.Ecs;
 /// <summary>
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)
 /// </summary>
-[DebuggerDisplay("{ID}v{Version}")]
+[DebuggerDisplay("{Id}v{Version}")]
 public readonly partial record struct EntityId
     : IComparable<EntityId>
 {
     /// <summary>
     /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
-    public readonly int ID;
+    public readonly int Id;
 
     /// <summary>
     /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
@@ -25,14 +25,14 @@ public readonly partial record struct EntityId
 
     internal EntityId(int id, uint version)
     {
-        ID = id;
+        Id = id;
         Version = version;
     }
 
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{ID}v{Version}";
+        return $"{Id}v{Version}";
     }
 
     /// <summary>
@@ -51,8 +51,8 @@ public readonly partial record struct EntityId
     /// <returns></returns>
     public bool Exists(World world)
     {
-        return ID != 0
-            && world.GetVersion(ID) == Version;
+        return Id != 0
+            && world.GetVersion(Id) == Version;
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public readonly partial record struct EntityId
     /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
     public bool IsPhantom(World world)
     {
-        return ID != 0
+        return Id != 0
             && Exists(world)
             && world.GetArchetype(this).IsPhantom;
     }
@@ -80,7 +80,7 @@ public readonly partial record struct EntityId
     /// <inheritdoc/>
     public int CompareTo(EntityId other)
     {
-        var idc = ID.CompareTo(other.ID);
+        var idc = Id.CompareTo(other.Id);
         if (idc != 0)
         {
             return idc;
@@ -93,12 +93,12 @@ public readonly partial record struct EntityId
     /// Get a unique 64 bit ID for this entity
     /// </summary>
     /// <returns></returns>
-    public long UniqueID()
+    public long UniqueId()
     {
         // Set the entity ID and version into the hi and lo 32 bits
         var u = new Union64
         {
-            I0 = ID,
+            I0 = Id,
             U1 = Version
         };
 
@@ -155,7 +155,7 @@ public readonly partial record struct EntityId
     public ref T GetComponentRef<T>(World world)
         where T : IComponent
     {
-        return ref GetComponentRefT<T>(world).Ref;
+        return ref GetComponentRefT<T>(world).Value;
     }
 
     /// <summary>

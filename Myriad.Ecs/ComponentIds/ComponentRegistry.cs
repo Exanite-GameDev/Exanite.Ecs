@@ -12,7 +12,7 @@ namespace Myriad.Ecs.ComponentIds;
 /// </summary>
 internal static class ComponentRegistry
 {
-    private static readonly RwLock<State> _lock = new(new State());
+    private static readonly RwLock<State> Lock = new(new State());
 
     /// <summary>
     /// Get the ID for the given type
@@ -24,7 +24,7 @@ internal static class ComponentRegistry
     {
         var type = typeof(T);
 
-        using (var locker = _lock.EnterReadLock())
+        using (var locker = Lock.EnterReadLock())
         {
             if (locker.Value.TryGet(type, out var value))
             {
@@ -32,7 +32,7 @@ internal static class ComponentRegistry
             }
         }
 
-        using (var locker = _lock.EnterWriteLock())
+        using (var locker = Lock.EnterWriteLock())
         {
             return locker.Value.GetOrAdd(type);
         }
@@ -47,7 +47,7 @@ internal static class ComponentRegistry
     {
         TypeCheck(type);
 
-        using (var locker = _lock.EnterReadLock())
+        using (var locker = Lock.EnterReadLock())
         {
             if (locker.Value.TryGet(type, out var value))
             {
@@ -55,7 +55,7 @@ internal static class ComponentRegistry
             }
         }
 
-        using (var locker = _lock.EnterWriteLock())
+        using (var locker = Lock.EnterWriteLock())
         {
             return locker.Value.GetOrAdd(type);
         }
@@ -68,7 +68,7 @@ internal static class ComponentRegistry
     /// <returns></returns>
     public static Type Get(ComponentId id)
     {
-        using var locker = _lock.EnterReadLock();
+        using var locker = Lock.EnterReadLock();
 
         if (!locker.Value.TryGet(id, out var type))
         {
@@ -88,18 +88,18 @@ internal static class ComponentRegistry
 
     private class State
     {
-        private readonly Dictionary<ComponentId, Type> TypeLookup = [];
-        private readonly Dictionary<Type, ComponentId> IDLookup = [];
+        private readonly Dictionary<ComponentId, Type> typeLookup = [];
+        private readonly Dictionary<Type, ComponentId> idLookup = [];
 
         // Init the first ID to be the one after the default ID. That
         // means that default is _not_ a valid ID.
-        private int _nextId = 1;
+        private int nextId = 1;
 
         public ComponentId GetOrAdd(Type type)
         {
-            if (!IDLookup.TryGetValue(type, out var value))
+            if (!idLookup.TryGetValue(type, out var value))
             {
-                var id = _nextId++;
+                var id = nextId++;
 
                 // Shift over the ID to make space for the special bits
                 id <<= ComponentId.SpecialBitsCount;
@@ -112,8 +112,8 @@ internal static class ComponentRegistry
 
                 // Store it for future lookups
                 value = new ComponentId(id);
-                IDLookup[type] = value;
-                TypeLookup[value] = type;
+                idLookup[type] = value;
+                typeLookup[value] = type;
 
                 // Since we've discovered this component we're likely to need
                 // arrays made for it later. Prepare the array factory for that.
@@ -125,12 +125,12 @@ internal static class ComponentRegistry
 
         public bool TryGet(Type type, out ComponentId id)
         {
-            return IDLookup.TryGetValue(type, out id);
+            return idLookup.TryGetValue(type, out id);
         }
 
         public bool TryGet(ComponentId id, [MaybeNullWhen(false)] out Type type)
         {
-            return TypeLookup.TryGetValue(id, out type);
+            return typeLookup.TryGetValue(id, out type);
         }
     }
 }

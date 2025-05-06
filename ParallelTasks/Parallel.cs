@@ -8,7 +8,7 @@ public static class Parallel
     /// <summary>
     /// Gets the work scheduler.
     /// </summary>
-    private static readonly WorkStealingScheduler _scheduler = new();
+    private static readonly WorkStealingScheduler Scheduler = new();
 
     /// <summary>
     /// Creates and starts a task to execute the given work.
@@ -30,7 +30,7 @@ public static class Parallel
 
         var workItem = WorkItem.Get();
         var task = workItem.PrepareStart(work);
-        _scheduler.Schedule(task);
+        Scheduler.Schedule(task);
         return task;
     }
 

@@ -32,7 +32,7 @@ public sealed partial class EcsCommandBuffer
         {
             Lookup.Clear();
             Parent = buffer;
-            Version = buffer._version;
+            Version = buffer.version;
         }
 
         /// <inheritdoc/>

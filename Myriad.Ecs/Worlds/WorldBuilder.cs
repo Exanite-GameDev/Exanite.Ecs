@@ -12,17 +12,17 @@ namespace Myriad.Ecs.Worlds;
 /// </summary>
 public sealed partial class WorldBuilder
 {
-    private readonly List<OrderedListSet<ComponentId>> _archetypes = [];
-    private IThreadPool? _pool;
+    private readonly List<OrderedListSet<ComponentId>> archetypes = [];
+    private IThreadPool? pool;
 
     private bool AddArchetype(HashSet<ComponentId> ids)
     {
-        if (_archetypes.Any(a => a.SetEquals(ids)))
+        if (archetypes.Any(a => a.SetEquals(ids)))
         {
             return false;
         }
 
-        _archetypes.Add(new OrderedListSet<ComponentId>(ids));
+        archetypes.Add(new OrderedListSet<ComponentId>(ids));
         return true;
     }
 
@@ -53,12 +53,12 @@ public sealed partial class WorldBuilder
     /// <exception cref="InvalidOperationException"></exception>
     public WorldBuilder WithThreadPool(IThreadPool pool)
     {
-        if (_pool != null)
+        if (this.pool != null)
         {
             throw new InvalidOperationException("Cannot call 'WithThreadPool' twice");
         }
 
-        _pool = pool;
+        this.pool = pool;
 
         return this;
     }
@@ -70,10 +70,10 @@ public sealed partial class WorldBuilder
     public World Build()
     {
         var w = new World(
-            _pool ?? new DefaultThreadPool()
+            pool ?? new DefaultThreadPool()
         );
 
-        foreach (var components in _archetypes)
+        foreach (var components in archetypes)
             w.GetOrCreateArchetype(components);
 
         return w;

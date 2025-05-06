@@ -15,12 +15,12 @@ namespace Myriad.Ecs.Queries;
 public sealed class QueryDescription
 {
     // Cache of result from last time TryMatch was called
-    private MatchResult? _result;
-    private readonly ReaderWriterLockSlim _resultLock = new();
-    private readonly OrderedListSet<ComponentId> _temporarySet = [];
+    private MatchResult? result;
+    private readonly ReaderWriterLockSlim resultLock = new();
+    private readonly OrderedListSet<ComponentId> temporarySet = [];
 
-    private readonly ComponentBloomFilter _includeBloom;
-    private readonly ComponentBloomFilter _excludeBloom;
+    private readonly ComponentBloomFilter includeBloom;
+    private readonly ComponentBloomFilter excludeBloom;
 
     /// <summary>
     /// The World that this query is for
@@ -59,8 +59,8 @@ public sealed class QueryDescription
         AtLeastOneOf = atLeastOne;
         ExactlyOneOf = exactlyOne;
 
-        _includeBloom = include.ToBloomFilter();
-        _excludeBloom = exclude.ToBloomFilter();
+        includeBloom = include.ToBloomFilter();
+        excludeBloom = exclude.ToBloomFilter();
     }
 
     /// <summary>
@@ -212,25 +212,25 @@ public sealed class QueryDescription
     public FrozenOrderedListSet<ArchetypeMatch> GetArchetypes()
     {
         // Quick check if we already have a non-stale result
-        _resultLock.EnterReadLock();
+        resultLock.EnterReadLock();
         try
         {
-            if (_result != null && !_result.Value.IsStale(World))
+            if (result != null && !result.Value.IsStale(World))
             {
-                return _result.Value.Archetypes;
+                return result.Value.Archetypes;
             }
         }
         finally
         {
-            _resultLock.ExitReadLock();
+            resultLock.ExitReadLock();
         }
 
         // We don't have a valid cached result, calculate it now
-        _resultLock.EnterWriteLock();
+        resultLock.EnterWriteLock();
         try
         {
             // If this query has never been evaluated before do it now
-            if (_result == null)
+            if (result == null)
             {
                 // Check every archetype
                 var matches = new List<ArchetypeMatch>();
@@ -241,20 +241,20 @@ public sealed class QueryDescription
                     }
 
                 // Store result for next time
-                _result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(matches));
+                result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
-                return _result.Value.Archetypes;
+                return result.Value.Archetypes;
             }
 
             // If the number of archetypes has changed since last time regenerate the cache
-            if (_result.Value.IsStale(World))
+            if (result.Value.IsStale(World))
             {
                 // Lazy copy of the match set, in case there are no matches
                 var copy = default(OrderedListSet<ArchetypeMatch>?);
 
                 // Check every new archetype
-                for (var i = _result.Value.ArchetypeWatermark; i < World.Archetypes.Count; i++)
+                for (var i = result.Value.ArchetypeWatermark; i < World.Archetypes.Count; i++)
                 {
                     var m = TryMatch(World.Archetypes[i]);
                     if (m == null)
@@ -263,7 +263,7 @@ public sealed class QueryDescription
                     }
 
                     // Lazy copy the set now that we know we need it
-                    copy ??= new OrderedListSet<ArchetypeMatch>(_result.Value.Archetypes);
+                    copy ??= new OrderedListSet<ArchetypeMatch>(result.Value.Archetypes);
 
                     // Add the match
                     copy.Add(m.Value);
@@ -272,20 +272,20 @@ public sealed class QueryDescription
                 if (copy == null)
                 {
                     // Copy is null, that means nothing new was found, just use the old result with the new watermark
-                    _result = new MatchResult(World.Archetypes.Count, _result.Value.Archetypes);
+                    result = new MatchResult(World.Archetypes.Count, result.Value.Archetypes);
                 }
                 else
                 {
                     // Create a new match result
-                    _result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(copy));
+                    result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(copy));
                 }
             }
 
-            return _result.Value.Archetypes;
+            return result.Value.Archetypes;
         }
         finally
         {
-            _resultLock.ExitWriteLock();
+            resultLock.ExitWriteLock();
         }
     }
 
@@ -293,7 +293,7 @@ public sealed class QueryDescription
     {
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
-        if (Include.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in _includeBloom))
+        if (Include.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in includeBloom))
         {
             return null;
         }
@@ -306,7 +306,7 @@ public sealed class QueryDescription
 
         // If this is false it means there is definitely _not_ an intersection, which means we can skip
         // the inner check.
-        if (Exclude.Count > 0 && _excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
+        if (Exclude.Count > 0 && excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
         {
             if (archetype.Components.Overlaps(Exclude))
             {
@@ -315,7 +315,7 @@ public sealed class QueryDescription
         }
 
         // Use the temp hashset to do this
-        var set = _temporarySet;
+        var set = temporarySet;
         set.Clear();
 
         // Check if there are any "exactly one" items
@@ -428,7 +428,7 @@ public sealed class QueryDescription
     /// <returns></returns>
     public bool Contains(Entity entity)
     {
-        var info = entity.World.GetEntityInfo(entity.ID);
+        var info = entity.World.GetEntityInfo(entity.Id);
         var archetype = new ArchetypeMatch(info.Chunk.Archetype, null, null);
         return GetArchetypes().Contains(archetype);
     }

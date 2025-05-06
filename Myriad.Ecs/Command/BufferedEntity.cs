@@ -9,11 +9,11 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public readonly record struct BufferedEntity
     {
-        private readonly uint _id;
-        private readonly uint _version;
+        private readonly uint id;
+        private readonly uint version;
 
-        internal readonly EcsCommandBuffer _buffer;
-        private readonly Resolver _resolver;
+        internal readonly EcsCommandBuffer Buffer;
+        private readonly Resolver resolver;
 
         /// <summary>
         /// Get the <see cref="CommandBuffer"/> which this <see cref="BufferedEntity"/> is from.
@@ -23,22 +23,22 @@ public sealed partial class EcsCommandBuffer
             get
             {
                 CheckIsMutable();
-                return _buffer;
+                return Buffer;
             }
         }
 
         internal BufferedEntity(uint id, EcsCommandBuffer buffer, Resolver resolver)
         {
-            _id = id;
-            _buffer = buffer;
-            _resolver = resolver;
+            this.id = id;
+            Buffer = buffer;
+            this.resolver = resolver;
 
-            _version = buffer._version;
+            version = buffer.version;
         }
 
         private void CheckIsMutable()
         {
-            if (_version != _buffer._version)
+            if (version != Buffer.version)
             {
                 throw new InvalidOperationException("Cannot use `BufferedEntity` after `CommandBuffer` has been played");
             }
@@ -55,7 +55,7 @@ public sealed partial class EcsCommandBuffer
         {
             CheckIsMutable();
 
-            _buffer.SetBuffered(_id, value);
+            Buffer.SetBuffered(id, value);
             return this;
         }
 
@@ -65,22 +65,22 @@ public sealed partial class EcsCommandBuffer
         /// <returns></returns>
         public Entity Resolve()
         {
-            if (_resolver.Parent == null)
+            if (resolver.Parent == null)
             {
                 throw new ObjectDisposedException("Resolver has already been disposed");
             }
 
-            if (_resolver.Parent != _buffer)
+            if (resolver.Parent != Buffer)
             {
                 throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
             }
 
-            if (_resolver.Version != _version)
+            if (resolver.Version != version)
             {
                 throw new ObjectDisposedException("Resolver has already been disposed");
             }
 
-            return _resolver.Lookup[_id].ToEntity(_resolver.World);
+            return resolver.Lookup[id].ToEntity(resolver.World);
         }
     }
 }

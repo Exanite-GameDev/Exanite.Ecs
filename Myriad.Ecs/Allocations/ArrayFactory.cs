@@ -6,7 +6,7 @@ namespace Myriad.Ecs.Allocations;
 
 internal static class ArrayFactory
 {
-    [ThreadStatic] private static Dictionary<Type, Func<int, Array>>? _factories;
+    [ThreadStatic] private static Dictionary<Type, Func<int, Array>>? Factories;
 
     /// <summary>
     /// Prepare this type so that arrays of it can be constructed later
@@ -15,11 +15,11 @@ internal static class ArrayFactory
     // ReSharper disable once UnusedMember.Global (Used implicity by reflection)
     public static void Prepare<T>()
     {
-        _factories ??= [];
+        Factories ??= [];
 
-        if (!_factories.ContainsKey(typeof(T)))
+        if (!Factories.ContainsKey(typeof(T)))
         {
-            _factories.Add(typeof(T), Create<T>);
+            Factories.Add(typeof(T), Create<T>);
         }
     }
 
@@ -41,7 +41,7 @@ internal static class ArrayFactory
     /// <returns></returns>
     public static Array Create(Type type, int capacity)
     {
-        if (_factories != null && _factories.TryGetValue(type, out var factory))
+        if (Factories != null && Factories.TryGetValue(type, out var factory))
         {
             return factory(capacity);
         }

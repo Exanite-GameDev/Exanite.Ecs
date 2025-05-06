@@ -15,12 +15,12 @@ namespace Myriad.Ecs.Collections;
 [StructLayout(LayoutKind.Sequential, Pack = 0)]
 internal struct ComponentBloomFilter
 {
-    private ulong _a;
-    private ulong _b;
-    private ulong _c;
-    private ulong _d;
-    private ulong _e;
-    private ulong _f;
+    private ulong a;
+    private ulong b;
+    private ulong c;
+    private ulong d;
+    private ulong e;
+    private ulong f;
 
     public void Add(ComponentId id)
     {
@@ -28,12 +28,12 @@ internal struct ComponentBloomFilter
         var bytes = MemoryMarshal.Cast<int, byte>(value);
 
         // Set one random bit in each of the bitsets
-        SetRandomBit(bytes, 136920569, ref _a);
-        SetRandomBit(bytes, 803654167, ref _b);
-        SetRandomBit(bytes, 786675075, ref _c);
-        SetRandomBit(bytes, 562713536, ref _d);
-        SetRandomBit(bytes, 703121798, ref _e);
-        SetRandomBit(bytes, 133703782, ref _f);
+        SetRandomBit(bytes, 136920569, ref a);
+        SetRandomBit(bytes, 803654167, ref b);
+        SetRandomBit(bytes, 786675075, ref c);
+        SetRandomBit(bytes, 562713536, ref d);
+        SetRandomBit(bytes, 703121798, ref e);
+        SetRandomBit(bytes, 133703782, ref f);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static void SetRandomBit(Span<byte> bytes, ulong seed, ref ulong output)
@@ -58,10 +58,10 @@ internal struct ComponentBloomFilter
         // set does not intersect.
 
         // Bitwise & each matching element in the two sets together
-        var abcd = System.Runtime.Intrinsics.Vector256.Create(_a, _b, _c, _d)
-                 & System.Runtime.Intrinsics.Vector256.Create(other._a, other._b, other._c, other._d);
-        var ef = System.Runtime.Intrinsics.Vector128.Create(_e, _f)
-               & System.Runtime.Intrinsics.Vector128.Create(other._e, other._f);
+        var abcd = System.Runtime.Intrinsics.Vector256.Create(a, b, c, d)
+                 & System.Runtime.Intrinsics.Vector256.Create(other.a, other.b, other.c, other.d);
+        var ef = System.Runtime.Intrinsics.Vector128.Create(e, f)
+               & System.Runtime.Intrinsics.Vector128.Create(other.e, other.f);
 
         // Check if any of the elements had any matching bits
         var abz = System.Runtime.Intrinsics.Vector256.EqualsAny(abcd, System.Runtime.Intrinsics.Vector256<ulong>.Zero);
@@ -74,11 +74,11 @@ internal struct ComponentBloomFilter
 
     public void Union(ref readonly ComponentBloomFilter other)
     {
-        _a |= other._a;
-        _b |= other._b;
-        _c |= other._c;
-        _d |= other._d;
-        _e |= other._e;
-        _f |= other._f;
+        a |= other.a;
+        b |= other.b;
+        c |= other.c;
+        d |= other.d;
+        e |= other.e;
+        f |= other.f;
     }
 }

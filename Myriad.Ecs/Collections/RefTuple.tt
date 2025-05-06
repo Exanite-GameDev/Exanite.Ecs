@@ -3,7 +3,7 @@
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
 <#
-	const int PARAM_COUNT = 16;
+	const int paramCount = 16;
 #>
 
 // ReSharper disable UnusedType.Global
@@ -21,26 +21,21 @@ namespace Myriad.Ecs.Collections;
 
 public readonly ref struct RefT<T>
 {
-	private readonly ref T _ref;
+	private readonly ref T value;
 
-	public ref T Ref
+	public ref T Value
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => ref _ref;
+		get => ref value;
 	}
 
 	internal RefT(ref T r)
 	{
-		_ref = ref r;
+		value = ref r;
 	}
-
-	public static implicit operator T(RefT<T> reference)
-    {
-		return reference.Ref;
-    }
 }
 
-<# for (var i = 1; i <= PARAM_COUNT; i++)
+<# for (var i = 1; i <= paramCount; i++)
 {
 	var tparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "T" + x));
 	var refparams = string.Join(", ", Enumerable.Range(0, i).Select(x => "ref T" + x));
@@ -60,11 +55,11 @@ public readonly ref struct RefTuple<<#= tparams #>>
 <# for (var k = 0; k < i; k++)
 {
 #>
-	private readonly RefT<T<#= k #>> _item<#= k #>;
+	private readonly RefT<T<#= k #>> item<#= k #>;
 	public ref T<#= k #> Item<#= k #>
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get => ref _item<#= k #>.Ref;
+		get => ref item<#= k #>.Value;
 	}
 
 <#
@@ -76,7 +71,7 @@ public readonly ref struct RefTuple<<#= tparams #>>
 <# for (var k = 0; k < i; k++)
 {
 #>
-		_item<#= k #> = item<#= k #>;
+		this.item<#= k #> = item<#= k #>;
 <#
 }
 #>
@@ -88,7 +83,7 @@ public readonly ref struct RefTuple<<#= tparams #>>
 <# for (var k = 0; k < i; k++)
 {
 #>
-		item<#= k #> = _item<#= k #>;
+		item<#= k #> = this.item<#= k #>;
 <#
 }
 #>

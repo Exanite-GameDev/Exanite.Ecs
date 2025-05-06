@@ -5,51 +5,51 @@ namespace Myriad.Ecs.Locks;
 internal class RwLock<T>(T value)
     where T : class
 {
-    private readonly ReaderWriterLockSlim _lock = new(LockRecursionPolicy.SupportsRecursion);
+    private readonly ReaderWriterLockSlim @lock = new(LockRecursionPolicy.SupportsRecursion);
 
     public ReadLockHandle EnterReadLock()
     {
-        _lock.EnterReadLock();
-        return new ReadLockHandle(_lock, value);
+        @lock.EnterReadLock();
+        return new ReadLockHandle(@lock, value);
     }
 
     public WriteLockHandle EnterWriteLock()
     {
-        _lock.EnterWriteLock();
-        return new WriteLockHandle(_lock, value);
+        @lock.EnterWriteLock();
+        return new WriteLockHandle(@lock, value);
     }
 
     public readonly ref struct ReadLockHandle
     {
-        private readonly ReaderWriterLockSlim _lock;
+        private readonly ReaderWriterLockSlim @lock;
         public readonly T Value;
 
         internal ReadLockHandle(ReaderWriterLockSlim @lock, T value)
         {
-            _lock = @lock;
+            this.@lock = @lock;
             Value = value;
         }
 
         public void Dispose()
         {
-            _lock.ExitReadLock();
+            @lock.ExitReadLock();
         }
     }
 
     public readonly ref struct WriteLockHandle
     {
-        private readonly ReaderWriterLockSlim _lock;
+        private readonly ReaderWriterLockSlim @lock;
         public readonly T Value;
 
         internal WriteLockHandle(ReaderWriterLockSlim @lock, T value)
         {
-            _lock = @lock;
+            this.@lock = @lock;
             Value = value;
         }
 
         public void Dispose()
         {
-            _lock.ExitWriteLock();
+            @lock.ExitWriteLock();
         }
     }
 }

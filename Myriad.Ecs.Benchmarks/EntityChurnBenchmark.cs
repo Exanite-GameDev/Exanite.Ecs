@@ -8,15 +8,15 @@ namespace Myriad.Ecs.Benchmarks;
 [MemoryDiagnoser]
 public class EntityChurnBenchmark
 {
-    private World _world = null!;
-    private EcsCommandBuffer _buffer = null!;
-    private readonly List<EcsCommandBuffer.BufferedEntity> _buffered = [];
+    private World world = null!;
+    private EcsCommandBuffer buffer = null!;
+    private readonly List<EcsCommandBuffer.BufferedEntity> buffered = [];
 
     [GlobalSetup]
     public void Setup()
     {
-        _world = new WorldBuilder().Build();
-        _buffer = new EcsCommandBuffer(_world);
+        world = new WorldBuilder().Build();
+        buffer = new EcsCommandBuffer(world);
     }
 
     [Benchmark]
@@ -30,19 +30,19 @@ public class EntityChurnBenchmark
         {
             // Create some entities
             for (var j = 0; j < 100; j++)
-                _buffered.Add(_buffer.Create().Set(new ComponentInt32(j)));
+                buffered.Add(buffer.Create().Set(new ComponentInt32(j)));
 
             // Destroy all previously created entities
-            _buffer.Delete(alive);
+            buffer.Delete(alive);
             alive.Clear();
 
             // Execute
-            using var resolver = _buffer.Playback();
+            using var resolver = buffer.Playback();
 
             // Resolve results
-            foreach (var b in _buffered)
+            foreach (var b in buffered)
                 alive.Add(b.Resolve());
-            _buffered.Clear();
+            buffered.Clear();
         }
     }
 }

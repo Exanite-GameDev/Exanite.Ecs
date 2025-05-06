@@ -59,7 +59,7 @@ public class EntityTests
     }
 
     [TestMethod]
-    public void EntityUniqueID()
+    public void EntityUniqueId()
     {
         var w = new WorldBuilder().Build();
         var b = new EcsCommandBuffer(w);
@@ -70,8 +70,8 @@ public class EntityTests
         var entity1 = eb1.Resolve();
         var entity2 = eb2.Resolve();
 
-        var id1 = entity1.UniqueID();
-        var id2 = entity2.UniqueID();
+        var id1 = entity1.UniqueId();
+        var id2 = entity2.UniqueId();
 
         Assert.AreNotEqual(id1, id2);
     }

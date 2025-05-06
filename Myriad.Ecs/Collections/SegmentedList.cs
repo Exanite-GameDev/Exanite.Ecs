@@ -19,7 +19,7 @@ internal class SegmentedList<TItem>
     /// </summary>
     public int TotalCapacity { get; private set; }
 
-    private readonly List<TItem[]> _segments = [];
+    private readonly List<TItem[]> segments = [];
 
     public SegmentedList(int segmentCapacity)
     {
@@ -52,7 +52,7 @@ internal class SegmentedList<TItem>
         var segIndex = index / SegmentCapacity;
         var rowIndex = index - segIndex * SegmentCapacity;
 
-        return (rowIndex, _segments[segIndex]);
+        return (rowIndex, segments[segIndex]);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ internal class SegmentedList<TItem>
     /// </summary>
     public void Grow()
     {
-        _segments.Add(new TItem[SegmentCapacity]);
+        segments.Add(new TItem[SegmentCapacity]);
         TotalCapacity += SegmentCapacity;
     }
 }

@@ -11,8 +11,8 @@ public readonly struct LocalPool<T>
     : IDisposable
     where T : class, new()
 {
-    private readonly List<T> _items = Pool<List<T>>.Get();
-    private readonly int _maxSize;
+    private readonly List<T> items = Pool<List<T>>.Get();
+    private readonly int maxSize;
 
     /// <summary>
     /// Create a new <see cref="LocalPool{T}"/>
@@ -27,8 +27,8 @@ public readonly struct LocalPool<T>
     /// </summary>
     public LocalPool(int maxSize)
     {
-        _items = Pool<List<T>>.Get();
-        _maxSize = maxSize;
+        items = Pool<List<T>>.Get();
+        this.maxSize = maxSize;
     }
 
     /// <summary>
@@ -37,13 +37,13 @@ public readonly struct LocalPool<T>
     /// <returns></returns>
     public T Get()
     {
-        if (_items.Count == 0)
+        if (items.Count == 0)
         {
             return Pool<T>.Get();
         }
 
-        var item = _items[^1];
-        _items.RemoveAt(_items.Count - 1);
+        var item = items[^1];
+        items.RemoveAt(items.Count - 1);
         return item;
     }
 
@@ -53,9 +53,9 @@ public readonly struct LocalPool<T>
     /// <param name="item"></param>
     public void Return(T item)
     {
-        if (_items.Count < _maxSize)
+        if (items.Count < maxSize)
         {
-            _items.Add(item);
+            items.Add(item);
         }
         else
         {
@@ -66,10 +66,10 @@ public readonly struct LocalPool<T>
     /// <inheritdoc/>
     public void Dispose()
     {
-        foreach (var item in _items)
+        foreach (var item in items)
             Pool<T>.Return(item);
-        _items.Clear();
+        items.Clear();
 
-        Pool<List<T>>.Return(_items);
+        Pool<List<T>>.Return(items);
     }
 }

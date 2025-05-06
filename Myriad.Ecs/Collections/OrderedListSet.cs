@@ -14,10 +14,10 @@ internal class OrderedListSet<TItem>
     : IReadOnlyList<TItem>
     where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
-    private readonly List<TItem> _items = [];
-    public int Count => _items.Count;
+    private readonly List<TItem> items = [];
+    public int Count => items.Count;
 
-    public TItem this[int i] => _items[i];
+    public TItem this[int i] => items[i];
 
     #region constructors
     public OrderedListSet()
@@ -27,57 +27,57 @@ internal class OrderedListSet<TItem>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Local
     public OrderedListSet(List<TItem> items)
     {
-        _items.EnsureCapacity(items.Count);
+        this.items.EnsureCapacity(items.Count);
         foreach (var item in items)
             Add(item);
     }
 
     public OrderedListSet(ReadOnlySpan<TItem> items)
     {
-        _items.EnsureCapacity(items.Length);
+        this.items.EnsureCapacity(items.Length);
         foreach (var item in items)
             Add(item);
     }
 
     internal OrderedListSet(HashSet<TItem> items)
     {
-        _items.AddRange(items);
-        _items.Sort();
+        this.items.AddRange(items);
+        this.items.Sort();
     }
 
     public OrderedListSet(OrderedListSet<TItem> items)
     {
-        _items = [..items._items];
+        this.items = [..items.items];
     }
 
     public OrderedListSet(FrozenOrderedListSet<TItem> items)
     {
-        _items.EnsureCapacity(items.Count);
+        this.items.EnsureCapacity(items.Count);
         foreach (var item in items)
-            _items.Add(item);
+            this.items.Add(item);
     }
     #endregion
 
     internal void CopyTo(List<TItem> dest)
     {
-        dest.AddRange(_items);
+        dest.AddRange(items);
     }
 
     #region add
     internal void EnsureCapacity(int capacity)
     {
-        _items.EnsureCapacity(capacity);
+        items.EnsureCapacity(capacity);
     }
 
     public bool Add(TItem item)
     {
-        var index = _items.BinarySearch(item);
+        var index = items.BinarySearch(item);
         if (index >= 0)
         {
             return false;
         }
 
-        _items.Insert(~index, item);
+        items.Insert(~index, item);
         return true;
     }
 
@@ -85,12 +85,12 @@ internal class OrderedListSet<TItem>
     {
         EnsureCapacity(Count + keys.Count);
 
-        if (_items.Count == 0)
+        if (items.Count == 0)
         {
             // Since this is a key collection we know all the items must be
             // unique, therefore we can just add and sort
-            _items.AddRange(keys);
-            _items.Sort();
+            items.AddRange(keys);
+            items.Sort();
         }
         else
         {
@@ -103,13 +103,13 @@ internal class OrderedListSet<TItem>
     #region unionwith
     internal void UnionWith(FrozenOrderedListSet<TItem> set)
     {
-        if (_items.Count == 0)
+        if (items.Count == 0)
         {
-            set.CopyTo(_items);
+            set.CopyTo(items);
         }
         else
         {
-            _items.EnsureCapacity(_items.Count + set.Count);
+            items.EnsureCapacity(items.Count + set.Count);
             foreach (var item in set)
                 Add(item);
         }
@@ -118,28 +118,28 @@ internal class OrderedListSet<TItem>
 
     public void IntersectWith(FrozenOrderedListSet<TItem> other)
     {
-        for (var i = _items.Count - 1; i >= 0; i--)
-            if (!other.Contains(_items[i]))
+        for (var i = items.Count - 1; i >= 0; i--)
+            if (!other.Contains(items[i]))
             {
-                _items.RemoveAt(i);
+                items.RemoveAt(i);
             }
     }
 
     public bool Remove(TItem item)
     {
-        var index = _items.BinarySearch(item);
+        var index = items.BinarySearch(item);
         if (index < 0)
         {
             return false;
         }
 
-        _items.RemoveAt(index);
+        items.RemoveAt(index);
         return true;
     }
 
     public void Clear()
     {
-        _items.Clear();
+        items.Clear();
     }
 
     /// <summary>
@@ -154,23 +154,23 @@ internal class OrderedListSet<TItem>
     #region GetEnumerator
     public List<TItem>.Enumerator GetEnumerator()
     {
-        return _items.GetEnumerator();
+        return items.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return _items.GetEnumerator();
+        return items.GetEnumerator();
     }
 
     IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
     {
-        return _items.GetEnumerator();
+        return items.GetEnumerator();
     }
     #endregion
 
     public bool Contains(TItem item)
     {
-        return _items.BinarySearch(item) >= 0;
+        return items.BinarySearch(item) >= 0;
     }
 
     //todo: other set methods when needed
@@ -216,9 +216,9 @@ internal class OrderedListSet<TItem>
         // Move forward through both lists, checking that all items in `other` are in `this`
         var i = 0;
         var j = 0;
-        while (i < _items.Count && j < other.Count)
+        while (i < items.Count && j < other.Count)
         {
-            var cmp = _items[i].CompareTo(other._items[j]);
+            var cmp = items[i].CompareTo(other.items[j]);
 
             if (cmp < 0)
             {
@@ -259,9 +259,9 @@ internal class OrderedListSet<TItem>
         // Move forward through both lists, checking if any item in `other` is in `this`
         var i = 0;
         var j = 0;
-        while (i < _items.Count && j < other.Count)
+        while (i < items.Count && j < other.Count)
         {
-            var cmp = _items[i].CompareTo(other._items[j]);
+            var cmp = items[i].CompareTo(other.items[j]);
 
             if (cmp < 0)
             {
@@ -291,7 +291,7 @@ internal class OrderedListSet<TItem>
         }
 
         // Ensure every item in this is in other
-        foreach (var item in _items)
+        foreach (var item in items)
             if (!other.Contains(item))
             {
                 return false;
@@ -307,8 +307,8 @@ internal class OrderedListSet<TItem>
             return false;
         }
 
-        var a = CollectionsMarshal.AsSpan(_items);
-        var b = CollectionsMarshal.AsSpan(other._items);
+        var a = CollectionsMarshal.AsSpan(items);
+        var b = CollectionsMarshal.AsSpan(other.items);
 
         // Add a specialization for ComponentId. This allows it to be compared with fast SIMD equality
         // instead of calling the equality implementation for every item individually.
@@ -332,7 +332,7 @@ internal class OrderedListSet<TItem>
 
         // Ensure every item in this is in other
         foreach (var item in other.Keys)
-            if (_items.BinarySearch(item) < 0)
+            if (items.BinarySearch(item) < 0)
             {
                 return false;
             }
@@ -342,24 +342,24 @@ internal class OrderedListSet<TItem>
     #endregion
 
     #region LINQ
-    internal IReadOnlyCollection<TItem> LINQ()
+    internal IReadOnlyCollection<TItem> Linq()
     {
-        return _items;
+        return items;
     }
 
     internal TItem Single()
     {
-        if (_items.Count != 1)
+        if (items.Count != 1)
         {
-            throw new InvalidOperationException($"Cannot get single item, there are {_items.Count} items");
+            throw new InvalidOperationException($"Cannot get single item, there are {items.Count} items");
         }
 
-        return _items[0];
+        return items[0];
     }
 
     internal bool Any(Func<TItem, bool> predicate)
     {
-        foreach (var item in _items)
+        foreach (var item in items)
             if (predicate(item))
             {
                 return true;
