@@ -58,19 +58,19 @@ public class QueryBenchmark
         }
     }
 
-    [Benchmark]
-    public void Query()
-    {
-        var q = new QueryAction();
-        world.Execute<QueryAction, Position, Velocity>(ref q, query);
-    }
+    // [Benchmark]
+    // public void Query()
+    // {
+    //     var q = new QueryAction();
+    //     world.Execute<QueryAction, Position, Velocity>(ref q, query);
+    // }
 
-    [Benchmark]
-    public void ChunkQuery()
-    {
-        var q = new ChunkQueryAction();
-        world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(ref q, query);
-    }
+    // [Benchmark]
+    // public void ChunkQuery()
+    // {
+    //     var q = new ChunkQueryAction();
+    //     world.ExecuteChunk<ChunkQueryAction, Position, Velocity>(ref q, query);
+    // }
 
     //[Benchmark]
     //public void SimdChunkQuery()
@@ -106,47 +106,47 @@ public class QueryBenchmark
     //    });
     //}
 
-    private struct QueryAction
-        : IQuery<Position, Velocity>
-    {
-        public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
-        {
-            pos.Value += vel.Value;
-            //pos.Value += new Vector2(
-            //    (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.X))),
-            //    (float)Math.Tanh(pos.Value.Y)
-            //);
-        }
-    }
+    // private struct QueryAction
+    //     : IQuery<Position, Velocity>
+    // {
+    //     public readonly void Execute(Entity e, ref Position pos, ref Velocity vel)
+    //     {
+    //         pos.Value += vel.Value;
+    //         //pos.Value += new Vector2(
+    //         //    (float)Math.Sqrt(Math.Abs(Math.Tanh(pos.Value.X))),
+    //         //    (float)Math.Tanh(pos.Value.Y)
+    //         //);
+    //     }
+    // }
 
-    private struct ChunkQueryAction
-        : IChunkQuery<Position, Velocity>
-    {
-        public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
-        {
-            for (var i = 0; i < pos.Length; i++)
-            {
-                ref var posi = ref pos[i];
+    // private struct ChunkQueryAction
+    //     : IChunkQuery<Position, Velocity>
+    // {
+    //     public readonly void Execute(ChunkHandle chunk, ReadOnlySpan<Entity> e, Span<Position> pos, Span<Velocity> vel)
+    //     {
+    //         for (var i = 0; i < pos.Length; i++)
+    //         {
+    //             ref var posi = ref pos[i];
+    //
+    //             posi.Value += vel[i].Value;
+    //
+    //             //posi.Value += new Vector2(
+    //             //    (float)Math.Sqrt(Math.Abs(Math.Tanh(posi.Value.X))),
+    //             //    (float)Math.Tanh(posi.Value.Y)
+    //             //);
+    //         }
+    //     }
+    // }
 
-                posi.Value += vel[i].Value;
-
-                //posi.Value += new Vector2(
-                //    (float)Math.Sqrt(Math.Abs(Math.Tanh(posi.Value.X))),
-                //    (float)Math.Tanh(posi.Value.Y)
-                //);
-            }
-        }
-    }
-
-    private readonly struct SimdChunkQueryAction2
-        : IVectorChunkQuery<float, float>
-    {
-        public void Execute(Span<Vector<float>> posf, Span<Vector<float>> velf, int offset, int pad)
-        {
-            for (var i = 0; i < posf.Length; i++)
-                posf[i] += velf[i];
-
-            throw new NotImplementedException("implement extra complicated stuff");
-        }
-    }
+    // private readonly struct SimdChunkQueryAction2
+    //     : IVectorChunkQuery<float, float>
+    // {
+    //     public void Execute(Span<Vector<float>> posf, Span<Vector<float>> velf, int offset, int pad)
+    //     {
+    //         for (var i = 0; i < posf.Length; i++)
+    //             posf[i] += velf[i];
+    //
+    //         throw new NotImplementedException("implement extra complicated stuff");
+    //     }
+    // }
 }

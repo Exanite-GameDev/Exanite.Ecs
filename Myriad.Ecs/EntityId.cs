@@ -38,9 +38,9 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// </summary>
     /// <param name="world"></param>
     /// <returns></returns>
-    public Ecs.Entity ToEntity(World world)
+    public Entity ToEntity(World world)
     {
-        return new Ecs.Entity(this, world);
+        return new Entity(this, world);
     }
 
     /// <summary>
