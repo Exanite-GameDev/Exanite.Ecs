@@ -7,8 +7,7 @@ namespace Myriad.Ecs.Collections;
 /// A frozen (i.e. completely immutable) set of objects.
 /// </summary>
 /// <typeparam name="TItem"></typeparam>
-public class FrozenOrderedListSet<TItem>
-    where TItem : struct, IComparable<TItem>, IEquatable<TItem>
+public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
     /// <summary>
     /// An empty frozen set

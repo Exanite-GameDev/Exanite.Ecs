@@ -69,7 +69,9 @@ public class EcsCommandBufferTests
         // Resolve results
         var entities = new List<Entity>();
         foreach (var b in buffered)
+        {
             entities.Add(b.Resolve());
+        }
 
         for (var i = 0; i < entities.Count; i++)
         {
@@ -137,7 +139,9 @@ public class EcsCommandBufferTests
             {
                 // Resolve results
                 foreach (var b in buffered)
+                {
                     alive.Add(b.Resolve());
+                }
             }
 
             // Check all the entities
@@ -374,7 +378,9 @@ public class EcsCommandBufferTests
         };
 
         foreach (var entity in entities)
+        {
             Assert.IsTrue(entity.Exists());
+        }
 
         buffer.Delete(entities[1]);
         buffer.Playback();
@@ -487,7 +493,9 @@ public class EcsCommandBufferTests
         };
 
         foreach (var entity in entities)
+        {
             Assert.IsTrue(entity.Exists());
+        }
 
         buffer.Delete([entities[0], entities[1]]);
         buffer.Playback();
@@ -547,9 +555,14 @@ public class EcsCommandBufferTests
 
         // Check the archetypes
         foreach (var archetype in deleting)
+        {
             Assert.AreEqual(0, archetype.EntityCount);
+        }
+
         foreach (var (archetype, count) in others)
+        {
             Assert.AreEqual(count, archetype.EntityCount);
+        }
 
         // Check it's dead
         Assert.IsFalse(dead.IsAlive());
@@ -600,15 +613,25 @@ public class EcsCommandBufferTests
 
         // Check the archetypes
         foreach (var archetype in deleting)
+        {
             Assert.AreEqual(0, archetype.EntityCount);
+        }
+
         foreach (var (archetype, count) in others)
+        {
             Assert.AreEqual(count, archetype.EntityCount);
+        }
 
         // Check the disposables
         foreach (var boxedInt in shouldNotDispose)
+        {
             Assert.AreEqual(0, boxedInt.Value);
+        }
+
         foreach (var boxedInt in shouldDispose)
+        {
             Assert.AreEqual(1, boxedInt.Value);
+        }
     }
 
     [TestMethod]
@@ -621,7 +644,10 @@ public class EcsCommandBufferTests
         // Attach a phantom to a load of entities
         var buffer = new EcsCommandBuffer(world);
         foreach (var (e, _, _) in world.Query<Component0, Component1>())
+        {
             buffer.Set(e, new TestPhantom0());
+        }
+
         buffer.Playback().Dispose();
 
         // Get the archetypes we're about to delete
@@ -662,9 +688,14 @@ public class EcsCommandBufferTests
 
         // Check the archetypes
         foreach (var archetype in deleting)
+        {
             Assert.AreEqual(0, archetype.EntityCount);
+        }
+
         foreach (var (archetype, count) in others)
+        {
             Assert.AreEqual(count, archetype.EntityCount);
+        }
     }
 
     [TestMethod]

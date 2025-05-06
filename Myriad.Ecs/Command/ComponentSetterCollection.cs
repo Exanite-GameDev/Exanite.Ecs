@@ -16,7 +16,10 @@ internal class ComponentSetterCollection
     public void Clear()
     {
         foreach (var (_, value) in components)
+        {
             value.Recycle();
+        }
+
         components.Clear();
     }
 

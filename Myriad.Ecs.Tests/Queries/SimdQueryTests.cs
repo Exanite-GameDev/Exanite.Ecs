@@ -23,7 +23,9 @@ public class SimdQueryTests
         w.ExecuteVectorChunk<AddInts, ComponentInt32, int>(new AddInts());
 
         foreach (var (_, i32, i64) in w.Query<ComponentInt32, ComponentInt64>())
+        {
             Assert.AreEqual(i64.Ref.Value * 2, i32.Ref.Value);
+        }
     }
 
     private struct AddInts

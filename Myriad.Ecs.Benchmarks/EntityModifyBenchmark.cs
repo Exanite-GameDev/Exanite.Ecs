@@ -70,7 +70,9 @@ public class EntityModifyBenchmark
         var rng = new Random();
         var ready = new EcsCommandBuffer(world);
         foreach (var entity in entities)
+        {
             ModifyEntity(ready, rng, entity);
+        }
 
         this.ready = ready;
     }

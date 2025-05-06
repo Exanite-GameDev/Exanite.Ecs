@@ -9,7 +9,10 @@ internal static class FrozenOrderedListSetUtility
     {
         var filter = new ComponentBloomFilter();
         foreach (var item in set)
+        {
             filter.Add(item);
+        }
+
         return filter;
     }
 }

@@ -27,14 +27,18 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
     {
         this.items.EnsureCapacity(items.Count);
         foreach (var item in items)
+        {
             Add(item);
+        }
     }
 
     public OrderedListSet(ReadOnlySpan<TItem> items)
     {
         this.items.EnsureCapacity(items.Length);
         foreach (var item in items)
+        {
             Add(item);
+        }
     }
 
     internal OrderedListSet(HashSet<TItem> items)
@@ -52,7 +56,9 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
     {
         this.items.EnsureCapacity(items.Count);
         foreach (var item in items)
+        {
             this.items.Add(item);
+        }
     }
     #endregion
 
@@ -93,7 +99,9 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         else
         {
             foreach (var key in keys)
+            {
                 Add(key);
+            }
         }
     }
     #endregion
@@ -109,7 +117,9 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         {
             items.EnsureCapacity(items.Count + set.Count);
             foreach (var item in set)
+            {
                 Add(item);
+            }
         }
     }
     #endregion
@@ -290,10 +300,12 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
 
         // Ensure every item in this is in other
         foreach (var item in items)
+        {
             if (!other.Contains(item))
             {
                 return false;
             }
+        }
 
         return true;
     }
@@ -330,10 +342,12 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
 
         // Ensure every item in this is in other
         foreach (var item in other.Keys)
+        {
             if (items.BinarySearch(item) < 0)
             {
                 return false;
             }
+        }
 
         return true;
     }
@@ -358,10 +372,12 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
     internal bool Any(Func<TItem, bool> predicate)
     {
         foreach (var item in items)
+        {
             if (predicate(item))
             {
                 return true;
             }
+        }
 
         return false;
     }

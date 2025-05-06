@@ -160,10 +160,12 @@ public sealed partial class EcsCommandBuffer
             if (maybeAddingPhantomComponent.Contains(entity) && entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
             {
                 foreach (var key in mod.Sets.Keys)
+                {
                     if (key.IsPhantomComponent)
                     {
                         return true;
                     }
+                }
             }
 
             return false;
@@ -243,7 +245,9 @@ public sealed partial class EcsCommandBuffer
                     if (mod.Sets != null)
                     {
                         foreach (var set in mod.Sets.Values)
+                        {
                             setters.Write(set, row);
+                        }
                     }
                 }
 
@@ -281,7 +285,9 @@ public sealed partial class EcsCommandBuffer
 
                 // Write the components into the entity
                 foreach (var setter in components.Values)
+                {
                     setters.Write(setter, slot);
+                }
 
                 // Recycle
                 components.Clear();

@@ -14,7 +14,9 @@ public class CachedQueryTests
         Assert.AreEqual(components.Length, q.Include.Count);
 
         foreach (var component in components)
+        {
             Assert.IsTrue(q.IsIncluded(component));
+        }
 
         Assert.AreEqual(1, q.Exclude.Count);
         Assert.IsTrue(q.IsExcluded<ComponentPhantom>());

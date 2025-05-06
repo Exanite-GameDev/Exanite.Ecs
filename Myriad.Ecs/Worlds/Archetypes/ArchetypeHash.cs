@@ -48,7 +48,9 @@ internal readonly record struct ArchetypeHash : IComparable<ArchetypeHash>
     {
         long l = 0;
         foreach (var componentId in componentIds)
+        {
             l = Toggle(l, componentId);
+        }
 
         return new ArchetypeHash { Value = l };
     }
@@ -57,7 +59,9 @@ internal readonly record struct ArchetypeHash : IComparable<ArchetypeHash>
     {
         long l = 0;
         foreach (var componentId in componentIds.Keys)
+        {
             l = Toggle(l, componentId);
+        }
 
         return new ArchetypeHash { Value = l };
     }

@@ -62,7 +62,10 @@ public class ExecuteChunkTests
         // Destroy all of these specific entities, to ensure at least one archetype matches the query but is empty
         var c = new EcsCommandBuffer(w);
         foreach (var (e, _, _) in w.Query<ComponentInt32, ComponentByte>())
+        {
             c.Delete(e);
+        }
+
         c.Playback().Dispose();
         Assert.AreEqual(0, w.Count<ComponentInt32, ComponentByte>());
 

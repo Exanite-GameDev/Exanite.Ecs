@@ -21,7 +21,9 @@ public class QueryEnumerableTests
                .Build(w);
 
         foreach (var _ in w.Query<ComponentInt64, ComponentFloat>(q))
+        {
             Assert.Fail("should not match anything");
+        }
     }
 
     [TestMethod]
@@ -42,7 +44,9 @@ public class QueryEnumerableTests
                .Build(w);
 
         foreach (var _ in w.Query<ComponentInt64, ComponentFloat>(q))
+        {
             Assert.Fail("should not match anything");
+        }
     }
 
     [TestMethod]

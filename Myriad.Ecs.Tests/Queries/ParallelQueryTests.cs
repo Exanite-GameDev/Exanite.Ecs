@@ -29,11 +29,15 @@ public class ParallelQueryTests
 
         // check they're 128
         foreach (var (_, v) in w.Query<ComponentInt32>())
+        {
             Assert.AreEqual(128, v.Ref.Value);
+        }
 
         // check they're 128 in a different way
         foreach (var item in w.Query<ComponentInt32>())
+        {
             Assert.AreEqual(128, item.Item0.Value);
+        }
 
         // check they're 128 in a different way
         w.Query((Entity _, ref ComponentInt32 c) => Assert.AreEqual(128, c.Value));
@@ -49,13 +53,24 @@ public class ParallelQueryTests
 
         // Check everything else is 0
         foreach (var (_, v) in w.Query<ComponentByte>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
+
         foreach (var (_, v) in w.Query<ComponentInt16>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
+
         foreach (var (_, v) in w.Query<ComponentFloat>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
+
         foreach (var (_, v) in w.Query<ComponentInt64>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
     }
 
     [TestMethod]
@@ -70,21 +85,36 @@ public class ParallelQueryTests
 
         // check they're 128
         foreach (var (_, v) in w.Query<ComponentInt32>())
+        {
             Assert.AreEqual(128, v.Ref.Value);
+        }
 
         // check they're 128 in a different way
         foreach (var e in w.Query(new QueryBuilder().Include<ComponentInt32>().Build(w)))
+        {
             Assert.AreEqual(128, e.GetComponentRef<ComponentInt32>().Value);
+        }
 
         // Check everything else is 0
         foreach (var (_, v) in w.Query<ComponentByte>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
+
         foreach (var (_, v) in w.Query<ComponentInt16>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
+
         foreach (var (_, v) in w.Query<ComponentFloat>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
+
         foreach (var (_, v) in w.Query<ComponentInt64>())
+        {
             Assert.AreEqual(0, v.Ref.Value);
+        }
     }
 
     [TestMethod]

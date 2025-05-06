@@ -156,10 +156,12 @@ public sealed class World : IDisposable
 
         // Check if any of the candidates are the one we need
         foreach (var archetype in candidates)
+        {
             if (archetype.SetEquals(components))
             {
                 return archetype;
             }
+        }
 
         // Didn't find one, create the new archetype
         var a = new Archetype(this, FrozenOrderedListSet<ComponentId>.Create(components));
@@ -182,10 +184,12 @@ public sealed class World : IDisposable
 
         // Check if any of the candidates are the one we need
         foreach (var archetype in candidates)
+        {
             if (archetype.SetEquals(components))
             {
                 return archetype;
             }
+        }
 
         // Didn't find one, create the new archetype
         var set = FrozenOrderedListSet<ComponentId>.Create(components);

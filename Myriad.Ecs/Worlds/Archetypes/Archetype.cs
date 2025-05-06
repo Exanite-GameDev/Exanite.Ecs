@@ -179,7 +179,9 @@ public sealed class Archetype
         {
             // Clear all the chunks
             foreach (var chunk in chunks)
+            {
                 chunk.Clear();
+            }
 
             // Move some chunks to hot spares and then delete the rest
             foreach (var chunk in chunks)
@@ -281,8 +283,10 @@ public sealed class Archetype
 
             // If the chunk was previously full and now isn't, add it to the set of chunks with space
             case ChunkSize - 1:
+            {
                 chunksWithSpace.Add(chunk);
                 break;
+            }
         }
     }
 
@@ -292,14 +296,7 @@ public sealed class Archetype
         return Hash.GetHashCode();
     }
 
-    [NonPublic]
     public IReadOnlyList<Chunk> Chunks => chunks;
-
-    //[MustDisposeResource]
-    internal List<Chunk>.Enumerator GetChunkEnumerator()
-    {
-        return chunks.GetEnumerator();
-    }
 
     internal bool SetEquals(OrderedListSet<ComponentId> query)
     {

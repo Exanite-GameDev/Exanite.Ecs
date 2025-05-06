@@ -8,7 +8,6 @@ using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Worlds.Chunks;
 
-[NonPublic]
 public sealed class Chunk
 {
     /// <summary>
@@ -57,48 +56,40 @@ public sealed class Chunk
     //    return ref GetRef<T>(entity, index);
     //}
 
-    internal ref T GetRef<T>(EntityId entityId, int rowIndex)
-        where T : IComponent
+    internal ref T GetRef<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
         Debug.Assert(entities[rowIndex].Id == entityId, "Mismatched entities in chunk");
         return ref GetRef<T>(rowIndex);
     }
 
-    public RefT<T> GetRefT<T>(EntityId entityId, int rowIndex)
-        where T : IComponent
+    public RefT<T> GetRefT<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
         Debug.Assert(entities[rowIndex].Id == entityId, "Mismatched entities in chunk");
 
         return new RefT<T>(ref GetRef<T>(rowIndex));
     }
 
-    internal ref T GetRef<T>(int rowIndex)
-        where T : IComponent
+    internal ref T GetRef<T>(int rowIndex) where T : IComponent
     {
         return ref GetRef<T>(rowIndex, ComponentId.Get<T>());
     }
 
-    internal ref T GetRef<T>(int rowIndex, ComponentId id)
-        where T : IComponent
+    internal ref T GetRef<T>(int rowIndex, ComponentId id) where T : IComponent
     {
         return ref GetSpan<T>(id)[rowIndex];
     }
 
-    internal Span<T> GetSpan<T>()
-        where T : IComponent
+    internal Span<T> GetSpan<T>() where T : IComponent
     {
         return GetSpan<T>(ComponentId.Get<T>());
     }
 
-    [NonPublic]
-    public Span<T> GetSpan<T>(ComponentId id)
-        where T : IComponent
+    public Span<T> GetSpan<T>(ComponentId id) where T : IComponent
     {
         return GetComponentArray<T>(id).AsSpan(0, EntityCount);
     }
 
-    internal T[] GetComponentArray<T>()
-        where T : IComponent
+    internal T[] GetComponentArray<T>() where T : IComponent
     {
         return GetComponentArray<T>(ComponentId.Get<T>());
     }
@@ -109,8 +100,7 @@ public sealed class Chunk
     /// <typeparam name="T"></typeparam>
     /// <param name="id"></param>
     /// <returns></returns>
-    internal T[] GetComponentArray<T>(ComponentId id)
-        where T : IComponent
+    internal T[] GetComponentArray<T>(ComponentId id) where T : IComponent
     {
         return (GetComponentArray(id) as T[])!;
     }
@@ -131,7 +121,9 @@ public sealed class Chunk
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
         foreach (var component in components)
+        {
             Array.Clear(component, 0, component.Length);
+        }
 
         // Not strictly necessary, clean up all the IDs so they're default instead of some invalid value.
         Array.Clear(entities, 0, entities.Length);
@@ -166,7 +158,9 @@ public sealed class Chunk
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
         foreach (var component in components)
+        {
             Array.Clear(component, index, 1);
+        }
 
         // No work to do if there are no other entities
         EntityCount -= 1;

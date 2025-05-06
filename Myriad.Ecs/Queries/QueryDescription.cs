@@ -72,13 +72,24 @@ public sealed class QueryDescription
         var builder = new QueryBuilder();
 
         foreach (var id in Include)
+        {
             builder.Include(id);
+        }
+
         foreach (var id in Exclude)
+        {
             builder.Exclude(id);
+        }
+
         foreach (var id in AtLeastOneOf)
+        {
             builder.AtLeastOneOf(id);
+        }
+
         foreach (var id in ExactlyOneOf)
+        {
             builder.ExactlyOneOf(id);
+        }
 
         return builder;
     }
@@ -235,10 +246,12 @@ public sealed class QueryDescription
                 // Check every archetype
                 var matches = new List<ArchetypeMatch>();
                 foreach (var item in World.Archetypes)
+                {
                     if (TryMatch(item) is ArchetypeMatch m)
                     {
                         matches.Add(m);
                     }
+                }
 
                 // Store result for next time
                 result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(matches));
@@ -401,7 +414,10 @@ public sealed class QueryDescription
     {
         var count = 0;
         foreach (var archetype in GetArchetypes())
+        {
             count += archetype.Archetype.EntityCount;
+        }
+
         return count;
     }
 
@@ -412,10 +428,12 @@ public sealed class QueryDescription
     public bool Any()
     {
         foreach (var archetype in GetArchetypes())
+        {
             if (archetype.Archetype.EntityCount > 0)
             {
                 return true;
             }
+        }
 
         return false;
     }

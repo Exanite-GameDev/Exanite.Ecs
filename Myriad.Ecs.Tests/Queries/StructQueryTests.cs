@@ -71,7 +71,9 @@ public class StructQueryTests
 
         // Check all have been set
         foreach (var (_, i) in w.Query<ComponentInt32>())
+        {
             Assert.AreEqual(42, i.Ref.Value);
+        }
 
         // Check the returned query is correct
         Assert.IsNotNull(q);

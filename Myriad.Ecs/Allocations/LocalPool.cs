@@ -64,7 +64,10 @@ public readonly struct LocalPool<T> : IDisposable where T : class, new()
     public void Dispose()
     {
         foreach (var item in items)
+        {
             Pool<T>.Return(item);
+        }
+
         items.Clear();
 
         Pool<List<T>>.Return(items);
