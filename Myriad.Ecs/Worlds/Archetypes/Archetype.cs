@@ -32,7 +32,7 @@ public sealed class Archetype
     /// <summary>
     /// The components of entities in this archetype
     /// </summary>
-    public FrozenOrderedListSet<ComponentId> Components { get; }
+    public ImmutableOrderedListSet<ComponentId> Components { get; }
 
     /// <summary>
     /// A bloom filter of all the components in this archetype
@@ -87,7 +87,7 @@ public sealed class Archetype
     /// </summary>
     public bool IsPhantom { get; }
 
-    internal Archetype(World world, FrozenOrderedListSet<ComponentId> components)
+    internal Archetype(World world, ImmutableOrderedListSet<ComponentId> components)
     {
         World = world;
         Components = components;

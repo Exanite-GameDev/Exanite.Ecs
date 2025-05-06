@@ -11,7 +11,7 @@ namespace Myriad.Ecs.Queries;
 /// </summary>
 public sealed class QueryBuilder
 {
-    internal static readonly FrozenOrderedListSet<ComponentId> SetWithJustPhantom = FrozenOrderedListSet<ComponentId>.Create(
+    internal static readonly ImmutableOrderedListSet<ComponentId> SetWithJustPhantom = ImmutableOrderedListSet<ComponentId>.Create(
         new[] { ComponentId.Get<ComponentPhantom>() }
     );
 
@@ -65,10 +65,10 @@ public sealed class QueryBuilder
 
         return new QueryDescription(
             world,
-            include.ToFrozenSet(),
-            exclude.ToFrozenSet(),
-            atLeastOne.ToFrozenSet(),
-            exactlyOne.ToFrozenSet()
+            include.ToImmutableSet(),
+            exclude.ToImmutableSet(),
+            atLeastOne.ToImmutableSet(),
+            exactlyOne.ToImmutableSet()
         );
     }
 
@@ -361,26 +361,26 @@ public sealed class QueryBuilder
 
         public readonly OrderedListSet<ComponentId> Items = [];
 
-        private FrozenOrderedListSet<ComponentId>? frozenCache;
+        private ImmutableOrderedListSet<ComponentId>? immutableSet;
 
-        public FrozenOrderedListSet<ComponentId> ToFrozenSet()
+        public ImmutableOrderedListSet<ComponentId> ToImmutableSet()
         {
-            if (frozenCache != null)
+            if (immutableSet != null)
             {
-                return frozenCache;
+                return immutableSet;
             }
 
             switch (Items.Count)
             {
                 case 0:
-                    return FrozenOrderedListSet<ComponentId>.Empty;
+                    return ImmutableOrderedListSet<ComponentId>.Empty;
 
                 case 1 when Items.Contains(ComponentId.Get<ComponentPhantom>()):
                     return SetWithJustPhantom;
 
                 default:
-                    frozenCache = FrozenOrderedListSet<ComponentId>.Create(Items);
-                    return frozenCache;
+                    immutableSet = ImmutableOrderedListSet<ComponentId>.Create(Items);
+                    return immutableSet;
             }
         }
 
@@ -389,7 +389,7 @@ public sealed class QueryBuilder
             check(id, Index, caller);
             if (Items.Add(id))
             {
-                frozenCache = null;
+                immutableSet = null;
                 return true;
             }
 

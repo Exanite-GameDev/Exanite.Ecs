@@ -9,21 +9,21 @@ namespace Myriad.Ecs.Collections;
 /// <summary>
 /// A set built out of an ordered list. This allows allocation free enumeration of the set.
 /// </summary>
-/// <typeparam name="TItem"></typeparam>
-internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct, IComparable<TItem>, IEquatable<TItem>
+public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<T>, IEquatable<T>
 {
-    private readonly List<TItem> items = [];
+    private readonly List<T> items = [];
+
+    public IReadOnlyList<T> Items => items;
+
     public int Count => items.Count;
 
-    public TItem this[int i] => items[i];
+    public T this[int i] => items[i];
 
-    #region constructors
-    public OrderedListSet()
-    {
-    }
+    #region Constructors
 
-    // ReSharper disable once ParameterTypeCanBeEnumerable.Local
-    public OrderedListSet(List<TItem> items)
+    public OrderedListSet() {}
+
+    public OrderedListSet(List<T> items)
     {
         this.items.EnsureCapacity(items.Count);
         foreach (var item in items)
@@ -32,7 +32,7 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         }
     }
 
-    public OrderedListSet(ReadOnlySpan<TItem> items)
+    public OrderedListSet(ReadOnlySpan<T> items)
     {
         this.items.EnsureCapacity(items.Length);
         foreach (var item in items)
@@ -41,18 +41,18 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         }
     }
 
-    internal OrderedListSet(HashSet<TItem> items)
+    public OrderedListSet(HashSet<T> items)
     {
         this.items.AddRange(items);
         this.items.Sort();
     }
 
-    public OrderedListSet(OrderedListSet<TItem> items)
+    public OrderedListSet(OrderedListSet<T> items)
     {
         this.items = [..items.items];
     }
 
-    public OrderedListSet(FrozenOrderedListSet<TItem> items)
+    public OrderedListSet(ImmutableOrderedListSet<T> items)
     {
         this.items.EnsureCapacity(items.Count);
         foreach (var item in items)
@@ -60,20 +60,22 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
             this.items.Add(item);
         }
     }
+
     #endregion
 
-    internal void CopyTo(List<TItem> dest)
+    public void CopyTo(List<T> dest)
     {
         dest.AddRange(items);
     }
 
-    #region add
-    internal void EnsureCapacity(int capacity)
+    #region Add
+
+    public void EnsureCapacity(int capacity)
     {
         items.EnsureCapacity(capacity);
     }
 
-    public bool Add(TItem item)
+    public bool Add(T item)
     {
         var index = items.BinarySearch(item);
         if (index >= 0)
@@ -85,7 +87,7 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         return true;
     }
 
-    public void AddRange<TValue>(Dictionary<TItem, TValue>.KeyCollection keys)
+    public void AddRange<TValue>(Dictionary<T, TValue>.KeyCollection keys)
     {
         EnsureCapacity(Count + keys.Count);
 
@@ -104,10 +106,12 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
             }
         }
     }
+
     #endregion
 
-    #region unionwith
-    internal void UnionWith(FrozenOrderedListSet<TItem> set)
+    #region UnionWith
+
+    public void UnionWith(ImmutableOrderedListSet<T> set)
     {
         if (items.Count == 0)
         {
@@ -124,7 +128,7 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
     }
     #endregion
 
-    public void IntersectWith(FrozenOrderedListSet<TItem> other)
+    public void IntersectWith(ImmutableOrderedListSet<T> other)
     {
         for (var i = items.Count - 1; i >= 0; i--)
             if (!other.Contains(items[i]))
@@ -133,7 +137,7 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
             }
     }
 
-    public bool Remove(TItem item)
+    public bool Remove(T item)
     {
         var index = items.BinarySearch(item);
         if (index < 0)
@@ -151,16 +155,16 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
     }
 
     /// <summary>
-    /// Copy this set to a new frozen set
+    /// Copy this set to a new immutable set
     /// </summary>
-    /// <returns></returns>
-    public FrozenOrderedListSet<TItem> Freeze()
+    public ImmutableOrderedListSet<T> ToImmutable()
     {
-        return FrozenOrderedListSet<TItem>.Create(this);
+        return ImmutableOrderedListSet<T>.Create(this);
     }
 
     #region GetEnumerator
-    public List<TItem>.Enumerator GetEnumerator()
+
+    public List<T>.Enumerator GetEnumerator()
     {
         return items.GetEnumerator();
     }
@@ -170,13 +174,14 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         return items.GetEnumerator();
     }
 
-    IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
         return items.GetEnumerator();
     }
+
     #endregion
 
-    public bool Contains(TItem item)
+    public bool Contains(T item)
     {
         return items.BinarySearch(item) >= 0;
     }
@@ -214,7 +219,8 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
     //}
 
     #region IsSupersetOf
-    public bool IsSupersetOf(OrderedListSet<TItem> other)
+
+    public bool IsSupersetOf(OrderedListSet<T> other)
     {
         if (other.Count > Count)
         {
@@ -249,10 +255,12 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
 
         return j == other.Count;
     }
+
     #endregion
 
     #region Overlaps
-    public bool Overlaps(OrderedListSet<TItem> other)
+
+    public bool Overlaps(OrderedListSet<T> other)
     {
         if (Count == 0)
         {
@@ -287,10 +295,12 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
 
         return false;
     }
+
     #endregion
 
     #region SetEquals
-    public bool SetEquals(HashSet<TItem> other)
+
+    public bool SetEquals(HashSet<T> other)
     {
         // Can't be equal if counts are different
         if (other.Count != Count)
@@ -310,7 +320,7 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         return true;
     }
 
-    public bool SetEquals(OrderedListSet<TItem> other)
+    public bool SetEquals(OrderedListSet<T> other)
     {
         if (Count != other.Count)
         {
@@ -322,17 +332,17 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
 
         // Add a specialization for ComponentId. This allows it to be compared with fast SIMD equality
         // instead of calling the equality implementation for every item individually.
-        if (typeof(TItem) == typeof(ComponentId))
+        if (typeof(T) == typeof(ComponentId))
         {
-            var aa = MemoryMarshal.Cast<TItem, int>(a);
-            var bb = MemoryMarshal.Cast<TItem, int>(b);
+            var aa = MemoryMarshal.Cast<T, int>(a);
+            var bb = MemoryMarshal.Cast<T, int>(b);
             return aa.SequenceEqual(bb);
         }
 
         return a.SequenceEqual(b);
     }
 
-    public bool SetEquals<TV>(Dictionary<TItem, TV> other)
+    public bool SetEquals<TV>(Dictionary<T, TV> other)
     {
         // Can't be equal if counts are different
         if (other.Count != Count)
@@ -351,15 +361,12 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
 
         return true;
     }
+
     #endregion
 
     #region LINQ
-    internal IReadOnlyCollection<TItem> Linq()
-    {
-        return items;
-    }
 
-    internal TItem Single()
+    public T Single()
     {
         if (items.Count != 1)
         {
@@ -369,7 +376,7 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
         return items[0];
     }
 
-    internal bool Any(Func<TItem, bool> predicate)
+    public bool Any(Func<T, bool> predicate)
     {
         foreach (var item in items)
         {
@@ -381,5 +388,6 @@ internal class OrderedListSet<TItem> : IReadOnlyList<TItem> where TItem : struct
 
         return false;
     }
+
     #endregion
 }

@@ -127,7 +127,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// Get the set of components which this entity currently has
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public FrozenOrderedListSet<ComponentId> GetComponents(World world)
+    public ImmutableOrderedListSet<ComponentId> GetComponents(World world)
     {
         var info = world.GetEntityInfo(this);
         return info.Chunk.Archetype.Components;

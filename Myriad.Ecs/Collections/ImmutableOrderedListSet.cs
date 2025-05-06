@@ -4,98 +4,89 @@ using System.Collections.Generic;
 namespace Myriad.Ecs.Collections;
 
 /// <summary>
-/// A frozen (i.e. completely immutable) set of objects.
+/// An immutable set of objects.
 /// </summary>
-/// <typeparam name="TItem"></typeparam>
-public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem>, IEquatable<TItem>
+public class ImmutableOrderedListSet<T> where T : struct, IComparable<T>, IEquatable<T>
 {
     /// <summary>
-    /// An empty frozen set
+    /// An empty set
     /// </summary>
-    public static readonly FrozenOrderedListSet<TItem> Empty = new([]);
+    public static readonly ImmutableOrderedListSet<T> Empty = new([]);
 
-    private readonly OrderedListSet<TItem> items;
+    private readonly OrderedListSet<T> items;
 
-    /// <summary>
-    /// Get the number of items in this set
-    /// </summary>
+    public IReadOnlyList<T> Items => items.Items;
+
     public int Count => items.Count;
 
-    #region constructors
-    private FrozenOrderedListSet(OrderedListSet<TItem> dangerousItems)
+    #region Constructors
+
+    private ImmutableOrderedListSet(OrderedListSet<T> dangerousItems)
     {
         items = dangerousItems;
     }
 
-    internal static FrozenOrderedListSet<TItem> Create(List<TItem> items)
+    public static ImmutableOrderedListSet<T> Create(List<T> items)
     {
         if (items.Count == 0)
         {
             return Empty;
         }
 
-        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
+        return new ImmutableOrderedListSet<T>(new OrderedListSet<T>(items));
     }
 
-    internal static FrozenOrderedListSet<TItem> Create(ReadOnlySpan<TItem> items)
+    public static ImmutableOrderedListSet<T> Create(ReadOnlySpan<T> items)
     {
         if (items.Length == 0)
         {
             return Empty;
         }
 
-        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
+        return new ImmutableOrderedListSet<T>(new OrderedListSet<T>(items));
     }
 
-    internal static FrozenOrderedListSet<TItem> Create(HashSet<TItem> items)
+    public static ImmutableOrderedListSet<T> Create(HashSet<T> items)
     {
         if (items.Count == 0)
         {
             return Empty;
         }
 
-        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
+        return new ImmutableOrderedListSet<T>(new OrderedListSet<T>(items));
     }
 
-    internal static FrozenOrderedListSet<TItem> Create(OrderedListSet<TItem> items)
+    public static ImmutableOrderedListSet<T> Create(OrderedListSet<T> items)
     {
         if (items.Count == 0)
         {
             return Empty;
         }
 
-        return new FrozenOrderedListSet<TItem>(new OrderedListSet<TItem>(items));
+        return new ImmutableOrderedListSet<T>(new OrderedListSet<T>(items));
     }
 
-    internal static FrozenOrderedListSet<TItem> Create<TV>(Dictionary<TItem, TV> items)
+    public static ImmutableOrderedListSet<T> Create<TV>(Dictionary<T, TV> items)
     {
         if (items.Count == 0)
         {
             return Empty;
         }
 
-        var set = new OrderedListSet<TItem>();
+        var set = new OrderedListSet<T>();
         set.AddRange(items.Keys);
-        return new FrozenOrderedListSet<TItem>(set);
+        return new ImmutableOrderedListSet<T>(set);
     }
+
     #endregion
 
     /// <summary>
     /// Copy this set to the given list
     /// </summary>
     /// <param name="dest"></param>
-    public void CopyTo(List<TItem> dest)
+    public void CopyTo(List<T> dest)
     {
         items.CopyTo(dest);
-    }
-
-    /// <summary>
-    /// Get a collection which can be queried by LINQ (only use this for tests)
-    /// </summary>
-    /// <returns></returns>
-    internal IReadOnlyCollection<TItem> Linq()
-    {
-        return items.Linq();
     }
 
     #region GetEnumerator
@@ -103,7 +94,7 @@ public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem
     /// Get an enumerator over the items in this set
     /// </summary>
     /// <returns></returns>
-    public List<TItem>.Enumerator GetEnumerator()
+    public List<T>.Enumerator GetEnumerator()
     {
         // ReSharper disable once NotDisposedResourceIsReturned
         return items.GetEnumerator();
@@ -115,7 +106,7 @@ public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    public bool Contains(TItem item)
+    public bool Contains(T item)
     {
         return items.Contains(item);
     }
@@ -123,48 +114,53 @@ public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem
     //todo: other set methods when needed
 
     //#region IsProperSubsetOf
-    //internal bool IsProperSubsetOf(OrderedListSet<TItem> other)
+
+    //public bool IsProperSubsetOf(OrderedListSet<TItem> other)
     //{
     //    return _items.IsProperSubsetOf(other);
     //}
 
-    //public bool IsProperSubsetOf(FrozenOrderedListSet<TItem> other)
+    //public bool IsProperSubsetOf(ImmutableOrderedListSet<TItem> other)
     //{
     //    return _items.IsProperSubsetOf(other._items);
     //}
+
     //#endregion
 
     //#region IsProperSupersetOf
-    //internal bool IsProperSupersetOf(OrderedListSet<TItem> other)
+
+    //public bool IsProperSupersetOf(OrderedListSet<TItem> other)
     //{
     //    return _items.IsProperSupersetOf(other);
     //}
 
-    //public bool IsProperSupersetOf(FrozenOrderedListSet<TItem> other)
+    //public bool IsProperSupersetOf(ImmutableOrderedListSet<TItem> other)
     //{
     //    return _items.IsProperSupersetOf(other._items);
     //}
+
     //#endregion
 
     //#region IsSubsetOf
-    //internal bool IsSubsetOf(OrderedListSet<TItem> other)
+
+    //public bool IsSubsetOf(OrderedListSet<TItem> other)
     //{
     //    return _items.IsSubsetOf(other);
     //}
 
-    //public bool IsSubsetOf(FrozenOrderedListSet<TItem> other)
+    //public bool IsSubsetOf(ImmutableOrderedListSet<TItem> other)
     //{
     //    return _items.IsSubsetOf(other._items);
     //}
+
     //#endregion
 
     #region IsSupersetOf
+
     /// <summary>
     /// Check if this set is a superset of another set. i.e. contains all the items in the other set.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    internal bool IsSupersetOf(OrderedListSet<TItem> other)
+    public bool IsSupersetOf(OrderedListSet<T> other)
     {
         return items.IsSupersetOf(other);
     }
@@ -172,21 +168,19 @@ public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem
     /// <summary>
     /// Check if this set is a superset of another set. i.e. contains all the items in the other set.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public bool IsSupersetOf(FrozenOrderedListSet<TItem> other)
+    public bool IsSupersetOf(ImmutableOrderedListSet<T> other)
     {
         return IsSupersetOf(other.items);
     }
+
     #endregion
 
     #region Overlaps
+
     /// <summary>
     /// Check if this set overlaps another set. i.e. contains at least one item which is in the other set.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    internal bool Overlaps(OrderedListSet<TItem> other)
+    public bool Overlaps(OrderedListSet<T> other)
     {
         return items.Overlaps(other);
     }
@@ -194,21 +188,18 @@ public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem
     /// <summary>
     /// Check if this set overlaps another set. i.e. contains at least one item which is in the other set.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public bool Overlaps(FrozenOrderedListSet<TItem> other)
+    public bool Overlaps(ImmutableOrderedListSet<T> other)
     {
         return Overlaps(other.items);
     }
     #endregion
 
     #region SetEquals
+
     /// <summary>
     /// Check if this set contains exactly the same items as another set
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    internal bool SetEquals(OrderedListSet<TItem> other)
+    public bool SetEquals(OrderedListSet<T> other)
     {
         return items.SetEquals(other);
     }
@@ -218,7 +209,7 @@ public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool SetEquals(FrozenOrderedListSet<TItem> other)
+    public bool SetEquals(ImmutableOrderedListSet<T> other)
     {
         return SetEquals(other.items);
     }
@@ -228,9 +219,10 @@ public class FrozenOrderedListSet<TItem> where TItem : struct, IComparable<TItem
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool SetEquals<TV>(Dictionary<TItem, TV> other)
+    public bool SetEquals<TValue>(Dictionary<T, TValue> other)
     {
         return items.SetEquals(other);
     }
+
     #endregion
 }

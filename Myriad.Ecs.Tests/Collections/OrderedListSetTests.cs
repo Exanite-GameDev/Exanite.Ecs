@@ -42,8 +42,8 @@ public class OrderedListSetTests
         ints.Add(2);
         ints.Add(3);
         ints.Add(4);
-        var frozen = FrozenOrderedListSet<int>.Create(ints);
-        set.UnionWith(frozen);
+        var immutable = ImmutableOrderedListSet<int>.Create(ints);
+        set.UnionWith(immutable);
 
         Assert.AreEqual(4, set.Count);
         Assert.IsTrue(set.Contains(1));
@@ -107,7 +107,7 @@ public class OrderedListSetTests
         b.Add(1);
         b.Add(0);
 
-        Assert.IsFalse(a.Freeze().SetEquals(b.Freeze()));
+        Assert.IsFalse(a.ToImmutable().SetEquals(b.ToImmutable()));
     }
 
     [TestMethod]
@@ -203,8 +203,8 @@ public class OrderedListSetTests
         b.Add(2);
         b.Add(3);
 
-        Assert.IsTrue(a.Freeze().IsSupersetOf(b.Freeze()));
-        Assert.IsFalse(b.Freeze().IsSupersetOf(a.Freeze()));
+        Assert.IsTrue(a.ToImmutable().IsSupersetOf(b.ToImmutable()));
+        Assert.IsFalse(b.ToImmutable().IsSupersetOf(a.ToImmutable()));
     }
 
     [TestMethod]

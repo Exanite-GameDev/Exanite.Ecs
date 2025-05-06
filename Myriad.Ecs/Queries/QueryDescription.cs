@@ -29,27 +29,27 @@ public sealed class QueryDescription
     /// <summary>
     /// The components which must be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentId> Include { get; }
+    public ImmutableOrderedListSet<ComponentId> Include { get; }
 
     /// <summary>
     /// The components which must not be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentId> Exclude { get; }
+    public ImmutableOrderedListSet<ComponentId> Exclude { get; }
 
     /// <summary>
     /// At least one of these components must be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentId> AtLeastOneOf { get; }
+    public ImmutableOrderedListSet<ComponentId> AtLeastOneOf { get; }
 
     /// <summary>
     /// Exactly one of these components must be present on an entity for it to match this query
     /// </summary>
-    public FrozenOrderedListSet<ComponentId> ExactlyOneOf { get; }
+    public ImmutableOrderedListSet<ComponentId> ExactlyOneOf { get; }
 
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
-    internal QueryDescription(World world, FrozenOrderedListSet<ComponentId> include, FrozenOrderedListSet<ComponentId> exclude, FrozenOrderedListSet<ComponentId> atLeastOne, FrozenOrderedListSet<ComponentId> exactlyOne)
+    internal QueryDescription(World world, ImmutableOrderedListSet<ComponentId> include, ImmutableOrderedListSet<ComponentId> exclude, ImmutableOrderedListSet<ComponentId> atLeastOne, ImmutableOrderedListSet<ComponentId> exactlyOne)
     {
         World = world;
 
@@ -219,7 +219,7 @@ public sealed class QueryDescription
     /// Get all archetypes which match this query
     /// </summary>
     /// <returns></returns>
-    public FrozenOrderedListSet<ArchetypeMatch> GetArchetypes()
+    public ImmutableOrderedListSet<ArchetypeMatch> GetArchetypes()
     {
         // Quick check if we already have a non-stale result
         resultLock.EnterReadLock();
@@ -253,7 +253,7 @@ public sealed class QueryDescription
                 }
 
                 // Store result for next time
-                result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(matches));
+                result = new MatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
                 return result.Value.Archetypes;
@@ -289,7 +289,7 @@ public sealed class QueryDescription
                 else
                 {
                     // Create a new match result
-                    result = new MatchResult(World.Archetypes.Count, FrozenOrderedListSet<ArchetypeMatch>.Create(copy));
+                    result = new MatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(copy));
                 }
             }
 
@@ -365,17 +365,17 @@ public sealed class QueryDescription
             set = null;
         }
 
-        var atLeastOne = set?.Freeze();
+        var atLeastOne = set?.ToImmutable();
 
         return new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
     }
 
-    private readonly struct MatchResult(int watermark, FrozenOrderedListSet<ArchetypeMatch> archetypes)
+    private readonly struct MatchResult(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypes)
     {
         /// <summary>
         /// The archetypes matching this query
         /// </summary>
-        public FrozenOrderedListSet<ArchetypeMatch> Archetypes { get; } = archetypes;
+        public ImmutableOrderedListSet<ArchetypeMatch> Archetypes { get; } = archetypes;
 
         /// <summary>
         /// The number of archetypes in the world when this cache was created
@@ -394,7 +394,7 @@ public sealed class QueryDescription
     /// <param name="Archetype">The archetype</param>
     /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query)</param>
     /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query)</param>
-    public readonly record struct ArchetypeMatch(Archetype Archetype, FrozenOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne) : IComparable<ArchetypeMatch>
+    public readonly record struct ArchetypeMatch(Archetype Archetype, ImmutableOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne) : IComparable<ArchetypeMatch>
     {
         /// <inheritdoc/>
         public int CompareTo(ArchetypeMatch other)

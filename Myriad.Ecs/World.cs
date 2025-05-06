@@ -165,7 +165,7 @@ public sealed class World : IDisposable
         }
 
         // Didn't find one, create the new archetype
-        var a = new Archetype(this, FrozenOrderedListSet<ComponentId>.Create(components));
+        var a = new Archetype(this, ImmutableOrderedListSet<ComponentId>.Create(components));
 
         // Add it to the relevant lists
         archetypes.Add(a);
@@ -193,7 +193,7 @@ public sealed class World : IDisposable
         }
 
         // Didn't find one, create the new archetype
-        var set = FrozenOrderedListSet<ComponentId>.Create(components);
+        var set = ImmutableOrderedListSet<ComponentId>.Create(components);
         var a = new Archetype(this, set);
 
         // Add it to the relevant lists
