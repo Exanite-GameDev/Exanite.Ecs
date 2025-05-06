@@ -29,14 +29,14 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     private readonly ComponentSetterCollection _setters = new();
 
-    private readonly List<BufferedEntityData> _bufferedSets = [ ];
+    private readonly List<BufferedEntityData> _bufferedSets = [];
 
-    private readonly Dictionary<Entity, EntityModificationData> _entityModifications = [ ];
-    private readonly List<Entity> _deletes = [ ];
-    private readonly List<QueryDescription> _archetypeDeletes = [ ];
-    private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = [ ];
+    private readonly Dictionary<Entity, EntityModificationData> _entityModifications = [];
+    private readonly List<Entity> _deletes = [];
+    private readonly List<QueryDescription> _archetypeDeletes = [];
+    private readonly OrderedListSet<Entity> _maybeAddingPhantomComponent = [];
 
-    private readonly OrderedListSet<ComponentId> _tempComponentIdSet = [ ];
+    private readonly OrderedListSet<ComponentId> _tempComponentIdSet = [];
 
     private Resolver _nextResolver;
 

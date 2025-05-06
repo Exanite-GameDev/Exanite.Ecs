@@ -5,7 +5,7 @@ namespace ParallelTasks;
 internal class Worker
 {
     private readonly Thread _thread;
-    private readonly ConcurrentBag<Task> _tasks = [ ];
+    private readonly ConcurrentBag<Task> _tasks = [];
     private readonly WorkStealingScheduler _scheduler;
 
     public AutoResetEvent Gate { get; } = new AutoResetEvent(false);
@@ -78,7 +78,7 @@ internal class Worker
                 replicable.Value.DoWork();
                 WorkItem.SetReplicableNull(replicable);
 
-                // MartinG@DigitalRune: Continue checking local queue and replicables. 
+                // MartinG@DigitalRune: Continue checking local queue and replicables.
                 // No need to steal work yet.
                 continue;
             }

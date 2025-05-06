@@ -1,5 +1,4 @@
 ﻿using System;
-using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Command;
 

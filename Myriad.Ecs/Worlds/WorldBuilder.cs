@@ -12,7 +12,7 @@ namespace Myriad.Ecs.Worlds;
 /// </summary>
 public sealed partial class WorldBuilder
 {
-    private readonly List<OrderedListSet<ComponentId>> _archetypes = [ ];
+    private readonly List<OrderedListSet<ComponentId>> _archetypes = [];
     private IThreadPool? _pool;
 
     private bool AddArchetype(HashSet<ComponentId> ids)

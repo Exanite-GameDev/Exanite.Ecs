@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Myriad.Ecs.Allocations;
-using Myriad.Ecs.Components;
 using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Worlds.Archetypes;
 
@@ -12,7 +11,7 @@ namespace Myriad.Ecs.Command;
 /// </summary>
 internal class ComponentSetterCollection
 {
-    private readonly Dictionary<ComponentId, IComponentList> _components = [ ];
+    private readonly Dictionary<ComponentId, IComponentList> _components = [];
 
     public void Clear()
     {

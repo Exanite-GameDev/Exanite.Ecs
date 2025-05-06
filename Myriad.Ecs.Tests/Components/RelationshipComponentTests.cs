@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.Command;
-using Myriad.Ecs.Components;
 using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Worlds;
 

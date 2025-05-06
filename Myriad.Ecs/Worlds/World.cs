@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Command;
 using Myriad.Ecs.ComponentIds;
-using Myriad.Ecs.Queries;
 using Myriad.Ecs.Threading;
 using Myriad.Ecs.Worlds.Archetypes;
 
@@ -18,11 +17,11 @@ public sealed partial class World
 {
     internal IThreadPool ThreadPool { get; }
 
-    private readonly List<Archetype> _archetypes = [ ];
-    private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [ ];
+    private readonly List<Archetype> _archetypes = [];
+    private readonly Dictionary<ArchetypeHash, List<Archetype>> _archetypesByHash = [];
 
     // Keep track of dead entities so their ID can be re-used
-    private readonly List<EntityId> _deadEntities = [ ];
+    private readonly List<EntityId> _deadEntities = [];
     private int _nextEntityId = 1;
 
     private readonly SegmentedList<EntityInfo> _entities = new(1024);
@@ -33,7 +32,7 @@ public sealed partial class World
     public IReadOnlyList<Archetype> Archetypes => _archetypes;
     internal int ArchetypesCount => _archetypes.Count;
 
-    private readonly ConcurrentBag<EcsCommandBuffer> _commandBufferPool = [ ];
+    private readonly ConcurrentBag<EcsCommandBuffer> _commandBufferPool = [];
 
     internal World(IThreadPool pool)
     {
@@ -157,7 +156,7 @@ public sealed partial class World
         // Get list of all archetypes with this hash
         if (!_archetypesByHash.TryGetValue(hash, out var candidates))
         {
-            candidates = [ ];
+            candidates = [];
             _archetypesByHash.Add(hash, candidates);
         }
 

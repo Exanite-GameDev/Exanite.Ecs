@@ -18,7 +18,7 @@ public readonly struct Future<T>
     /// <summary>
     /// Gets an array containing any exceptions thrown by this future.
     /// </summary>
-    public Exception[] Exceptions => _task.Exceptions ?? [ ];
+    public Exception[] Exceptions => _task.Exceptions ?? [];
 
     internal Future(Task task, FutureWork<T> work)
     {
@@ -58,7 +58,7 @@ internal class FutureWork<T>
 
     public void DoWork()
     {
-        Result = Function!();            
+        Result = Function!();
     }
 
     public static FutureWork<T> GetInstance()

@@ -53,12 +53,12 @@ public sealed class Archetype
     /// <summary>
     /// All chunks in this archetype
     /// </summary>
-    private readonly List<Chunk> _chunks = [ ];
+    private readonly List<Chunk> _chunks = [];
 
     /// <summary>
     /// A list of chunks which might have space to put an entity in
     /// </summary>
-    private readonly List<Chunk> _chunksWithSpace = [ ];
+    private readonly List<Chunk> _chunksWithSpace = [];
 
     /// <summary>
     /// A list of empty chunks that have been removed from this archetype
@@ -125,7 +125,7 @@ public sealed class Archetype
         }
 
         // Build an array where the number at a given index is the index of the component with that ID
-        _componentIndexLookup = maxComponentId == int.MinValue ? [ ] : new int[maxComponentId + 1];
+        _componentIndexLookup = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
         Array.Fill(_componentIndexLookup, -1);
         var idx = 0;
         foreach (var component in components)

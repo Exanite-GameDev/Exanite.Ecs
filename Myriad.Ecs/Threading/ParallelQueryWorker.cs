@@ -15,7 +15,7 @@ internal class ParallelQueryWorker<TWork>
     private CountdownEvent? _counter;
 
     private readonly ConcurrentQueue<TWork> _work = new();
-    private readonly List<Exception> _exceptions = [ ];
+    private readonly List<Exception> _exceptions = [];
 
     public ManualResetEventSlim FinishEvent { get; } = new ManualResetEventSlim(false);
 
@@ -31,7 +31,7 @@ internal class ParallelQueryWorker<TWork>
     {
         if (_exceptions.Count > 0)
         {
-            exceptions ??= [ ];
+            exceptions ??= [];
             exceptions.AddRange(_exceptions);
             _exceptions.Clear();
         }

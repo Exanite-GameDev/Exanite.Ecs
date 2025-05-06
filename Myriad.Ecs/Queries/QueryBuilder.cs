@@ -361,7 +361,7 @@ public sealed partial class QueryBuilder
     {
         public int Index { get; } = Index;
 
-        public readonly OrderedListSet<ComponentId> Items = [ ];
+        public readonly OrderedListSet<ComponentId> Items = [];
 
         private FrozenOrderedListSet<ComponentId>? _frozenCache;
 

@@ -14,7 +14,7 @@ internal class OrderedListSet<TItem>
     : IReadOnlyList<TItem>
     where TItem : struct, IComparable<TItem>, IEquatable<TItem>
 {
-    private readonly List<TItem> _items = [ ];
+    private readonly List<TItem> _items = [];
     public int Count => _items.Count;
 
     public TItem this[int i] => _items[i];
