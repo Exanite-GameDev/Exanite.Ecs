@@ -1,4 +1,5 @@
-﻿using Myriad.Ecs.Threading;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Myriad.Ecs.Threading;
 using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;

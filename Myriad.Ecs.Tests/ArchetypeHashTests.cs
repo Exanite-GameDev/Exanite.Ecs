@@ -1,4 +1,5 @@
-﻿using Myriad.Ecs.ComponentIds;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Tests;

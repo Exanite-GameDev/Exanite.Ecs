@@ -1,4 +1,5 @@
-﻿using Myriad.Ecs.Allocations;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Myriad.Ecs.Allocations;
 
 namespace Myriad.Ecs.Tests.Collections;
 
