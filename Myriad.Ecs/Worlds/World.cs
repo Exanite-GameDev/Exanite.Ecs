@@ -33,7 +33,7 @@ public sealed class World : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-
+        // TODO: Make sure events are properly sent out
     }
 
     #region command buffer pool
