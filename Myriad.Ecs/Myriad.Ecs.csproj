@@ -27,7 +27,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RefTuple.tt</DependentUpon>
     </Compile>
-    <Compile Update="Worlds\EntityGetComponentRef.cs">
+    <Compile Update="EntityGetComponentRef.cs">
       <DependentUpon>EntityGetComponentRef.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -39,7 +39,7 @@
       <LastGenOutput>RefTuple.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-    <None Update="Worlds\EntityGetComponentRef.tt">
+    <None Update="EntityGetComponentRef.tt">
       <LastGenOutput>EntityGetComponentRef.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>

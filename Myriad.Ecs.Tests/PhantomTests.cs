@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests;
 
@@ -256,7 +255,7 @@ public class PhantomTests
         Assert.IsFalse(ComponentId.Get<PhantomNotifier>().IsPhantomComponent);
 
         // Create an entity with a phantom component
-        var list = new List<Worlds.EntityId>();
+        var list = new List<EntityId>();
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new PhantomNotifier { CalledWith = list });
         var resolver = cmd.Playback();
@@ -316,7 +315,7 @@ public class PhantomTests
         Assert.IsFalse(ComponentId.Get<PhantomNotifier>().IsPhantomComponent);
 
         // Create an entity **without** a phantom component
-        var list = new List<Worlds.EntityId>();
+        var list = new List<EntityId>();
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentInt32()).Set(new PhantomNotifier { CalledWith = list });
         var resolver = cmd.Playback();

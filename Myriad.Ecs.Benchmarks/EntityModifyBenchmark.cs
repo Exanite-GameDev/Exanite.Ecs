@@ -1,7 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Myriad.Ecs.Benchmarks.Components;
 using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Benchmarks;
 
@@ -12,7 +11,7 @@ public class EntityModifyBenchmark
     private const int Count = 1_000_000;
 
     private World world = null!;
-    private readonly List<Worlds.Entity> entities = [];
+    private readonly List<Entity> entities = [];
     private EcsCommandBuffer ready = null!;
 
     [GlobalSetup]
@@ -47,7 +46,7 @@ public class EntityModifyBenchmark
         }
     }
 
-    private static void ModifyEntity(EcsCommandBuffer buffer, Random random, Worlds.Entity entity)
+    private static void ModifyEntity(EcsCommandBuffer buffer, Random random, Entity entity)
     {
         for (var i = 0; i < 5; i++)
         {

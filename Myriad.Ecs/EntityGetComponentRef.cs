@@ -1,7 +1,6 @@
 ﻿using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.Worlds;
+namespace Myriad.Ecs;
 
 /* dotcover disable */
 

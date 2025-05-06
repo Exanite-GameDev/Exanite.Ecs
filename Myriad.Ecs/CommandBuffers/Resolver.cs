@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Myriad.Ecs.Allocations;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.CommandBuffers;
 
@@ -12,7 +11,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public sealed class Resolver : IDisposable
     {
-        internal SortedList<uint, Worlds.EntityId> Lookup { get; } = [];
+        internal SortedList<uint, EntityId> Lookup { get; } = [];
         internal EcsCommandBuffer? Parent { get; private set; }
 
         internal uint Version { get; private set; }
@@ -57,6 +56,6 @@ public sealed partial class EcsCommandBuffer
         /// Get the nth item in this <see cref="Resolver"/>. Items are an arbitrary order.
         /// </summary>
         /// <param name="index"></param>
-        public Worlds.Entity this[int index] => Lookup.Values[index].ToEntity(World);
+        public Entity this[int index] => Lookup.Values[index].ToEntity(World);
     }
 }

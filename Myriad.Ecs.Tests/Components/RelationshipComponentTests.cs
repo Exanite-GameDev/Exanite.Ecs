@@ -1,14 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Myriad.Ecs.CommandBuffers;
 using Myriad.Ecs.Components;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Components;
 
 [TestClass]
 public class RelationshipComponentTests
 {
-    private static Worlds.Entity CreateEntity(World world)
+    private static Entity CreateEntity(World world)
     {
         var cmd = new EcsCommandBuffer(world);
 

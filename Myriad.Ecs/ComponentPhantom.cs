@@ -1,4 +1,4 @@
-﻿namespace Myriad.Ecs.Components;
+﻿namespace Myriad.Ecs;
 
 /// <summary>
 /// <para>

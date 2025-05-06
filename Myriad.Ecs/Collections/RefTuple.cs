@@ -32,7 +32,7 @@ public readonly ref struct RefT<T>
 
 public readonly ref struct RefTuple<T0>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -41,13 +41,13 @@ public readonly ref struct RefTuple<T0>
 		get => ref item0.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0)
+	internal RefTuple(Entity entity, RefT<T0> item0)
 	{
 		Entity = entity;
 		this.item0 = item0;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -57,7 +57,7 @@ public readonly ref struct RefTuple<T0>
 
 public readonly ref struct RefTuple<T0, T1>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -73,14 +73,14 @@ public readonly ref struct RefTuple<T0, T1>
 		get => ref item1.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1)
 	{
 		Entity = entity;
 		this.item0 = item0;
 		this.item1 = item1;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -91,7 +91,7 @@ public readonly ref struct RefTuple<T0, T1>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -114,7 +114,7 @@ public readonly ref struct RefTuple<T0, T1, T2>
 		get => ref item2.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -122,7 +122,7 @@ public readonly ref struct RefTuple<T0, T1, T2>
 		this.item2 = item2;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -134,7 +134,7 @@ public readonly ref struct RefTuple<T0, T1, T2>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -164,7 +164,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3>
 		get => ref item3.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -173,7 +173,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3>
 		this.item3 = item3;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -186,7 +186,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -223,7 +223,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 		get => ref item4.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -233,7 +233,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 		this.item4 = item4;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -247,7 +247,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -291,7 +291,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 		get => ref item5.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -302,7 +302,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 		this.item5 = item5;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -317,7 +317,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -368,7 +368,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 		get => ref item6.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -380,7 +380,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 		this.item6 = item6;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -396,7 +396,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -454,7 +454,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 		get => ref item7.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -467,7 +467,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 		this.item7 = item7;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -484,7 +484,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -549,7 +549,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		get => ref item8.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -563,7 +563,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 		this.item8 = item8;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -581,7 +581,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -653,7 +653,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		get => ref item9.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -668,7 +668,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 		this.item9 = item9;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -687,7 +687,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -766,7 +766,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		get => ref item10.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -782,7 +782,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 		this.item10 = item10;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -802,7 +802,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -888,7 +888,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		get => ref item11.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -905,7 +905,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		this.item11 = item11;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -926,7 +926,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -1019,7 +1019,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		get => ref item12.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -1037,7 +1037,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		this.item12 = item12;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -1059,7 +1059,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -1159,7 +1159,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		get => ref item13.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -1178,7 +1178,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		this.item13 = item13;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -1201,7 +1201,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -1308,7 +1308,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		get => ref item14.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -1328,7 +1328,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		this.item14 = item14;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13, out RefT<T14> item14)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13, out RefT<T14> item14)
 	{
 		entity = Entity;
 		item0 = this.item0;
@@ -1352,7 +1352,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 [ExcludeFromCodeCoverage]
 public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 {
-	public readonly Worlds.Entity Entity;
+	public readonly Entity Entity;
 
 	private readonly RefT<T0> item0;
 	public ref T0 Item0
@@ -1466,7 +1466,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		get => ref item15.Value;
 	}
 
-	internal RefTuple(Worlds.Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14, RefT<T15> item15)
+	internal RefTuple(Entity entity, RefT<T0> item0, RefT<T1> item1, RefT<T2> item2, RefT<T3> item3, RefT<T4> item4, RefT<T5> item5, RefT<T6> item6, RefT<T7> item7, RefT<T8> item8, RefT<T9> item9, RefT<T10> item10, RefT<T11> item11, RefT<T12> item12, RefT<T13> item13, RefT<T14> item14, RefT<T15> item15)
 	{
 		Entity = entity;
 		this.item0 = item0;
@@ -1487,7 +1487,7 @@ public readonly ref struct RefTuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
 		this.item15 = item15;
 	}
 
-	public void Deconstruct(out Worlds.Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13, out RefT<T14> item14, out RefT<T15> item15)
+	public void Deconstruct(out Entity entity, out RefT<T0> item0, out RefT<T1> item1, out RefT<T2> item2, out RefT<T3> item3, out RefT<T4> item4, out RefT<T5> item5, out RefT<T6> item6, out RefT<T7> item7, out RefT<T8> item8, out RefT<T9> item9, out RefT<T10> item10, out RefT<T11> item11, out RefT<T12> item12, out RefT<T13> item13, out RefT<T14> item14, out RefT<T15> item15)
 	{
 		entity = Entity;
 		item0 = this.item0;

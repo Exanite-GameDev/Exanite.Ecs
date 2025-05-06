@@ -1,5 +1,4 @@
 ﻿using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.Tests.Queries;
 

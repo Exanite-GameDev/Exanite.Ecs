@@ -1,5 +1,4 @@
 ﻿using System;
-using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.CommandBuffers;
 
@@ -64,7 +63,7 @@ public sealed partial class EcsCommandBuffer
         /// Resolve this buffered Entity into the real Entity that was constructed
         /// </summary>
         /// <returns></returns>
-        public Worlds.Entity Resolve()
+        public Entity Resolve()
         {
             if (resolver.Parent == null)
             {

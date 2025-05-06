@@ -6,7 +6,6 @@ using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Queries;
-using Myriad.Ecs.Worlds;
 using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.CommandBuffers;
@@ -30,10 +29,10 @@ public sealed partial class EcsCommandBuffer
 
     private readonly List<BufferedEntityData> bufferedSets = [];
 
-    private readonly Dictionary<Worlds.Entity, EntityModificationData> entityModifications = [];
-    private readonly List<Worlds.Entity> deletes = [];
+    private readonly Dictionary<Entity, EntityModificationData> entityModifications = [];
+    private readonly List<Entity> deletes = [];
     private readonly List<QueryDescription> archetypeDeletes = [];
-    private readonly OrderedListSet<Worlds.Entity> maybeAddingPhantomComponent = [];
+    private readonly OrderedListSet<Entity> maybeAddingPhantomComponent = [];
 
     private readonly OrderedListSet<ComponentId> tempComponentIdSet = [];
 
@@ -154,7 +153,7 @@ public sealed partial class EcsCommandBuffer
         deletes.Clear();
 
         // Check if this entity should not be deleted, because a phantom component is being added
-        bool IsAddingPhantomComponent(Worlds.Entity entity)
+        bool IsAddingPhantomComponent(Entity entity)
         {
             if (maybeAddingPhantomComponent.Contains(entity) && entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
             {
@@ -383,7 +382,7 @@ public sealed partial class EcsCommandBuffer
     #endregion
 
     /// <summary>
-    /// Create a new <see cref="Worlds.Entity"/> in the world.
+    /// Create a new <see cref="Entity"/> in the world.
     /// </summary>
     /// <returns></returns>
     public BufferedEntity Create()
@@ -443,7 +442,7 @@ public sealed partial class EcsCommandBuffer
     /// <typeparam name="T"></typeparam>
     /// <param name="entity"></param>
     /// <param name="value"></param>
-    public void Set<T>(Worlds.Entity entity, T value)
+    public void Set<T>(Entity entity, T value)
         where T : IComponent
     {
         if (typeof(T) == typeof(ComponentPhantom))
@@ -454,7 +453,7 @@ public sealed partial class EcsCommandBuffer
         SetInternal(entity, value);
     }
 
-    private void SetInternal<T>(Worlds.Entity entity, T value)
+    private void SetInternal<T>(Entity entity, T value)
         where T : IComponent
     {
         var mod = GetModificationData(entity, true, false);
@@ -486,7 +485,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="entity"></param>
-    public void Remove<T>(Worlds.Entity entity)
+    public void Remove<T>(Entity entity)
         where T : IComponent
     {
         if (typeof(T) == typeof(ComponentPhantom))
@@ -508,7 +507,7 @@ public sealed partial class EcsCommandBuffer
     /// Delete an entity
     /// </summary>
     /// <param name="entity"></param>
-    public void Delete(Worlds.Entity entity)
+    public void Delete(Entity entity)
     {
         deletes.Add(entity);
     }
@@ -517,7 +516,7 @@ public sealed partial class EcsCommandBuffer
     /// Bulk delete entities
     /// </summary>
     /// <param name="entities"></param>
-    public void Delete(List<Worlds.Entity> entities)
+    public void Delete(List<Entity> entities)
     {
         deletes.AddRange(entities);
     }
@@ -536,7 +535,7 @@ public sealed partial class EcsCommandBuffer
         archetypeDeletes.Add(entities);
     }
 
-    private EntityModificationData GetModificationData(Worlds.Entity entity, bool ensureSet, bool ensureRemove)
+    private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
     {
         // Add it if it's missing
         if (!entityModifications.TryGetValue(entity, out var existing))

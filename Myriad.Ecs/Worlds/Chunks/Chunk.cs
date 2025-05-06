@@ -23,7 +23,7 @@ public sealed class Chunk
     /// </summary>
     private readonly IReadOnlyList<ComponentId> componentIdLookup;
 
-    private readonly Entity[] entities;
+    private readonly Ecs.Entity[] entities;
     private readonly Array[] components;
 
     /// <summary>
@@ -34,13 +34,13 @@ public sealed class Chunk
     /// <summary>
     /// Get all of the entities in this chunk
     /// </summary>
-    public ReadOnlyMemory<Entity> Entities => entities.AsMemory(0, EntityCount);
+    public ReadOnlyMemory<Ecs.Entity> Entities => entities.AsMemory(0, EntityCount);
 
     internal Chunk(Archetype archetype, int size, int[] componentIndexLookup, IReadOnlyList<Type> componentTypes, IReadOnlyList<ComponentId> ids)
     {
         Archetype = archetype;
         this.componentIndexLookup = componentIndexLookup;
-        entities = new Entity[size];
+        entities = new Ecs.Entity[size];
         componentIdLookup = ids;
 
         components = new Array[componentTypes.Count];

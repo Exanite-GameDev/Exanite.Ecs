@@ -4,7 +4,6 @@ using System.Threading;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Utilities;
-using Myriad.Ecs.Worlds;
 using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Queries;
@@ -443,7 +442,7 @@ public sealed class QueryDescription
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public bool Contains(Worlds.Entity entity)
+    public bool Contains(Entity entity)
     {
         var info = entity.World.GetEntityInfo(entity.Id);
         var archetype = new ArchetypeMatch(info.Chunk.Archetype, null, null);
@@ -454,7 +453,7 @@ public sealed class QueryDescription
     /// Get the first entity which this query matches (or null)
     /// </summary>
     /// <returns></returns>
-    public Worlds.Entity? FirstOrDefault()
+    public Entity? FirstOrDefault()
     {
         foreach (var archetype in GetArchetypes())
         {
@@ -481,7 +480,7 @@ public sealed class QueryDescription
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">Thrown if there are no matches</exception>
-    public Worlds.Entity First()
+    public Entity First()
     {
         return FirstOrDefault()
             ?? throw new InvalidOperationException("QueryDescription.First() found no matching entities");
@@ -492,9 +491,9 @@ public sealed class QueryDescription
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">Thrown if there are more than one matches</exception>
-    public Worlds.Entity? SingleOrDefault()
+    public Entity? SingleOrDefault()
     {
-        Worlds.Entity? result = default;
+        Entity? result = default;
 
         foreach (var archetype in GetArchetypes())
         {
@@ -529,7 +528,7 @@ public sealed class QueryDescription
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
-    public Worlds.Entity Single()
+    public Entity Single()
     {
         return SingleOrDefault()
             ?? throw new InvalidOperationException("QueryDescription.SingleOrDefault() found no matching entities");
@@ -540,7 +539,7 @@ public sealed class QueryDescription
     /// </summary>
     /// <param name="random"></param>
     /// <returns></returns>
-    public Worlds.Entity? RandomOrDefault(Random random)
+    public Entity? RandomOrDefault(Random random)
     {
         // Get total entity count
         var count = Count();

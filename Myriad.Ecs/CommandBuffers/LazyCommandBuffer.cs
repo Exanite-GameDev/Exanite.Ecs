@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Myriad.Ecs.Worlds;
 
 namespace Myriad.Ecs.CommandBuffers;
 

@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Tests;
 
@@ -37,17 +36,17 @@ public record struct TestPhantom2 : IComponentPhantom;
 
 public record struct PhantomNotifier : IPhantomNotifierComponent
 {
-    public required List<Worlds.EntityId> CalledWith;
+    public required List<EntityId> CalledWith;
 
-    public void OnBecomePhantom(Worlds.EntityId self)
+    public void OnBecomePhantom(EntityId self)
     {
         CalledWith.Add(self);
     }
 }
 
-public record struct Relational1(Worlds.Entity Target) : IEntityRelationComponent;
-public record struct Relational2(Worlds.Entity Target, int X) : IEntityRelationComponent;
-public record struct Relational3(Worlds.Entity Target, float Y) : IEntityRelationComponent;
+public record struct Relational1(Entity Target) : IEntityRelationComponent;
+public record struct Relational2(Entity Target, int X) : IEntityRelationComponent;
+public record struct Relational3(Entity Target, float Y) : IEntityRelationComponent;
 
 public class BoxedInt
 {
@@ -74,7 +73,7 @@ public readonly record struct TestDisposable
 public record struct TestDisposableParent
     : IDisposableComponent, IEntityRelationComponent
 {
-    public Worlds.Entity Target { get; set; }
+    public Entity Target { get; set; }
 
     public void Dispose(ref LazyCommandBuffer lazy)
     {

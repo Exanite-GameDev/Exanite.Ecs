@@ -3,16 +3,16 @@ using System.Diagnostics;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.Worlds;
+namespace Myriad.Ecs;
 
 /// <summary>
-/// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="World"/>)
+/// The ID of an <see cref="Ecs.Entity"/> (not carrying a reference to a <see cref="World"/>)
 /// </summary>
 [DebuggerDisplay("{Id}v{Version}")]
 public readonly partial record struct EntityId : IComparable<EntityId>
 {
     /// <summary>
-    /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
+    /// The <see cref="Ecs.Entity"/> of an entity, may be re-used very quickly once an <see cref="Ecs.Entity"/> is destroyed.
     /// </summary>
     public readonly int Id;
 
@@ -34,13 +34,13 @@ public readonly partial record struct EntityId : IComparable<EntityId>
     }
 
     /// <summary>
-    /// Create a new <see cref="Entity"/> struct that represents this Entity
+    /// Create a new <see cref="Ecs.Entity"/> struct that represents this Entity
     /// </summary>
     /// <param name="world"></param>
     /// <returns></returns>
-    public Entity ToEntity(World world)
+    public Ecs.Entity ToEntity(World world)
     {
-        return new Entity(this, world);
+        return new Ecs.Entity(this, world);
     }
 
     /// <summary>
