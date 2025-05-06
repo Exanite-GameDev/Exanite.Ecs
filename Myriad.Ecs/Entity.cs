@@ -11,7 +11,7 @@ namespace Myriad.Ecs;
 /// An <see cref="Entity"/> is an ID in the <see cref="World"/> which has a set of components associated with it.
 /// </summary>
 [DebuggerDisplay("{EntityId}")]
-public readonly record struct Entity : IComparable<Entity>
+public readonly partial record struct Entity : IComparable<Entity>
 {
     /// <summary>
     /// The <see cref="World"/> this <see cref="Entity"/> is in

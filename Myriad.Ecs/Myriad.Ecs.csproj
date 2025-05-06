@@ -15,4 +15,18 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <WarningsAsErrors>true</WarningsAsErrors>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Update="EntityTryGetComponent.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EntityTryGetComponent.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="EntityTryGetComponent.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityTryGetComponent.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

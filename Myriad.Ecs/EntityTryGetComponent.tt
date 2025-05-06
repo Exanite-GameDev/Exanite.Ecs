@@ -1,0 +1,55 @@
+<#@ template language="C#" #>
+<#@ assembly name="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" #>
+<#@ import namespace="System.Linq" #>
+using Myriad.Ecs.Collections;
+
+namespace Myriad.Ecs;
+
+public readonly partial record struct Entity
+{
+<#
+for (var paramCount = 1; paramCount <= 16; paramCount++)
+{
+    var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
+    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out Ref<T{t}> ref{t}"));
+    var queryConstraints = string.Join(" ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
+#>
+    public bool TryGetComponent<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
+    {
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+        ref<#= t #> = default;
+<#
+    }
+#>
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+
+        if (!HasComponent<T<#= t #>>())
+        {
+            return false;
+        }
+<#
+    }
+#>
+
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+        ref<#= t #> = GetComponentRef<T<#= t #>>();
+<#
+    }
+#>
+
+        return true;
+    }
+
+<#
+}
+#>
+}
