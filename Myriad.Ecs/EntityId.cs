@@ -1,6 +1,6 @@
 ﻿using System;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Worlds;
 using System.Diagnostics;
 

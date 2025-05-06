@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Myriad.Ecs.Queries;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Worlds.Chunks;
 using System.Diagnostics.CodeAnalysis;
@@ -18,9 +18,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Myriad.Ecs.Queries
 {
-
+    
     public readonly struct QueryResultEnumerable0
-
+        
     {
         private readonly QueryDescription _query;
 
@@ -37,9 +37,9 @@ namespace Myriad.Ecs.Queries
         }
     }
 
-
+    
     public ref struct QueryResultEnumerator0
-
+        
     {
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
@@ -137,7 +137,7 @@ namespace Myriad.Ecs.Worlds
 
 namespace Myriad.Ecs.Queries
 {
-
+    
     public readonly struct QueryResultEnumerable1<T0>
         where T0 : IComponent
     {
@@ -156,11 +156,11 @@ namespace Myriad.Ecs.Queries
         }
     }
 
-
+    
     public ref struct QueryResultEnumerator1<T0>
         where T0 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -250,14 +250,14 @@ namespace Myriad.Ecs.Worlds
 {
     public partial class World
     {
-
+        
         public QueryResultEnumerable1<T0> Query<T0>(QueryDescription? query = null)
             where T0 : IComponent
         {
             return Query<T0>(ref query);
         }
 
-
+        
         public QueryResultEnumerable1<T0> Query<T0>(ref QueryDescription? query)
             where T0 : IComponent
         {
@@ -299,8 +299,8 @@ namespace Myriad.Ecs.Queries
         where T0 : IComponent
         where T1 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -446,9 +446,9 @@ namespace Myriad.Ecs.Queries
         where T1 : IComponent
         where T2 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -601,10 +601,10 @@ namespace Myriad.Ecs.Queries
         where T2 : IComponent
         where T3 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -764,11 +764,11 @@ namespace Myriad.Ecs.Queries
         where T3 : IComponent
         where T4 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -935,12 +935,12 @@ namespace Myriad.Ecs.Queries
         where T4 : IComponent
         where T5 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -1114,13 +1114,13 @@ namespace Myriad.Ecs.Queries
         where T5 : IComponent
         where T6 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -1301,14 +1301,14 @@ namespace Myriad.Ecs.Queries
         where T6 : IComponent
         where T7 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -1496,15 +1496,15 @@ namespace Myriad.Ecs.Queries
         where T7 : IComponent
         where T8 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -1699,16 +1699,16 @@ namespace Myriad.Ecs.Queries
         where T8 : IComponent
         where T9 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
-        private static readonly ComponentId C9 = ComponentId<T9>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
+        private static readonly ComponentID C9 = ComponentID<T9>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -1910,17 +1910,17 @@ namespace Myriad.Ecs.Queries
         where T9 : IComponent
         where T10 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
-        private static readonly ComponentId C9 = ComponentId<T9>.Id;
-        private static readonly ComponentId C10 = ComponentId<T10>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
+        private static readonly ComponentID C9 = ComponentID<T9>.ID;
+        private static readonly ComponentID C10 = ComponentID<T10>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -2129,18 +2129,18 @@ namespace Myriad.Ecs.Queries
         where T10 : IComponent
         where T11 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
-        private static readonly ComponentId C9 = ComponentId<T9>.Id;
-        private static readonly ComponentId C10 = ComponentId<T10>.Id;
-        private static readonly ComponentId C11 = ComponentId<T11>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
+        private static readonly ComponentID C9 = ComponentID<T9>.ID;
+        private static readonly ComponentID C10 = ComponentID<T10>.ID;
+        private static readonly ComponentID C11 = ComponentID<T11>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -2356,19 +2356,19 @@ namespace Myriad.Ecs.Queries
         where T11 : IComponent
         where T12 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
-        private static readonly ComponentId C9 = ComponentId<T9>.Id;
-        private static readonly ComponentId C10 = ComponentId<T10>.Id;
-        private static readonly ComponentId C11 = ComponentId<T11>.Id;
-        private static readonly ComponentId C12 = ComponentId<T12>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
+        private static readonly ComponentID C9 = ComponentID<T9>.ID;
+        private static readonly ComponentID C10 = ComponentID<T10>.ID;
+        private static readonly ComponentID C11 = ComponentID<T11>.ID;
+        private static readonly ComponentID C12 = ComponentID<T12>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -2591,20 +2591,20 @@ namespace Myriad.Ecs.Queries
         where T12 : IComponent
         where T13 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
-        private static readonly ComponentId C9 = ComponentId<T9>.Id;
-        private static readonly ComponentId C10 = ComponentId<T10>.Id;
-        private static readonly ComponentId C11 = ComponentId<T11>.Id;
-        private static readonly ComponentId C12 = ComponentId<T12>.Id;
-        private static readonly ComponentId C13 = ComponentId<T13>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
+        private static readonly ComponentID C9 = ComponentID<T9>.ID;
+        private static readonly ComponentID C10 = ComponentID<T10>.ID;
+        private static readonly ComponentID C11 = ComponentID<T11>.ID;
+        private static readonly ComponentID C12 = ComponentID<T12>.ID;
+        private static readonly ComponentID C13 = ComponentID<T13>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -2834,21 +2834,21 @@ namespace Myriad.Ecs.Queries
         where T13 : IComponent
         where T14 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
-        private static readonly ComponentId C9 = ComponentId<T9>.Id;
-        private static readonly ComponentId C10 = ComponentId<T10>.Id;
-        private static readonly ComponentId C11 = ComponentId<T11>.Id;
-        private static readonly ComponentId C12 = ComponentId<T12>.Id;
-        private static readonly ComponentId C13 = ComponentId<T13>.Id;
-        private static readonly ComponentId C14 = ComponentId<T14>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
+        private static readonly ComponentID C9 = ComponentID<T9>.ID;
+        private static readonly ComponentID C10 = ComponentID<T10>.ID;
+        private static readonly ComponentID C11 = ComponentID<T11>.ID;
+        private static readonly ComponentID C12 = ComponentID<T12>.ID;
+        private static readonly ComponentID C13 = ComponentID<T13>.ID;
+        private static readonly ComponentID C14 = ComponentID<T14>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;
@@ -3085,22 +3085,22 @@ namespace Myriad.Ecs.Queries
         where T14 : IComponent
         where T15 : IComponent
     {
-        private static readonly ComponentId C0 = ComponentId<T0>.Id;
-        private static readonly ComponentId C1 = ComponentId<T1>.Id;
-        private static readonly ComponentId C2 = ComponentId<T2>.Id;
-        private static readonly ComponentId C3 = ComponentId<T3>.Id;
-        private static readonly ComponentId C4 = ComponentId<T4>.Id;
-        private static readonly ComponentId C5 = ComponentId<T5>.Id;
-        private static readonly ComponentId C6 = ComponentId<T6>.Id;
-        private static readonly ComponentId C7 = ComponentId<T7>.Id;
-        private static readonly ComponentId C8 = ComponentId<T8>.Id;
-        private static readonly ComponentId C9 = ComponentId<T9>.Id;
-        private static readonly ComponentId C10 = ComponentId<T10>.Id;
-        private static readonly ComponentId C11 = ComponentId<T11>.Id;
-        private static readonly ComponentId C12 = ComponentId<T12>.Id;
-        private static readonly ComponentId C13 = ComponentId<T13>.Id;
-        private static readonly ComponentId C14 = ComponentId<T14>.Id;
-        private static readonly ComponentId C15 = ComponentId<T15>.Id;
+        private static readonly ComponentID C0 = ComponentID<T0>.ID;
+        private static readonly ComponentID C1 = ComponentID<T1>.ID;
+        private static readonly ComponentID C2 = ComponentID<T2>.ID;
+        private static readonly ComponentID C3 = ComponentID<T3>.ID;
+        private static readonly ComponentID C4 = ComponentID<T4>.ID;
+        private static readonly ComponentID C5 = ComponentID<T5>.ID;
+        private static readonly ComponentID C6 = ComponentID<T6>.ID;
+        private static readonly ComponentID C7 = ComponentID<T7>.ID;
+        private static readonly ComponentID C8 = ComponentID<T8>.ID;
+        private static readonly ComponentID C9 = ComponentID<T9>.ID;
+        private static readonly ComponentID C10 = ComponentID<T10>.ID;
+        private static readonly ComponentID C11 = ComponentID<T11>.ID;
+        private static readonly ComponentID C12 = ComponentID<T12>.ID;
+        private static readonly ComponentID C13 = ComponentID<T13>.ID;
+        private static readonly ComponentID C14 = ComponentID<T14>.ID;
+        private static readonly ComponentID C15 = ComponentID<T15>.ID;
 
         private List<QueryDescription.ArchetypeMatch>.Enumerator _archetypesEnumerator;
         private List<Chunk>.Enumerator _chunksEnumerator;

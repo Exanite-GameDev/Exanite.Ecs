@@ -2,7 +2,7 @@
 <#@ assembly name="System.Core" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 
 namespace Myriad.Ecs.Worlds;
 

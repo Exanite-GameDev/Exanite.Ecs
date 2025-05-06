@@ -2,7 +2,7 @@
 using Myriad.Ecs.Collections;
 using Myriad.Ecs.Command;
 using Myriad.Ecs.Components;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Worlds.Chunks;
 
 namespace Myriad.Ecs.Worlds.Archetypes;

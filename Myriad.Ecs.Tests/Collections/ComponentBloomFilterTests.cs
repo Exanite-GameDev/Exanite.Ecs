@@ -1,5 +1,5 @@
 ﻿using Myriad.Ecs.Collections;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 
 namespace Myriad.Ecs.Tests.Collections;
 

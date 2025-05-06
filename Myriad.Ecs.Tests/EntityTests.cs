@@ -1,6 +1,6 @@
 ﻿using Myriad.Ecs.Worlds;
 using Myriad.Ecs.Command;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 
 namespace Myriad.Ecs.Tests;
 

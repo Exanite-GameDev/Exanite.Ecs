@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.xxHash;
 
 namespace Myriad.Ecs.Worlds.Archetypes;

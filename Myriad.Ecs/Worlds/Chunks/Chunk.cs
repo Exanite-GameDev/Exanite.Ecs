@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Collections;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Worlds.Archetypes;
 
 namespace Myriad.Ecs.Worlds.Chunks;

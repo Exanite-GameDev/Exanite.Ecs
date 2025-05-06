@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Components;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 
 namespace Myriad.Ecs.Command;
 

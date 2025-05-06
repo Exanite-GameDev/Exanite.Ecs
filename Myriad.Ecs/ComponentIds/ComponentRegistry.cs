@@ -5,7 +5,7 @@ using Myriad.Ecs.Allocations;
 using Myriad.Ecs.Components;
 using Myriad.Ecs.Locks;
 
-namespace Myriad.Ecs.IDs;
+namespace Myriad.Ecs.ComponentIds;
 
 /// <summary>
 /// Store a lookup from component type to unique 32 bit ID.

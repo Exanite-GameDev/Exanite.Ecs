@@ -10,7 +10,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using Myriad.Ecs.Queries;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedParameter.Global

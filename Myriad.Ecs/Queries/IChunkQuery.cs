@@ -2,7 +2,7 @@
 
 using System;
 using Myriad.Ecs.Queries;
-using Myriad.Ecs.IDs;
+using Myriad.Ecs.ComponentIds;
 using Myriad.Ecs.Threading;
 using Myriad.Ecs.Allocations;
 using System.Buffers;
@@ -41,7 +41,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			QueryDescription? query = null
@@ -61,7 +61,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			ref QueryDescription? query
@@ -82,7 +82,7 @@ namespace Myriad.Ecs.Worlds
 		/// query object will automatically be created and written into this field.</param>
 		/// <param name="q">The TQ instance which will be executed for each chunk</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
@@ -103,7 +103,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			TQ q,
@@ -124,7 +124,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a default
 		/// query object will be used (based on type parameters).</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
@@ -145,7 +145,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		public int ExecuteChunk<TQ, T0>(
 			ref TQ q,
 			ref QueryDescription? query
@@ -157,7 +157,7 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
+		    var c0 = ComponentID<T0>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -191,7 +191,7 @@ namespace Myriad.Ecs.Worlds
         /// <param name="query">A query expressing which entities to execute this query over. If null a suitable
 		/// query object will automatically be created and written into this field.</param>
         /// <returns>The total number of entities processed</returns>
-
+		
 		public int ExecuteChunkParallel<TQ, T0>(
 			TQ q,
 			QueryDescription? query = null
@@ -315,7 +315,7 @@ namespace Myriad.Ecs.Worlds
 			return count;
 		}
 
-
+		
 		private readonly struct ChunkWorkItem1<TQ, T0>
 			: IWorkItem
 			where T0 : IComponent
@@ -497,8 +497,8 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -856,9 +856,9 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -1234,10 +1234,10 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -1631,11 +1631,11 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -2047,12 +2047,12 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -2482,13 +2482,13 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -2936,14 +2936,14 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -3409,15 +3409,15 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -3901,16 +3901,16 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
+		    var c9 = ComponentID<T9>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -4412,17 +4412,17 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
+		    var c9 = ComponentID<T9>.ID;
+		    var c10 = ComponentID<T10>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -4942,18 +4942,18 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
+		    var c9 = ComponentID<T9>.ID;
+		    var c10 = ComponentID<T10>.ID;
+		    var c11 = ComponentID<T11>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -5491,19 +5491,19 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
+		    var c9 = ComponentID<T9>.ID;
+		    var c10 = ComponentID<T10>.ID;
+		    var c11 = ComponentID<T11>.ID;
+		    var c12 = ComponentID<T12>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -6059,20 +6059,20 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
-		    var c13 = ComponentId<T13>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
+		    var c9 = ComponentID<T9>.ID;
+		    var c10 = ComponentID<T10>.ID;
+		    var c11 = ComponentID<T11>.ID;
+		    var c12 = ComponentID<T12>.ID;
+		    var c13 = ComponentID<T13>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -6646,21 +6646,21 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
-		    var c13 = ComponentId<T13>.Id;
-		    var c14 = ComponentId<T14>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
+		    var c9 = ComponentID<T9>.ID;
+		    var c10 = ComponentID<T10>.ID;
+		    var c11 = ComponentID<T11>.ID;
+		    var c12 = ComponentID<T12>.ID;
+		    var c13 = ComponentID<T13>.ID;
+		    var c14 = ComponentID<T14>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
@@ -7252,22 +7252,22 @@ namespace Myriad.Ecs.Worlds
 
 			var archetypes = query.GetArchetypes();
 
-		    var c0 = ComponentId<T0>.Id;
-		    var c1 = ComponentId<T1>.Id;
-		    var c2 = ComponentId<T2>.Id;
-		    var c3 = ComponentId<T3>.Id;
-		    var c4 = ComponentId<T4>.Id;
-		    var c5 = ComponentId<T5>.Id;
-		    var c6 = ComponentId<T6>.Id;
-		    var c7 = ComponentId<T7>.Id;
-		    var c8 = ComponentId<T8>.Id;
-		    var c9 = ComponentId<T9>.Id;
-		    var c10 = ComponentId<T10>.Id;
-		    var c11 = ComponentId<T11>.Id;
-		    var c12 = ComponentId<T12>.Id;
-		    var c13 = ComponentId<T13>.Id;
-		    var c14 = ComponentId<T14>.Id;
-		    var c15 = ComponentId<T15>.Id;
+		    var c0 = ComponentID<T0>.ID;
+		    var c1 = ComponentID<T1>.ID;
+		    var c2 = ComponentID<T2>.ID;
+		    var c3 = ComponentID<T3>.ID;
+		    var c4 = ComponentID<T4>.ID;
+		    var c5 = ComponentID<T5>.ID;
+		    var c6 = ComponentID<T6>.ID;
+		    var c7 = ComponentID<T7>.ID;
+		    var c8 = ComponentID<T8>.ID;
+		    var c9 = ComponentID<T9>.ID;
+		    var c10 = ComponentID<T10>.ID;
+		    var c11 = ComponentID<T11>.ID;
+		    var c12 = ComponentID<T12>.ID;
+		    var c13 = ComponentID<T13>.ID;
+		    var c14 = ComponentID<T14>.ID;
+		    var c15 = ComponentID<T15>.ID;
 
 			var count = 0;
 			foreach (var archetypeMatch in archetypes)
