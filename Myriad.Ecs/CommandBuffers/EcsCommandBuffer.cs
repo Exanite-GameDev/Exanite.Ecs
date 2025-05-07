@@ -22,6 +22,8 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public World World { get; }
 
+    public bool HasBufferedOperations { get; private set; }
+
     /// <summary>
     /// Collection of all components to be set onto entities
     /// </summary>
@@ -92,6 +94,8 @@ public sealed partial class EcsCommandBuffer
         maybeAddingPhantomComponent.Clear();
         tempComponentIdSet.Clear();
 
+        HasBufferedOperations = false;
+
         unchecked { version++; }
         nextResolver.Dispose();
         nextResolver = Pool<Resolver>.Get();
@@ -134,6 +138,8 @@ public sealed partial class EcsCommandBuffer
         entityModifications.Clear();
         tempComponentIdSet.Clear();
         archetypeEdges.Clear();
+
+        HasBufferedOperations = false;
 
         // Update the version of this buffer, invalidating all buffered entities for further modification
         unchecked { version++; }
@@ -206,6 +212,8 @@ public sealed partial class EcsCommandBuffer
         }
 
         deletes.Clear();
+
+        return;
 
         // Check if this entity should not be deleted, because a phantom component is being added
         bool IsAddingPhantomComponent(Entity entity)
@@ -386,6 +394,8 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public BufferedEntity Create()
     {
+        HasBufferedOperations = true;
+
         // Get a set to hold all of the component setters
         var set = Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get();
         set.Clear();
@@ -401,9 +411,10 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Add or overwrite a component attached to an entity
     /// </summary>
-    public void Set<T>(Entity entity, T value)
-        where T : IComponent
+    public void Set<T>(Entity entity, T value) where T : IComponent
     {
+        HasBufferedOperations = true;
+
         if (typeof(T) == typeof(ComponentPhantom))
         {
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
@@ -415,9 +426,10 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Remove a component attached to an entity
     /// </summary>
-    public void Remove<T>(Entity entity)
-        where T : IComponent
+    public void Remove<T>(Entity entity) where T : IComponent
     {
+        HasBufferedOperations = true;
+
         if (typeof(T) == typeof(ComponentPhantom))
         {
             throw new InvalidOperationException("Cannot remove `Phantom` component from an entity");
@@ -438,6 +450,8 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public void Delete(Entity entity)
     {
+        HasBufferedOperations = true;
+
         deletes.Add(entity);
     }
 
@@ -446,6 +460,8 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public void Delete(List<Entity> entities)
     {
+        HasBufferedOperations = true;
+
         deletes.AddRange(entities);
     }
 
@@ -459,11 +475,12 @@ public sealed partial class EcsCommandBuffer
             throw new ArgumentException("Cannot use QueryDescription from one World with CommandBuffer for another World");
         }
 
+        HasBufferedOperations = true;
+
         archetypeDeletes.Add(entities);
     }
 
-    private void SetBuffered<T>(uint id, T value)
-        where T : IComponent
+    private void SetBuffered<T>(uint id, T value) where T : IComponent
     {
         Debug.Assert(id < bufferedSets.Count, "Unknown entity ID in SetBuffered");
 
@@ -499,8 +516,7 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void SetInternal<T>(Entity entity, T value)
-        where T : IComponent
+    private void SetInternal<T>(Entity entity, T value) where T : IComponent
     {
         var mod = GetModificationData(entity, true, false);
 
