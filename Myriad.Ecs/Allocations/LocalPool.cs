@@ -6,7 +6,6 @@ namespace Myriad.Ecs.Allocations;
 /// <summary>
 /// A non-thread safe pool, backed by the global thread safe pool.
 /// </summary>
-/// <typeparam name="T"></typeparam>
 public readonly struct LocalPool<T> : IDisposable where T : class, new()
 {
     private readonly List<T> items = Pool<List<T>>.Get();
@@ -31,7 +30,6 @@ public readonly struct LocalPool<T> : IDisposable where T : class, new()
     /// <summary>
     /// Get an item from this pool, fetches from the global pool if none are available
     /// </summary>
-    /// <returns></returns>
     public T Get()
     {
         if (items.Count == 0)
@@ -47,7 +45,6 @@ public readonly struct LocalPool<T> : IDisposable where T : class, new()
     /// <summary>
     /// Return an item to this pool
     /// </summary>
-    /// <param name="item"></param>
     public void Return(T item)
     {
         if (items.Count < maxSize)

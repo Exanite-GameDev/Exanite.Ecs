@@ -16,8 +16,6 @@ internal static class ComponentRegistry
     /// <summary>
     /// Get the ID for the given type
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
     public static ComponentId Get<T>()
         where T : IComponent
     {
@@ -40,8 +38,6 @@ internal static class ComponentRegistry
     /// <summary>
     /// Get the ID for the given type
     /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
     public static ComponentId Get(Type type)
     {
         TypeCheck(type);
@@ -63,8 +59,6 @@ internal static class ComponentRegistry
     /// <summary>
     /// Get the type for a given ID
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
     public static Type Get(ComponentId id)
     {
         using var locker = Lock.EnterReadLock();

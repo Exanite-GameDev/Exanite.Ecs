@@ -84,7 +84,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     /// <summary>
     /// Copy this set to the given list
     /// </summary>
-    /// <param name="dest"></param>
     public void CopyTo(List<T> dest)
     {
         items.CopyTo(dest);
@@ -217,8 +216,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     /// <summary>
     /// Check if this set contains exactly the same items as another set
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
     public bool SetEquals(ImmutableOrderedListSet<T> other)
     {
         return SetEquals(other.items);
@@ -227,8 +224,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     /// <summary>
     /// Check if this set contains exactly the same items as another set
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
     public bool SetEquals<TValue>(Dictionary<T, TValue> other)
     {
         return items.SetEquals(other);

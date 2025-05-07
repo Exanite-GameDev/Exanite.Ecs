@@ -17,7 +17,6 @@ internal readonly record struct ArchetypeHash : IComparable<ArchetypeHash>
     /// <summary>
     /// Toggle (add or remove) the given component
     /// </summary>
-    /// <param name="component"></param>
     public ArchetypeHash Toggle(ComponentId component)
     {
         return new ArchetypeHash

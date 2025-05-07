@@ -21,9 +21,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Given an archetype key and an added component, determine the new archetype key
     /// </summary>
-    /// <param name="currentKey"></param>
-    /// <param name="added"></param>
-    /// <returns></returns>
     private int GetArchetypeKey(int currentKey, ComponentId added)
     {
         if (!archetypeEdges.TryGetValue((currentKey, added), out var value))

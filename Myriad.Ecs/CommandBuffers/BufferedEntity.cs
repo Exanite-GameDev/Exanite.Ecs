@@ -62,7 +62,6 @@ public sealed partial class EcsCommandBuffer
         /// <summary>
         /// Resolve this buffered Entity into the real Entity that was constructed
         /// </summary>
-        /// <returns></returns>
         public Entity Resolve()
         {
             if (resolver.Parent == null)

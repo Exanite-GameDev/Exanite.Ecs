@@ -51,10 +51,8 @@ public sealed class QueryBuilder
     }
 
     /// <summary>
-    /// Build a <see cref="QueryDescription"/> from the current state of this builder
+    /// Build a <see cref="QueryDescription"/> from the current state of this builder.
     /// </summary>
-    /// <param name="world"></param>
-    /// <returns></returns>
     public QueryDescription Build(World world)
     {
         // Automatically exclude all Phantom entities, unless specifically requested.
@@ -99,8 +97,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// The given component must exist for an entity to be matched by this query
     /// </summary>
-    /// <typeparam name="T">The component type</typeparam>
-    /// <returns>this builder</returns>
     public QueryBuilder Include<T>()
         where T : IComponent
     {
@@ -111,8 +107,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// The given component must exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="type">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder Include(Type type)
     {
         include.Add(type);
@@ -122,8 +116,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// The given component must exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="id">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder Include(ComponentId id)
     {
         include.Add(id);
@@ -133,7 +125,7 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component type has been marked as "Include"
     /// </summary>
-    /// <param name="type">The component type</param>
+    /// <param name="type">The component type.</param>
     /// <returns>true, if the component is included, otherwise false</returns>
     public bool IsIncluded(Type type)
     {
@@ -143,7 +135,7 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component type has been marked as "Include"
     /// </summary>
-    /// <typeparam name="T">The component type</typeparam>
+    /// <typeparam name="T">The component type.</typeparam>
     /// <returns>true, if the component is included, otherwise false</returns>
     public bool IsIncluded<T>()
         where T : IComponent
@@ -166,8 +158,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// The given component must not exist for an entity to be matched by this query
     /// </summary>
-    /// <typeparam name="T">The component type</typeparam>
-    /// <returns>this builder</returns>
     public QueryBuilder Exclude<T>()
         where T : IComponent
     {
@@ -178,8 +168,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// The given component must not exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="type">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder Exclude(Type type)
     {
         exclude.Add(type);
@@ -189,8 +177,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// The given component must not exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="id">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder Exclude(ComponentId id)
     {
         exclude.Add(id);
@@ -200,8 +186,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is excluded
     /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
     public bool IsExcluded(Type type)
     {
         return exclude.Contains(type);
@@ -210,7 +194,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is excluded
     /// </summary>
-    /// <returns></returns>
     public bool IsExcluded<T>()
         where T : IComponent
     {
@@ -220,7 +203,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is excluded
     /// </summary>
-    /// <returns></returns>
     public bool IsExcluded(ComponentId id)
     {
         return exclude.Contains(id);
@@ -231,8 +213,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query
     /// </summary>
-    /// <typeparam name="T">The component type</typeparam>
-    /// <returns>this builder</returns>
     public QueryBuilder AtLeastOneOf<T>()
         where T : IComponent
     {
@@ -243,8 +223,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="type">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder AtLeastOneOf(Type type)
     {
         atLeastOne.Add(type);
@@ -254,8 +232,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="id">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder AtLeastOneOf(ComponentId id)
     {
         atLeastOne.Add(id);
@@ -265,7 +241,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have at least one of
     /// </summary>
-    /// <returns></returns>
     public bool IsAtLeastOneOf(Type type)
     {
         return atLeastOne.Contains(type);
@@ -274,7 +249,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have at least one of
     /// </summary>
-    /// <returns></returns>
     public bool IsAtLeastOneOf<T>()
         where T : IComponent
     {
@@ -284,7 +258,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have at least one of
     /// </summary>
-    /// <returns></returns>
     public bool IsAtLeastOneOf(ComponentId id)
     {
         return atLeastOne.Contains(id);
@@ -295,8 +268,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query
     /// </summary>
-    /// <typeparam name="T">The component type</typeparam>
-    /// <returns>this builder</returns>
     public QueryBuilder ExactlyOneOf<T>()
         where T : IComponent
     {
@@ -307,8 +278,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="type">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder ExactlyOneOf(Type type)
     {
         exactlyOne.Add(type);
@@ -318,8 +287,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query
     /// </summary>
-    /// <param name="id">The component type</param>
-    /// <returns>this builder</returns>
     public QueryBuilder ExactlyOneOf(ComponentId id)
     {
         exactlyOne.Add(id);
@@ -329,7 +296,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have exactly one of
     /// </summary>
-    /// <returns></returns>
     public bool IsExactlyOneOf(Type type)
     {
         return exactlyOne.Contains(type);
@@ -338,7 +304,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have exactly one of
     /// </summary>
-    /// <returns></returns>
     public bool IsExactlyOneOf<T>()
         where T : IComponent
     {
@@ -348,7 +313,6 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have exactly one of
     /// </summary>
-    /// <returns></returns>
     public bool IsExactlyOneOf(ComponentId id)
     {
         return exactlyOne.Contains(id);

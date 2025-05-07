@@ -66,7 +66,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Create a query builder which describes this query
     /// </summary>
-    /// <returns></returns>
     public QueryBuilder ToBuilder()
     {
         var builder = new QueryBuilder();
@@ -99,8 +98,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query requires the given component
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
     public bool IsIncluded<T>()
         where T : IComponent
     {
@@ -110,7 +107,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query requires the given component
     /// </summary>
-    /// <returns></returns>
     public bool IsIncluded(Type type)
     {
         return IsIncluded(ComponentId.Get(type));
@@ -119,7 +115,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query requires the given component
     /// </summary>
-    /// <returns></returns>
     public bool IsIncluded(ComponentId id)
     {
         return Include.Contains(id);
@@ -128,8 +123,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query excludes entities with the given component
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
     public bool IsExcluded<T>()
         where T : IComponent
     {
@@ -139,7 +132,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query excludes entities with the given component
     /// </summary>
-    /// <returns></returns>
     public bool IsExcluded(Type type)
     {
         return IsExcluded(ComponentId.Get(type));
@@ -148,7 +140,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query excludes entities with the given component
     /// </summary>
-    /// <returns></returns>
     public bool IsExcluded(ComponentId id)
     {
         return Exclude.Contains(id);
@@ -157,8 +148,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if the given component is one of the components which at least one of must be on the entity
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
     public bool IsAtLeastOneOf<T>()
         where T : IComponent
     {
@@ -168,7 +157,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if the given component is one of the components which at least one of must be on the entity
     /// </summary>
-    /// <returns></returns>
     public bool IsAtLeastOneOf(Type type)
     {
         return IsAtLeastOneOf(ComponentId.Get(type));
@@ -177,7 +165,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if the given component is one of the components which at least one of must be on the entity
     /// </summary>
-    /// <returns></returns>
     public bool IsAtLeastOneOf(ComponentId id)
     {
         return AtLeastOneOf.Contains(id);
@@ -186,8 +173,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if the given component is one of the components which exactly one of must be on the entity
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
     public bool IsExactlyOneOf<T>()
         where T : IComponent
     {
@@ -197,7 +182,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if the given component is one of the components which exactly one of must be on the entity
     /// </summary>
-    /// <returns></returns>
     public bool IsExactlyOneOf(Type type)
     {
         return IsExactlyOneOf(ComponentId.Get(type));
@@ -206,7 +190,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if the given component is one of the components which exactly one of must be on the entity
     /// </summary>
-    /// <returns></returns>
     public bool IsExactlyOneOf(ComponentId id)
     {
         return ExactlyOneOf.Contains(id);
@@ -442,7 +425,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Count how many entities match this query
     /// </summary>
-    /// <returns></returns>
     public int Count()
     {
         var count = 0;
@@ -457,7 +439,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query matches any entities
     /// </summary>
-    /// <returns></returns>
     public bool Any()
     {
         foreach (var archetype in GetArchetypes())
@@ -474,8 +455,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Check if this query description matches the given entity
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
     public bool Contains(Entity entity)
     {
         var info = entity.World.GetEntityInfo(entity.EntityId);
@@ -486,7 +465,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Get the first entity which this query matches (or null)
     /// </summary>
-    /// <returns></returns>
     public Entity? FirstOrDefault()
     {
         foreach (var archetype in GetArchetypes())
@@ -511,7 +489,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Get the first entity which this query matches (or throw if there are none)
     /// </summary>
-    /// <returns></returns>
     /// <exception cref="InvalidOperationException">Thrown if there are no matches</exception>
     public Entity First()
     {
@@ -522,7 +499,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Get the single entity which this query matches (or null if there are none).
     /// </summary>
-    /// <returns></returns>
     /// <exception cref="InvalidOperationException">Thrown if there are more than one matches</exception>
     public Entity? SingleOrDefault()
     {
@@ -556,7 +532,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Get a single entity which this query matches (throws if there is not exactly one match)
     /// </summary>
-    /// <returns></returns>
     /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
     public Entity Single()
     {
@@ -567,8 +542,6 @@ public sealed class QueryDescription
     /// <summary>
     /// Get a random entity matched by this query (or null if there are none).
     /// </summary>
-    /// <param name="random"></param>
-    /// <returns></returns>
     public Entity? RandomOrDefault(Random random)
     {
         // Get total entity count

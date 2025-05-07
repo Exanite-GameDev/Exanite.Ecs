@@ -11,7 +11,6 @@ internal static class ArrayFactory
     /// <summary>
     /// Prepare this type so that arrays of it can be constructed later
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     // ReSharper disable once UnusedMember.Global (Used implicity by reflection)
     public static void Prepare<T>()
     {
@@ -36,9 +35,6 @@ internal static class ArrayFactory
     /// <summary>
     /// Create an array of the given type
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="capacity"></param>
-    /// <returns></returns>
     public static Array Create(Type type, int capacity)
     {
         if (Factories != null && Factories.TryGetValue(type, out var factory))

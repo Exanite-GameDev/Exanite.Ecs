@@ -45,12 +45,11 @@ internal struct ComponentBloomFilter
 
     /// <summary>
     /// Check if this bloom filter <b>might</b> intersect with another.
-    /// <br/><br/>
-    /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br/>
-    /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br/>
+    /// <br/>
+    /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).
+    /// <br/>
+    /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
     public readonly bool MaybeIntersects(ref readonly ComponentBloomFilter other)
     {
         // The same items have been added to all 6 sets, with different hashes.

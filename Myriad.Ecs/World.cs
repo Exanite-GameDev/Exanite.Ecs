@@ -41,7 +41,6 @@ public sealed class World : IDisposable
     /// <summary>
     /// Get a <see cref="EcsCommandBuffer"/> from the pool or create a new one
     /// </summary>
-    /// <returns></returns>
     public EcsCommandBuffer GetCommandBuffer()
     {
         if (!commandBufferPool.TryTake(out var buffer))
@@ -55,7 +54,6 @@ public sealed class World : IDisposable
     /// <summary>
     /// Return a <see cref="EcsCommandBuffer"/> to the internal pool
     /// </summary>
-    /// <param name="buffer"></param>
     public void ReturnCommandBuffer(EcsCommandBuffer buffer)
     {
         if (commandBufferPool.Count < 32)
@@ -68,7 +66,7 @@ public sealed class World : IDisposable
 
     internal void DeleteImmediate(EntityId delete, ref LazyCommandBuffer lazy)
     {
-        // Get the entityinfo for this entity
+        // Get the EntityInfo for this entity
         ref var entityInfo = ref entities[delete.Id];
 
         // Check this is still a valid entity reference. Early exit if the entity
@@ -127,7 +125,6 @@ public sealed class World : IDisposable
     /// <summary>
     /// Get the current version for a given entity ID
     /// </summary>
-    /// <param name="entityId"></param>
     /// <returns>The entity ID, or zero if the entity does not exist</returns>
     internal uint GetVersion(int entityId)
     {
@@ -143,9 +140,6 @@ public sealed class World : IDisposable
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
-    /// <param name="components"></param>
-    /// <param name="hash"></param>
-    /// <returns></returns>
     internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components, ArchetypeHash hash)
     {
         // Get list of all archetypes with this hash

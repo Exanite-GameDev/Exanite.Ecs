@@ -36,7 +36,6 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get the set of components which this entity currently has
     /// </summary>
-    /// <returns></returns>
     public ImmutableOrderedListSet<ComponentId> ComponentTypes => EntityId.GetComponents(World);
 
     /// <summary>

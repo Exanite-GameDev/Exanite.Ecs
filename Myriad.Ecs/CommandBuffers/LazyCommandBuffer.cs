@@ -17,7 +17,6 @@ public struct LazyCommandBuffer
     /// <summary>
     /// Create a new <see cref="LazyCommandBuffer"/> for the given <see cref="World"/>
     /// </summary>
-    /// <param name="world"></param>
     public LazyCommandBuffer(World world)
     {
         World = world;
@@ -39,8 +38,6 @@ public struct LazyCommandBuffer
     /// <summary>
     /// Get the buffer, or null if it does not yet exist
     /// </summary>
-    /// <param name="buffer"></param>
-    /// <returns></returns>
     public readonly bool TryGetBuffer([NotNullWhen(true)] out EcsCommandBuffer? buffer)
     {
         buffer = this.buffer;

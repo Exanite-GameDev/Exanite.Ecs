@@ -90,9 +90,6 @@ public sealed class Chunk
     /// <summary>
     /// Get the component array, providing the component ID if it is known.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="id"></param>
-    /// <returns></returns>
     internal T[] GetComponentArray<T>(ComponentId id) where T : IComponent
     {
         return (GetComponentArray(id) as T[])!;

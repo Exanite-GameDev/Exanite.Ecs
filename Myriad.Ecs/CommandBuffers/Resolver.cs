@@ -55,7 +55,6 @@ public sealed partial class EcsCommandBuffer
         /// <summary>
         /// Get the nth item in this <see cref="Resolver"/>. Items are an arbitrary order.
         /// </summary>
-        /// <param name="index"></param>
         public Entity this[int index] => Lookup.Values[index].ToEntity(World);
     }
 }

@@ -41,7 +41,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>
     /// </summary>
-    /// <param name="world"></param>
     public EcsCommandBuffer(World world)
     {
         World = world;
@@ -55,7 +54,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Apply all of the operations in this buffer to the <see cref="World"/>
     /// </summary>
-    /// <returns></returns>
     public Resolver Playback()
     {
         // Use this resolver for this playback
@@ -333,7 +331,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Clear this <see cref="EcsCommandBuffer"/>
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     public void Clear()
     {
         // We can't actually make any changes, but we do still need the lazy buffer
@@ -388,7 +385,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Create a new <see cref="Entity"/> in the world.
     /// </summary>
-    /// <returns></returns>
     public BufferedEntity Create()
     {
         // Get a set to hold all of the component setters
@@ -443,9 +439,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Add or overwrite a component attached to an entity
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="entity"></param>
-    /// <param name="value"></param>
     public void Set<T>(Entity entity, T value)
         where T : IComponent
     {
@@ -487,8 +480,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Remove a component attached to an entity
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="entity"></param>
     public void Remove<T>(Entity entity)
         where T : IComponent
     {
@@ -510,7 +501,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Delete an entity
     /// </summary>
-    /// <param name="entity"></param>
     public void Delete(Entity entity)
     {
         deletes.Add(entity);
@@ -519,7 +509,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Bulk delete entities
     /// </summary>
-    /// <param name="entities"></param>
     public void Delete(List<Entity> entities)
     {
         deletes.AddRange(entities);
@@ -528,7 +517,6 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Bulk delete all entities which match the given query
     /// </summary>
-    /// <param name="entities"></param>
     public void Delete(QueryDescription entities)
     {
         if (entities.World != World)

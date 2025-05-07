@@ -10,7 +10,6 @@ namespace Myriad.Ecs.Allocations;
 /// <summary>
 /// Thread safe global pool.
 /// </summary>
-/// <typeparam name="T"></typeparam>
 public static class Pool<T>
     where T : class, new()
 {
@@ -32,7 +31,6 @@ public static class Pool<T>
     /// <summary>
     /// Get an item from this pool, creates a new one if there are none in the pool
     /// </summary>
-    /// <returns></returns>
     public static T Get()
     {
         Init();
@@ -68,7 +66,6 @@ public static class Pool<T>
     /// <summary>
     /// Return an item to the pool
     /// </summary>
-    /// <param name="item"></param>
     public static void Return(T item)
     {
         Init();
@@ -89,7 +86,6 @@ public static class Pool<T>
     /// <summary>
     /// Contains an object borrowed from a pool, returns it when disposed
     /// </summary>
-    /// <param name="value"></param>
     public readonly struct Rental(T value) : IDisposable
     {
         /// <summary>
@@ -113,8 +109,6 @@ public static class Pool
     /// <summary>
     /// Return an item to the pool
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="item"></param>
     public static void Return<T>(T item)
         where T : class, new()
     {

@@ -6,7 +6,6 @@ namespace Myriad.Ecs.Collections;
 /// <summary>
 /// A list which stores data in "segments", this removes the need for copying data when the list grows.
 /// </summary>
-/// <typeparam name="TItem"></typeparam>
 internal class SegmentedList<TItem>
 {
     /// <summary>
@@ -30,8 +29,6 @@ internal class SegmentedList<TItem>
     /// <summary>
     /// Get the item with the given index (mutable)
     /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
     public ref TItem this[int index]
     {
         get
@@ -44,9 +41,7 @@ internal class SegmentedList<TItem>
     /// <summary>
     /// Get the segment and index within the segment for the item with the given index
     /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="IndexOutOfRangeException"/>
     private (int, TItem[]) GetSegment(int index)
     {
         var segIndex = index / SegmentCapacity;

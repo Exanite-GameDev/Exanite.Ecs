@@ -31,7 +31,6 @@ public readonly struct Future<T>
     /// Gets the result. Blocks the calling thread until the future has completed execution.
     /// This can only be called once!
     /// </summary>
-    /// <returns></returns>
     public T GetResult()
     {
         if (work == null || work.Id != id)

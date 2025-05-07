@@ -38,7 +38,6 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// <summary>
     /// Create a new <see cref="Ecs.Entity"/> struct that represents this Entity
     /// </summary>
-    /// <param name="world"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Entity ToEntity(World world)
     {
@@ -67,7 +66,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// Check if this Entity is in a phantom state. i.e. automatically excluded from queries
     /// and automatically deleted when the last IPhantomComponent component is removed.
     /// </summary>
-    /// <returns>true if this entity is a phantom. False is it does not exist or is not a phantom.</returns>
+    /// <returns>true if this entity is a phantom. False if it does not exist or is not a phantom.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsPhantom(World world)
     {

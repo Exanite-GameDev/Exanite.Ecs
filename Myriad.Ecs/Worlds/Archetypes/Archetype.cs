@@ -151,8 +151,6 @@ public sealed class Archetype
     /// <summary>
     /// Delete every Entity in this archetype
     /// </summary>
-    /// <param name="lazy"></param>
-    /// <exception cref="NotImplementedException"></exception>
     internal void Clear(ref LazyCommandBuffer lazy)
     {
         if (HasPhantomComponents && !IsPhantom)
@@ -209,7 +207,6 @@ public sealed class Archetype
     /// </summary>
     /// <param name="entity">Entity to add to a chunk</param>
     /// <param name="info">Info will be mutated to point to the new location</param>
-    /// <returns></returns>
     internal Row AddEntity(EntityId entity, ref EntityInfo info)
     {
         // Increase archetype entity count
