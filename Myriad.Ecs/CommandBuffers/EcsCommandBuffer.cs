@@ -103,8 +103,10 @@ public sealed partial class EcsCommandBuffer
 
         HasBufferedOperations = false;
 
-        unchecked { version++; }
         nextResolver.Dispose();
+
+        // Update version and get new resolver
+        unchecked { version++; }
         nextResolver = Pool<Resolver>.Get();
         nextResolver.Configure(this);
 
@@ -122,13 +124,13 @@ public sealed partial class EcsCommandBuffer
     {
         // Use this resolver for this playback
         var resolver = nextResolver;
-
-        // Create a resolver ready to use in the future
-        nextResolver = Pool<Resolver>.Get();
-        nextResolver.Configure(this);
-
         if (!HasBufferedOperations)
         {
+            // Update version and get new resolver
+            unchecked { version++; }
+            nextResolver = Pool<Resolver>.Get();
+            nextResolver.Configure(this);
+
             return resolver;
         }
 
@@ -154,8 +156,10 @@ public sealed partial class EcsCommandBuffer
 
         HasBufferedOperations = false;
 
-        // Update the version of this buffer, invalidating all buffered entities for further modification
+        // Update version and get new resolver
         unchecked { version++; }
+        nextResolver = Pool<Resolver>.Get();
+        nextResolver.Configure(this);
 
         // Apply any changes caused by these changes
         secondaryCommandBuffer.Playback().Dispose();
