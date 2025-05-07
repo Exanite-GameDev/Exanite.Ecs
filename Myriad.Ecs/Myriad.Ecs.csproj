@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Exanite.Core\Exanite.Core.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="EntityTryGetComponent.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EntityTryGetComponent.g.cs</LastGenOutput>
