@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Components;
-using Myriad.Ecs.Queries;
-using Myriad.Ecs.Worlds.Archetypes;
+﻿using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.CommandBuffers;
+using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Queries;
+using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Myriad.Ecs.Tests;
+namespace Exanite.Myriad.Ecs.Tests;
 
 [TestClass]
 public class QueryDescriptionTests

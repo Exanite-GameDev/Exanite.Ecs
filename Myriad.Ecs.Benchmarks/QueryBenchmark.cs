@@ -1,10 +1,10 @@
 ﻿using System.Numerics;
 using BenchmarkDotNet.Attributes;
-using Myriad.Ecs.Benchmarks.Components;
-using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Queries;
+using Exanite.Myriad.Ecs.Benchmarks.Components;
+using Exanite.Myriad.Ecs.CommandBuffers;
+using Exanite.Myriad.Ecs.Queries;
 
-namespace Myriad.Ecs.Benchmarks;
+namespace Exanite.Myriad.Ecs.Benchmarks;
 
 //[HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.BranchInstructions)]
 //[ThreadingDiagnoser]

@@ -1,5 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
-using Myriad.Ecs.Benchmarks;
+using Exanite.Myriad.Ecs.Benchmarks;
 
 //var e = new QueryBenchmark();
 //e.Setup();

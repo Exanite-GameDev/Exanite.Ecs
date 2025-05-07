@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Myriad.Ecs.Tests</AssemblyName>
-    <RootNamespace>Myriad.Ecs.Tests</RootNamespace>
+    <AssemblyName>Exanite.Myriad.Ecs.Tests</AssemblyName>
+    <RootNamespace>Exanite.Myriad.Ecs.Tests</RootNamespace>
     <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
 
     <TargetFramework>net9.0</TargetFramework>

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Myriad.Ecs.Benchmarks.Components;
+namespace Exanite.Myriad.Ecs.Benchmarks.Components;
 
 public record struct ComponentByte(byte Value) : IComponent;
 public record struct ComponentInt16(short Value) : IComponent;

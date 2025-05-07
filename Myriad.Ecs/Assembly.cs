@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Myriad.Ecs.Tests")]
+[assembly: InternalsVisibleTo("Exanite.Myriad.Ecs.Tests")]

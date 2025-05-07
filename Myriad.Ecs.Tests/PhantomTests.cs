@@ -1,8 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Components;
+﻿using Exanite.Myriad.Ecs.CommandBuffers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Myriad.Ecs.Tests;
+namespace Exanite.Myriad.Ecs.Tests;
 
 [TestClass]
 public class PhantomTests

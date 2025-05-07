@@ -1,6 +1,6 @@
-﻿using Myriad.Ecs.CommandBuffers;
+﻿using Exanite.Myriad.Ecs.CommandBuffers;
 
-namespace Myriad.Ecs.Tests.Queries;
+namespace Exanite.Myriad.Ecs.Tests;
 
 public static class TestHelpers
 {

@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Allocations;
+﻿using Exanite.Myriad.Ecs.Allocations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Myriad.Ecs.Tests.Collections;
+namespace Exanite.Myriad.Ecs.Tests.Collections;
 
 [TestClass]
 public class LocalPoolTests

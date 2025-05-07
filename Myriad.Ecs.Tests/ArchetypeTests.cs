@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Queries;
+﻿using Exanite.Myriad.Ecs.CommandBuffers;
+using Exanite.Myriad.Ecs.Queries;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Myriad.Ecs.Tests;
+namespace Exanite.Myriad.Ecs.Tests;
 
 [TestClass]
 public class ArchetypeTests

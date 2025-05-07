@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Myriad.Ecs.Benchmarks</AssemblyName>
-    <RootNamespace>Myriad.Ecs.Benchmarks</RootNamespace>
+    <AssemblyName>Exanite.Myriad.Ecs.Benchmarks</AssemblyName>
+    <RootNamespace>Exanite.Myriad.Ecs.Benchmarks</RootNamespace>
     <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
 
     <OutputType>Exe</OutputType>

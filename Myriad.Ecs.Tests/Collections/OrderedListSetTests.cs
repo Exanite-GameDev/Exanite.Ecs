@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Collections;
+﻿using Exanite.Myriad.Ecs.Collections;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Myriad.Ecs.Tests.Collections;
+namespace Exanite.Myriad.Ecs.Tests.Collections;
 
 [TestClass]
 public class OrderedListSetTests

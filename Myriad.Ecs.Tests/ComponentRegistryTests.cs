@@ -1,7 +1,7 @@
+using Exanite.Myriad.Ecs.Components;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.Tests;
+namespace Exanite.Myriad.Ecs.Tests;
 
 [TestClass]
 public class ComponentRegistryTests
