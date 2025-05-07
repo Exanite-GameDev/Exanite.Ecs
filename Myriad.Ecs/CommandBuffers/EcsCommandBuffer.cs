@@ -49,6 +49,62 @@ public sealed partial class EcsCommandBuffer
         nextResolver.Configure(this);
     }
 
+    #region Clear
+
+    /// <summary>
+    /// Clear this <see cref="EcsCommandBuffer"/>
+    /// </summary>
+    public void Clear()
+    {
+        // We can't actually make any changes, but we do still need the lazy buffer
+        var lazy = new LazyCommandBuffer(World);
+
+        setters.ClearAndDispose(ref lazy);
+
+        foreach (var bufferedEntity in bufferedSets)
+        {
+            var setters = bufferedEntity.Setters;
+            setters.Clear();
+            Pool.Return(setters);
+        }
+        bufferedSets.Clear();
+
+        foreach (var (_, data) in entityModifications)
+        {
+            if (data.Removes != null)
+            {
+                data.Removes.Clear();
+                Pool.Return(data.Removes);
+            }
+
+            if (data.Sets != null)
+            {
+                data.Sets.Clear();
+                Pool.Return(data.Sets);
+            }
+        }
+        entityModifications.Clear();
+
+        archetypeEdges.Clear();
+
+        deletes.Clear();
+        archetypeDeletes.Clear();
+        maybeAddingPhantomComponent.Clear();
+        tempComponentIdSet.Clear();
+
+        unchecked { version++; }
+        nextResolver.Dispose();
+        nextResolver = Pool<Resolver>.Get();
+        nextResolver.Configure(this);
+
+        if (lazy.TryGetBuffer(out var cmd))
+        {
+            cmd.Clear();
+        }
+    }
+
+    #endregion
+
     #region Playback
 
     /// <summary>
@@ -325,62 +381,6 @@ public sealed partial class EcsCommandBuffer
 
     #endregion
 
-    #region Clear
-
-    /// <summary>
-    /// Clear this <see cref="EcsCommandBuffer"/>
-    /// </summary>
-    public void Clear()
-    {
-        // We can't actually make any changes, but we do still need the lazy buffer
-        var lazy = new LazyCommandBuffer(World);
-
-        setters.ClearAndDispose(ref lazy);
-
-        foreach (var bufferedEntity in bufferedSets)
-        {
-            var setters = bufferedEntity.Setters;
-            setters.Clear();
-            Pool.Return(setters);
-        }
-        bufferedSets.Clear();
-
-        foreach (var (_, data) in entityModifications)
-        {
-            if (data.Removes != null)
-            {
-                data.Removes.Clear();
-                Pool.Return(data.Removes);
-            }
-
-            if (data.Sets != null)
-            {
-                data.Sets.Clear();
-                Pool.Return(data.Sets);
-            }
-        }
-        entityModifications.Clear();
-
-        archetypeEdges.Clear();
-
-        deletes.Clear();
-        archetypeDeletes.Clear();
-        maybeAddingPhantomComponent.Clear();
-        tempComponentIdSet.Clear();
-
-        unchecked { version++; }
-        nextResolver.Dispose();
-        nextResolver = Pool<Resolver>.Get();
-        nextResolver.Configure(this);
-
-        if (lazy.TryGetBuffer(out var cmd))
-        {
-            cmd.Clear();
-        }
-    }
-
-    #endregion
-
     /// <summary>
     /// Create a new <see cref="Entity"/> in the world.
     /// </summary>
@@ -398,43 +398,6 @@ public sealed partial class EcsCommandBuffer
         return new BufferedEntity(id, this, nextResolver);
     }
 
-    private void SetBuffered<T>(uint id, T value)
-        where T : IComponent
-    {
-        Debug.Assert(id < bufferedSets.Count, "Unknown entity ID in SetBuffered");
-
-        if (typeof(T) == typeof(ComponentPhantom))
-        {
-            throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
-        }
-
-        var bufferedData = bufferedSets[(int)id];
-        var setters = bufferedData.Setters;
-
-        var key = ComponentId.Get<T>();
-
-        if (setters.TryGetValue(key, out var existing))
-        {
-            this.setters.Overwrite(existing, value);
-        }
-        else
-        {
-            // Add to global collection of setters
-            var setterIndex = this.setters.Add(value);
-
-            // Store the index in the per-entity collection
-            setters.Add(key, setterIndex);
-
-            // Update node id. Skip it if it's in node -1, once an entity is
-            // marked as node -1 it's been opted out of aggregation.
-            if (bufferedData.ArchetypeKey != -1)
-            {
-                bufferedData.ArchetypeKey = GetArchetypeKey(bufferedData.ArchetypeKey, key);
-                bufferedSets[(int)id] = bufferedData;
-            }
-        }
-    }
-
     /// <summary>
     /// Add or overwrite a component attached to an entity
     /// </summary>
@@ -447,33 +410,6 @@ public sealed partial class EcsCommandBuffer
         }
 
         SetInternal(entity, value);
-    }
-
-    private void SetInternal<T>(Entity entity, T value)
-        where T : IComponent
-    {
-        var mod = GetModificationData(entity, true, false);
-
-        // Create a setter and store it in the list (recycling the old one, if it's there)
-        var id = ComponentId.Get<T>();
-        if (mod.Sets!.TryGetValue(id, out var existing))
-        {
-            setters.Overwrite(existing, value);
-        }
-        else
-        {
-            var index = setters.Add(value);
-            mod.Sets!.Add(id, index);
-        }
-
-        // Check if this is a phantom component being added
-        if (id.IsPhantomComponent)
-        {
-            maybeAddingPhantomComponent.Add(entity);
-        }
-
-        // Remove it from the "remove" set. In case it was previously removed
-        mod.Removes?.Remove(id);
     }
 
     /// <summary>
@@ -524,6 +460,70 @@ public sealed partial class EcsCommandBuffer
         }
 
         archetypeDeletes.Add(entities);
+    }
+
+    private void SetBuffered<T>(uint id, T value)
+        where T : IComponent
+    {
+        Debug.Assert(id < bufferedSets.Count, "Unknown entity ID in SetBuffered");
+
+        if (typeof(T) == typeof(ComponentPhantom))
+        {
+            throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
+        }
+
+        var bufferedData = bufferedSets[(int)id];
+        var setters = bufferedData.Setters;
+
+        var key = ComponentId.Get<T>();
+
+        if (setters.TryGetValue(key, out var existing))
+        {
+            this.setters.Overwrite(existing, value);
+        }
+        else
+        {
+            // Add to global collection of setters
+            var setterIndex = this.setters.Add(value);
+
+            // Store the index in the per-entity collection
+            setters.Add(key, setterIndex);
+
+            // Update node id. Skip it if it's in node -1, once an entity is
+            // marked as node -1 it's been opted out of aggregation.
+            if (bufferedData.ArchetypeKey != -1)
+            {
+                bufferedData.ArchetypeKey = GetArchetypeKey(bufferedData.ArchetypeKey, key);
+                bufferedSets[(int)id] = bufferedData;
+            }
+        }
+    }
+
+    private void SetInternal<T>(Entity entity, T value)
+        where T : IComponent
+    {
+        var mod = GetModificationData(entity, true, false);
+
+        // Create a setter and store it in the list (recycling the old one, if it's there)
+        var id = ComponentId.Get<T>();
+        if (mod.Sets!.TryGetValue(id, out var existing))
+        {
+            setters.Overwrite(existing, value);
+        }
+        else
+        {
+            var index = setters.Add(value);
+            mod.Sets!.Add(id, index);
+        }
+
+        // Check if this is a phantom component being added
+        if (id.IsPhantomComponent)
+        {
+            maybeAddingPhantomComponent.Add(entity);
+        }
+
+        // Remove it from the "remove" set. In case it was previously removed
+        mod.Removes?.Remove(id);
     }
 
     private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
