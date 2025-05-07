@@ -16,8 +16,7 @@ internal static class ComponentRegistry
     /// <summary>
     /// Get the ID for the given type
     /// </summary>
-    public static ComponentId Get<T>()
-        where T : IComponent
+    public static ComponentId Get<T>() where T : IComponent
     {
         var type = typeof(T);
 

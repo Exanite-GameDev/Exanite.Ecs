@@ -3,7 +3,7 @@ using Myriad.Ecs.Components;
 
 namespace Myriad.Ecs.Utilities;
 
-internal static class FrozenOrderedListSetUtility
+internal static class CollectionUtility
 {
     public static ComponentBloomFilter ToBloomFilter(this ImmutableOrderedListSet<ComponentId> set)
     {

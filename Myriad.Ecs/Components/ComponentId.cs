@@ -42,7 +42,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{Type.Name} ({Value}{(IsPhantomComponent ? "; Phantom" : "")})";
+        return $"{Type} ({Value}{(IsPhantomComponent ? "; Phantom" : "")})";
     }
 
     /// <summary>
