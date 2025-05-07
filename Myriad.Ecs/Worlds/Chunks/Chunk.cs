@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Collections;
@@ -56,11 +57,11 @@ public sealed class Chunk
         return ref Get<T>(rowIndex);
     }
 
-    internal Ref<T> GetRef<T>(EntityId entityId, int rowIndex) where T : IComponent
+    internal ValueRef<T> GetRef<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
         AssertUtility.IsTrue(entities[rowIndex].EntityId == entityId, "Mismatched entities in chunk");
 
-        return new Ref<T>(ref Get<T>(rowIndex));
+        return new ValueRef<T>(ref Get<T>(rowIndex));
     }
 
     internal ref T Get<T>(int rowIndex) where T : IComponent

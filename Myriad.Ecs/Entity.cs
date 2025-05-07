@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
@@ -107,7 +108,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Ref<T> GetComponentRef<T>() where T : IComponent => EntityId.GetComponentRef<T>(World);
+    public ValueRef<T> GetComponentRef<T>() where T : IComponent => EntityId.GetComponentRef<T>(World);
 
     /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!

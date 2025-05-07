@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
@@ -156,7 +157,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Ref<T> GetComponentRef<T>(World world) where T : IComponent
+    public ValueRef<T> GetComponentRef<T>(World world) where T : IComponent
     {
         ref var entityInfo = ref world.GetEntityInfo(this);
         return entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
