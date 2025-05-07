@@ -268,9 +268,8 @@ public sealed partial class EcsCommandBuffer
         Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
         try
         {
-            for (var i = 0; i < bufferedSets.Count; i++)
+            foreach (var bufferedData in bufferedSets)
             {
-                var bufferedData = bufferedSets[i];
                 var components = bufferedData.Setters;
 
                 var archetype = GetArchetype(bufferedData, archetypeLookup);
