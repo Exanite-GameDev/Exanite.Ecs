@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
-using System.Diagnostics;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
@@ -488,7 +488,7 @@ public sealed partial class EcsCommandBuffer
 
     private void SetBuffered<T>(uint id, T value) where T : IComponent
     {
-        Debug.Assert(id < bufferedSets.Count, "Unknown entity ID in SetBuffered");
+        AssertUtility.IsTrue(id < bufferedSets.Count, "Unknown entity ID in SetBuffered");
 
         if (typeof(T) == typeof(ComponentPhantom))
         {

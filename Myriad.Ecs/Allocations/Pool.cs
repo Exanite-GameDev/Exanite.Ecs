@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using Exanite.Core.Utilities;
 
 // ReSharper disable StaticMemberInGenericType
 
@@ -34,7 +34,7 @@ public static class Pool<T>
     public static T Get()
     {
         Init();
-        Debug.Assert(Items != null);
+        AssertUtility.NotNull(Items);
 
         if (Items.Count == 0)
         {
@@ -69,7 +69,7 @@ public static class Pool<T>
     public static void Return(T item)
     {
         Init();
-        Debug.Assert(Items != null);
+        AssertUtility.NotNull(Items);
 
         if (Pressure > MaxSize)
         {

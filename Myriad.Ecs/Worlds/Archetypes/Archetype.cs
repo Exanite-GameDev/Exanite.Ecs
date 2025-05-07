@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
@@ -155,7 +155,7 @@ public sealed class Archetype
     {
         if (HasPhantomComponents && !IsPhantom)
         {
-            Debug.Assert(phantomDestination != null);
+            AssertUtility.NotNull(phantomDestination);
 
             // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookkeeping like chunk management and entity count.
             // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
@@ -199,7 +199,7 @@ public sealed class Archetype
             EntityCount = 0;
         }
 
-        Debug.Assert(EntityCount == 0);
+        AssertUtility.IsTrue(EntityCount == 0, "Expected EntityCount to equal 0");
     }
 
     /// <summary>

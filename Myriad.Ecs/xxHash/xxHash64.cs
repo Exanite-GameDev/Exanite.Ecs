@@ -23,10 +23,10 @@
 // SOFTWARE.
 
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Exanite.Core.Utilities;
 
 // ReSharper disable All
 #pragma warning disable IDE1006 // Naming Styles
@@ -44,7 +44,7 @@ namespace Myriad.Ecs.xxHash
         /// <returns>hash</returns>
         public static unsafe ulong ComputeHash(ReadOnlySpan<byte> data, ulong seed = 0)
         {
-            Debug.Assert(data != null);
+            AssertUtility.IsTrue(data != ReadOnlySpan<byte>.Empty, $"{nameof(data)} cannot be an empty/default span");
 
             fixed (byte* pData = &MemoryMarshal.GetReference(data))
             {

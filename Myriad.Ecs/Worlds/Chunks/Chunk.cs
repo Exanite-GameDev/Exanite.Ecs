@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
@@ -48,16 +48,17 @@ public sealed class Chunk
             components[i] = ArrayFactory.Create(componentTypes[i], size);
     }
 
-    #region get component
+    #region Get component
+
     internal ref T Get<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
-        Debug.Assert(entities[rowIndex].EntityId == entityId, "Mismatched entities in chunk");
+        AssertUtility.IsTrue(entities[rowIndex].EntityId == entityId, "Mismatched entities in chunk");
         return ref Get<T>(rowIndex);
     }
 
     internal Ref<T> GetRef<T>(EntityId entityId, int rowIndex) where T : IComponent
     {
-        Debug.Assert(entities[rowIndex].EntityId == entityId, "Mismatched entities in chunk");
+        AssertUtility.IsTrue(entities[rowIndex].EntityId == entityId, "Mismatched entities in chunk");
 
         return new Ref<T>(ref Get<T>(rowIndex));
     }
@@ -99,14 +100,16 @@ public sealed class Chunk
     {
         return components[componentIndexLookup[id.Value]];
     }
+
     #endregion
 
-    #region add/remove entity
+    #region Add/remove entity
+
     // Note that these must be called only from Archetype! The Archetype needs to do some bookeeping on create/destroy.
 
     internal void Clear()
     {
-        Debug.Assert(!Archetype.HasPhantomComponents);
+        AssertUtility.IsTrue(!Archetype.HasPhantomComponents, "Cannot clear archetype when it has active phantom components");
 
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
@@ -126,7 +129,7 @@ public sealed class Chunk
         // It is safe to only debug assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
         // below so it still fails in a sensible way.
-        Debug.Assert(EntityCount < entities.Length, "Cannot add entity to full chunk");
+        AssertUtility.IsTrue(EntityCount < entities.Length, "Cannot add entity to full chunk");
 
         // Use the next free slot
         var index = EntityCount++;
@@ -219,5 +222,6 @@ public sealed class Chunk
 
         return destRow;
     }
+
     #endregion
 }
