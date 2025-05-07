@@ -32,8 +32,10 @@ public sealed partial class EcsCommandBuffer
     private readonly List<BufferedEntityData> bufferedSets = [];
 
     private readonly Dictionary<Entity, EntityModificationData> entityModifications = [];
+
     private readonly List<Entity> deletes = [];
-    private readonly List<QueryDescription> archetypeDeletes = [];
+    private readonly List<QueryDescription> queryDeletes = [];
+
     private readonly OrderedListSet<Entity> maybeAddingPhantomComponent = [];
 
     private readonly OrderedListSet<ComponentId> tempComponentIdSet = [];
@@ -95,7 +97,7 @@ public sealed partial class EcsCommandBuffer
         archetypeEdges.Clear();
 
         deletes.Clear();
-        archetypeDeletes.Clear();
+        queryDeletes.Clear();
         maybeAddingPhantomComponent.Clear();
         tempComponentIdSet.Clear();
 
@@ -165,7 +167,7 @@ public sealed partial class EcsCommandBuffer
 
     private void DeleteEntities(EcsCommandBuffer commandBuffer)
     {
-        foreach (var query in archetypeDeletes)
+        foreach (var query in queryDeletes)
         {
             foreach (var archetype in query.GetArchetypes())
             {
@@ -177,7 +179,7 @@ public sealed partial class EcsCommandBuffer
                 World.DeleteImmediate(archetype, commandBuffer);
             }
         }
-        archetypeDeletes.Clear();
+        queryDeletes.Clear();
 
         foreach (var delete in deletes)
         {
@@ -481,7 +483,7 @@ public sealed partial class EcsCommandBuffer
 
         HasBufferedOperations = true;
 
-        archetypeDeletes.Add(entities);
+        queryDeletes.Add(entities);
     }
 
     private void SetBuffered<T>(uint id, T value) where T : IComponent

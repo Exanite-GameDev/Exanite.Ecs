@@ -28,8 +28,7 @@ internal class ComponentSetterCollection
         Clear();
     }
 
-    public SetterId Add<T>(T value)
-        where T : IComponent
+    public SetterId Add<T>(T value) where T : IComponent
     {
         var id = ComponentId.Get<T>();
 
@@ -75,7 +74,8 @@ internal class ComponentSetterCollection
         }
     }
 
-    #region component list
+    #region Component list
+
     private interface IComponentList
     {
         public void Clear();
@@ -116,5 +116,6 @@ internal class ComponentSetterCollection
             dest.GetMutable<T>() = values[index];
         }
     }
+
     #endregion
 }
