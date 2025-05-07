@@ -151,7 +151,7 @@ public sealed class Archetype
     /// <summary>
     /// Delete every Entity in this archetype
     /// </summary>
-    internal void Clear(ref LazyCommandBuffer lazy)
+    internal void Clear(EcsCommandBuffer commandBuffer)
     {
         if (HasPhantomComponents && !IsPhantom)
         {
@@ -168,7 +168,7 @@ public sealed class Archetype
                     var entity = chunk.Entities.Span[^1].EntityId;
                     ref var info = ref World.GetEntityInfo(entity);
 
-                    MigrateTo(entity, ref info, phantomDestination, ref lazy);
+                    MigrateTo(entity, ref info, phantomDestination, commandBuffer);
                 }
             }
         }
@@ -230,7 +230,7 @@ public sealed class Archetype
         return newChunk.AddEntity(entity, ref info);
     }
 
-    internal void RemoveEntity(EntityInfo info, ref LazyCommandBuffer lazy)
+    internal void RemoveEntity(EntityInfo info, EcsCommandBuffer commandBuffer)
     {
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
@@ -239,7 +239,7 @@ public sealed class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, ref LazyCommandBuffer lazy)
+    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, EcsCommandBuffer commandBuffer)
     {
         // Early exit if we're migrating to where we already are!
         if (to == this)

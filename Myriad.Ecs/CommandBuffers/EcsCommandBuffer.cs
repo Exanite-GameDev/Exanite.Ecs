@@ -58,10 +58,15 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public void Clear()
     {
-        // We can't actually make any changes, but we do still need the lazy buffer
-        var lazy = new LazyCommandBuffer(World);
+        if (!HasBufferedOperations)
+        {
+            return;
+        }
 
-        setters.ClearAndDispose(ref lazy);
+        // We can't actually make any changes, but we do still need a secondary command buffer
+        var secondaryCommandBuffer = World.GetCommandBuffer();
+
+        setters.ClearAndDispose(secondaryCommandBuffer);
 
         foreach (var bufferedEntity in bufferedSets)
         {
@@ -101,10 +106,7 @@ public sealed partial class EcsCommandBuffer
         nextResolver = Pool<Resolver>.Get();
         nextResolver.Configure(this);
 
-        if (lazy.TryGetBuffer(out var cmd))
-        {
-            cmd.Clear();
-        }
+        secondaryCommandBuffer.Clear();
     }
 
     #endregion
@@ -119,18 +121,27 @@ public sealed partial class EcsCommandBuffer
         // Use this resolver for this playback
         var resolver = nextResolver;
 
+        // Create a resolver ready to use in the future
+        nextResolver = Pool<Resolver>.Get();
+        nextResolver.Configure(this);
+
+        if (!HasBufferedOperations)
+        {
+            return resolver;
+        }
+
         // Create buffered entities.
         CreateBufferedEntities(resolver);
 
-        // Lazy command buffer accumulates any changes caused by applying this command buffer
-        var lazy = new LazyCommandBuffer(World);
+        // Secondary command buffer accumulates any changes caused by applying this command buffer
+        var secondaryCommandBuffer = World.GetCommandBuffer();
 
         // Delete entities, this must occur before structural changes because it may trigger new structural changes
         // by adding a new phantom component.
-        DeleteEntities(ref lazy);
+        DeleteEntities(secondaryCommandBuffer);
 
         // Structural changes (add/remove components)
-        ApplyStructuralChanges(ref lazy);
+        ApplyStructuralChanges(secondaryCommandBuffer);
 
         // Clear all temporary state
         maybeAddingPhantomComponent.Clear();
@@ -145,21 +156,14 @@ public sealed partial class EcsCommandBuffer
         unchecked { version++; }
 
         // Apply any changes caused by these changes
-        if (lazy.TryGetBuffer(out var lazyBuffer))
-        {
-            lazyBuffer.Playback().Dispose();
-            World.ReturnCommandBuffer(lazyBuffer);
-        }
-
-        // Create a resolver ready to use in the future
-        nextResolver = Pool<Resolver>.Get();
-        nextResolver.Configure(this);
+        secondaryCommandBuffer.Playback().Dispose();
+        World.ReturnCommandBuffer(secondaryCommandBuffer);
 
         // Return the resolver
         return resolver;
     }
 
-    private void DeleteEntities(ref LazyCommandBuffer lazy)
+    private void DeleteEntities(EcsCommandBuffer commandBuffer)
     {
         foreach (var query in archetypeDeletes)
         {
@@ -170,7 +174,7 @@ public sealed partial class EcsCommandBuffer
                     continue;
                 }
 
-                World.DeleteImmediate(archetype, ref lazy);
+                World.DeleteImmediate(archetype, commandBuffer);
             }
         }
         archetypeDeletes.Clear();
@@ -191,7 +195,7 @@ public sealed partial class EcsCommandBuffer
             }
             else
             {
-                World.DeleteImmediate(delete.EntityId, ref lazy);
+                World.DeleteImmediate(delete.EntityId, commandBuffer);
 
                 // Return objects to pools
                 if (entityModifications.Remove(delete, out var mod))
@@ -233,7 +237,7 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void ApplyStructuralChanges(ref LazyCommandBuffer lazy)
+    private void ApplyStructuralChanges(EcsCommandBuffer commandBuffer)
     {
         if (entityModifications.Count > 0)
         {
@@ -283,7 +287,7 @@ public sealed partial class EcsCommandBuffer
                 var autodelete = tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
                 if (autodelete)
                 {
-                    World.DeleteImmediate(entity.EntityId, ref lazy);
+                    World.DeleteImmediate(entity.EntityId, commandBuffer);
                 }
                 else
                 {
@@ -295,7 +299,7 @@ public sealed partial class EcsCommandBuffer
                         var newArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity.EntityId, newArchetype, ref lazy);
+                        row = World.MigrateEntity(entity.EntityId, newArchetype, commandBuffer);
                     }
                     else
                     {

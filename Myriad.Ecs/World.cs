@@ -64,7 +64,7 @@ public sealed class World : IDisposable
     }
     #endregion
 
-    internal void DeleteImmediate(EntityId delete, ref LazyCommandBuffer lazy)
+    internal void DeleteImmediate(EntityId delete, EcsCommandBuffer commandBuffer)
     {
         // Get the EntityInfo for this entity
         ref var entityInfo = ref entities[delete.Id];
@@ -77,7 +77,7 @@ public sealed class World : IDisposable
         }
 
         // Notify archetype this entity is dead
-        entityInfo.Chunk.Archetype.RemoveEntity(entityInfo, ref lazy);
+        entityInfo.Chunk.Archetype.RemoveEntity(entityInfo, commandBuffer);
 
         // Increment version, this will invalid the handle
         entityInfo.Version++;
@@ -86,7 +86,7 @@ public sealed class World : IDisposable
         deadEntities.Add(delete);
     }
 
-    internal void DeleteImmediate(Archetype archetype, ref LazyCommandBuffer lazy)
+    internal void DeleteImmediate(Archetype archetype, EcsCommandBuffer commandBuffer)
     {
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         if (archetype is { HasPhantomComponents: false, IsPhantom: false })
@@ -109,7 +109,7 @@ public sealed class World : IDisposable
         }
 
         // Clear the archetype
-        archetype.Clear(ref lazy);
+        archetype.Clear(commandBuffer);
     }
 
     internal Archetype GetArchetype(EntityId entity)
@@ -208,10 +208,10 @@ public sealed class World : IDisposable
     }
     #endregion
 
-    internal Row MigrateEntity(EntityId entity, Archetype to, ref LazyCommandBuffer lazy)
+    internal Row MigrateEntity(EntityId entity, Archetype to, EcsCommandBuffer commandBuffer)
     {
         ref var info = ref GetEntityInfo(entity);
-        return info.Chunk.Archetype.MigrateTo(entity, ref info, to, ref lazy);
+        return info.Chunk.Archetype.MigrateTo(entity, ref info, to, commandBuffer);
     }
 
     internal ref EntityInfo AllocateEntity(out EntityId entity)

@@ -23,7 +23,7 @@ internal class ComponentSetterCollection
         components.Clear();
     }
 
-    public void ClearAndDispose(ref LazyCommandBuffer buffer)
+    public void ClearAndDispose(EcsCommandBuffer buffer)
     {
         Clear();
     }
