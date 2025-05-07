@@ -21,9 +21,9 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Given an archetype key and an added component, determine the new archetype key
     /// </summary>
-    private int GetArchetypeKey(int currentKey, ComponentId added)
+    private int GetArchetypeKey(int currentKey, ComponentId addedComponent)
     {
-        if (!archetypeEdges.TryGetValue((currentKey, added), out var value))
+        if (!archetypeEdges.TryGetValue((currentKey, addedComponent), out var newKey))
         {
             // Limit the number of edges to prevent explosive growth in some edge cases.
             if (archetypeEdges.Count >= MaxAggregationEdges)
@@ -31,10 +31,10 @@ public sealed partial class EcsCommandBuffer
                 return -1;
             }
 
-            value = archetypeEdges.Count + 1;
-            archetypeEdges.Add((currentKey, added), value);
+            newKey = archetypeEdges.Count + 1;
+            archetypeEdges.Add((currentKey, addedComponent), newKey);
         }
 
-        return value;
+        return newKey;
     }
 }

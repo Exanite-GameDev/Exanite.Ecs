@@ -332,8 +332,8 @@ public sealed partial class EcsCommandBuffer
     {
         tempComponentIdSet.Clear();
 
-        // Keep a map from archetype key -> archetype. This means we only need to calculate it once
-        // per archetype key.
+        // Keep a map from archetype key -> archetype.
+        // This means we only need to calculate it once per archetype key.
         var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(archetypeEdges.Count + 1);
         Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
         try
