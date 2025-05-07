@@ -34,7 +34,7 @@ public class ComponentBloomFilterTests
         var i = a.MaybeIntersects(ref b);
         Assert.IsFalse(i);
 
-        // Note that this test _can_ fail, since the bloom filter is probabalistic and errs on the side of caution.
+        // Note that this test _can_ fail, since the bloom filter is probabilistic and errors on the side of caution.
     }
 
     [TestMethod]
