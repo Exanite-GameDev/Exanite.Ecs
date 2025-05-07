@@ -28,8 +28,8 @@ internal static class ArrayFactory
     public static void Prepare(Type type)
     {
         typeof(ArrayFactory).GetMethod("Prepare", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any, [], null)!
-                            .MakeGenericMethod(type)
-                            .Invoke(null, null);
+            .MakeGenericMethod(type)
+            .Invoke(null, null);
     }
 
     /// <summary>

@@ -10,8 +10,7 @@ namespace Exanite.Myriad.Ecs.Allocations;
 /// <summary>
 /// Thread safe global pool.
 /// </summary>
-public static class Pool<T>
-    where T : class, new()
+public static class Pool<T> where T : class, new()
 {
     [ThreadStatic] private static int MaxSize;
     [ThreadStatic] private static int Pressure;
@@ -109,8 +108,7 @@ public static class Pool
     /// <summary>
     /// Return an item to the pool
     /// </summary>
-    public static void Return<T>(T item)
-        where T : class, new()
+    public static void Return<T>(T item) where T : class, new()
     {
         Pool<T>.Return(item);
     }
