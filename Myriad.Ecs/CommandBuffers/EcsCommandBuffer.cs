@@ -50,7 +50,8 @@ public sealed partial class EcsCommandBuffer
         nextResolver.Configure(this);
     }
 
-    #region playback
+    #region Playback
+
     /// <summary>
     /// Apply all of the operations in this buffer to the <see cref="World"/>
     /// </summary>
@@ -324,9 +325,11 @@ public sealed partial class EcsCommandBuffer
 
         return archetype;
     }
+
     #endregion
 
-    #region clear
+    #region Clear
+
     /// <summary>
     /// Clear this <see cref="EcsCommandBuffer"/>
     /// </summary>
@@ -338,9 +341,9 @@ public sealed partial class EcsCommandBuffer
 
         setters.ClearAndDispose(ref lazy);
 
-        for (var i = 0; i < bufferedSets.Count; i++)
+        foreach (var bufferedEntity in bufferedSets)
         {
-            var setters = bufferedSets[i].Setters;
+            var setters = bufferedEntity.Setters;
             setters.Clear();
             Pool.Return(setters);
         }
@@ -379,6 +382,7 @@ public sealed partial class EcsCommandBuffer
             cmd.Clear();
         }
     }
+
     #endregion
 
     /// <summary>
