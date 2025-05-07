@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable StaticMemberInGenericType
 
-namespace Myriad.Ecs.Allocations;
+namespace Exanite.Myriad.Ecs.Allocations;
 
 /// <summary>
 /// Thread safe global pool.

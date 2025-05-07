@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
-using Myriad.Ecs.Utilities;
-using Myriad.Ecs.Worlds.Archetypes;
-using Myriad.Ecs.Worlds.Chunks;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Utilities;
+using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.Ecs.Queries;
+namespace Exanite.Myriad.Ecs.Queries;
 
 /// <summary>
 /// Describes a query for entities, bound to a world.

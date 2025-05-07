@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Components;
-using Myriad.Ecs.Worlds;
-using Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.CommandBuffers;
+using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.Ecs;
+namespace Exanite.Myriad.Ecs;
 
 /// <summary>
 /// A world contains all entities.

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.CommandBuffers;
-using Myriad.Ecs.Components;
-using Myriad.Ecs.Utilities;
-using Myriad.Ecs.Worlds.Chunks;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.CommandBuffers;
+using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Utilities;
+using Exanite.Myriad.Ecs.Worlds.Chunks;
 
-namespace Myriad.Ecs.Worlds.Archetypes;
+namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 /// <summary>
 /// An archetype contains all entities which share exactly the same set of components.

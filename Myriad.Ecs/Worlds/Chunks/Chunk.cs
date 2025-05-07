@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Myriad.Ecs.Allocations;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
-using Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Allocations;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.Ecs.Worlds.Chunks;
+namespace Exanite.Myriad.Ecs.Worlds.Chunks;
 
 public sealed class Chunk
 {

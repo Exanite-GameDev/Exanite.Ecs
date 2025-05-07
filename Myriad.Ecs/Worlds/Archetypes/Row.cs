@@ -1,6 +1,6 @@
-﻿using Myriad.Ecs.Worlds.Chunks;
+﻿using Exanite.Myriad.Ecs.Worlds.Chunks;
 
-namespace Myriad.Ecs.Worlds.Archetypes;
+namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 internal readonly record struct Row
 {

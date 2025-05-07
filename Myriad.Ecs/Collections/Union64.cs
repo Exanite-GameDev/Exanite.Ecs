@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Myriad.Ecs.Collections;
+namespace Exanite.Myriad.Ecs.Collections;
 
 [StructLayout(LayoutKind.Explicit)]
 internal struct Union64

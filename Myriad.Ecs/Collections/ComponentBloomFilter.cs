@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Components;
 using Myriad.Ecs.xxHash;
 
-namespace Myriad.Ecs.Collections;
+namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
 /// Probabilistic set of component IDs. Can be used to check if two sets intersect.<br/>

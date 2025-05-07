@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.Collections;
+namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
 /// A set built out of an ordered list. This allows allocation free enumeration of the set.

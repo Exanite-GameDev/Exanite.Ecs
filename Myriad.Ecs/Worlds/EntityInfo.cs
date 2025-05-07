@@ -1,7 +1,7 @@
-﻿using Myriad.Ecs.Worlds.Archetypes;
-using Myriad.Ecs.Worlds.Chunks;
+﻿using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Worlds.Chunks;
 
-namespace Myriad.Ecs.Worlds;
+namespace Exanite.Myriad.Ecs.Worlds;
 
 internal struct EntityInfo
 {

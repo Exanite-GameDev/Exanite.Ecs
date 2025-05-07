@@ -1,7 +1,7 @@
-﻿using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
+﻿using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.Utilities;
+namespace Exanite.Myriad.Ecs.Utilities;
 
 internal static class CollectionUtility
 {

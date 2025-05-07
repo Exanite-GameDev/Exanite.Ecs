@@ -1,4 +1,4 @@
-﻿namespace Myriad.Ecs;
+﻿namespace Exanite.Myriad.Ecs;
 
 /// <summary>
 /// <para>

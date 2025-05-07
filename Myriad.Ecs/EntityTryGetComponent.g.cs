@@ -1,6 +1,6 @@
-﻿using Myriad.Ecs.Collections;
+﻿using Exanite.Myriad.Ecs.Collections;
 
-namespace Myriad.Ecs;
+namespace Exanite.Myriad.Ecs;
 
 public readonly partial record struct Entity
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
 
-namespace Myriad.Ecs.Queries;
+namespace Exanite.Myriad.Ecs.Queries;
 
 /// <summary>
 /// Build a new <see cref="QueryDescription"/> object

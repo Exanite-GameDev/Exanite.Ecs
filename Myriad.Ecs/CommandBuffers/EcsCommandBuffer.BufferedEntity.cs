@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Myriad.Ecs.CommandBuffers;
+namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 public sealed partial class EcsCommandBuffer
 {

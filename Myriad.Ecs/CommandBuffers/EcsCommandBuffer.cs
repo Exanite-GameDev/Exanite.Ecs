@@ -2,13 +2,13 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Myriad.Ecs.Allocations;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
-using Myriad.Ecs.Queries;
-using Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Allocations;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Queries;
+using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
-namespace Myriad.Ecs.CommandBuffers;
+namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
 /// Buffers up modifications to entities and replays them all at once.

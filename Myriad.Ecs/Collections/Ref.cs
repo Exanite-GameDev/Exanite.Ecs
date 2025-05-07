@@ -1,4 +1,4 @@
-namespace Myriad.Ecs.Collections;
+namespace Exanite.Myriad.Ecs.Collections;
 
 public readonly ref struct Ref<T>
 {

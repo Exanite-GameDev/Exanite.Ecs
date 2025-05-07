@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
 
-namespace Myriad.Ecs;
+namespace Exanite.Myriad.Ecs;
 
 /// <summary>
 /// An <see cref="Entity"/> is an ID in the <see cref="World"/> which has a set of components associated with it.

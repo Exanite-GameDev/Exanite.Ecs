@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Myriad.Ecs.Threading;
+namespace Exanite.Myriad.Ecs.Threading;
 
 internal class RwLock<T>(T value) where T : class
 {

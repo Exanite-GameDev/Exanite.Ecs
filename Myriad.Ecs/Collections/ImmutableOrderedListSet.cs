@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Myriad.Ecs.Collections;
+namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
 /// An immutable set of objects.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Myriad.Ecs.Components;
+namespace Exanite.Myriad.Ecs.Components;
 
 /// <summary>
 /// Unique numeric ID for a type which implements IComponent

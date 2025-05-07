@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Myriad.Ecs.Collections;
-using Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
 
-namespace Myriad.Ecs;
+namespace Exanite.Myriad.Ecs;
 
 /// <summary>
 /// The ID of an <see cref="Ecs.Entity"/> (not carrying a reference to a <see cref="World"/>)

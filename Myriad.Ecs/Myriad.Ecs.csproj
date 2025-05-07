@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Myriad.Ecs</AssemblyName>
-    <RootNamespace>Myriad.Ecs</RootNamespace>
+    <AssemblyName>Exanite.Myriad.Ecs</AssemblyName>
+    <RootNamespace>Exanite.Myriad.Ecs</RootNamespace>
     <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
 
     <TargetFramework>net9.0</TargetFramework>
@@ -15,7 +15,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <WarningsAsErrors>true</WarningsAsErrors>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Update="EntityTryGetComponent.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

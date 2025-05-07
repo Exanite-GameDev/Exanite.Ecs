@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Myriad.Ecs.Allocations;
+namespace Exanite.Myriad.Ecs.Allocations;
 
 internal static class ArrayFactory
 {

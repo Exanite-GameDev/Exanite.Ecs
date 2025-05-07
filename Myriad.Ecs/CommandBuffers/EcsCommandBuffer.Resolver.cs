@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Myriad.Ecs.Allocations;
+using Exanite.Myriad.Ecs.Allocations;
 
-namespace Myriad.Ecs.CommandBuffers;
+namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 public sealed partial class EcsCommandBuffer
 {
