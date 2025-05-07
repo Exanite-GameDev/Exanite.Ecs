@@ -1,4 +1,5 @@
 ﻿using Exanite.Core.Runtime;
+using Exanite.Myriad.Ecs;
 using Exanite.Myriad.Ecs.Collections;
 
 namespace Exanite.Myriad.Ecs;
