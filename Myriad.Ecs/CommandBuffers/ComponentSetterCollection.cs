@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using Exanite.Core.Pooling;
 using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds;
@@ -29,7 +30,7 @@ internal class ComponentSetterCollection
 
         if (!components.TryGetValue(id, out var list))
         {
-            list = Pool<GenericComponentList<T>>.Get();
+            list = SimplePool<GenericComponentList<T>>.Acquire();
             list.Clear();
             components.Add(id, list);
         }
@@ -103,7 +104,7 @@ internal class ComponentSetterCollection
 
         public void Recycle()
         {
-            Pool.Return(this);
+            SimplePool.Release(this);
         }
 
         public void Write(int index, EntityStorageLocation dest)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Collections;
@@ -50,7 +51,7 @@ public sealed partial class EcsCommandBuffer
     {
         World = world;
 
-        nextResolver = Pool<EcsCommandBufferResolver>.Get();
+        nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
         nextResolver.Configure(this);
     }
 
@@ -72,7 +73,7 @@ public sealed partial class EcsCommandBuffer
         {
             var entitySetters = bufferedEntity.Setters;
             entitySetters.Clear();
-            Pool.Return(entitySetters);
+            SimplePool.Release(entitySetters);
         }
         bufferedEntities.Clear();
 
@@ -81,13 +82,13 @@ public sealed partial class EcsCommandBuffer
             if (data.Removes != null)
             {
                 data.Removes.Clear();
-                Pool.Return(data.Removes);
+                SimplePool.Release(data.Removes);
             }
 
             if (data.Sets != null)
             {
                 data.Sets.Clear();
-                Pool.Return(data.Sets);
+                SimplePool.Release(data.Sets);
             }
         }
         entityModifications.Clear();
@@ -105,7 +106,7 @@ public sealed partial class EcsCommandBuffer
 
         // Update version and get new resolver
         unchecked { Version++; }
-        nextResolver = Pool<EcsCommandBufferResolver>.Get();
+        nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
         nextResolver.Configure(this);
     }
 
@@ -124,7 +125,7 @@ public sealed partial class EcsCommandBuffer
         {
             // Update version and get new resolver
             unchecked { Version++; }
-            nextResolver = Pool<EcsCommandBufferResolver>.Get();
+            nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
             nextResolver.Configure(this);
 
             return resolver;
@@ -151,7 +152,7 @@ public sealed partial class EcsCommandBuffer
 
         // Update version and get new resolver
         unchecked { Version++; }
-        nextResolver = Pool<EcsCommandBufferResolver>.Get();
+        nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
         nextResolver.Configure(this);
 
         // Return the resolver
@@ -198,13 +199,13 @@ public sealed partial class EcsCommandBuffer
                     if (mod.Sets != null)
                     {
                         mod.Sets.Clear();
-                        Pool.Return(mod.Sets);
+                        SimplePool.Release(mod.Sets);
                     }
 
                     if (mod.Removes != null)
                     {
                         mod.Removes.Clear();
-                        Pool.Return(mod.Removes);
+                        SimplePool.Release(mod.Removes);
                     }
                 }
             }
@@ -272,7 +273,7 @@ public sealed partial class EcsCommandBuffer
 
                     // Recycle remove set
                     mod.Removes.Clear();
-                    Pool.Return(mod.Removes);
+                    SimplePool.Release(mod.Removes);
                 }
 
                 // Check if the entity will have any phantom components after this change
@@ -315,7 +316,7 @@ public sealed partial class EcsCommandBuffer
                 if (mod.Sets != null)
                 {
                     mod.Sets.Clear();
-                    Pool.Return(mod.Sets);
+                    SimplePool.Release(mod.Sets);
                 }
             }
         }
@@ -350,7 +351,7 @@ public sealed partial class EcsCommandBuffer
 
                 // Recycle
                 components.Clear();
-                Pool.Return(components);
+                SimplePool.Release(components);
             }
 
             bufferedEntities.Clear();
@@ -396,7 +397,7 @@ public sealed partial class EcsCommandBuffer
         HasBufferedOperations = true;
 
         // Get a set to hold all of the component setters
-        var set = Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get();
+        var set = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
         set.Clear();
 
         // Store this entity in the collection of entities
@@ -547,8 +548,8 @@ public sealed partial class EcsCommandBuffer
         if (!entityModifications.TryGetValue(entity, out var existing))
         {
             var mod = new EntityModificationData(
-                ensureSet ? Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get() : null,
-                ensureRemove ? Pool<OrderedListSet<ComponentId>>.Get() : null
+                ensureSet ? SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire() : null,
+                ensureRemove ? SimplePool<OrderedListSet<ComponentId>>.Acquire() : null
             );
             mod.Sets?.Clear();
             mod.Removes?.Clear();
@@ -565,13 +566,13 @@ public sealed partial class EcsCommandBuffer
             var overwrite = false;
             if (mod.Sets == null && ensureSet)
             {
-                mod.Sets = Pool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Get();
+                mod.Sets = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
                 overwrite = true;
             }
 
             if (mod.Removes == null && ensureRemove)
             {
-                mod.Removes = Pool<OrderedListSet<ComponentId>>.Get();
+                mod.Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
                 overwrite = true;
             }
 

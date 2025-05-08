@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exanite.Core.Pooling;
 using Exanite.Myriad.Ecs.Allocations;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
@@ -47,7 +48,7 @@ public sealed class EcsCommandBufferResolver : IDisposable
         Parent = null;
         Lookup.Clear();
 
-        Pool.Return(this);
+        SimplePool.Release(this);
     }
 
     /// <summary>
