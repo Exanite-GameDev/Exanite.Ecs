@@ -27,7 +27,7 @@ public class QueryBenchmark
         var rng = new Random(2);
         for (var i = 0; i < EntityCount; i++)
             AddEntity(buffer, rng);
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
 
         query = new QueryBuilder()
             .Include<Position>()

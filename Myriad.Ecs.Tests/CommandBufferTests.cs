@@ -22,7 +22,7 @@ public class EcsCommandBufferTests
         var world = new World();
         var buffer = new EcsCommandBuffer(world);
 
-        var r = buffer.Playback();
+        var r = buffer.Execute();
         r.Dispose();
 
         Assert.ThrowsException<ObjectDisposedException>(() =>
@@ -40,7 +40,7 @@ public class EcsCommandBufferTests
         var eb = buffer.Create();
         Assert.AreEqual(buffer, eb.CommandBuffer);
 
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         Assert.IsTrue(entity.Exists());
@@ -60,7 +60,7 @@ public class EcsCommandBufferTests
             buffered.Add(buffer.Create().Set(new ComponentInt32(i)));
 
         // Execute buffer
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
 
         // Resolve results
         var entities = new List<Entity>();
@@ -131,7 +131,7 @@ public class EcsCommandBufferTests
             }
 
             // Execute
-            using (buffer.Playback())
+            using (buffer.Execute())
             {
                 // Resolve results
                 foreach (var b in buffered)
@@ -162,7 +162,7 @@ public class EcsCommandBufferTests
     {
         var world = new World();
         var entities = new List<Entity>();
-        using (var setupResolver = TestHelpers.SetupRandomEntities(world, 10_000).Playback())
+        using (var setupResolver = TestHelpers.SetupRandomEntities(world, 10_000).Execute())
         {
             for (var i = 0; i < setupResolver.Count; i++)
                 entities.Add(setupResolver[i]);
@@ -212,7 +212,7 @@ public class EcsCommandBufferTests
                 }
             }
 
-            buffer.Playback().Dispose();
+            buffer.Execute().Dispose();
         }
 
         void ChangeComponent<T>(Entity e, EcsCommandBuffer b, bool update)
@@ -237,7 +237,7 @@ public class EcsCommandBufferTests
 
         var eb = buffer.Create();
 
-        var resolver = buffer.Playback();
+        var resolver = buffer.Execute();
         resolver.Dispose();
 
         Assert.ThrowsException<ObjectDisposedException>(() =>
@@ -255,10 +255,10 @@ public class EcsCommandBufferTests
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback().Dispose();
+        buffer1.Execute().Dispose();
 
         // Also run the other buffer to get another resolver
-        using var resolver2 = buffer2.Playback();
+        using var resolver2 = buffer2.Execute();
 
         // Resolve the entity ID using the wrong resolver
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -275,10 +275,10 @@ public class EcsCommandBufferTests
 
         // Create the entity
         var eb1 = buffer1.Create();
-        buffer1.Playback().Dispose();
+        buffer1.Execute().Dispose();
 
         // Re-use that buffer
-        using var resolver2 = buffer1.Playback();
+        using var resolver2 = buffer1.Execute();
 
         // Resolve the entity ID using the wrong resolver
         Assert.ThrowsException<ObjectDisposedException>(() =>
@@ -295,7 +295,7 @@ public class EcsCommandBufferTests
 
         // Create the entity
         var eb1 = buffer1.Create();
-        using var resolver = buffer1.Playback();
+        using var resolver = buffer1.Execute();
 
         // Try to modify the buffered entity
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -314,7 +314,7 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(17));
 
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         Assert.IsTrue(entity.Exists());
@@ -348,7 +348,7 @@ public class EcsCommandBufferTests
             buffer.Create().Set(new ComponentFloat(3))
         };
 
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
 
         var entities = new[]
         {
@@ -363,7 +363,7 @@ public class EcsCommandBufferTests
         }
 
         buffer.Delete(entities[1]);
-        buffer.Playback();
+        buffer.Execute();
 
         Assert.IsTrue(entities[0].Exists());
         Assert.IsFalse(entities[1].Exists());
@@ -380,7 +380,7 @@ public class EcsCommandBufferTests
         var buffer = new EcsCommandBuffer(world);
 
         var buffered = buffer.Create().Set(new ComponentFloat(1));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists());
 
@@ -389,7 +389,7 @@ public class EcsCommandBufferTests
         buffer.Delete(entity);
         buffer.Delete(entity);
         buffer.Delete(entity);
-        buffer.Playback();
+        buffer.Execute();
 
         Assert.IsFalse(entity.Exists());
     }
@@ -401,7 +401,7 @@ public class EcsCommandBufferTests
         var buffer = new EcsCommandBuffer(world);
 
         var buffered = buffer.Create().Set(new TestPhantom0());
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists());
 
@@ -410,14 +410,14 @@ public class EcsCommandBufferTests
         buffer.Delete(entity);
         buffer.Delete(entity);
         buffer.Delete(entity);
-        buffer.Playback().Dispose();
+        buffer.Execute().Dispose();
 
         Assert.IsTrue(entity.IsPhantom());
 
         buffer.Delete(entity);
         buffer.Delete(entity);
         buffer.Delete(entity);
-        buffer.Playback().Dispose();
+        buffer.Execute().Dispose();
 
         Assert.IsFalse(entity.IsPhantom());
         Assert.IsFalse(entity.Exists());
@@ -431,7 +431,7 @@ public class EcsCommandBufferTests
 
         // Create an entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists());
 
@@ -441,11 +441,11 @@ public class EcsCommandBufferTests
         // Delete that entity before playing back the first buffer
         var buffer2 = new EcsCommandBuffer(world);
         buffer2.Delete(entity);
-        buffer2.Playback().Dispose();
+        buffer2.Execute().Dispose();
         Assert.IsFalse(entity.Exists());
 
         // Now play the first buffer back
-        buffer.Playback().Dispose();
+        buffer.Execute().Dispose();
 
         Assert.IsFalse(entity.Exists());
     }
@@ -463,7 +463,7 @@ public class EcsCommandBufferTests
             buffer.Create().Set(new ComponentFloat(3))
         };
 
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
 
         var entities = new[]
         {
@@ -478,7 +478,7 @@ public class EcsCommandBufferTests
         }
 
         buffer.Delete([entities[0], entities[1]]);
-        buffer.Playback();
+        buffer.Execute();
 
         Assert.IsFalse(entities[0].Exists());
         Assert.IsFalse(entities[1].Exists());
@@ -508,7 +508,7 @@ public class EcsCommandBufferTests
     {
         var world = new World();
 
-        TestHelpers.SetupRandomEntities(world, count: 100000).Playback().Dispose();
+        TestHelpers.SetupRandomEntities(world, count: 100000).Execute().Dispose();
 
         // Get the archetypes we're about to delete
         var deleting = (from archetype in world.Archetypes
@@ -531,7 +531,7 @@ public class EcsCommandBufferTests
         // Delete it
         var buffer = new EcsCommandBuffer(world);
         buffer.Delete(q);
-        buffer.Playback().Dispose();
+        buffer.Execute().Dispose();
 
         // Check the archetypes
         foreach (var archetype in deleting)
@@ -556,7 +556,7 @@ public class EcsCommandBufferTests
 
         // Create entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists());
 
@@ -565,7 +565,7 @@ public class EcsCommandBufferTests
         buffer.Remove<ComponentFloat>(entity);
         buffer.Delete(entity);
 
-        buffer.Playback().Dispose();
+        buffer.Execute().Dispose();
 
         // Check it's dead
         Assert.IsFalse(entity.Exists());
@@ -587,12 +587,12 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         // Remove a component
         buffer.Remove<ComponentInt16>(entity);
-        buffer.Playback();
+        buffer.Execute();
 
         Assert.AreEqual(123, entity.GetComponent<ComponentFloat>().Value);
         Assert.IsFalse(entity.HasComponent<ComponentInt16>());
@@ -609,12 +609,12 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         // Add a third
         buffer.Set(entity, new ComponentInt32(789));
-        buffer.Playback();
+        buffer.Execute();
 
         // Check they are all present
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
@@ -633,12 +633,12 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         // Overwrite one
         buffer.Set(entity, new ComponentInt16(789));
-        buffer.Playback();
+        buffer.Execute();
 
         // Check the value has changed
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
@@ -657,13 +657,13 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         // Overwrite one, twice
         buffer.Set(entity, new ComponentInt16(789));
         buffer.Set(entity, new ComponentInt16(987));
-        buffer.Playback();
+        buffer.Execute();
 
         // Check the value has changed to the latest value
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
@@ -682,7 +682,7 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         // Overwrite one
@@ -691,7 +691,7 @@ public class EcsCommandBufferTests
         // Then remove it
         buffer.Remove<ComponentInt16>(entity);
 
-        buffer.Playback();
+        buffer.Execute();
 
         // Check the value is gone
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
@@ -709,13 +709,13 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         // Remove a component
         buffer.Remove<ComponentInt32>(entity);
 
-        buffer.Playback();
+        buffer.Execute();
 
         // Check entity is unchanged
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
@@ -734,7 +734,7 @@ public class EcsCommandBufferTests
                 .Create()
                 .Set(new ComponentFloat(123))
                 .Set(new ComponentInt16(456));
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
         // Remove a component
@@ -743,7 +743,7 @@ public class EcsCommandBufferTests
         // Then set the same component!
         buffer.Set(entity, new ComponentInt16(789));
 
-        buffer.Playback();
+        buffer.Execute();
 
         // Check entity structure is unchanged
         Assert.IsTrue(entity.HasComponent<ComponentFloat>());
@@ -796,7 +796,7 @@ public class EcsCommandBufferTests
             }
         }
 
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         Assert.AreEqual(1024, resolver.Count);
 
         // Ensure this is identical to the loop above!
@@ -843,7 +843,7 @@ public class EcsCommandBufferTests
         buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
         buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
         buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
-        var resolver = buffer.Playback();
+        var resolver = buffer.Execute();
         var entity0 = resolver[0];
         var entity1 = resolver[1];
         var entity2 = resolver[2];
@@ -863,7 +863,7 @@ public class EcsCommandBufferTests
         // Do nothing to 3
 
         // Apply all that
-        buffer.Playback().Dispose();
+        buffer.Execute().Dispose();
 
         // Check 1 has everything expected
         Assert.AreEqual(4, entity0.ComponentTypes.Count);
@@ -898,14 +898,14 @@ public class EcsCommandBufferTests
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
-        var r = cmd.Playback();
+        var r = cmd.Execute();
         var e = eb.Resolve();
         r.Dispose();
 
         // Set value, then clear buffer
         cmd.Set(e, new Component1());
         cmd.Clear();
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         Assert.IsTrue(e.HasComponent<Component0>());
         Assert.IsFalse(e.HasComponent<Component1>());
@@ -919,14 +919,14 @@ public class EcsCommandBufferTests
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
-        var r = cmd.Playback();
+        var r = cmd.Execute();
         var e = eb.Resolve();
         r.Dispose();
 
         // Create another entity then clear
         cmd.Create().Set(new Component0());
         cmd.Clear();
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         Assert.AreEqual(1, new QueryBuilder().Include<Component0>().Build(world).Count());
     }
@@ -940,7 +940,7 @@ public class EcsCommandBufferTests
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
         cmd.Clear();
-        cmd.Playback();
+        cmd.Execute();
 
         Assert.ThrowsException<ObjectDisposedException>(() =>
         {
@@ -957,14 +957,14 @@ public class EcsCommandBufferTests
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());
-        var r = cmd.Playback();
+        var r = cmd.Execute();
         var e = eb.Resolve();
         r.Dispose();
 
         // Remove value, then clear buffer
         cmd.Remove<Component1>(e);
         cmd.Clear();
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         Assert.IsTrue(e.HasComponent<Component0>());
         Assert.IsTrue(e.HasComponent<Component1>());
@@ -978,14 +978,14 @@ public class EcsCommandBufferTests
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());
-        var r = cmd.Playback();
+        var r = cmd.Execute();
         var e = eb.Resolve();
         r.Dispose();
 
         // Delete entity, then clear buffer
         cmd.Delete(e);
         cmd.Clear();
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         Assert.IsTrue(e.IsAlive());
         Assert.IsTrue(e.HasComponent<Component0>());
@@ -1000,14 +1000,14 @@ public class EcsCommandBufferTests
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());
-        var r = cmd.Playback();
+        var r = cmd.Execute();
         var e = eb.Resolve();
         r.Dispose();
 
         // Delete archetypes, then clear buffer
         cmd.Delete(new QueryBuilder().Include<Component0>().Build(world));
         cmd.Clear();
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         Assert.IsTrue(e.IsAlive());
         Assert.IsTrue(e.HasComponent<Component0>());

@@ -113,11 +113,11 @@ public sealed partial class EcsCommandBuffer
     #region Playback
 
     /// <summary>
-    /// Apply all of the operations in this buffer to the <see cref="World"/>
+    /// Apply all of the operations in this buffer to the <see cref="World"/>.
     /// </summary>
-    public EcsCommandBufferResolver Playback()
+    public EcsCommandBufferResolver Execute()
     {
-        // Use this resolver for this playback
+        // Use this resolver for this execution
         var resolver = nextResolver;
         if (!HasBufferedOperations)
         {

@@ -22,7 +22,7 @@ public class ArchetypeTests
                 e.Set(new ComponentFloat(i));
             }
         }
-        cb.Playback().Dispose();
+        cb.Execute().Dispose();
 
         foreach (var archetype in w.Archetypes)
         {

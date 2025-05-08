@@ -24,7 +24,7 @@ public class EntityModifyBenchmark
         var buffer = new EcsCommandBuffer(world);
         for (var i = 0; i < Count; i++)
             CreateEntity(buffer, rng);
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
         for (var i = 0; i < resolver.Count; i++)
             entities.Add(resolver[i]);
     }
@@ -79,6 +79,6 @@ public class EntityModifyBenchmark
     [Benchmark]
     public void Playback()
     {
-        ready.Playback().Dispose();
+        ready.Execute().Dispose();
     }
 }

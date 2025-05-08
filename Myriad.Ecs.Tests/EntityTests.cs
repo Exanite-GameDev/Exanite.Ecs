@@ -29,7 +29,7 @@ public class EntityTests
         var b = new EcsCommandBuffer(w);
 
         var eb = b.Create();
-        using var resolver = b.Playback();
+        using var resolver = b.Execute();
         var entity = eb.Resolve();
 
         Assert.AreEqual(0, entity.CompareTo(entity));
@@ -43,7 +43,7 @@ public class EntityTests
 
         var eb1 = b.Create();
         var eb2 = b.Create();
-        using var resolver = b.Playback();
+        using var resolver = b.Execute();
         var entity1 = eb1.Resolve();
         var entity2 = eb2.Resolve();
 
@@ -65,7 +65,7 @@ public class EntityTests
 
         var eb1 = b.Create();
         var eb2 = b.Create();
-        using var resolver = b.Playback();
+        using var resolver = b.Execute();
         var entity1 = eb1.Resolve();
         var entity2 = eb2.Resolve();
 
@@ -83,7 +83,7 @@ public class EntityTests
 
         var e = b.Create()
                  .Set(new ComponentInt16(7));
-        using var resolver = b.Playback();
+        using var resolver = b.Execute();
         var entity = e.Resolve();
 
         ref var c = ref entity.GetComponent<ComponentInt16>();
@@ -97,7 +97,7 @@ public class EntityTests
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
-        using var resolver = b.Playback();
+        using var resolver = b.Execute();
         var entity = e.Resolve();
 
         Assert.AreEqual(1, entity.ComponentTypes.Count);
@@ -111,12 +111,12 @@ public class EntityTests
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
-        var resolver = b.Playback();
+        var resolver = b.Execute();
         var entity = e.Resolve();
         resolver.Dispose();
 
         b.Delete(entity);
-        b.Playback().Dispose();
+        b.Execute().Dispose();
 
         Assert.ThrowsException<ArgumentException>(() =>
         {
@@ -131,7 +131,7 @@ public class EntityTests
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
-        using var resolver = b.Playback();
+        using var resolver = b.Execute();
         var entity = e.Resolve();
 
         Assert.AreEqual(1, entity.BoxedComponents.Length);
@@ -146,7 +146,7 @@ public class EntityTests
 
         var e = b.Create()
                  .Set(new ComponentInt16(7));
-        using var resolver = b.Playback();
+        using var resolver = b.Execute();
         var entity = e.Resolve();
 
         var c = (ComponentInt16)entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>())!;
@@ -155,7 +155,7 @@ public class EntityTests
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));
 
         b.Delete(entity);
-        b.Playback().Dispose();
+        b.Execute().Dispose();
 
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>()));
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));

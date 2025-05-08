@@ -44,7 +44,7 @@ public class EntityCreateBenchmark
         for (var i = 0; i < Count; i++)
             AddEntity(buffer, rng);
 
-        using var resolver = buffer.Playback();
+        using var resolver = buffer.Execute();
     }
 
     [Benchmark]
@@ -56,7 +56,7 @@ public class EntityCreateBenchmark
         for (var i = 0; i < Count; i++)
         {
             AddEntity(buffer, rng);
-            using var resolver = buffer.Playback();
+            using var resolver = buffer.Execute();
         }
     }
 }

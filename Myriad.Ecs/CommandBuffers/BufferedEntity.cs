@@ -20,7 +20,7 @@ public readonly record struct BufferedEntity
     {
         get
         {
-            CheckIsMutable();
+            EnsureIsMutable();
             return Buffer;
         }
     }
@@ -34,11 +34,11 @@ public readonly record struct BufferedEntity
         version = buffer.Version;
     }
 
-    private void CheckIsMutable()
+    private void EnsureIsMutable()
     {
         if (version != Buffer.Version)
         {
-            throw new InvalidOperationException("Cannot use `BufferedEntity` after `CommandBuffer` has been played");
+            throw new InvalidOperationException("Cannot use buffered entity after command buffer has been executed");
         }
     }
 
@@ -50,7 +50,7 @@ public readonly record struct BufferedEntity
     /// <returns>this buffered entity</returns>
     public BufferedEntity Set<T>(T value) where T : IComponent
     {
-        CheckIsMutable();
+        EnsureIsMutable();
 
         Buffer.SetBuffered(id, value);
         return this;
@@ -68,7 +68,7 @@ public readonly record struct BufferedEntity
 
         if (resolver.Parent != Buffer)
         {
-            throw new InvalidOperationException("Cannot use a resolver from one CommandBuffer with BufferedEntity from another");
+            throw new InvalidOperationException("Cannot use a resolver from one command buffer with buffered entity from another");
         }
 
         if (resolver.Version != version)

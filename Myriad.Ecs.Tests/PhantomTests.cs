@@ -31,7 +31,7 @@ public class PhantomTests
         var cmd = new EcsCommandBuffer(w);
 
         cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
-        var e = cmd.Playback()[0];
+        var e = cmd.Execute()[0];
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
@@ -48,11 +48,11 @@ public class PhantomTests
         var cmd = new EcsCommandBuffer(w);
 
         cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
-        var e = cmd.Playback()[0];
+        var e = cmd.Execute()[0];
 
         // Delete it, so it becomes a phantom
         cmd.Delete(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
@@ -68,7 +68,7 @@ public class PhantomTests
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
-        var resolver = cmd.Playback();
+        var resolver = cmd.Execute();
         var e = eb.Resolve();
         resolver.Dispose();
 
@@ -78,7 +78,7 @@ public class PhantomTests
 
         // Delete it
         cmd.Delete(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
@@ -86,7 +86,7 @@ public class PhantomTests
 
         // Delete it again
         cmd.Delete(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Entity should no longer exist at all
         Assert.IsFalse(e.Exists());
@@ -100,7 +100,7 @@ public class PhantomTests
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new ComponentInt32(42)).Set(new ComponentFloat(42));
-        var resolver = cmd.Playback();
+        var resolver = cmd.Execute();
         var e = eb.Resolve();
         resolver.Dispose();
 
@@ -110,7 +110,7 @@ public class PhantomTests
 
         // Delete it
         cmd.Delete(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
@@ -119,7 +119,7 @@ public class PhantomTests
 
         // Remove one of the non-phantom components
         cmd.Remove<ComponentInt32>(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
@@ -135,7 +135,7 @@ public class PhantomTests
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new TestPhantom0()).Set(new TestPhantom1()).Set(new ComponentInt32(42)).Set(new ComponentFloat(42));
-        var resolver = cmd.Playback();
+        var resolver = cmd.Execute();
         var e = eb.Resolve();
         resolver.Dispose();
 
@@ -145,7 +145,7 @@ public class PhantomTests
 
         // Delete it
         cmd.Delete(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
@@ -154,7 +154,7 @@ public class PhantomTests
 
         // Remove one phantom component
         cmd.Remove<TestPhantom1>(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
@@ -163,7 +163,7 @@ public class PhantomTests
 
         // Remove one more phantom component, this is the final one so it should be auto deleted.
         cmd.Remove<TestPhantom0>(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Entity should no longer exist at all
         Assert.IsFalse(e.Exists());
@@ -177,7 +177,7 @@ public class PhantomTests
         // Create an entity without a phantom component
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42));
-        var resolver = cmd.Playback();
+        var resolver = cmd.Execute();
         var e = eb.Resolve();
         resolver.Dispose();
 
@@ -188,7 +188,7 @@ public class PhantomTests
         // Add a phantom component and then delete it
         cmd.Set(e, new TestPhantom0());
         cmd.Delete(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
@@ -204,7 +204,7 @@ public class PhantomTests
         // Create an entity without a phantom component
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42));
-        var resolver = cmd.Playback();
+        var resolver = cmd.Execute();
         var e = eb.Resolve();
         resolver.Dispose();
 
@@ -215,7 +215,7 @@ public class PhantomTests
         // Delete it and also add a phantom component
         cmd.Delete(e);
         cmd.Set(e, new TestPhantom0());
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
@@ -231,14 +231,14 @@ public class PhantomTests
         // Create an entity with a phantom component
         var cmd = new EcsCommandBuffer(w);
         var eb = cmd.Create().Set(new ComponentFloat(42)).Set(new TestPhantom0());
-        var resolver = cmd.Playback();
+        var resolver = cmd.Execute();
         var e = eb.Resolve();
         resolver.Dispose();
 
         // Delete entity and remove phantom in one go
         cmd.Remove<TestPhantom0>(e);
         cmd.Delete(e);
-        cmd.Playback().Dispose();
+        cmd.Execute().Dispose();
 
         Assert.IsFalse(e.IsAlive());
         Assert.IsFalse(e.Exists());

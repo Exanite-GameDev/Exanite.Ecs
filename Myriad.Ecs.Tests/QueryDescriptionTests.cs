@@ -344,7 +344,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.First());
@@ -362,7 +362,7 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
@@ -392,7 +392,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.FirstOrDefault());
@@ -410,7 +410,7 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
@@ -441,7 +441,7 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
-        c.Playback().Dispose();
+        c.Execute().Dispose();
 
         Assert.ThrowsException<InvalidOperationException>(() => q.SingleOrDefault());
     }
@@ -457,7 +457,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.SingleOrDefault()!.Value);
@@ -475,7 +475,7 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
-        c.Playback().Dispose();
+        c.Execute().Dispose();
 
         Assert.ThrowsException<InvalidOperationException>(() => q.Single());
     }
@@ -503,7 +503,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.Single());
@@ -520,7 +520,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         Assert.IsTrue(q.Any());
@@ -549,7 +549,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         Assert.IsTrue(q.Contains(e));
@@ -566,7 +566,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create();
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         Assert.IsFalse(q.Contains(e));
@@ -597,7 +597,7 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Playback();
+        using var _ = c.Execute();
         var e = eb.Resolve();
 
         var r = new Random(123);
@@ -621,7 +621,7 @@ public class QueryDescriptionTests
             c.Create().Set(new ComponentInt32(i)).Set(new Component0());
         for (var i = 0; i < 10000; i++)
             c.Create().Set(new ComponentInt32(i)).Set(new Component1());
-        using var resolver = c.Playback();
+        using var resolver = c.Execute();
         var entities = new List<Entity>();
         for (var i = 0; i < resolver.Count; i++)
             entities.Add(resolver[i]);
