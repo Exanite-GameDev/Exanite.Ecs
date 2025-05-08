@@ -14,7 +14,7 @@ public readonly record struct BufferedEntity
     private readonly EcsCommandBufferResolver resolver;
 
     /// <summary>
-    /// Get the <see cref="CommandBuffer"/> which this <see cref="BufferedEntity"/> is from.
+    /// Get the <see cref="EcsCommandBuffer"/> which this <see cref="BufferedEntity"/> is from.
     /// </summary>
     public EcsCommandBuffer CommandBuffer
     {
