@@ -15,7 +15,7 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// </summary>
 public sealed partial class EcsCommandBuffer
 {
-    private uint version;
+    internal uint Version { get; private set; }
 
     /// <summary>
     /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying
@@ -40,7 +40,7 @@ public sealed partial class EcsCommandBuffer
 
     private readonly OrderedListSet<ComponentId> tempComponentIdSet = [];
 
-    private Resolver nextResolver;
+    private EcsCommandBufferResolver nextResolver;
 
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>
@@ -49,7 +49,7 @@ public sealed partial class EcsCommandBuffer
     {
         World = world;
 
-        nextResolver = Pool<Resolver>.Get();
+        nextResolver = Pool<EcsCommandBufferResolver>.Get();
         nextResolver.Configure(this);
     }
 
@@ -103,8 +103,8 @@ public sealed partial class EcsCommandBuffer
         nextResolver.Dispose();
 
         // Update version and get new resolver
-        unchecked { version++; }
-        nextResolver = Pool<Resolver>.Get();
+        unchecked { Version++; }
+        nextResolver = Pool<EcsCommandBufferResolver>.Get();
         nextResolver.Configure(this);
     }
 
@@ -115,15 +115,15 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Apply all of the operations in this buffer to the <see cref="World"/>
     /// </summary>
-    public Resolver Playback()
+    public EcsCommandBufferResolver Playback()
     {
         // Use this resolver for this playback
         var resolver = nextResolver;
         if (!HasBufferedOperations)
         {
             // Update version and get new resolver
-            unchecked { version++; }
-            nextResolver = Pool<Resolver>.Get();
+            unchecked { Version++; }
+            nextResolver = Pool<EcsCommandBufferResolver>.Get();
             nextResolver.Configure(this);
 
             return resolver;
@@ -149,8 +149,8 @@ public sealed partial class EcsCommandBuffer
         HasBufferedOperations = false;
 
         // Update version and get new resolver
-        unchecked { version++; }
-        nextResolver = Pool<Resolver>.Get();
+        unchecked { Version++; }
+        nextResolver = Pool<EcsCommandBufferResolver>.Get();
         nextResolver.Configure(this);
 
         // Return the resolver
@@ -320,7 +320,7 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void CreateBufferedEntities(Resolver resolver)
+    private void CreateBufferedEntities(EcsCommandBufferResolver resolver)
     {
         tempComponentIdSet.Clear();
 
@@ -478,7 +478,7 @@ public sealed partial class EcsCommandBuffer
         queryDeletes.Add(entities);
     }
 
-    private void SetBuffered<T>(uint id, T value) where T : IComponent
+    internal void SetBuffered<T>(uint id, T value) where T : IComponent
     {
         AssertUtility.IsTrue(id < bufferedEntities.Count, "Unknown entity ID in SetBuffered");
 

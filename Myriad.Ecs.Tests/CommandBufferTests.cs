@@ -55,7 +55,7 @@ public class EcsCommandBufferTests
         var buffer = new EcsCommandBuffer(world);
 
         // Create lots of entities
-        var buffered = new List<EcsCommandBuffer.BufferedEntity>();
+        var buffered = new List<BufferedEntity>();
         for (var i = 0; i < 50000; i++)
             buffered.Add(buffer.Create().Set(new ComponentInt32(i)));
 
@@ -95,7 +95,7 @@ public class EcsCommandBufferTests
         for (var i = 0; i < 20; i++)
         {
             // Create lots of entities
-            var buffered = new List<EcsCommandBuffer.BufferedEntity>();
+            var buffered = new List<BufferedEntity>();
             for (var j = 0; j < 10000; j++)
             {
                 var b = buffer.Create().Set(new ComponentInt32(j));
@@ -763,7 +763,7 @@ public class EcsCommandBufferTests
         // Create entities in lots of different archetypes. The idea is to
         // create so many the entity runs out of aggregation buffers.
 
-        var buffered = new List<EcsCommandBuffer.BufferedEntity>();
+        var buffered = new List<BufferedEntity>();
         var rng = new Random(17);
         for (var i = 0; i < 1024; i++)
         {

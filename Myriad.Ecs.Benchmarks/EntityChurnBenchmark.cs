@@ -9,7 +9,7 @@ public class EntityChurnBenchmark
 {
     private World world = null!;
     private EcsCommandBuffer buffer = null!;
-    private readonly List<EcsCommandBuffer.BufferedEntity> buffered = [];
+    private readonly List<BufferedEntity> buffered = [];
 
     [GlobalSetup]
     public void Setup()
