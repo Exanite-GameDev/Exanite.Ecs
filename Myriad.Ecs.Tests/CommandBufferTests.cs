@@ -57,7 +57,9 @@ public class EcsCommandBufferTests
         // Create lots of entities
         var buffered = new List<BufferedEntity>();
         for (var i = 0; i < 50000; i++)
+        {
             buffered.Add(buffer.Create().Set(new ComponentInt32(i)));
+        }
 
         // Execute buffer
         using var resolver = buffer.Execute();
@@ -165,7 +167,9 @@ public class EcsCommandBufferTests
         using (var setupResolver = TestHelpers.SetupRandomEntities(world, 10_000).Execute())
         {
             for (var i = 0; i < setupResolver.Count; i++)
+            {
                 entities.Add(setupResolver[i]);
+            }
         }
 
         var buffer = new EcsCommandBuffer(world);

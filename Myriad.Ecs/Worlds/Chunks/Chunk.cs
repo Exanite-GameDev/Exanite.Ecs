@@ -32,7 +32,7 @@ public sealed class Chunk
     public int EntityCount { get; private set; }
 
     /// <summary>
-    /// Get all of the entities in this chunk
+    /// All of the entities in this chunk
     /// </summary>
     public ReadOnlyMemory<Entity> Entities => entities.AsMemory(0, EntityCount);
 
@@ -45,7 +45,9 @@ public sealed class Chunk
 
         components = new Array[componentTypes.Count];
         for (var i = 0; i < components.Length; i++)
+        {
             components[i] = ArrayFactory.Create(componentTypes[i], size);
+        }
     }
 
     #region Get component
@@ -88,9 +90,6 @@ public sealed class Chunk
         return GetComponentArray<T>(ComponentId.Get<T>());
     }
 
-    /// <summary>
-    /// Get the component array, providing the component ID if it is known.
-    /// </summary>
     internal T[] GetComponentArray<T>(ComponentId id) where T : IComponent
     {
         return (T[])GetComponentArray(id);
@@ -186,17 +185,17 @@ public sealed class Chunk
         }
     }
 
-    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation info, Archetype to)
+    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation location, Archetype to)
     {
-        // Copy current entity info so we can use it later
-        var oldInfo = info;
+        // Copy current location so we can use it later
+        var srcLocation = location;
 
         // Get a reference to the row currently storing this entity
-        var srcRow = info.GetEntityStorageLocation(entity);
+        var srcRow = location.GetEntityStorageLocation(entity);
 
         // Move the entity to the new archetype
-        var destRow = to.AddEntity(entity, ref info);
-        var destChunk = destRow.Chunk;
+        var dstLocation = to.AddEntity(entity, ref location);
+        var dstChunk = dstLocation.Chunk;
 
         // Copy across everything that exists in the destination archetype
         for (var i = 0; i < components.Length; i++)
@@ -204,23 +203,23 @@ public sealed class Chunk
             var id = componentIdLookup[i].Value;
 
             // Check if the component is not in the destination, in which case just don't copy it
-            if (id >= destChunk.componentIndexLookup.Length || destChunk.componentIndexLookup[id] == -1)
+            if (id >= dstChunk.componentIndexLookup.Length || dstChunk.componentIndexLookup[id] == -1)
             {
                 continue;
             }
 
             // Get the two arrays
-            var srcArr = components[i];
-            var destArr = destChunk.components[destChunk.componentIndexLookup[id]];
+            var srcArray = components[i];
+            var dstArray = dstChunk.components[dstChunk.componentIndexLookup[id]];
 
             // Copy!
-            Array.Copy(srcArr, srcRow.RowIndex, destArr, destRow.RowIndex, 1);
+            Array.Copy(srcArray, srcRow.RowIndex, dstArray, dstLocation.RowIndex, 1);
         }
 
         // Remove the entity from this chunk (using the old saved info)
-        RemoveEntity(oldInfo);
+        RemoveEntity(srcLocation);
 
-        return destRow;
+        return dstLocation;
     }
 
     #endregion

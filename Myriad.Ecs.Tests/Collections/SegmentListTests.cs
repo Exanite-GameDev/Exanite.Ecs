@@ -21,11 +21,15 @@ public class SegmentListTests
 
         // Write index to each slot
         for (var i = 0; i < list.SegmentCapacity; i++)
+        {
             list[i] = i;
+        }
 
         // Read index from each slot
         for (var i = 0; i < list.SegmentCapacity; i++)
+        {
             Assert.AreEqual(i, list[i]);
+        }
     }
 
     [TestMethod]

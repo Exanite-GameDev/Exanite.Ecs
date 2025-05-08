@@ -29,7 +29,9 @@ public class EntityChurnBenchmark
         {
             // Create some entities
             for (var j = 0; j < 100; j++)
+            {
                 buffered.Add(buffer.Create().Set(new ComponentInt32(j)));
+            }
 
             // Destroy all previously created entities
             buffer.Delete(alive);

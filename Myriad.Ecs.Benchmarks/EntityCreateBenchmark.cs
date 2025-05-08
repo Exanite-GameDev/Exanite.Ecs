@@ -42,7 +42,9 @@ public class EntityCreateBenchmark
         var buffer = new EcsCommandBuffer(world);
 
         for (var i = 0; i < Count; i++)
+        {
             AddEntity(buffer, rng);
+        }
 
         using var resolver = buffer.Execute();
     }

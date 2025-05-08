@@ -616,19 +616,32 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         for (var i = 0; i < 10000; i++)
+        {
             c.Create().Set(new ComponentInt32(i));
+        }
+
         for (var i = 0; i < 10000; i++)
+        {
             c.Create().Set(new ComponentInt32(i)).Set(new Component0());
+        }
+
         for (var i = 0; i < 10000; i++)
+        {
             c.Create().Set(new ComponentInt32(i)).Set(new Component1());
+        }
+
         using var resolver = c.Execute();
         var entities = new List<Entity>();
         for (var i = 0; i < resolver.Count; i++)
+        {
             entities.Add(resolver[i]);
+        }
 
         var r = new Random(123);
 
         for (var i = 0; i < 1000; i++)
+        {
             Assert.IsTrue(entities.Contains(q.RandomOrDefault(r)!.Value));
+        }
     }
 }

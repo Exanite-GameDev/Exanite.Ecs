@@ -23,10 +23,15 @@ public class EntityModifyBenchmark
         var rng = new Random(1);
         var buffer = new EcsCommandBuffer(world);
         for (var i = 0; i < Count; i++)
+        {
             CreateEntity(buffer, rng);
+        }
+
         using var resolver = buffer.Execute();
         for (var i = 0; i < resolver.Count; i++)
+        {
             entities.Add(resolver[i]);
+        }
     }
 
     private static void CreateEntity(EcsCommandBuffer buffer, Random random)

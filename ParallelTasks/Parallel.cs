@@ -118,10 +118,14 @@ public static class Parallel
         var tasks = Pool<List<Task>>.Instance.Get();
 
         for (var i = 0; i < work.Length; i++)
+        {
             tasks.Add(Start(work[i]));
+        }
 
         for (var i = 0; i < tasks.Count; i++)
+        {
             tasks[i].Wait();
+        }
 
         tasks.Clear();
         Pool<List<Task>>.Instance.Return(tasks);

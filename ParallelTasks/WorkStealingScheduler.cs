@@ -29,7 +29,9 @@ internal class WorkStealingScheduler
 
         Workers = new List<Worker>(numThreads);
         for (var i = 0; i < numThreads; i++)
+        {
             Workers.Add(new Worker(this, i));
+        }
 
         for (var i = 0; i < numThreads; i++)
         {

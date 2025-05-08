@@ -129,10 +129,12 @@ public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<
     public void IntersectWith(ImmutableOrderedListSet<T> other)
     {
         for (var i = items.Count - 1; i >= 0; i--)
+        {
             if (!other.Contains(items[i]))
             {
                 items.RemoveAt(i);
             }
+        }
     }
 
     public bool Remove(T item)

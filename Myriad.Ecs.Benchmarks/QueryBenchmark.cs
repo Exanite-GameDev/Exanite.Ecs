@@ -26,7 +26,10 @@ public class QueryBenchmark
         var buffer = new EcsCommandBuffer(world);
         var rng = new Random(2);
         for (var i = 0; i < EntityCount; i++)
+        {
             AddEntity(buffer, rng);
+        }
+
         using var resolver = buffer.Execute();
 
         query = new QueryBuilder()

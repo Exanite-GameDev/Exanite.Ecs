@@ -6,6 +6,7 @@ using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
+using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
@@ -285,15 +286,15 @@ public sealed partial class EcsCommandBuffer
                 }
                 else
                 {
-                    // Get a row handle for the entity, moving it to a new archetype first if necessary
+                    // Get the location for the entity, moving it to a new archetype first if necessary
                     EntityStorageLocation location;
                     if (moveRequired)
                     {
                         // Get the new archetype we're moving to
-                        var newArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
+                        var dstArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        location = World.MigrateEntity(entity.EntityId, newArchetype);
+                        location = World.MigrateEntity(entity.EntityId, dstArchetype);
                     }
                     else
                     {
