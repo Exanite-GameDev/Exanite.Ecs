@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Utilities;
 using Exanite.Myriad.Ecs.Worlds.Chunks;
@@ -151,7 +150,7 @@ public sealed class Archetype
     /// <summary>
     /// Delete every Entity in this archetype
     /// </summary>
-    internal void Clear(EcsCommandBuffer commandBuffer)
+    internal void Clear()
     {
         if (HasPhantomComponents && !IsPhantom)
         {
@@ -168,7 +167,7 @@ public sealed class Archetype
                     var entity = chunk.Entities.Span[^1].EntityId;
                     ref var info = ref World.GetEntityInfo(entity);
 
-                    MigrateTo(entity, ref info, phantomDestination, commandBuffer);
+                    MigrateTo(entity, ref info, phantomDestination);
                 }
             }
         }
@@ -230,7 +229,7 @@ public sealed class Archetype
         return newChunk.AddEntity(entity, ref info);
     }
 
-    internal void RemoveEntity(EntityInfo info, EcsCommandBuffer commandBuffer)
+    internal void RemoveEntity(EntityInfo info)
     {
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
@@ -239,7 +238,7 @@ public sealed class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to, EcsCommandBuffer commandBuffer)
+    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to)
     {
         // Early exit if we're migrating to where we already are!
         if (to == this)

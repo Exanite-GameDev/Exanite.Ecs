@@ -65,16 +65,13 @@ public sealed partial class EcsCommandBuffer
             return;
         }
 
-        // We can't actually make any changes, but we do still need a secondary command buffer
-        var secondaryCommandBuffer = World.GetCommandBuffer();
-
-        setters.ClearAndDispose(secondaryCommandBuffer);
+        setters.Clear();
 
         foreach (var bufferedEntity in bufferedSets)
         {
-            var setters = bufferedEntity.Setters;
-            setters.Clear();
-            Pool.Return(setters);
+            var entitySetters = bufferedEntity.Setters;
+            entitySetters.Clear();
+            Pool.Return(entitySetters);
         }
         bufferedSets.Clear();
 
@@ -109,8 +106,6 @@ public sealed partial class EcsCommandBuffer
         unchecked { version++; }
         nextResolver = Pool<Resolver>.Get();
         nextResolver.Configure(this);
-
-        secondaryCommandBuffer.Clear();
     }
 
     #endregion
@@ -137,15 +132,12 @@ public sealed partial class EcsCommandBuffer
         // Create buffered entities.
         CreateBufferedEntities(resolver);
 
-        // Secondary command buffer accumulates any changes caused by applying this command buffer
-        var secondaryCommandBuffer = World.GetCommandBuffer();
-
         // Delete entities, this must occur before structural changes because it may trigger new structural changes
         // by adding a new phantom component.
-        DeleteEntities(secondaryCommandBuffer);
+        DeleteEntities();
 
         // Structural changes (add/remove components)
-        ApplyStructuralChanges(secondaryCommandBuffer);
+        ApplyStructuralChanges();
 
         // Clear all temporary state
         maybeAddingPhantomComponent.Clear();
@@ -161,15 +153,11 @@ public sealed partial class EcsCommandBuffer
         nextResolver = Pool<Resolver>.Get();
         nextResolver.Configure(this);
 
-        // Apply any changes caused by these changes
-        secondaryCommandBuffer.Playback().Dispose();
-        World.ReturnCommandBuffer(secondaryCommandBuffer);
-
         // Return the resolver
         return resolver;
     }
 
-    private void DeleteEntities(EcsCommandBuffer commandBuffer)
+    private void DeleteEntities()
     {
         foreach (var query in queryDeletes)
         {
@@ -180,7 +168,7 @@ public sealed partial class EcsCommandBuffer
                     continue;
                 }
 
-                World.DeleteImmediate(archetype, commandBuffer);
+                World.DeleteImmediate(archetype);
             }
         }
         queryDeletes.Clear();
@@ -201,7 +189,7 @@ public sealed partial class EcsCommandBuffer
             }
             else
             {
-                World.DeleteImmediate(delete.EntityId, commandBuffer);
+                World.DeleteImmediate(delete.EntityId);
 
                 // Return objects to pools
                 if (entityModifications.Remove(delete, out var mod))
@@ -243,7 +231,7 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void ApplyStructuralChanges(EcsCommandBuffer commandBuffer)
+    private void ApplyStructuralChanges()
     {
         if (entityModifications.Count > 0)
         {
@@ -293,7 +281,7 @@ public sealed partial class EcsCommandBuffer
                 var autodelete = tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
                 if (autodelete)
                 {
-                    World.DeleteImmediate(entity.EntityId, commandBuffer);
+                    World.DeleteImmediate(entity.EntityId);
                 }
                 else
                 {
@@ -305,7 +293,7 @@ public sealed partial class EcsCommandBuffer
                         var newArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity.EntityId, newArchetype, commandBuffer);
+                        row = World.MigrateEntity(entity.EntityId, newArchetype);
                     }
                     else
                     {
@@ -499,29 +487,29 @@ public sealed partial class EcsCommandBuffer
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
         }
 
-        var bufferedData = bufferedSets[(int)id];
-        var setters = bufferedData.Setters;
+        var bufferedEntity = bufferedSets[(int)id];
+        var entitySetters = bufferedEntity.Setters;
 
         var key = ComponentId.Get<T>();
 
-        if (setters.TryGetValue(key, out var existing))
+        if (entitySetters.TryGetValue(key, out var existing))
         {
-            this.setters.Overwrite(existing, value);
+            setters.Overwrite(existing, value);
         }
         else
         {
             // Add to global collection of setters
-            var setterIndex = this.setters.Add(value);
+            var setterIndex = setters.Add(value);
 
             // Store the index in the per-entity collection
-            setters.Add(key, setterIndex);
+            entitySetters.Add(key, setterIndex);
 
             // Update node id. Skip it if it's in node -1, once an entity is
             // marked as node -1 it's been opted out of aggregation.
-            if (bufferedData.ArchetypeKey != -1)
+            if (bufferedEntity.ArchetypeKey != -1)
             {
-                bufferedData.ArchetypeKey = GetArchetypeKey(bufferedData.ArchetypeKey, key);
-                bufferedSets[(int)id] = bufferedData;
+                bufferedEntity.ArchetypeKey = GetArchetypeKey(bufferedEntity.ArchetypeKey, key);
+                bufferedSets[(int)id] = bufferedEntity;
             }
         }
     }

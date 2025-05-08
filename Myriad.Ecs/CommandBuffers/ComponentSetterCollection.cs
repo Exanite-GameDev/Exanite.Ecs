@@ -23,11 +23,6 @@ internal class ComponentSetterCollection
         components.Clear();
     }
 
-    public void ClearAndDispose(EcsCommandBuffer buffer)
-    {
-        Clear();
-    }
-
     public SetterId Add<T>(T value) where T : IComponent
     {
         var id = ComponentId.Get<T>();
