@@ -210,8 +210,8 @@ public sealed class World : IDisposable
 
     internal EntityStorageLocation MigrateEntity(EntityId entity, Archetype to)
     {
-        ref var info = ref GetStorageLocation(entity);
-        return info.Chunk.Archetype.MigrateTo(entity, ref info, to);
+        ref var location = ref GetStorageLocation(entity);
+        return location.Chunk.Archetype.MigrateTo(entity, ref location, to);
     }
 
     internal ref StorageLocation AllocateEntity(out EntityId entity)
@@ -252,19 +252,19 @@ public sealed class World : IDisposable
 
     internal EntityStorageLocation GetEntityStorageLocation(EntityId entity)
     {
-        var info = GetStorageLocation(entity);
-        return new EntityStorageLocation(entity, info.IndexInChunk, info.Chunk);
+        var location = GetStorageLocation(entity);
+        return new EntityStorageLocation(entity, location.IndexInChunk, location.Chunk);
     }
 
     internal ref StorageLocation GetStorageLocation(EntityId entity)
     {
-        ref var info = ref entities[entity.Id];
+        ref var location = ref entities[entity.Id];
 
-        if (info.Version != entity.Version)
+        if (location.Version != entity.Version)
         {
             throw new ArgumentException("Entity is not alive", nameof(entity));
         }
 
-        return ref info;
+        return ref location;
     }
 }

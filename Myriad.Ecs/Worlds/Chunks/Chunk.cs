@@ -138,7 +138,7 @@ public sealed class Chunk
         EntityCount = 0;
     }
 
-    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation info)
+    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation location)
     {
         // It is safe to only assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
@@ -151,16 +151,16 @@ public sealed class Chunk
         // Occupy this entity index
         entities[entityIndex] = entity.ToEntity(Archetype.World);
 
-        // Update global entity info to refer to this location
-        info.IndexInChunk = entityIndex;
-        info.Chunk = this;
+        // Update global entity location to refer to this location
+        location.IndexInChunk = entityIndex;
+        location.Chunk = this;
 
         return new EntityStorageLocation(entity, entityIndex, this);
     }
 
-    internal void RemoveEntity(StorageLocation info)
+    internal void RemoveEntity(StorageLocation location)
     {
-        var entityIndex = info.IndexInChunk;
+        var entityIndex = location.IndexInChunk;
 
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
@@ -228,7 +228,7 @@ public sealed class Chunk
             Array.Copy(srcArray, srcLocation.IndexInChunk, dstArray, dstLocation.IndexInChunk, 1);
         }
 
-        // Remove the entity from this chunk (using the old saved info)
+        // Remove the entity from this chunk (using the old saved location)
         RemoveEntity(srcLocation);
 
         return dstLocation;

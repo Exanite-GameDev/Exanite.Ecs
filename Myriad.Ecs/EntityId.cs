@@ -129,8 +129,8 @@ internal readonly record struct EntityId : IComparable<EntityId>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ImmutableOrderedListSet<ComponentId> GetComponents(World world)
     {
-        var info = world.GetStorageLocation(this);
-        return info.Chunk.Archetype.Components;
+        var location = world.GetStorageLocation(this);
+        return location.Chunk.Archetype.Components;
     }
 
     /// <summary>

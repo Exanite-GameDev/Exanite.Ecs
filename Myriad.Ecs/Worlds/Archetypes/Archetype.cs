@@ -177,9 +177,9 @@ public sealed class Archetype
                 while (chunk.EntityCount > 0)
                 {
                     var entity = chunk.Entities.Span[^1].EntityId;
-                    ref var info = ref World.GetStorageLocation(entity);
+                    ref var location = ref World.GetStorageLocation(entity);
 
-                    MigrateTo(entity, ref info, phantomDestination!);
+                    MigrateTo(entity, ref location, phantomDestination!);
                 }
             }
         }
@@ -217,8 +217,8 @@ public sealed class Archetype
     /// Find a chunk with space and add the given entity to it.
     /// </summary>
     /// <param name="entity">Entity to add to a chunk</param>
-    /// <param name="info">Info will be mutated to point to the new location</param>
-    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation info)
+    /// <param name="location">Location will be mutated to point to the new location</param>
+    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation location)
     {
         // Increase archetype entity count
         EntityCount++;
@@ -229,7 +229,7 @@ public sealed class Archetype
         // If there's one with space, use it
         if (chunksWithSpace.Count > 0)
         {
-            return chunksWithSpace[0].AddEntity(entity, ref info);
+            return chunksWithSpace[0].AddEntity(entity, ref location);
         }
 
         // No space in any chunks, create a new chunk
@@ -238,37 +238,37 @@ public sealed class Archetype
         chunksWithSpace.Add(newChunk);
 
         // The chunk obviously has space, so this cannot fail!
-        return newChunk.AddEntity(entity, ref info);
+        return newChunk.AddEntity(entity, ref location);
     }
 
-    internal void RemoveEntity(StorageLocation info)
+    internal void RemoveEntity(StorageLocation location)
     {
         // Remove the entity from the chunk, component data is lost after this point
-        info.Chunk.RemoveEntity(info);
+        location.Chunk.RemoveEntity(location);
 
         // Execute handler for when an entity is removed from a chunk
-        HandleChunkEntityRemoved(info.Chunk);
+        OnChunkEntityRemoved(location.Chunk);
     }
 
-    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation info, Archetype dstArchetype)
+    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation location, Archetype dstArchetype)
     {
         // Early exit if we're migrating to where we already are!
         if (dstArchetype == this)
         {
-            return info.GetEntityStorageLocation(entity);
+            return location.GetEntityStorageLocation(entity);
         }
 
         // Do the actual copying
-        var chunk = info.Chunk;
-        var location = chunk.MigrateTo(entity, ref info, dstArchetype);
+        var srcChunk = location.Chunk;
+        var newEntityLocation = srcChunk.MigrateTo(entity, ref location, dstArchetype);
 
         // Execute handler for when an entity is removed from a chunk
-        HandleChunkEntityRemoved(chunk);
+        OnChunkEntityRemoved(srcChunk);
 
-        return location;
+        return newEntityLocation;
     }
 
-    private void HandleChunkEntityRemoved(Chunk chunk)
+    private void OnChunkEntityRemoved(Chunk chunk)
     {
         // Decrease archetype entity count
         EntityCount--;
