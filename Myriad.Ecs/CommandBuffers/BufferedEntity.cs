@@ -10,7 +10,7 @@ public readonly record struct BufferedEntity
     private readonly uint id;
     private readonly uint version;
 
-    internal readonly EcsCommandBuffer Buffer;
+    private readonly EcsCommandBuffer commandBuffer;
     private readonly EcsCommandBufferResolver resolver;
 
     /// <summary>
@@ -21,17 +21,17 @@ public readonly record struct BufferedEntity
         get
         {
             EnsureIsMutable();
-            return Buffer;
+            return commandBuffer;
         }
     }
 
-    internal BufferedEntity(uint id, EcsCommandBuffer buffer, EcsCommandBufferResolver resolver)
+    internal BufferedEntity(uint id, EcsCommandBuffer commandBuffer, EcsCommandBufferResolver resolver)
     {
         this.id = id;
-        Buffer = buffer;
+        this.commandBuffer = commandBuffer;
         this.resolver = resolver;
 
-        version = buffer.Version;
+        version = commandBuffer.Version;
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public readonly record struct BufferedEntity
     {
         EnsureIsMutable();
 
-        Buffer.SetBuffered(id, value);
+        commandBuffer.SetBuffered(id, value);
         return this;
     }
 
@@ -58,7 +58,7 @@ public readonly record struct BufferedEntity
             throw new ObjectDisposedException("Resolver has already been disposed");
         }
 
-        if (resolver.Parent != Buffer)
+        if (resolver.Parent != commandBuffer)
         {
             throw new InvalidOperationException("Cannot use a resolver from one command buffer with buffered entity from another");
         }
@@ -73,7 +73,7 @@ public readonly record struct BufferedEntity
 
     private void EnsureIsMutable()
     {
-        if (version != Buffer.Version)
+        if (version != commandBuffer.Version)
         {
             throw new InvalidOperationException("Cannot use buffered entity after command buffer has been executed");
         }
