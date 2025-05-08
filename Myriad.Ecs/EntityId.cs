@@ -160,7 +160,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     public ValueRef<T> GetComponentRef<T>(World world) where T : IComponent
     {
         ref var entityInfo = ref world.GetStorageLocation(this);
-        return entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
+        return entityInfo.Chunk.GetRef<T>(this, entityInfo.IndexInChunk);
     }
 
     /// <summary>
@@ -180,6 +180,6 @@ internal readonly record struct EntityId : IComparable<EntityId>
         }
 
         ref var entityInfo = ref world.GetStorageLocation(this);
-        return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
+        return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.IndexInChunk);
     }
 }

@@ -253,7 +253,7 @@ public sealed class World : IDisposable
     internal EntityStorageLocation GetEntityStorageLocation(EntityId entity)
     {
         var info = GetStorageLocation(entity);
-        return new EntityStorageLocation(entity, info.RowIndex, info.Chunk);
+        return new EntityStorageLocation(entity, info.IndexInChunk, info.Chunk);
     }
 
     internal ref StorageLocation GetStorageLocation(EntityId entity)

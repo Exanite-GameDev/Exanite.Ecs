@@ -15,12 +15,12 @@ internal struct StorageLocation
     public Chunk Chunk;
 
     /// <summary>
-    /// The row in the chunk which contains this entity.
+    /// The entity index in the chunk which contains this entity.
     /// </summary>
-    public int RowIndex;
+    public int IndexInChunk;
 
     public readonly EntityStorageLocation GetEntityStorageLocation(EntityId entity)
     {
-        return new EntityStorageLocation(entity, RowIndex, Chunk);
+        return new EntityStorageLocation(entity, IndexInChunk, Chunk);
     }
 }

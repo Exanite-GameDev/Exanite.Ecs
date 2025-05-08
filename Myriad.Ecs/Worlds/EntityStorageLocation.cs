@@ -18,19 +18,19 @@ internal readonly record struct EntityStorageLocation
     public Chunk Chunk { get; }
 
     /// <summary>
-    /// The row in the chunk which contains this entity.
+    /// The entity index in the chunk which contains this entity.
     /// </summary>
-    public int RowIndex { get; }
+    public int IndexInChunk { get; }
 
-    internal EntityStorageLocation(EntityId entity, int rowIndex, Chunk chunk)
+    internal EntityStorageLocation(EntityId entity, int indexInChunk, Chunk chunk)
     {
         Entity = entity;
-        RowIndex = rowIndex;
+        IndexInChunk = indexInChunk;
         Chunk = chunk;
     }
 
     public ref T GetMutable<T>() where T : IComponent
     {
-        return ref Chunk.Get<T>(Entity, RowIndex);
+        return ref Chunk.Get<T>(Entity, IndexInChunk);
     }
 }

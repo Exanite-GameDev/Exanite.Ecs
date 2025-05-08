@@ -14,77 +14,89 @@ namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
 public sealed class Archetype
 {
     /// <summary>
-    /// Number of entities in a single chunk
+    /// Number of entities in a single chunk.
     /// </summary>
     internal const int ChunkSize = 1024;
 
     /// <summary>
-    /// How many empty chunks to keep as spares
+    /// How many empty chunks to keep as spares.
     /// </summary>
     private const int ChunkHotSpares = 4;
 
     /// <summary>
-    /// The world which this archetype belongs to
+    /// The world which this archetype belongs to.
     /// </summary>
     public World World { get; }
 
     /// <summary>
-    /// The components of entities in this archetype
+    /// The chunks contained in this archetype.
+    /// </summary>
+    public IReadOnlyList<Chunk> Chunks => chunks;
+
+    /// <summary>
+    /// The components of entities in this archetype.
     /// </summary>
     public ImmutableOrderedListSet<ComponentId> Components { get; }
 
     /// <summary>
-    /// A bloom filter of all the components in this archetype
-    /// </summary>
-    internal readonly ComponentBloomFilter ComponentsBloomFilter;
-
-    /// <summary>
-    /// The hash of all components IDs in this archetype
-    /// </summary>
-    internal ArchetypeHash Hash { get; }
-
-    /// <summary>
-    /// Map from component ID (index) to index in chunk
-    /// </summary>
-    private readonly int[] componentIndexLookup;
-
-    /// <summary>
-    /// All chunks in this archetype
-    /// </summary>
-    private readonly List<Chunk> chunks = [];
-
-    /// <summary>
-    /// A list of chunks which might have space to put an entity in
-    /// </summary>
-    private readonly List<Chunk> chunksWithSpace = [];
-
-    /// <summary>
-    /// A list of empty chunks that have been removed from this archetype
-    /// </summary>
-    private readonly Stack<Chunk> spareChunks = new(ChunkHotSpares);
-
-    private readonly ComponentId[] componentIDs;
-    private readonly Type[] componentTypes;
-
-    /// <summary>
-    /// The archetype that entities should be moved to when deleted. Only non-null if <code>HasPhantomComponents &amp; !IsPhantom</code>
-    /// </summary>
-    private readonly Archetype? phantomDestination;
-
-    /// <summary>
-    /// The total number of entities in this archetype
+    /// The total number of entities in this archetype.
     /// </summary>
     public int EntityCount { get; private set; }
 
     /// <summary>
-    /// Indicates if any of the components in this Archetype implement <see cref="IComponentPhantom"/>;
+    /// True if any of the components in this Archetype implement <see cref="IComponentPhantom"/>.
     /// </summary>
     public bool HasPhantomComponents { get; }
 
     /// <summary>
-    /// Indicates if any of the components in this Archetype is <see cref="ComponentPhantom"/>
+    /// True if any of the components in this Archetype is <see cref="ComponentPhantom"/>.
     /// </summary>
     public bool IsPhantom { get; }
+
+    /// <summary>
+    /// A bloom filter of all the components in this archetype.
+    /// </summary>
+    internal readonly ComponentBloomFilter ComponentsBloomFilter;
+
+    /// <summary>
+    /// The hash of all components IDs in this archetype.
+    /// </summary>
+    internal ArchetypeHash Hash { get; }
+
+    /// <summary>
+    /// Map from component index to component type for chunks in this archetype.
+    /// </summary>
+    private readonly Type[] componentTypesByComponentIndex;
+
+    /// <summary>
+    /// Map from component index to component ID for chunks in this archetype.
+    /// </summary>
+    private readonly ComponentId[] componentIdByComponentIndex;
+
+    /// <summary>
+    /// Sparse map from component ID to component index in chunk for chunks in this archetype.
+    /// </summary>
+    private readonly int[] componentIndexByComponentId;
+
+    /// <summary>
+    /// All chunks in this archetype.
+    /// </summary>
+    private readonly List<Chunk> chunks = [];
+
+    /// <summary>
+    /// A list of chunks which might have space to put an entity in.
+    /// </summary>
+    private readonly List<Chunk> chunksWithSpace = [];
+
+    /// <summary>
+    /// A list of empty chunks that have been removed from this archetype.
+    /// </summary>
+    private readonly Stack<Chunk> spareChunks = new(ChunkHotSpares);
+
+    /// <summary>
+    /// The archetype that entities should be moved to when deleted. Only non-null if <c>HasPhantomComponents &amp; !IsPhantom</c>.
+    /// </summary>
+    private readonly Archetype? phantomDestination;
 
     internal Archetype(World world, ImmutableOrderedListSet<ComponentId> components)
     {
@@ -93,8 +105,8 @@ public sealed class Archetype
         ComponentsBloomFilter = components.ToBloomFilter();
 
         // Create arrays to fills in below
-        componentTypes = new Type[components.Count];
-        componentIDs = new ComponentId[components.Count];
+        componentTypesByComponentIndex = new Type[components.Count];
+        componentIdByComponentIndex = new ComponentId[components.Count];
 
         // Calculate archetype hash and also keep track of the max component ID ever seen
         var maxComponentId = int.MinValue;
@@ -108,14 +120,14 @@ public sealed class Archetype
         }
 
         // Build an array where the number at a given index is the index of the component with that ID
-        componentIndexLookup = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
-        Array.Fill(componentIndexLookup, -1);
+        componentIndexByComponentId = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
+        Array.Fill(componentIndexByComponentId, -1);
         var idx = 0;
         foreach (var component in components)
         {
-            componentTypes[idx] = component.Type;
-            componentIndexLookup[component.Value] = idx;
-            componentIDs[idx] = component;
+            componentTypesByComponentIndex[idx] = component.Type;
+            componentIndexByComponentId[component.Value] = idx;
+            componentIdByComponentIndex[idx] = component;
 
             idx++;
         }
@@ -141,10 +153,10 @@ public sealed class Archetype
     internal EntityStorageLocation CreateEntity()
     {
         // Allocate an entity in the world
-        ref var info = ref World.AllocateEntity(out var entity);
+        ref var location = ref World.AllocateEntity(out var entity);
 
-        // Add it to this archetype, find a row to put components into
-        return AddEntity(entity, ref info);
+        // Add it to this archetype, find a location to put components into
+        return AddEntity(entity, ref location);
     }
 
     /// <summary>
@@ -167,7 +179,7 @@ public sealed class Archetype
                     var entity = chunk.Entities.Span[^1].EntityId;
                     ref var info = ref World.GetStorageLocation(entity);
 
-                    MigrateTo(entity, ref info, phantomDestination);
+                    MigrateTo(entity, ref info, phantomDestination!);
                 }
             }
         }
@@ -221,7 +233,7 @@ public sealed class Archetype
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, ChunkSize, componentIndexLookup, componentTypes, componentIDs);
+        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, ChunkSize, componentTypesByComponentIndex, componentIdByComponentIndex, componentIndexByComponentId);
         chunks.Add(newChunk);
         chunksWithSpace.Add(newChunk);
 
@@ -238,22 +250,22 @@ public sealed class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation info, Archetype to)
+    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation info, Archetype dstArchetype)
     {
         // Early exit if we're migrating to where we already are!
-        if (to == this)
+        if (dstArchetype == this)
         {
             return info.GetEntityStorageLocation(entity);
         }
 
         // Do the actual copying
         var chunk = info.Chunk;
-        var row = chunk.MigrateTo(entity, ref info, to);
+        var location = chunk.MigrateTo(entity, ref info, dstArchetype);
 
         // Execute handler for when an entity is removed from a chunk
         HandleChunkEntityRemoved(chunk);
 
-        return row;
+        return location;
     }
 
     private void HandleChunkEntityRemoved(Chunk chunk)
@@ -290,8 +302,6 @@ public sealed class Archetype
     {
         return Hash.GetHashCode();
     }
-
-    public IReadOnlyList<Chunk> Chunks => chunks;
 
     internal bool SetEquals(OrderedListSet<ComponentId> query)
     {
