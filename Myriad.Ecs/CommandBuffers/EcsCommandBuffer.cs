@@ -29,7 +29,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     private readonly ComponentSetterCollection setters = new();
 
-    private readonly List<BufferedEntityData> bufferedSets = [];
+    private readonly List<BufferedEntityData> bufferedEntities = [];
 
     private readonly Dictionary<Entity, EntityModificationData> entityModifications = [];
 
@@ -67,13 +67,13 @@ public sealed partial class EcsCommandBuffer
 
         setters.Clear();
 
-        foreach (var bufferedEntity in bufferedSets)
+        foreach (var bufferedEntity in bufferedEntities)
         {
             var entitySetters = bufferedEntity.Setters;
             entitySetters.Clear();
             Pool.Return(entitySetters);
         }
-        bufferedSets.Clear();
+        bufferedEntities.Clear();
 
         foreach (var (_, data) in entityModifications)
         {
@@ -330,7 +330,7 @@ public sealed partial class EcsCommandBuffer
         Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
         try
         {
-            foreach (var bufferedData in bufferedSets)
+            foreach (var bufferedData in bufferedEntities)
             {
                 var components = bufferedData.Setters;
 
@@ -352,7 +352,7 @@ public sealed partial class EcsCommandBuffer
                 Pool.Return(components);
             }
 
-            bufferedSets.Clear();
+            bufferedEntities.Clear();
             tempComponentIdSet.Clear();
         }
         finally
@@ -400,8 +400,8 @@ public sealed partial class EcsCommandBuffer
 
         // Store this entity in the collection of entities
         // Put it in aggregate node 0 (i.e. no components)
-        var id = (uint)bufferedSets.Count;
-        bufferedSets.Add(new BufferedEntityData(id, set));
+        var id = (uint)bufferedEntities.Count;
+        bufferedEntities.Add(new BufferedEntityData(id, set));
 
         return new BufferedEntity(id, this, nextResolver);
     }
@@ -480,14 +480,14 @@ public sealed partial class EcsCommandBuffer
 
     private void SetBuffered<T>(uint id, T value) where T : IComponent
     {
-        AssertUtility.IsTrue(id < bufferedSets.Count, "Unknown entity ID in SetBuffered");
+        AssertUtility.IsTrue(id < bufferedEntities.Count, "Unknown entity ID in SetBuffered");
 
         if (typeof(T) == typeof(ComponentPhantom))
         {
             throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
         }
 
-        var bufferedEntity = bufferedSets[(int)id];
+        var bufferedEntity = bufferedEntities[(int)id];
         var entitySetters = bufferedEntity.Setters;
 
         var key = ComponentId.Get<T>();
@@ -509,7 +509,7 @@ public sealed partial class EcsCommandBuffer
             if (bufferedEntity.ArchetypeKey != -1)
             {
                 bufferedEntity.ArchetypeKey = GetArchetypeKey(bufferedEntity.ArchetypeKey, key);
-                bufferedSets[(int)id] = bufferedEntity;
+                bufferedEntities[(int)id] = bufferedEntity;
             }
         }
     }

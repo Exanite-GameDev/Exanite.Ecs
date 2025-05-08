@@ -50,8 +50,7 @@ public sealed partial class EcsCommandBuffer
         /// <typeparam name="T">The type of component to add</typeparam>
         /// <param name="value">The value of the component to add</param>
         /// <returns>this buffered entity</returns>
-        public BufferedEntity Set<T>(T value)
-            where T : IComponent
+        public BufferedEntity Set<T>(T value) where T : IComponent
         {
             CheckIsMutable();
 
