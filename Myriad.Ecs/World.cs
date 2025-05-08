@@ -262,7 +262,7 @@ public sealed class World : IDisposable
 
         if (info.Version != entity.Version)
         {
-            throw new ArgumentException("entity is not alive", nameof(entity));
+            throw new ArgumentException("Entity is not alive", nameof(entity));
         }
 
         return ref info;
