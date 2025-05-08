@@ -286,18 +286,18 @@ public sealed partial class EcsCommandBuffer
                 else
                 {
                     // Get a row handle for the entity, moving it to a new archetype first if necessary
-                    Row row;
+                    EntityStorageLocation location;
                     if (moveRequired)
                     {
                         // Get the new archetype we're moving to
                         var newArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
 
                         // Migrate the entity across
-                        row = World.MigrateEntity(entity.EntityId, newArchetype);
+                        location = World.MigrateEntity(entity.EntityId, newArchetype);
                     }
                     else
                     {
-                        row = World.GetRow(entity.EntityId);
+                        location = World.GetEntityStorageLocation(entity.EntityId);
                     }
 
                     // Run all setters
@@ -305,7 +305,7 @@ public sealed partial class EcsCommandBuffer
                     {
                         foreach (var set in mod.Sets.Values)
                         {
-                            setters.Write(set, row);
+                            setters.Write(set, location);
                         }
                     }
                 }

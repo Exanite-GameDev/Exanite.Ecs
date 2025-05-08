@@ -2,13 +2,13 @@
 
 namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
 
-internal readonly record struct Row
+internal readonly record struct EntityStorageLocation
 {
     public EntityId Entity { get; }
     public int RowIndex { get; }
     public Chunk Chunk { get; }
 
-    internal Row(EntityId entity, int rowIndex, Chunk chunk)
+    internal EntityStorageLocation(EntityId entity, int rowIndex, Chunk chunk)
     {
         Entity = entity;
         RowIndex = rowIndex;

@@ -21,7 +21,7 @@ public sealed class World : IDisposable
     private readonly List<EntityId> deadEntities = [];
     private int nextEntityId = 1;
 
-    private readonly SegmentedList<EntityInfo> entities = new(1024);
+    private readonly SegmentedList<StorageLocation> entities = new(1024);
 
     /// <summary>
     /// Get a list of all archetypes in this <see cref="World"/>
@@ -119,7 +119,7 @@ public sealed class World : IDisposable
             throw new ArgumentException("Invalid entity ID", nameof(entity));
         }
 
-        return GetEntityInfo(entity).Chunk.Archetype;
+        return GetStorageLocation(entity).Chunk.Archetype;
     }
 
     /// <summary>
@@ -208,13 +208,13 @@ public sealed class World : IDisposable
     }
     #endregion
 
-    internal Row MigrateEntity(EntityId entity, Archetype to)
+    internal EntityStorageLocation MigrateEntity(EntityId entity, Archetype to)
     {
-        ref var info = ref GetEntityInfo(entity);
+        ref var info = ref GetStorageLocation(entity);
         return info.Chunk.Archetype.MigrateTo(entity, ref info, to);
     }
 
-    internal ref EntityInfo AllocateEntity(out EntityId entity)
+    internal ref StorageLocation AllocateEntity(out EntityId entity)
     {
         if (deadEntities.Count > 0)
         {
@@ -244,19 +244,19 @@ public sealed class World : IDisposable
         }
 
         // Update the version
-        ref var slot = ref entities[entity.Id];
-        slot.Version = entity.Version;
+        ref var location = ref entities[entity.Id];
+        location.Version = entity.Version;
 
-        return ref slot;
+        return ref location;
     }
 
-    internal Row GetRow(EntityId entity)
+    internal EntityStorageLocation GetEntityStorageLocation(EntityId entity)
     {
-        var info = GetEntityInfo(entity);
-        return new Row(entity, info.RowIndex, info.Chunk);
+        var info = GetStorageLocation(entity);
+        return new EntityStorageLocation(entity, info.RowIndex, info.Chunk);
     }
 
-    internal ref EntityInfo GetEntityInfo(EntityId entity)
+    internal ref StorageLocation GetStorageLocation(EntityId entity)
     {
         ref var info = ref entities[entity.Id];
 

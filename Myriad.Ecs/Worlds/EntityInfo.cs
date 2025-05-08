@@ -3,7 +3,7 @@ using Exanite.Myriad.Ecs.Worlds.Chunks;
 
 namespace Exanite.Myriad.Ecs.Worlds;
 
-internal struct EntityInfo
+internal struct StorageLocation
 {
     /// <summary>
     /// The current version of this entity
@@ -20,8 +20,8 @@ internal struct EntityInfo
     /// </summary>
     public int RowIndex;
 
-    public readonly Row GetRow(EntityId entity)
+    public readonly EntityStorageLocation GetEntityStorageLocation(EntityId entity)
     {
-        return new Row(entity, RowIndex, Chunk);
+        return new EntityStorageLocation(entity, RowIndex, Chunk);
     }
 }

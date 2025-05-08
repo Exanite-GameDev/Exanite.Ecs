@@ -456,7 +456,7 @@ public sealed class QueryDescription
     /// </summary>
     public bool Contains(Entity entity)
     {
-        var info = entity.World.GetEntityInfo(entity.EntityId);
+        var info = entity.World.GetStorageLocation(entity.EntityId);
         var archetype = new ArchetypeMatch(info.Chunk.Archetype, null, null);
         return GetArchetypeMatches().Contains(archetype);
     }

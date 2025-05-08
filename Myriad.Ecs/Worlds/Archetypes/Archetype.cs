@@ -138,7 +138,7 @@ public sealed class Archetype
         }
     }
 
-    internal Row CreateEntity()
+    internal EntityStorageLocation CreateEntity()
     {
         // Allocate an entity in the world
         ref var info = ref World.AllocateEntity(out var entity);
@@ -165,7 +165,7 @@ public sealed class Archetype
                 while (chunk.EntityCount > 0)
                 {
                     var entity = chunk.Entities.Span[^1].EntityId;
-                    ref var info = ref World.GetEntityInfo(entity);
+                    ref var info = ref World.GetStorageLocation(entity);
 
                     MigrateTo(entity, ref info, phantomDestination);
                 }
@@ -206,7 +206,7 @@ public sealed class Archetype
     /// </summary>
     /// <param name="entity">Entity to add to a chunk</param>
     /// <param name="info">Info will be mutated to point to the new location</param>
-    internal Row AddEntity(EntityId entity, ref EntityInfo info)
+    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation info)
     {
         // Increase archetype entity count
         EntityCount++;
@@ -229,7 +229,7 @@ public sealed class Archetype
         return newChunk.AddEntity(entity, ref info);
     }
 
-    internal void RemoveEntity(EntityInfo info)
+    internal void RemoveEntity(StorageLocation info)
     {
         // Remove the entity from the chunk, component data is lost after this point
         info.Chunk.RemoveEntity(info);
@@ -238,12 +238,12 @@ public sealed class Archetype
         HandleChunkEntityRemoved(info.Chunk);
     }
 
-    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to)
+    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation info, Archetype to)
     {
         // Early exit if we're migrating to where we already are!
         if (to == this)
         {
-            return info.GetRow(entity);
+            return info.GetEntityStorageLocation(entity);
         }
 
         // Do the actual copying

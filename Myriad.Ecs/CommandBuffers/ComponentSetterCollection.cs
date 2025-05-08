@@ -44,10 +44,10 @@ internal class ComponentSetterCollection
         ((GenericComponentList<T>)components[id]).Overwrite(index, value);
     }
 
-    public void Write(SetterId id, Row row)
+    public void Write(SetterId id, EntityStorageLocation location)
     {
         var list = components[id.Id];
-        list.Write(id.Index, row);
+        list.Write(id.Index, location);
     }
 
     public readonly struct SetterId
@@ -77,7 +77,7 @@ internal class ComponentSetterCollection
 
         void Recycle();
 
-        void Write(int index, Row dest);
+        void Write(int index, EntityStorageLocation dest);
     }
 
     [DebuggerDisplay("Count = {values.Count}")]
@@ -106,7 +106,7 @@ internal class ComponentSetterCollection
             Pool.Return(this);
         }
 
-        public void Write(int index, Row dest)
+        public void Write(int index, EntityStorageLocation dest)
         {
             dest.GetMutable<T>() = values[index];
         }

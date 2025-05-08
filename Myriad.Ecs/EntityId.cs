@@ -129,7 +129,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ImmutableOrderedListSet<ComponentId> GetComponents(World world)
     {
-        var info = world.GetEntityInfo(this);
+        var info = world.GetStorageLocation(this);
         return info.Chunk.Archetype.Components;
     }
 
@@ -159,7 +159,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueRef<T> GetComponentRef<T>(World world) where T : IComponent
     {
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetStorageLocation(this);
         return entityInfo.Chunk.GetRef<T>(this, entityInfo.RowIndex);
     }
 
@@ -179,7 +179,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
             return null;
         }
 
-        ref var entityInfo = ref world.GetEntityInfo(this);
+        ref var entityInfo = ref world.GetStorageLocation(this);
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.RowIndex);
     }
 }

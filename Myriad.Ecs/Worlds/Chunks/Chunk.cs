@@ -124,7 +124,7 @@ public sealed class Chunk
         EntityCount = 0;
     }
 
-    internal Row AddEntity(EntityId entity, ref EntityInfo info)
+    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation info)
     {
         // It is safe to only debug assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
@@ -141,10 +141,10 @@ public sealed class Chunk
         info.RowIndex = index;
         info.Chunk = this;
 
-        return new Row(entity, index, this);
+        return new EntityStorageLocation(entity, index, this);
     }
 
-    internal void RemoveEntity(EntityInfo info)
+    internal void RemoveEntity(StorageLocation info)
     {
         var index = info.RowIndex;
 
@@ -169,7 +169,7 @@ public sealed class Chunk
         {
             var lastEntity = entities[EntityCount];
             var lastEntityIndex = EntityCount;
-            ref var lastInfo = ref Archetype.World.GetEntityInfo(lastEntity.EntityId);
+            ref var lastInfo = ref Archetype.World.GetStorageLocation(lastEntity.EntityId);
             entities[index] = lastEntity;
             entities[lastEntityIndex] = default;
             lastInfo.RowIndex = index;
@@ -186,13 +186,13 @@ public sealed class Chunk
         }
     }
 
-    internal Row MigrateTo(EntityId entity, ref EntityInfo info, Archetype to)
+    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation info, Archetype to)
     {
         // Copy current entity info so we can use it later
         var oldInfo = info;
 
         // Get a reference to the row currently storing this entity
-        var srcRow = info.GetRow(entity);
+        var srcRow = info.GetEntityStorageLocation(entity);
 
         // Move the entity to the new archetype
         var destRow = to.AddEntity(entity, ref info);
