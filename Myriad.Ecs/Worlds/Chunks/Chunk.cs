@@ -93,7 +93,7 @@ public sealed class Chunk
     /// </summary>
     internal T[] GetComponentArray<T>(ComponentId id) where T : IComponent
     {
-        return (GetComponentArray(id) as T[])!;
+        return (T[])GetComponentArray(id);
     }
 
     internal Array GetComponentArray(ComponentId id)
