@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Exanite.Core.Pooling;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
@@ -12,7 +13,7 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// A world contains all entities.
 /// </summary>
-public sealed class World : IDisposable
+public sealed class World : IDisposable, IPool<EcsCommandBuffer>
 {
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
@@ -29,7 +30,14 @@ public sealed class World : IDisposable
     public IReadOnlyList<Archetype> Archetypes => archetypes;
     internal int ArchetypesCount => archetypes.Count;
 
-    private readonly ConcurrentBag<EcsCommandBuffer> commandBufferPool = [];
+    private readonly Pool<EcsCommandBuffer> commandBufferPool;
+
+    public World()
+    {
+        commandBufferPool = new Pool<EcsCommandBuffer>(
+            create: () => new EcsCommandBuffer(this),
+            onRelease: commandBuffer => commandBuffer.Clear());
+    }
 
     /// <inheritdoc/>
     public void Dispose()
@@ -37,31 +45,32 @@ public sealed class World : IDisposable
         // TODO: Make sure events are properly sent out
     }
 
-    #region command buffer pool
-    /// <summary>
-    /// Get a <see cref="EcsCommandBuffer"/> from the pool or create a new one
-    /// </summary>
-    public EcsCommandBuffer GetCommandBuffer()
-    {
-        if (!commandBufferPool.TryTake(out var buffer))
-        {
-            buffer = new EcsCommandBuffer(this);
-        }
+    #region Command Buffer Pool
 
-        return buffer;
-    }
-
-    /// <summary>
-    /// Return a <see cref="EcsCommandBuffer"/> to the internal pool
-    /// </summary>
-    public void ReturnCommandBuffer(EcsCommandBuffer buffer)
+    public Pool<EcsCommandBuffer>.Handle Acquire(out EcsCommandBuffer value)
     {
-        if (commandBufferPool.Count < 32)
+        lock (commandBufferPool)
         {
-            buffer.Clear();
-            commandBufferPool.Add(buffer);
+            return commandBufferPool.Acquire(out value);
         }
     }
+
+    public EcsCommandBuffer Acquire()
+    {
+        lock (commandBufferPool)
+        {
+            return commandBufferPool.Acquire();
+        }
+    }
+
+    public void Release(EcsCommandBuffer value)
+    {
+        lock (commandBufferPool)
+        {
+            commandBufferPool.Release(value);
+        }
+    }
+
     #endregion
 
     internal void DeleteImmediate(EntityId delete)
@@ -137,6 +146,7 @@ public sealed class World : IDisposable
     }
 
     #region Get/Create Archetype
+
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
@@ -206,30 +216,31 @@ public sealed class World : IDisposable
     {
         return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
     }
+
     #endregion
 
-    internal EntityStorageLocation MigrateEntity(EntityId entity, Archetype to)
+    internal EntityStorageLocation MigrateEntity(EntityId entity, Archetype dstArchetype)
     {
         ref var location = ref GetStorageLocation(entity);
-        return location.Chunk.Archetype.MigrateTo(entity, ref location, to);
+        return location.Chunk.Archetype.MigrateTo(entity, ref location, dstArchetype);
     }
 
     internal ref StorageLocation AllocateEntity(out EntityId entity)
     {
         if (deadEntities.Count > 0)
         {
-            var prev = deadEntities[^1];
+            var previousId = deadEntities[^1];
             deadEntities.RemoveAt(deadEntities.Count - 1);
 
-            var v = unchecked(prev.Version + 1);
+            var version = unchecked(previousId.Version + 1);
 
             // Ensure ID 0 is not assigned even after wrapping around 2^32 entities
-            if (v == 0)
+            if (version == 0)
             {
-                v += 1;
+                version += 1;
             }
 
-            entity = new EntityId(prev.Id, v);
+            entity = new EntityId(previousId.Id, version);
         }
         else
         {
