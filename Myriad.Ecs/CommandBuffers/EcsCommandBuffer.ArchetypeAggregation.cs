@@ -14,12 +14,12 @@ public sealed partial class EcsCommandBuffer
     private const int MaxAggregationEdges = 1024;
 
     /// <summary>
-    /// Map from (current_archetype_key, added_component) => new_archetype_key
+    /// Map from (currentArchetypeKey, addedComponent) => newArchetypeKey.
     /// </summary>
     private readonly Dictionary<(int, ComponentId), int> archetypeEdges = new();
 
     /// <summary>
-    /// Given an archetype key and an added component, determine the new archetype key
+    /// Given an archetype key and an added component, determine the new archetype key.
     /// </summary>
     private int GetArchetypeKey(int currentKey, ComponentId addedComponent)
     {

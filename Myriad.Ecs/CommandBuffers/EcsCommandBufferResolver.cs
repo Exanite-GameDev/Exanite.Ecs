@@ -4,7 +4,6 @@ using Exanite.Myriad.Ecs.Allocations;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 
-
 /// <summary>
 /// Provides a way to resolve created entities. Must be disposed once finished with!
 /// </summary>
@@ -52,7 +51,7 @@ public sealed class EcsCommandBufferResolver : IDisposable
     }
 
     /// <summary>
-    /// Get the nth item in this <see cref="EcsCommandBufferResolver"/>. Items are an arbitrary order.
+    /// Get the nth item in this <see cref="EcsCommandBufferResolver"/>. Items are in an arbitrary order.
     /// </summary>
     public Entity this[int index] => Lookup.Values[index].ToEntity(World);
 }

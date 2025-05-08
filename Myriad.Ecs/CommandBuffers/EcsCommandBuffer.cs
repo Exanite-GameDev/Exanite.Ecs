@@ -19,14 +19,14 @@ public sealed partial class EcsCommandBuffer
     internal uint Version { get; private set; }
 
     /// <summary>
-    /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying
+    /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying.
     /// </summary>
     public World World { get; }
 
     public bool HasBufferedOperations { get; private set; }
 
     /// <summary>
-    /// Collection of all components to be set onto entities
+    /// Collection of all components to be set onto entities.
     /// </summary>
     private readonly ComponentSetterCollection setters = new();
 
@@ -44,7 +44,7 @@ public sealed partial class EcsCommandBuffer
     private EcsCommandBufferResolver nextResolver;
 
     /// <summary>
-    /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>
+    /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>.
     /// </summary>
     public EcsCommandBuffer(World world)
     {
@@ -57,7 +57,7 @@ public sealed partial class EcsCommandBuffer
     #region Clear
 
     /// <summary>
-    /// Clear this <see cref="EcsCommandBuffer"/>
+    /// Clear this <see cref="EcsCommandBuffer"/>.
     /// </summary>
     public void Clear()
     {
@@ -408,7 +408,7 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
-    /// Add or overwrite a component attached to an entity
+    /// Add or overwrite a component attached to an entity.
     /// </summary>
     public void Set<T>(Entity entity, T value) where T : IComponent
     {
@@ -423,7 +423,7 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
-    /// Remove a component attached to an entity
+    /// Remove a component attached to an entity.
     /// </summary>
     public void Remove<T>(Entity entity) where T : IComponent
     {
@@ -445,7 +445,7 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
-    /// Delete an entity
+    /// Delete an entity.
     /// </summary>
     public void Delete(Entity entity)
     {
@@ -455,7 +455,7 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
-    /// Bulk delete entities
+    /// Bulk delete entities.
     /// </summary>
     public void Delete(List<Entity> entities)
     {
@@ -465,7 +465,7 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
-    /// Bulk delete all entities which match the given query
+    /// Bulk delete all entities which match the given query.
     /// </summary>
     public void Delete(QueryDescription entities)
     {
@@ -585,24 +585,30 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
-    /// Data about a new entity being created
+    /// Data about a new entity being created.
     /// </summary>
     private record struct BufferedEntityData
     {
-        /// <summary>ID of this buffered entity, used in resolver to get actual entity</summary>
+        /// <summary>
+        /// ID of this buffered entity, used in resolver to get actual entity.
+        /// </summary>
         public uint Id { get; }
 
-        /// <summary>All setters to be run on this entity</summary>
+        /// <summary>
+        /// All setters to be run on this entity.
+        /// </summary>
         public Dictionary<ComponentId, ComponentSetterCollection.SetterId> Setters { get; }
 
-        /// <summary>The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1)</summary>
+        /// <summary>
+        /// The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1).
+        /// </summary>
         public int ArchetypeKey { get; set; }
 
         /// <summary>
-        /// Data about a new entity being created
+        /// Data about a new entity being created.
         /// </summary>
-        /// <param name="id">ID of this buffered entity, used in resolver to get actual entity</param>
-        /// <param name="setters">All setters to be run on this entity</param>
+        /// <param name="id">ID of this buffered entity, used in resolver to get actual entity.</param>
+        /// <param name="setters">All setters to be run on this entity.</param>
         public BufferedEntityData(uint id, Dictionary<ComponentId, ComponentSetterCollection.SetterId> setters)
         {
             Id = id;

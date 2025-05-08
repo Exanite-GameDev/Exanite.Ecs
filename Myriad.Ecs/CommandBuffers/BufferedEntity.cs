@@ -34,20 +34,12 @@ public readonly record struct BufferedEntity
         version = buffer.Version;
     }
 
-    private void EnsureIsMutable()
-    {
-        if (version != Buffer.Version)
-        {
-            throw new InvalidOperationException("Cannot use buffered entity after command buffer has been executed");
-        }
-    }
-
     /// <summary>
-    /// Add a component to this entity
+    /// Add a component to this entity.
     /// </summary>
-    /// <typeparam name="T">The type of component to add</typeparam>
-    /// <param name="value">The value of the component to add</param>
-    /// <returns>this buffered entity</returns>
+    /// <typeparam name="T">The type of component to add.</typeparam>
+    /// <param name="value">The value of the component to add.</param>
+    /// <returns>This buffered entity.</returns>
     public BufferedEntity Set<T>(T value) where T : IComponent
     {
         EnsureIsMutable();
@@ -57,7 +49,7 @@ public readonly record struct BufferedEntity
     }
 
     /// <summary>
-    /// Resolve this buffered Entity into the real Entity that was constructed
+    /// Resolve this <see cref="BufferedEntity"/> into the real <see cref="Entity"/> that was constructed.
     /// </summary>
     public Entity Resolve()
     {
@@ -77,5 +69,13 @@ public readonly record struct BufferedEntity
         }
 
         return resolver.Lookup[id].ToEntity(resolver.World);
+    }
+
+    private void EnsureIsMutable()
+    {
+        if (version != Buffer.Version)
+        {
+            throw new InvalidOperationException("Cannot use buffered entity after command buffer has been executed");
+        }
     }
 }

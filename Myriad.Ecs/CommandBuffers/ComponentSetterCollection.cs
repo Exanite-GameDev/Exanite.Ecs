@@ -7,7 +7,7 @@ using Exanite.Myriad.Ecs.Worlds;
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
-/// Collection of components of all different types, keyed by ComponentId, involves no boxing
+/// Collection of components of all different types, keyed by ComponentId, involves no boxing.
 /// </summary>
 internal class ComponentSetterCollection
 {
