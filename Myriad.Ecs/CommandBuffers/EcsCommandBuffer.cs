@@ -5,6 +5,7 @@ using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
@@ -174,26 +175,30 @@ public sealed partial class EcsCommandBuffer
         }
         queryDeletes.Clear();
 
-        foreach (var delete in deletes)
+        foreach (var entity in deletes)
         {
             // Skip deleted entities
-            if (!delete.Exists())
+            if (!entity.Exists())
             {
                 continue;
             }
 
-            var archetype = World.GetArchetype(delete.EntityId);
-            if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(delete))
+            var archetype = World.GetArchetype(entity.EntityId);
+            if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(entity))
             {
                 // It has phantom components and isn't yet a phantom. Add a Phantom component.
-                SetInternal(delete, new ComponentPhantom());
+                SetInternal(entity, new ComponentPhantom());
             }
             else
             {
-                World.DeleteImmediate(delete.EntityId);
+                // Raise entity removed event
+                World.EventBus.Raise(new EntityRemovedEvent(entity.EntityId.ToEntity(World)));
+
+                // Delete entity
+                World.DeleteImmediate(entity.EntityId);
 
                 // Return objects to pools
-                if (entityModifications.Remove(delete, out var mod))
+                if (entityModifications.Remove(entity, out var mod))
                 {
                     if (mod.Sets != null)
                     {
@@ -337,15 +342,18 @@ public sealed partial class EcsCommandBuffer
 
                 var archetype = GetArchetype(bufferedData, archetypeLookup);
 
-                var slot = archetype.CreateEntity();
+                var location = archetype.CreateEntity();
 
                 // Store the new ID in the resolver so it can be retrieved later
-                resolver.Lookup.Add(bufferedData.Id, slot.Entity);
+                resolver.Lookup.Add(bufferedData.Id, location.Entity);
+
+                // Raise entity added event
+                World.EventBus.Raise(new EntityAddedEvent());
 
                 // Write the components into the entity
                 foreach (var setter in components.Values)
                 {
-                    setters.Write(setter, slot);
+                    setters.Write(setter, location);
                 }
 
                 // Recycle

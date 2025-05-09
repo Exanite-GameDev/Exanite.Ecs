@@ -6,6 +6,7 @@ using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
@@ -119,11 +120,14 @@ public sealed class World : IDisposable
             {
                 foreach (var entity in chunk.Entities.Span)
                 {
-                    // Get the entityinfo for this entity
-                    ref var entityInfo = ref entities[entity.EntityId.Id];
+                    // Raise entity removed event
+                    EventBus.Raise(new EntityRemovedEvent(entity));
+
+                    // Get the location for this entity
+                    ref var location = ref entities[entity.EntityId.Id];
 
                     // Increment version, this will invalidate the handle
-                    entityInfo.Version++;
+                    location.Version++;
 
                     // Store this ID for re-use later
                     deadEntities.Add(entity.EntityId);

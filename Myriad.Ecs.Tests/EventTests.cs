@@ -9,12 +9,33 @@ namespace Exanite.Myriad.Ecs.Tests;
 public class EventTests
 {
     [TestMethod]
-    public void CreatingAndDestroyingEntity_RaisesEvents()
+    public void CreatingEntities_RaisesEvents()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireEventBuffer();
 
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create();
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
+    }
+
+    // TODO: Add test cases for destroying entities with phantom components
+
+    [TestMethod]
+    public void DestroyingEntities_UsingEntities_RaisesEvents()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireEventBuffer();
+
+        // Create entities
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
@@ -24,6 +45,42 @@ public class EventTests
         commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
 
+        // Destroy entities
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        foreach (var archetype in allEntitiesQuery.GetArchetypes())
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    commandBuffer.Delete(entity);
+                }
+            }
+        }
+        commandBuffer.Delete(allEntitiesQuery);
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
+    }
+
+    [TestMethod]
+    public void DestroyingEntities_UsingQuery_RaisesEvents()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireEventBuffer();
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create();
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
+
+        // Destroy entities
         var allEntitiesQuery = new QueryBuilder().Build(world);
         commandBuffer.Delete(allEntitiesQuery);
 
