@@ -45,7 +45,9 @@ public readonly ref struct ComponentAdded<T> where T : IComponent
 }
 
 /// <summary>
-/// Raised after an existing component is set.
+/// Raised after an existing component is explicitly set.
+/// <br/>
+/// Warning: Modifications without setting through the command buffer will NOT raise this event.
 /// </summary>
 public readonly ref struct ComponentModified<T> where T : IComponent
 {
