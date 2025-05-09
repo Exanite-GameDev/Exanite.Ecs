@@ -93,15 +93,6 @@ internal static class ComponentRegistry
             {
                 var id = nextId++;
 
-                // Shift over the ID to make space for the special bits
-                id <<= ComponentId.SpecialBitsCount;
-
-                // Set the bit indicating that this component implements IPhantomComponent
-                if (typeof(IComponentPhantom).IsAssignableFrom(type))
-                {
-                    id |= ComponentId.IsPhantomComponentMask;
-                }
-
                 // Store it for future lookups
                 value = new ComponentId(id);
                 idLookup[type] = value;

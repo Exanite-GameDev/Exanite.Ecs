@@ -258,10 +258,10 @@ public class QueryBuilderTests
         var world = new World();
 
         var builder = new QueryBuilder()
-                     .Include<ComponentInt16>()
-                     .Exclude<ComponentInt32>()
-                     .ExactlyOneOf<ComponentFloat>()
-                     .AtLeastOneOf<ComponentInt64>();
+            .Include<ComponentInt16>()
+            .Exclude<ComponentInt32>()
+            .ExactlyOneOf<ComponentFloat>()
+            .AtLeastOneOf<ComponentInt64>();
 
         var q1 = builder.Build(world);
         var q2 = builder.Build(world);

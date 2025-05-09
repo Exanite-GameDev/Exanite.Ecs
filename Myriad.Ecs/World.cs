@@ -90,21 +90,24 @@ public sealed class World : IDisposable
 
     internal void DestroyImmediate(EntityId destroy)
     {
-        // Get the EntityInfo for this entity
-        ref var entityInfo = ref entities[destroy.Id];
+        // Get the location for this entity
+        ref var location = ref entities[destroy.Id];
 
         // Check this is still a valid entity reference. Early exit if the entity
         // is already dead.
-        if (entityInfo.Version != destroy.Version)
+        if (location.Version != destroy.Version)
         {
             return;
         }
 
+        // Raise entity removed event
+        EventBus.Raise(new EntityRemovedEvent(destroy.ToEntity(this)));
+
         // Notify archetype this entity is dead
-        entityInfo.Chunk.Archetype.RemoveEntity(entityInfo);
+        location.Chunk.Archetype.RemoveEntity(location);
 
         // Increment version, this will invalid the handle
-        entityInfo.Version++;
+        location.Version++;
 
         // Store this ID for re-use later
         deadEntities.Add(destroy);
@@ -113,25 +116,22 @@ public sealed class World : IDisposable
     internal void DestroyImmediate(Archetype archetype)
     {
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
-        if (archetype is { HasPhantomComponents: false, IsPhantom: false })
+        deadEntities.EnsureCapacity(deadEntities.Count + archetype.EntityCount);
+        foreach (var chunk in archetype.Chunks)
         {
-            deadEntities.EnsureCapacity(deadEntities.Count + archetype.EntityCount);
-            foreach (var chunk in archetype.Chunks)
+            foreach (var entity in chunk.Entities.Span)
             {
-                foreach (var entity in chunk.Entities.Span)
-                {
-                    // Raise entity removed event
-                    EventBus.Raise(new EntityRemovedEvent(entity));
+                // Raise entity removed event
+                EventBus.Raise(new EntityRemovedEvent(entity));
 
-                    // Get the location for this entity
-                    ref var location = ref entities[entity.EntityId.Id];
+                // Get the location for this entity
+                ref var location = ref entities[entity.EntityId.Id];
 
-                    // Increment version, this will invalidate the handle
-                    location.Version++;
+                // Increment version, this will invalidate the handle
+                location.Version++;
 
-                    // Store this ID for re-use later
-                    deadEntities.Add(entity.EntityId);
-                }
+                // Store this ID for re-use later
+                deadEntities.Add(entity.EntityId);
             }
         }
 

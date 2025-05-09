@@ -88,73 +88,13 @@ public class EventTests
         Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
     }
 
-    [TestMethod]
-    public void DestroyingEntities_WithPhantomComponents_UsingEntities_RaisesEvents()
-    {
-        var world = new World();
-        var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireEventBuffer();
-
-        // Create entities
-        var entityAddCount = 10;
-        for (var i = 0; i < entityAddCount; i++)
-        {
-            commandBuffer.Create().Set(new ComponentPhantomTest());
-        }
-
-        commandBuffer.Execute().Dispose();
-        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
-
-        // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
-        foreach (var archetype in allEntitiesQuery.GetArchetypes())
-        {
-            foreach (var chunk in archetype.Chunks)
-            {
-                foreach (var entity in chunk.Entities.Span)
-                {
-                    commandBuffer.Destroy(entity);
-                }
-            }
-        }
-        commandBuffer.Destroy(allEntitiesQuery);
-
-        commandBuffer.Execute().Dispose();
-        Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
-    }
-
-    [TestMethod]
-    public void DestroyingEntities_WithPhantomComponents_UsingQuery_RaisesEvents()
-    {
-        var world = new World();
-        var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireEventBuffer();
-
-        // Create entities
-        var entityAddCount = 10;
-        for (var i = 0; i < entityAddCount; i++)
-        {
-            commandBuffer.Create().Set(new ComponentPhantomTest());
-        }
-
-        commandBuffer.Execute().Dispose();
-        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
-
-        // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
-        commandBuffer.Destroy(allEntitiesQuery);
-
-        commandBuffer.Execute().Dispose();
-        Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
-    }
-
     private class WorldEventHandler :
         IEventHandler<EntityAddedEvent>,
         IEventHandler<EntityRemovedEvent>,
-        IEventHandler<ComponentAdded<ComponentTest>>,
-        IEventHandler<ComponentModified<ComponentTest>>,
-        IEventHandler<ComponentRemoved<ComponentTest>>,
-        IEventHandler<ComponentDestroyed<ComponentTest>>
+        IEventHandler<ComponentAdded<Component0>>,
+        IEventHandler<ComponentModified<Component0>>,
+        IEventHandler<ComponentRemoved<Component0>>,
+        IEventHandler<ComponentDestroyed<Component0>>
     {
         public int EntityAddedCount { get; private set; }
         public int EntityRemovedCount { get; private set; }
@@ -168,10 +108,10 @@ public class EventTests
         {
             world.EventBus.Register<EntityAddedEvent>(this);
             world.EventBus.Register<EntityRemovedEvent>(this);
-            world.EventBus.Register<ComponentAdded<ComponentTest>>(this);
-            world.EventBus.Register<ComponentModified<ComponentTest>>(this);
-            world.EventBus.Register<ComponentRemoved<ComponentTest>>(this);
-            world.EventBus.Register<ComponentDestroyed<ComponentTest>>(this);
+            world.EventBus.Register<ComponentAdded<Component0>>(this);
+            world.EventBus.Register<ComponentModified<Component0>>(this);
+            world.EventBus.Register<ComponentRemoved<Component0>>(this);
+            world.EventBus.Register<ComponentDestroyed<Component0>>(this);
 
             return this;
         }
@@ -186,27 +126,24 @@ public class EventTests
             EntityRemovedCount++;
         }
 
-        public void OnEvent(ComponentAdded<ComponentTest> e)
+        public void OnEvent(ComponentAdded<Component0> e)
         {
             ComponentAddedCount++;
         }
 
-        public void OnEvent(ComponentModified<ComponentTest> e)
+        public void OnEvent(ComponentModified<Component0> e)
         {
             ComponentModifiedCount++;
         }
 
-        public void OnEvent(ComponentRemoved<ComponentTest> e)
+        public void OnEvent(ComponentRemoved<Component0> e)
         {
             ComponentRemovedCount++;
         }
 
-        public void OnEvent(ComponentDestroyed<ComponentTest> e)
+        public void OnEvent(ComponentDestroyed<Component0> e)
         {
             ComponentDestroyedCount++;
         }
     }
-
-    private struct ComponentPhantomTest : IComponentPhantom;
-    private struct ComponentTest : IComponent;
 }

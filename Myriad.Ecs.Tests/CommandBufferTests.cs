@@ -399,35 +399,6 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void DestroyEntityTwice_Phantom()
-    {
-        var world = new World();
-        var buffer = new EcsCommandBuffer(world);
-
-        var buffered = buffer.Create().Set(new TestPhantom0());
-        using var resolver = buffer.Execute();
-        var entity = buffered.Resolve();
-        Assert.IsTrue(entity.Exists());
-
-        buffer.Destroy(entity);
-        buffer.Destroy(entity);
-        buffer.Destroy(entity);
-        buffer.Destroy(entity);
-        buffer.Destroy(entity);
-        buffer.Execute().Dispose();
-
-        Assert.IsTrue(entity.IsPhantom());
-
-        buffer.Destroy(entity);
-        buffer.Destroy(entity);
-        buffer.Destroy(entity);
-        buffer.Execute().Dispose();
-
-        Assert.IsFalse(entity.IsPhantom());
-        Assert.IsFalse(entity.Exists());
-    }
-
-    [TestMethod]
     public void DestroyDeadEntity()
     {
         var world = new World();

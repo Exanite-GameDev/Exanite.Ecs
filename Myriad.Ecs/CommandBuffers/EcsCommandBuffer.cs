@@ -38,8 +38,6 @@ public sealed partial class EcsCommandBuffer
     private readonly List<Entity> destroys = [];
     private readonly List<QueryDescription> queryDestroys = [];
 
-    private readonly OrderedListSet<Entity> maybeAddingPhantomComponent = [];
-
     private readonly OrderedListSet<ComponentId> tempComponentIdSet = [];
 
     private EcsCommandBufferResolver nextResolver;
@@ -97,7 +95,6 @@ public sealed partial class EcsCommandBuffer
 
         destroys.Clear();
         queryDestroys.Clear();
-        maybeAddingPhantomComponent.Clear();
         tempComponentIdSet.Clear();
 
         HasBufferedOperations = false;
@@ -142,7 +139,6 @@ public sealed partial class EcsCommandBuffer
         ApplyStructuralChanges();
 
         // Clear all temporary state
-        maybeAddingPhantomComponent.Clear();
         setters.Clear();
         entityModifications.Clear();
         tempComponentIdSet.Clear();
@@ -183,58 +179,26 @@ public sealed partial class EcsCommandBuffer
                 continue;
             }
 
-            var archetype = World.GetArchetype(entity.EntityId);
-            if (archetype is { IsPhantom: false, HasPhantomComponents: true } || IsAddingPhantomComponent(entity))
-            {
-                // It has phantom components and isn't yet a phantom. Add a Phantom component.
-                SetInternal(entity, new ComponentPhantom());
-            }
-            else
-            {
-                // Raise entity removed event
-                World.EventBus.Raise(new EntityRemovedEvent(entity.EntityId.ToEntity(World)));
+            // Destroy entity
+            World.DestroyImmediate(entity.EntityId);
 
-                // Destroy entity
-                World.DestroyImmediate(entity.EntityId);
-
-                // Return objects to pools
-                if (entityModifications.Remove(entity, out var mod))
+            // Return objects to pools
+            if (entityModifications.Remove(entity, out var mod))
+            {
+                if (mod.Sets != null)
                 {
-                    if (mod.Sets != null)
-                    {
-                        mod.Sets.Clear();
-                        SimplePool.Release(mod.Sets);
-                    }
+                    mod.Sets.Clear();
+                    SimplePool.Release(mod.Sets);
+                }
 
-                    if (mod.Removes != null)
-                    {
-                        mod.Removes.Clear();
-                        SimplePool.Release(mod.Removes);
-                    }
+                if (mod.Removes != null)
+                {
+                    mod.Removes.Clear();
+                    SimplePool.Release(mod.Removes);
                 }
             }
         }
-
         destroys.Clear();
-
-        return;
-
-        // Check if this entity should not be destroyed, because a phantom component is being added
-        bool IsAddingPhantomComponent(Entity entity)
-        {
-            if (maybeAddingPhantomComponent.Contains(entity) && entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
-            {
-                foreach (var key in mod.Sets.Keys)
-                {
-                    if (key.IsPhantomComponent)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
     }
 
     private void ApplyStructuralChanges()
@@ -280,39 +244,27 @@ public sealed partial class EcsCommandBuffer
                     SimplePool.Release(mod.Removes);
                 }
 
-                // Check if the entity will have any phantom components after this change
-                var destHasPhantomComponents = tempComponentIdSet.Any(static a => a.IsPhantomComponent);
-
-                // Entity must be auto destroyed if, after the change, it will be a `Phantom` but not have any phantom components
-                var autodestroy = tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
-                if (autodestroy)
+                // Get the location for the entity, moving it to a new archetype first if necessary
+                EntityStorageLocation location;
+                if (moveRequired)
                 {
-                    World.DestroyImmediate(entity.EntityId);
+                    // Get the new archetype we're moving to
+                    var dstArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
+
+                    // Migrate the entity across
+                    location = World.MigrateEntity(entity.EntityId, dstArchetype);
                 }
                 else
                 {
-                    // Get the location for the entity, moving it to a new archetype first if necessary
-                    EntityStorageLocation location;
-                    if (moveRequired)
-                    {
-                        // Get the new archetype we're moving to
-                        var dstArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
+                    location = World.GetEntityStorageLocation(entity.EntityId);
+                }
 
-                        // Migrate the entity across
-                        location = World.MigrateEntity(entity.EntityId, dstArchetype);
-                    }
-                    else
+                // Run all setters
+                if (mod.Sets != null)
+                {
+                    foreach (var set in mod.Sets.Values)
                     {
-                        location = World.GetEntityStorageLocation(entity.EntityId);
-                    }
-
-                    // Run all setters
-                    if (mod.Sets != null)
-                    {
-                        foreach (var set in mod.Sets.Values)
-                        {
-                            setters.Write(set, location);
-                        }
+                        setters.Write(set, location);
                     }
                 }
 
@@ -346,9 +298,6 @@ public sealed partial class EcsCommandBuffer
 
                 // Store the new ID in the resolver so it can be retrieved later
                 resolver.Lookup.Add(bufferedData.Id, location.Entity);
-
-                // Raise entity added event
-                World.EventBus.Raise(new EntityAddedEvent());
 
                 // Write the components into the entity
                 foreach (var setter in components.Values)
@@ -422,11 +371,6 @@ public sealed partial class EcsCommandBuffer
     {
         HasBufferedOperations = true;
 
-        if (typeof(T) == typeof(ComponentPhantom))
-        {
-            throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
-        }
-
         SetInternal(entity, value);
     }
 
@@ -436,11 +380,6 @@ public sealed partial class EcsCommandBuffer
     public void Remove<T>(Entity entity) where T : IComponent
     {
         HasBufferedOperations = true;
-
-        if (typeof(T) == typeof(ComponentPhantom))
-        {
-            throw new InvalidOperationException("Cannot remove `Phantom` component from an entity");
-        }
 
         var mod = GetModificationData(entity, false, true);
 
@@ -491,11 +430,6 @@ public sealed partial class EcsCommandBuffer
     {
         AssertUtility.IsTrue(id < bufferedEntities.Count, "Unknown entity ID in SetBuffered");
 
-        if (typeof(T) == typeof(ComponentPhantom))
-        {
-            throw new InvalidOperationException("Cannot manually attach `Phantom` component to an entity");
-        }
-
         var bufferedEntity = bufferedEntities[(int)id];
         var entitySetters = bufferedEntity.Setters;
 
@@ -537,12 +471,6 @@ public sealed partial class EcsCommandBuffer
         {
             var index = setters.Add(value);
             mod.Sets!.Add(id, index);
-        }
-
-        // Check if this is a phantom component being added
-        if (id.IsPhantomComponent)
-        {
-            maybeAddingPhantomComponent.Add(entity);
         }
 
         // Remove it from the "remove" set. In case it was previously removed

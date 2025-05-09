@@ -28,13 +28,3 @@ public record struct Component14 : IComponent;
 public record struct Component15 : IComponent;
 public record struct Component16 : IComponent;
 public record struct Component17 : IComponent;
-
-public record struct TestPhantom0 : IComponentPhantom;
-public record struct TestPhantom1 : IComponentPhantom;
-public record struct TestPhantom2 : IComponentPhantom;
-
-public class BoxedInt
-{
-    public string? Id;
-    public int Value;
-}

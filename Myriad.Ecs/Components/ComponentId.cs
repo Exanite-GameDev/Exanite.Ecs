@@ -9,10 +9,6 @@ namespace Exanite.Myriad.Ecs.Components;
 [DebuggerDisplay("{Type} ({Value})")]
 public readonly record struct ComponentId : IComparable<ComponentId>
 {
-    internal const int SpecialBitsCount = 1;
-    internal const int SpecialBitsMask  = ~(~0 << SpecialBitsCount);
-    internal const int IsPhantomComponentMask         = 0b0001;
-
     /// <summary>
     /// Get the raw value of this ID
     /// </summary>
@@ -22,11 +18,6 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// The <see cref="System.Type"/> of the component this ID is for
     /// </summary>
     public Type Type => ComponentRegistry.Get(this);
-
-    /// <summary>
-    /// Indicates if this component implements <see cref="IComponentPhantom"/>
-    /// </summary>
-    public bool IsPhantomComponent => (Value & IsPhantomComponentMask) == IsPhantomComponentMask;
 
     internal ComponentId(int value)
     {
@@ -42,7 +33,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{Type} ({Value}{(IsPhantomComponent ? "; Phantom" : "")})";
+        return $"{Type} ({Value})";
     }
 
     /// <summary>

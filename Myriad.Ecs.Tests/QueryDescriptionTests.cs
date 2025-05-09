@@ -265,63 +265,6 @@ public class QueryDescriptionTests
     }
 
     [TestMethod]
-    public void ExcludePhantoms()
-    {
-        var w = new World();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentPhantom>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
-
-        var q = new QueryBuilder()
-               .Include<ComponentInt32>()
-               .Build(w);
-
-        var matches = q.GetArchetypeMatches();
-
-        Assert.IsNotNull(matches);
-        Assert.AreEqual(2, matches.Count);
-
-        foreach (var match in matches)
-        {
-            Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == null);
-
-            Assert.IsTrue(match.Archetype.Components.Contains(ComponentId.Get<ComponentInt32>()));
-        }
-    }
-
-    [TestMethod]
-    public void IncludePhantoms()
-    {
-        var w = new World();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentPhantom>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
-
-        var q = new QueryBuilder()
-               .Include<ComponentInt32>()
-               .Include<ComponentPhantom>()
-               .Build(w);
-
-        var matches = q.GetArchetypeMatches();
-
-        Assert.IsNotNull(matches);
-        Assert.AreEqual(1, matches.Count);
-
-        foreach (var match in matches)
-        {
-            Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == null);
-
-            Assert.IsTrue(match.Archetype.Components.Contains(ComponentId.Get<ComponentInt32>()));
-        }
-    }
-
-    [TestMethod]
     public void First_ThrowsNoMatch()
     {
         var w = new World();

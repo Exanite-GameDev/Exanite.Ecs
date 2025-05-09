@@ -48,13 +48,4 @@ public class ComponentRegistryTests
             var t = default(ComponentId).Type;
         });
     }
-
-    [TestMethod]
-    public void PhantomEntityHasPhantomFlag()
-    {
-        Assert.IsTrue(ComponentId.Get(typeof(TestPhantom0)).IsPhantomComponent);
-        Assert.IsTrue(ComponentId.Get(typeof(TestPhantom1)).IsPhantomComponent);
-        Assert.IsTrue(ComponentId.Get(typeof(TestPhantom2)).IsPhantomComponent);
-        Assert.IsFalse(ComponentId.Get(typeof(Component1)).IsPhantomComponent);
-    }
 }

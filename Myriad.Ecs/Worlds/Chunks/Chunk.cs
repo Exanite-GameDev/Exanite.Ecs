@@ -123,8 +123,6 @@ public sealed class Chunk
 
     internal void Clear()
     {
-        AssertUtility.IsTrue(!Archetype.HasPhantomComponents, "Cannot clear archetype when it has active phantom components");
-
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
         foreach (var component in components)

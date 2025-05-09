@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Utilities;
 using Exanite.Myriad.Ecs.Worlds.Chunks;
 
@@ -44,16 +45,6 @@ public sealed class Archetype
     public int EntityCount { get; private set; }
 
     /// <summary>
-    /// True if any of the components in this Archetype implement <see cref="IComponentPhantom"/>.
-    /// </summary>
-    public bool HasPhantomComponents { get; }
-
-    /// <summary>
-    /// True if any of the components in this Archetype is <see cref="ComponentPhantom"/>.
-    /// </summary>
-    public bool IsPhantom { get; }
-
-    /// <summary>
     /// A bloom filter of all the components in this archetype.
     /// </summary>
     internal readonly ComponentBloomFilter ComponentsBloomFilter;
@@ -93,11 +84,6 @@ public sealed class Archetype
     /// </summary>
     private readonly Stack<Chunk> spareChunks = new(ChunkHotSpares);
 
-    /// <summary>
-    /// The archetype that entities should be moved to when destroyed. Only non-null if <c>HasPhantomComponents &amp; !IsPhantom</c>.
-    /// </summary>
-    private readonly Archetype? phantomDestination;
-
     internal Archetype(World world, ImmutableOrderedListSet<ComponentId> components)
     {
         World = world;
@@ -131,23 +117,6 @@ public sealed class Archetype
 
             idx++;
         }
-
-        // Gather flags for special components
-        foreach (var component in components)
-        {
-            IsPhantom |= component == ComponentId.Get<ComponentPhantom>();
-            HasPhantomComponents |= component.IsPhantomComponent;
-        }
-
-        // Get the destination archetype for destroyed entities, if they become phantoms
-        if (HasPhantomComponents && !IsPhantom)
-        {
-            var c = new OrderedListSet<ComponentId>(components)
-            {
-                ComponentId.Get<ComponentPhantom>()
-            };
-            phantomDestination = World.GetOrCreateArchetype(c);
-        }
     }
 
     internal EntityStorageLocation CreateEntity()
@@ -156,7 +125,12 @@ public sealed class Archetype
         ref var location = ref World.AllocateEntity(out var entity);
 
         // Add it to this archetype, find a location to put components into
-        return AddEntity(entity, ref location);
+        var entityLocation = AddEntity(entity, ref location);
+
+        // Raise entity added event
+        World.EventBus.Raise(new EntityAddedEvent());
+
+        return entityLocation;
     }
 
     /// <summary>
@@ -164,53 +138,29 @@ public sealed class Archetype
     /// </summary>
     internal void Clear()
     {
-        if (HasPhantomComponents && !IsPhantom)
+        // Clear all the chunks
+        foreach (var chunk in chunks)
         {
-            AssertUtility.NotNull(phantomDestination);
-
-            // Migrate all entities in all chunks to the new archetype. Doing this does all of the bookkeeping like chunk management and entity count.
-            // This could be better, at the moment it just does the work on a per-entity basis, instead of doing it all in one batch.
-            while (chunks.Count > 0)
-            {
-                var chunk = chunks[^1];
-
-                while (chunk.EntityCount > 0)
-                {
-                    var entity = chunk.Entities.Span[^1].EntityId;
-                    ref var location = ref World.GetStorageLocation(entity);
-
-                    MigrateTo(entity, ref location, phantomDestination!);
-                }
-            }
-        }
-        else
-        {
-            // Clear all the chunks
-            foreach (var chunk in chunks)
-            {
-                chunk.Clear();
-            }
-
-            // Move some chunks to hot spares and then destroy the rest
-            foreach (var chunk in chunks)
-            {
-                if (spareChunks.Count < ChunkHotSpares)
-                {
-                    spareChunks.Push(chunk);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            chunksWithSpace.Clear();
-            chunks.Clear();
-
-            // Done! No entities left.
-            EntityCount = 0;
+            chunk.Clear();
         }
 
-        AssertUtility.IsTrue(EntityCount == 0, "Expected EntityCount to equal 0");
+        // Move some chunks to hot spares and then destroy the rest
+        foreach (var chunk in chunks)
+        {
+            if (spareChunks.Count < ChunkHotSpares)
+            {
+                spareChunks.Push(chunk);
+            }
+            else
+            {
+                break;
+            }
+        }
+        chunksWithSpace.Clear();
+        chunks.Clear();
+
+        // Done! No entities left.
+        EntityCount = 0;
     }
 
     /// <summary>

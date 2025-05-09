@@ -11,10 +11,6 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// </summary>
 public sealed class QueryBuilder
 {
-    internal static readonly ImmutableOrderedListSet<ComponentId> SetWithJustPhantom = ImmutableOrderedListSet<ComponentId>.Create(
-        new[] { ComponentId.Get<ComponentPhantom>() }
-    );
-
     /// <summary>
     /// An Entity must include all of these components to be matched by this query
     /// </summary>
@@ -55,12 +51,6 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryDescription Build(World world)
     {
-        // Automatically exclude all Phantom entities, unless specifically requested.
-        if (!IsIncluded<ComponentPhantom>() && !IsAtLeastOneOf<ComponentPhantom>() && !IsExactlyOneOf<ComponentPhantom>())
-        {
-            Exclude<ComponentPhantom>();
-        }
-
         return new QueryDescription(
             world,
             include.ToImmutableSet(),
@@ -93,12 +83,12 @@ public sealed class QueryBuilder
         }
     }
 
-    #region include
+    #region Include
+
     /// <summary>
     /// The given component must exist for an entity to be matched by this query
     /// </summary>
-    public QueryBuilder Include<T>()
-        where T : IComponent
+    public QueryBuilder Include<T>() where T : IComponent
     {
         include.Add<T>();
         return this;
@@ -137,8 +127,7 @@ public sealed class QueryBuilder
     /// </summary>
     /// <typeparam name="T">The component type.</typeparam>
     /// <returns>true, if the component is included, otherwise false</returns>
-    public bool IsIncluded<T>()
-        where T : IComponent
+    public bool IsIncluded<T>() where T : IComponent
     {
         return include.Contains<T>();
     }
@@ -152,14 +141,15 @@ public sealed class QueryBuilder
     {
         return include.Contains(id);
     }
+
     #endregion
 
-    #region exclude
+    #region Exclude
+
     /// <summary>
     /// The given component must not exist for an entity to be matched by this query
     /// </summary>
-    public QueryBuilder Exclude<T>()
-        where T : IComponent
+    public QueryBuilder Exclude<T>() where T : IComponent
     {
         exclude.Add<T>();
         return this;
@@ -194,8 +184,7 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is excluded
     /// </summary>
-    public bool IsExcluded<T>()
-        where T : IComponent
+    public bool IsExcluded<T>() where T : IComponent
     {
         return exclude.Contains<T>();
     }
@@ -207,14 +196,15 @@ public sealed class QueryBuilder
     {
         return exclude.Contains(id);
     }
+
     #endregion
 
-    #region at least one
+    #region At least one
+
     /// <summary>
     /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query
     /// </summary>
-    public QueryBuilder AtLeastOneOf<T>()
-        where T : IComponent
+    public QueryBuilder AtLeastOneOf<T>() where T : IComponent
     {
         atLeastOne.Add<T>();
         return this;
@@ -249,8 +239,7 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have at least one of
     /// </summary>
-    public bool IsAtLeastOneOf<T>()
-        where T : IComponent
+    public bool IsAtLeastOneOf<T>() where T : IComponent
     {
         return atLeastOne.Contains<T>();
     }
@@ -262,14 +251,15 @@ public sealed class QueryBuilder
     {
         return atLeastOne.Contains(id);
     }
+
     #endregion
 
-    #region exactly one
+    #region Exactly one
+
     /// <summary>
     /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query
     /// </summary>
-    public QueryBuilder ExactlyOneOf<T>()
-        where T : IComponent
+    public QueryBuilder ExactlyOneOf<T>() where T : IComponent
     {
         exactlyOne.Add<T>();
         return this;
@@ -304,8 +294,7 @@ public sealed class QueryBuilder
     /// <summary>
     /// Check if the given component is one of the components which entities must have exactly one of
     /// </summary>
-    public bool IsExactlyOneOf<T>()
-        where T : IComponent
+    public bool IsExactlyOneOf<T>() where T : IComponent
     {
         return exactlyOne.Contains<T>();
     }
@@ -317,6 +306,7 @@ public sealed class QueryBuilder
     {
         return exactlyOne.Contains(id);
     }
+
     #endregion
 
     private class ComponentSet(Action<ComponentId, int, string> check, int index)
@@ -334,18 +324,8 @@ public sealed class QueryBuilder
                 return immutableSet;
             }
 
-            switch (Items.Count)
-            {
-                case 0:
-                    return ImmutableOrderedListSet<ComponentId>.Empty;
-
-                case 1 when Items.Contains(ComponentId.Get<ComponentPhantom>()):
-                    return SetWithJustPhantom;
-
-                default:
-                    immutableSet = ImmutableOrderedListSet<ComponentId>.Create(Items);
-                    return immutableSet;
-            }
+            immutableSet = Items.Count == 0 ? ImmutableOrderedListSet<ComponentId>.Empty : ImmutableOrderedListSet<ComponentId>.Create(Items);
+            return immutableSet;
         }
 
         public bool Add(ComponentId id, [CallerMemberName] string caller = "")
@@ -365,8 +345,7 @@ public sealed class QueryBuilder
             return Add(ComponentId.Get(type), caller);
         }
 
-        public bool Add<T>([CallerMemberName] string caller = "")
-            where T : IComponent
+        public bool Add<T>([CallerMemberName] string caller = "") where T : IComponent
         {
             return Add(ComponentId.Get<T>(), caller);
         }
@@ -381,8 +360,7 @@ public sealed class QueryBuilder
             return Contains(ComponentId.Get(type));
         }
 
-        public bool Contains<T>()
-            where T : IComponent
+        public bool Contains<T>() where T : IComponent
         {
             return Contains(ComponentId.Get<T>());
         }
