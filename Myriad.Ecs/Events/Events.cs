@@ -15,7 +15,7 @@ public readonly ref struct EntityAddedEvent
 }
 
 /// <summary>
-/// Raised when an entity is removed from the world.
+/// Raised when an entity becomes a phantom entity, but before entity destruction.
 /// </summary>
 public readonly ref struct EntityRemovedEvent
 {
