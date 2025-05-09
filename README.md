@@ -62,7 +62,7 @@ Myriad supports "Phantom Components", these are defined by `IPhantomComponent` i
 
 A phantom entity can be destroyed in two ways:
 
-- Delete it again.
+- Destroy it again.
 - Remove all phantom components.
 
 Phantom components are useful for tracking per-entity state. For example if there is some event that needs to run when an entity is destroyed you can attach a component when the entity is created (`DoTheThing : IPhantomComponent`) and then query for `Include<DoTheThing, Phantom>()`. When you have done whatever is needed you should remove the `DoTheThing` component. Once all of the phantoms have been handled and removed, the entity will be automatically destroyed.

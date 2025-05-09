@@ -127,7 +127,7 @@ public class EcsCommandBufferTests
                 var idx = rng.Next(0, alive.Count);
                 var ent = alive[idx];
                 Assert.IsTrue(ent.Exists());
-                buffer.Delete(ent);
+                buffer.Destroy(ent);
                 alive.RemoveAt(idx);
                 dead.Add(ent);
             }
@@ -340,7 +340,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void DeleteEntity()
+    public void DestroyEntity()
     {
         var world = new World();
         var buffer = new EcsCommandBuffer(world);
@@ -366,7 +366,7 @@ public class EcsCommandBufferTests
             Assert.IsTrue(entity.Exists());
         }
 
-        buffer.Delete(entities[1]);
+        buffer.Destroy(entities[1]);
         buffer.Execute();
 
         Assert.IsTrue(entities[0].Exists());
@@ -378,7 +378,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void DeleteEntityTwice()
+    public void DestroyEntityTwice()
     {
         var world = new World();
         var buffer = new EcsCommandBuffer(world);
@@ -388,18 +388,18 @@ public class EcsCommandBufferTests
         var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists());
 
-        buffer.Delete(entity);
-        buffer.Delete(entity);
-        buffer.Delete(entity);
-        buffer.Delete(entity);
-        buffer.Delete(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
         buffer.Execute();
 
         Assert.IsFalse(entity.Exists());
     }
 
     [TestMethod]
-    public void DeleteEntityTwice_Phantom()
+    public void DestroyEntityTwice_Phantom()
     {
         var world = new World();
         var buffer = new EcsCommandBuffer(world);
@@ -409,18 +409,18 @@ public class EcsCommandBufferTests
         var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists());
 
-        buffer.Delete(entity);
-        buffer.Delete(entity);
-        buffer.Delete(entity);
-        buffer.Delete(entity);
-        buffer.Delete(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
         buffer.Execute().Dispose();
 
         Assert.IsTrue(entity.IsPhantom());
 
-        buffer.Delete(entity);
-        buffer.Delete(entity);
-        buffer.Delete(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
+        buffer.Destroy(entity);
         buffer.Execute().Dispose();
 
         Assert.IsFalse(entity.IsPhantom());
@@ -428,7 +428,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void DeleteDeadEntity()
+    public void DestroyDeadEntity()
     {
         var world = new World();
         var buffer = new EcsCommandBuffer(world);
@@ -440,11 +440,11 @@ public class EcsCommandBufferTests
         Assert.IsTrue(entity.Exists());
 
         // Setup deletion for that entity
-        buffer.Delete(entity);
+        buffer.Destroy(entity);
 
-        // Delete that entity before playing back the first buffer
+        // Destroy that entity before playing back the first buffer
         var buffer2 = new EcsCommandBuffer(world);
-        buffer2.Delete(entity);
+        buffer2.Destroy(entity);
         buffer2.Execute().Dispose();
         Assert.IsFalse(entity.Exists());
 
@@ -455,7 +455,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void DeleteEntities()
+    public void DestroyEntities()
     {
         var world = new World();
         var buffer = new EcsCommandBuffer(world);
@@ -481,7 +481,7 @@ public class EcsCommandBufferTests
             Assert.IsTrue(entity.Exists());
         }
 
-        buffer.Delete([entities[0], entities[1]]);
+        buffer.Destroy([entities[0], entities[1]]);
         buffer.Execute();
 
         Assert.IsFalse(entities[0].Exists());
@@ -492,7 +492,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void DeleteByQueryMixedWorlds()
+    public void DestroyByQueryMixedWorlds()
     {
         var world1 = new World();
         var world2 = new World();
@@ -503,18 +503,18 @@ public class EcsCommandBufferTests
 
         Assert.ThrowsException<ArgumentException>(() =>
         {
-            cmd.Delete(q);
+            cmd.Destroy(q);
         });
     }
 
     [TestMethod]
-    public void DeleteByQuery()
+    public void DestroyByQuery()
     {
         var world = new World();
 
         TestHelpers.SetupRandomEntities(world, count: 100000).Execute().Dispose();
 
-        // Get the archetypes we're about to delete
+        // Get the archetypes we're about to destroy
         var deleting = (from archetype in world.Archetypes
                         where archetype.Components.Contains(ComponentId.Get<Component0>())
                         where archetype.Components.Contains(ComponentId.Get<Component1>())
@@ -526,15 +526,15 @@ public class EcsCommandBufferTests
                       where !deleting.Contains(archetype)
                       select (archetype, archetype.EntityCount)).ToArray();
 
-        // Query to delete
+        // Query to destroy
         var q = new QueryBuilder().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world);
 
-        // Get an entity we're going to delete
+        // Get an entity we're going to destroy
         var dead = q.FirstOrDefault()!.Value;
 
-        // Delete it
+        // Destroy it
         var buffer = new EcsCommandBuffer(world);
-        buffer.Delete(q);
+        buffer.Destroy(q);
         buffer.Execute().Dispose();
 
         // Check the archetypes
@@ -553,7 +553,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void ModifyThenDelete()
+    public void ModifyThenDestroy()
     {
         var world = new World();
         var buffer = new EcsCommandBuffer(world);
@@ -564,10 +564,10 @@ public class EcsCommandBufferTests
         var entity = buffered.Resolve();
         Assert.IsTrue(entity.Exists());
 
-        // Modify it _and_ delete it
+        // Modify it _and_ destroy it
         buffer.Set(entity, new ComponentInt64(7));
         buffer.Remove<ComponentFloat>(entity);
-        buffer.Delete(entity);
+        buffer.Destroy(entity);
 
         buffer.Execute().Dispose();
 
@@ -975,7 +975,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void ClearBufferDelete()
+    public void ClearBufferDestroy()
     {
         var world = new World();
         var cmd = new EcsCommandBuffer(world);
@@ -986,8 +986,8 @@ public class EcsCommandBufferTests
         var e = eb.Resolve();
         r.Dispose();
 
-        // Delete entity, then clear buffer
-        cmd.Delete(e);
+        // Destroy entity, then clear buffer
+        cmd.Destroy(e);
         cmd.Clear();
         cmd.Execute().Dispose();
 
@@ -997,7 +997,7 @@ public class EcsCommandBufferTests
     }
 
     [TestMethod]
-    public void ClearBufferDeleteArchetype()
+    public void ClearBufferDestroyArchetype()
     {
         var world = new World();
         var cmd = new EcsCommandBuffer(world);
@@ -1008,8 +1008,8 @@ public class EcsCommandBufferTests
         var e = eb.Resolve();
         r.Dispose();
 
-        // Delete archetypes, then clear buffer
-        cmd.Delete(new QueryBuilder().Include<Component0>().Build(world));
+        // Destroy archetypes, then clear buffer
+        cmd.Destroy(new QueryBuilder().Include<Component0>().Build(world));
         cmd.Clear();
         cmd.Execute().Dispose();
 

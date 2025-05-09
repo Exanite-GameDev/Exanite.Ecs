@@ -65,7 +65,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
 
     /// <summary>
     /// Check if this Entity is in a phantom state. i.e. automatically excluded from queries
-    /// and automatically deleted when the last IPhantomComponent component is removed.
+    /// and automatically destroyed when the last IPhantomComponent component is removed.
     /// </summary>
     /// <returns>true if this entity is a phantom. False if it does not exist or is not a phantom.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

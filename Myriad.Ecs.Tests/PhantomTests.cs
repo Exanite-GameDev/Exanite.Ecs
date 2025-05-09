@@ -50,8 +50,8 @@ public class PhantomTests
         cmd.Create().Set(new TestPhantom0()).Set(new ComponentInt32(42));
         var e = cmd.Execute()[0];
 
-        // Delete it, so it becomes a phantom
-        cmd.Delete(e);
+        // Destroy it, so it becomes a phantom
+        cmd.Destroy(e);
         cmd.Execute().Dispose();
 
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -61,7 +61,7 @@ public class PhantomTests
     }
 
     [TestMethod]
-    public void DeletePhantom()
+    public void DestroyPhantom()
     {
         var w = new World();
 
@@ -76,16 +76,16 @@ public class PhantomTests
         Assert.IsTrue(e.Exists());
         Assert.IsFalse(e.IsPhantom());
 
-        // Delete it
-        cmd.Delete(e);
+        // Destroy it
+        cmd.Destroy(e);
         cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
         Assert.IsTrue(e.Exists());
         Assert.IsTrue(e.IsPhantom());
 
-        // Delete it again
-        cmd.Delete(e);
+        // Destroy it again
+        cmd.Destroy(e);
         cmd.Execute().Dispose();
 
         // Entity should no longer exist at all
@@ -108,8 +108,8 @@ public class PhantomTests
         Assert.IsTrue(e.Exists());
         Assert.IsFalse(e.IsPhantom());
 
-        // Delete it
-        cmd.Delete(e);
+        // Destroy it
+        cmd.Destroy(e);
         cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
@@ -128,7 +128,7 @@ public class PhantomTests
     }
 
     [TestMethod]
-    public void AutoDeletePhantom()
+    public void AutoDestroyPhantom()
     {
         var w = new World();
 
@@ -143,8 +143,8 @@ public class PhantomTests
         Assert.IsTrue(e.Exists());
         Assert.IsFalse(e.IsPhantom());
 
-        // Delete it
-        cmd.Delete(e);
+        // Destroy it
+        cmd.Destroy(e);
         cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
@@ -161,7 +161,7 @@ public class PhantomTests
         Assert.IsTrue(e.IsPhantom());
         Assert.IsFalse(e.HasComponent<TestPhantom1>());
 
-        // Remove one more phantom component, this is the final one so it should be auto deleted.
+        // Remove one more phantom component, this is the final one so it should be auto destroyed.
         cmd.Remove<TestPhantom0>(e);
         cmd.Execute().Dispose();
 
@@ -170,7 +170,7 @@ public class PhantomTests
     }
 
     [TestMethod]
-    public void AddPhantomComponentAndDelete()
+    public void AddPhantomComponentAndDestroy()
     {
         var w = new World();
 
@@ -185,9 +185,9 @@ public class PhantomTests
         Assert.IsTrue(e.Exists());
         Assert.IsFalse(e.IsPhantom());
 
-        // Add a phantom component and then delete it
+        // Add a phantom component and then destroy it
         cmd.Set(e, new TestPhantom0());
-        cmd.Delete(e);
+        cmd.Destroy(e);
         cmd.Execute().Dispose();
 
         // Is the entity valid but no longer alive
@@ -197,7 +197,7 @@ public class PhantomTests
     }
 
     [TestMethod]
-    public void DeleteAndAddPhantomComponent()
+    public void DestroyAndAddPhantomComponent()
     {
         var w = new World();
 
@@ -212,8 +212,8 @@ public class PhantomTests
         Assert.IsTrue(e.Exists());
         Assert.IsFalse(e.IsPhantom());
 
-        // Delete it and also add a phantom component
-        cmd.Delete(e);
+        // Destroy it and also add a phantom component
+        cmd.Destroy(e);
         cmd.Set(e, new TestPhantom0());
         cmd.Execute().Dispose();
 
@@ -224,7 +224,7 @@ public class PhantomTests
     }
 
     [TestMethod]
-    public void SimultaneousRemoveAndDelete()
+    public void SimultaneousRemoveAndDestroy()
     {
         var w = new World();
 
@@ -235,9 +235,9 @@ public class PhantomTests
         var e = eb.Resolve();
         resolver.Dispose();
 
-        // Delete entity and remove phantom in one go
+        // Destroy entity and remove phantom in one go
         cmd.Remove<TestPhantom0>(e);
-        cmd.Delete(e);
+        cmd.Destroy(e);
         cmd.Execute().Dispose();
 
         Assert.IsFalse(e.IsAlive());

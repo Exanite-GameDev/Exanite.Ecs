@@ -35,8 +35,8 @@ public sealed partial class EcsCommandBuffer
 
     private readonly Dictionary<Entity, EntityModificationData> entityModifications = [];
 
-    private readonly List<Entity> deletes = [];
-    private readonly List<QueryDescription> queryDeletes = [];
+    private readonly List<Entity> destroys = [];
+    private readonly List<QueryDescription> queryDestroys = [];
 
     private readonly OrderedListSet<Entity> maybeAddingPhantomComponent = [];
 
@@ -95,8 +95,8 @@ public sealed partial class EcsCommandBuffer
 
         archetypeEdges.Clear();
 
-        deletes.Clear();
-        queryDeletes.Clear();
+        destroys.Clear();
+        queryDestroys.Clear();
         maybeAddingPhantomComponent.Clear();
         tempComponentIdSet.Clear();
 
@@ -134,9 +134,9 @@ public sealed partial class EcsCommandBuffer
         // Create buffered entities.
         CreateBufferedEntities(resolver);
 
-        // Delete entities, this must occur before structural changes because it may trigger new structural changes
+        // Destroy entities, this must occur before structural changes because it may trigger new structural changes
         // by adding a new phantom component.
-        DeleteEntities();
+        DestroyEntities();
 
         // Structural changes (add/remove components)
         ApplyStructuralChanges();
@@ -159,9 +159,9 @@ public sealed partial class EcsCommandBuffer
         return resolver;
     }
 
-    private void DeleteEntities()
+    private void DestroyEntities()
     {
-        foreach (var query in queryDeletes)
+        foreach (var query in queryDestroys)
         {
             foreach (var archetype in query.GetArchetypes())
             {
@@ -170,14 +170,14 @@ public sealed partial class EcsCommandBuffer
                     continue;
                 }
 
-                World.DeleteImmediate(archetype);
+                World.DestroyImmediate(archetype);
             }
         }
-        queryDeletes.Clear();
+        queryDestroys.Clear();
 
-        foreach (var entity in deletes)
+        foreach (var entity in destroys)
         {
-            // Skip deleted entities
+            // Skip destroyed entities
             if (!entity.Exists())
             {
                 continue;
@@ -194,8 +194,8 @@ public sealed partial class EcsCommandBuffer
                 // Raise entity removed event
                 World.EventBus.Raise(new EntityRemovedEvent(entity.EntityId.ToEntity(World)));
 
-                // Delete entity
-                World.DeleteImmediate(entity.EntityId);
+                // Destroy entity
+                World.DestroyImmediate(entity.EntityId);
 
                 // Return objects to pools
                 if (entityModifications.Remove(entity, out var mod))
@@ -215,11 +215,11 @@ public sealed partial class EcsCommandBuffer
             }
         }
 
-        deletes.Clear();
+        destroys.Clear();
 
         return;
 
-        // Check if this entity should not be deleted, because a phantom component is being added
+        // Check if this entity should not be destroyed, because a phantom component is being added
         bool IsAddingPhantomComponent(Entity entity)
         {
             if (maybeAddingPhantomComponent.Contains(entity) && entityModifications.TryGetValue(entity, out var mod) && mod.Sets != null)
@@ -283,11 +283,11 @@ public sealed partial class EcsCommandBuffer
                 // Check if the entity will have any phantom components after this change
                 var destHasPhantomComponents = tempComponentIdSet.Any(static a => a.IsPhantomComponent);
 
-                // Entity must be auto deleted if, after the change, it will be a `Phantom` but not have any phantom components
-                var autodelete = tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
-                if (autodelete)
+                // Entity must be auto destroyed if, after the change, it will be a `Phantom` but not have any phantom components
+                var autodestroy = tempComponentIdSet.Contains(ComponentId.Get<ComponentPhantom>()) && !destHasPhantomComponents;
+                if (autodestroy)
                 {
-                    World.DeleteImmediate(entity.EntityId);
+                    World.DestroyImmediate(entity.EntityId);
                 }
                 else
                 {
@@ -453,29 +453,29 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
-    /// Delete an entity.
+    /// Destroy an entity.
     /// </summary>
-    public void Delete(Entity entity)
+    public void Destroy(Entity entity)
     {
         HasBufferedOperations = true;
 
-        deletes.Add(entity);
+        destroys.Add(entity);
     }
 
     /// <summary>
-    /// Bulk delete entities.
+    /// Bulk destroy entities.
     /// </summary>
-    public void Delete(List<Entity> entities)
+    public void Destroy(List<Entity> entities)
     {
         HasBufferedOperations = true;
 
-        deletes.AddRange(entities);
+        destroys.AddRange(entities);
     }
 
     /// <summary>
-    /// Bulk delete all entities which match the given query.
+    /// Bulk destroy all entities which match the given query.
     /// </summary>
-    public void Delete(QueryDescription entities)
+    public void Destroy(QueryDescription entities)
     {
         if (entities.World != World)
         {
@@ -484,7 +484,7 @@ public sealed partial class EcsCommandBuffer
 
         HasBufferedOperations = true;
 
-        queryDeletes.Add(entities);
+        queryDestroys.Add(entities);
     }
 
     internal void SetBuffered<T>(uint id, T value) where T : IComponent

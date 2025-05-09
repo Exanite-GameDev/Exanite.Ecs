@@ -53,11 +53,11 @@ public class EventTests
             {
                 foreach (var entity in chunk.Entities.Span)
                 {
-                    commandBuffer.Delete(entity);
+                    commandBuffer.Destroy(entity);
                 }
             }
         }
-        commandBuffer.Delete(allEntitiesQuery);
+        commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
@@ -82,7 +82,7 @@ public class EventTests
 
         // Destroy entities
         var allEntitiesQuery = new QueryBuilder().Build(world);
-        commandBuffer.Delete(allEntitiesQuery);
+        commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);

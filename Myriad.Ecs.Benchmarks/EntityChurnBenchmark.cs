@@ -34,7 +34,7 @@ public class EntityChurnBenchmark
             }
 
             // Destroy all previously created entities
-            buffer.Delete(alive);
+            buffer.Destroy(alive);
             alive.Clear();
 
             // Execute

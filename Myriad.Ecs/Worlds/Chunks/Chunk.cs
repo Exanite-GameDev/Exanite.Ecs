@@ -177,7 +177,7 @@ public sealed class Chunk
             return;
         }
 
-        // If we did not just delete the top entity into place then swap the top
+        // If we did not just destroy the top entity into place then swap the top
         // entity down into this slot to keep the chunk continuous.
         if (entityIndex != EntityCount)
         {

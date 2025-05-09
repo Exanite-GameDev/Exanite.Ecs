@@ -88,14 +88,14 @@ public sealed class World : IDisposable
 
     #endregion
 
-    internal void DeleteImmediate(EntityId delete)
+    internal void DestroyImmediate(EntityId destroy)
     {
         // Get the EntityInfo for this entity
-        ref var entityInfo = ref entities[delete.Id];
+        ref var entityInfo = ref entities[destroy.Id];
 
         // Check this is still a valid entity reference. Early exit if the entity
         // is already dead.
-        if (entityInfo.Version != delete.Version)
+        if (entityInfo.Version != destroy.Version)
         {
             return;
         }
@@ -107,10 +107,10 @@ public sealed class World : IDisposable
         entityInfo.Version++;
 
         // Store this ID for re-use later
-        deadEntities.Add(delete);
+        deadEntities.Add(destroy);
     }
 
-    internal void DeleteImmediate(Archetype archetype)
+    internal void DestroyImmediate(Archetype archetype)
     {
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         if (archetype is { HasPhantomComponents: false, IsPhantom: false })

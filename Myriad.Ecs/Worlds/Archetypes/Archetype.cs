@@ -94,7 +94,7 @@ public sealed class Archetype
     private readonly Stack<Chunk> spareChunks = new(ChunkHotSpares);
 
     /// <summary>
-    /// The archetype that entities should be moved to when deleted. Only non-null if <c>HasPhantomComponents &amp; !IsPhantom</c>.
+    /// The archetype that entities should be moved to when destroyed. Only non-null if <c>HasPhantomComponents &amp; !IsPhantom</c>.
     /// </summary>
     private readonly Archetype? phantomDestination;
 
@@ -139,7 +139,7 @@ public sealed class Archetype
             HasPhantomComponents |= component.IsPhantomComponent;
         }
 
-        // Get the destination archetype for deleted entities, if they become phantoms
+        // Get the destination archetype for destroyed entities, if they become phantoms
         if (HasPhantomComponents && !IsPhantom)
         {
             var c = new OrderedListSet<ComponentId>(components)
@@ -160,7 +160,7 @@ public sealed class Archetype
     }
 
     /// <summary>
-    /// Delete every Entity in this archetype
+    /// Destroy every Entity in this archetype
     /// </summary>
     internal void Clear()
     {
@@ -191,7 +191,7 @@ public sealed class Archetype
                 chunk.Clear();
             }
 
-            // Move some chunks to hot spares and then delete the rest
+            // Move some chunks to hot spares and then destroy the rest
             foreach (var chunk in chunks)
             {
                 if (spareChunks.Count < ChunkHotSpares)

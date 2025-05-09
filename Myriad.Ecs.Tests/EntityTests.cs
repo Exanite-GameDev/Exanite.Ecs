@@ -115,7 +115,7 @@ public class EntityTests
         var entity = e.Resolve();
         resolver.Dispose();
 
-        b.Delete(entity);
+        b.Destroy(entity);
         b.Execute().Dispose();
 
         Assert.ThrowsException<ArgumentException>(() =>
@@ -154,7 +154,7 @@ public class EntityTests
 
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));
 
-        b.Delete(entity);
+        b.Destroy(entity);
         b.Execute().Dispose();
 
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>()));
