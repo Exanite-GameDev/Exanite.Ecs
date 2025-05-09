@@ -23,7 +23,7 @@ internal class EventLogger : IAllEventHandler
 /// <summary>
 /// A world contains all entities.
 /// </summary>
-public sealed class World : IDisposable, IPool<EcsCommandBuffer>
+public sealed class World : IDisposable
 {
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
@@ -61,7 +61,7 @@ public sealed class World : IDisposable, IPool<EcsCommandBuffer>
 
     #region Command Buffer Pool
 
-    public Pool<EcsCommandBuffer>.Handle Acquire(out EcsCommandBuffer value)
+    public Pool<EcsCommandBuffer>.Handle AcquireEventBuffer(out EcsCommandBuffer value)
     {
         lock (commandBufferPool)
         {
@@ -69,7 +69,7 @@ public sealed class World : IDisposable, IPool<EcsCommandBuffer>
         }
     }
 
-    public EcsCommandBuffer Acquire()
+    public EcsCommandBuffer AcquireEventBuffer()
     {
         lock (commandBufferPool)
         {
@@ -77,7 +77,7 @@ public sealed class World : IDisposable, IPool<EcsCommandBuffer>
         }
     }
 
-    public void Release(EcsCommandBuffer value)
+    public void ReleaseEventBuffer(EcsCommandBuffer value)
     {
         lock (commandBufferPool)
         {
