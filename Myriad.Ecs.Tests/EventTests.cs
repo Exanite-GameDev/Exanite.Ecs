@@ -88,6 +88,66 @@ public class EventTests
         Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
     }
 
+    [TestMethod]
+    public void DestroyingEntities_WithPhantomComponents_UsingEntities_RaisesEvents()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireEventBuffer();
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create().Set(new ComponentPhantomTest());
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
+
+        // Destroy entities
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        foreach (var archetype in allEntitiesQuery.GetArchetypes())
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    commandBuffer.Destroy(entity);
+                }
+            }
+        }
+        commandBuffer.Destroy(allEntitiesQuery);
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
+    }
+
+    [TestMethod]
+    public void DestroyingEntities_WithPhantomComponents_UsingQuery_RaisesEvents()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireEventBuffer();
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create().Set(new ComponentPhantomTest());
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
+
+        // Destroy entities
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        commandBuffer.Destroy(allEntitiesQuery);
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
+    }
+
     private class WorldEventHandler :
         IEventHandler<EntityAddedEvent>,
         IEventHandler<EntityRemovedEvent>,
@@ -96,13 +156,13 @@ public class EventTests
         IEventHandler<ComponentRemoved<ComponentTest>>,
         IEventHandler<ComponentDestroyed<ComponentTest>>
     {
-        public int EntityAddedCount { get; set; }
-        public int EntityRemovedCount { get; set; }
+        public int EntityAddedCount { get; private set; }
+        public int EntityRemovedCount { get; private set; }
 
-        public int ComponentAddedCount { get; set; }
-        public int ComponentModifiedCount { get; set; }
-        public int ComponentRemovedCount { get; set; }
-        public int ComponentDestroyedCount { get; set; }
+        public int ComponentAddedCount { get; private set; }
+        public int ComponentModifiedCount { get; private set; }
+        public int ComponentRemovedCount { get; private set; }
+        public int ComponentDestroyedCount { get; private set; }
 
         public WorldEventHandler RegisterAll(World world)
         {
@@ -147,5 +207,6 @@ public class EventTests
         }
     }
 
+    private struct ComponentPhantomTest : IComponentPhantom;
     private struct ComponentTest : IComponent;
 }
