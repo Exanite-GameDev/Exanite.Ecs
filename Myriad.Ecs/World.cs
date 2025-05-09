@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exanite.Core.Events;
 using Exanite.Core.Pooling;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
@@ -30,6 +31,8 @@ public sealed class World : IDisposable, IPool<EcsCommandBuffer>
     internal int ArchetypesCount => archetypes.Count;
 
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
+
+    public EventBus EventBus { get; } = new();
 
     public World()
     {
