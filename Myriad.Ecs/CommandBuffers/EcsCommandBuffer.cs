@@ -217,31 +217,36 @@ public sealed partial class EcsCommandBuffer
 
                 // Calculate the hash and component set of the new archetype
                 var hash = currentArchetype.Hash;
-                if (mod.Sets != null)
                 {
-                    foreach (var id in mod.Sets.Keys)
+                    // Component adds/sets
+                    if (mod.Sets != null)
                     {
-                        if (tempComponentIdSet.Add(id))
+                        foreach (var id in mod.Sets.Keys)
                         {
-                            hash = hash.Toggle(id);
-                            moveRequired = true;
-                        }
-                    }
-                }
-                if (mod.Removes != null)
-                {
-                    foreach (var remove in mod.Removes)
-                    {
-                        if (tempComponentIdSet.Remove(remove))
-                        {
-                            hash = hash.Toggle(remove);
-                            moveRequired = true;
+                            if (tempComponentIdSet.Add(id))
+                            {
+                                hash = hash.Toggle(id);
+                                moveRequired = true;
+                            }
                         }
                     }
 
-                    // Recycle remove set
-                    mod.Removes.Clear();
-                    SimplePool.Release(mod.Removes);
+                    // Component removes
+                    if (mod.Removes != null)
+                    {
+                        foreach (var remove in mod.Removes)
+                        {
+                            if (tempComponentIdSet.Remove(remove))
+                            {
+                                hash = hash.Toggle(remove);
+                                moveRequired = true;
+                            }
+                        }
+
+                        // Recycle remove set
+                        mod.Removes.Clear();
+                        SimplePool.Release(mod.Removes);
+                    }
                 }
 
                 // Get the location for the entity, moving it to a new archetype first if necessary
