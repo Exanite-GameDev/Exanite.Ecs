@@ -30,7 +30,6 @@ internal class ComponentSetterCollection
         if (!components.TryGetValue(id, out var list))
         {
             list = SimplePool<GenericComponentList<T>>.Acquire();
-            list.Clear();
             components.Add(id, list);
         }
 
@@ -77,7 +76,7 @@ internal class ComponentSetterCollection
 
         void Recycle();
 
-        void Write(int index, EntityStorageLocation dest);
+        void Write(int index, EntityStorageLocation location);
     }
 
     [DebuggerDisplay("Count = {values.Count}")]
@@ -103,12 +102,13 @@ internal class ComponentSetterCollection
 
         public void Recycle()
         {
+            Clear();
             SimplePool.Release(this);
         }
 
-        public void Write(int index, EntityStorageLocation dest)
+        public void Write(int index, EntityStorageLocation location)
         {
-            dest.GetMutable<T>() = values[index];
+            location.GetMutable<T>() = values[index];
         }
     }
 
