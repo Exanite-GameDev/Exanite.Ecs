@@ -1,7 +1,7 @@
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
-/// Raised when an entity is added to the world.
+/// Raised after an entity is added to the world.
 /// </summary>
 public readonly ref struct EntityAddedEvent
 {
@@ -15,7 +15,7 @@ public readonly ref struct EntityAddedEvent
 }
 
 /// <summary>
-/// Raised when an entity becomes a phantom entity, but before entity destruction.
+/// Raised before an entity becomes a phantom entity or is destroyed.
 /// </summary>
 public readonly ref struct EntityRemovedEvent
 {
@@ -29,7 +29,7 @@ public readonly ref struct EntityRemovedEvent
 }
 
 /// <summary>
-/// Raised when a component is either added or set. When setting, this event will contain the new component value.
+/// Raised after a component is either added or set. When setting, this event will contain the new component value.
 /// </summary>
 public readonly ref struct ComponentAdded<T> where T : IComponent
 {
@@ -45,41 +45,41 @@ public readonly ref struct ComponentAdded<T> where T : IComponent
 }
 
 /// <summary>
-/// Raised when an existing component is set.
+/// Raised after an existing component is set.
 /// </summary>
 public readonly ref struct ComponentModified<T> where T : IComponent
 {
     public World World => Entity.World;
     public readonly Entity Entity;
-    public readonly ref T OldValue;
+    public readonly T OldValue;
     public readonly ref T NewValue;
 
-    public ComponentModified(Entity entity, ref T oldValue, ref T newValue)
+    public ComponentModified(Entity entity, T oldValue, ref T newValue)
     {
         Entity = entity;
+        OldValue = oldValue;
         NewValue = ref newValue;
-        OldValue = ref oldValue;
     }
 }
 
 /// <summary>
-/// Raised when a component is either removed or set. When setting, this event will contain the old component value.
+/// Raised after a component is either removed or set. When setting, this event will contain the old component value.
 /// </summary>
 public readonly ref struct ComponentRemoved<T> where T : IComponent
 {
     public World World => Entity.World;
     public readonly Entity Entity;
-    public readonly ref T Value;
+    public readonly T Value;
 
-    public ComponentRemoved(Entity entity, ref T value)
+    public ComponentRemoved(Entity entity, T value)
     {
         Entity = entity;
-        Value = ref value;
+        Value = value;
     }
 }
 
 /// <summary>
-/// Raised when a component is either removed, set, or when a command buffer set is never applied. When setting, this event will contain the old component value.
+/// Raised after a component is either removed, set, or when a command buffer set is never applied. When setting, this event will contain the old component value.
 /// </summary>
 /// <remarks>
 /// Use this for cleaning up memory and other resources.
