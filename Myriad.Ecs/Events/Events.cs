@@ -29,20 +29,6 @@ public readonly ref struct EntityRemovedEvent
 }
 
 /// <summary>
-/// Raised when an entity is destroyed.
-/// </summary>
-public readonly ref struct EntityDestroyedEvent
-{
-    public World World => Entity.World;
-    public readonly Entity Entity;
-
-    public EntityDestroyedEvent(Entity entity)
-    {
-        Entity = entity;
-    }
-}
-
-/// <summary>
 /// Raised when a component is either added or set. When setting, this event will contain the new component value.
 /// </summary>
 public readonly ref struct ComponentAdded<T> where T : IComponent
