@@ -108,14 +108,14 @@ public sealed class Archetype
         // Build an array where the number at a given index is the index of the component with that ID
         componentIndexByComponentId = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
         Array.Fill(componentIndexByComponentId, -1);
-        var idx = 0;
+        var componentIndex = 0;
         foreach (var component in components)
         {
-            componentTypesByComponentIndex[idx] = component.Type;
-            componentIndexByComponentId[component.Value] = idx;
-            componentIdByComponentIndex[idx] = component;
+            componentTypesByComponentIndex[componentIndex] = component.Type;
+            componentIndexByComponentId[component.Value] = componentIndex;
+            componentIdByComponentIndex[componentIndex] = component;
 
-            idx++;
+            componentIndex++;
         }
     }
 

@@ -124,11 +124,11 @@ public class EcsCommandBufferTests
                     break;
                 }
 
-                var idx = rng.Next(0, alive.Count);
-                var ent = alive[idx];
+                var index = rng.Next(0, alive.Count);
+                var ent = alive[index];
                 Assert.IsTrue(ent.Exists());
                 buffer.Destroy(ent);
-                alive.RemoveAt(idx);
+                alive.RemoveAt(index);
                 dead.Add(ent);
             }
 

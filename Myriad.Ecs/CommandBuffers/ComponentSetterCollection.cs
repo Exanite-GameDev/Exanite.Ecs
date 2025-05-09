@@ -33,8 +33,8 @@ internal class ComponentSetterCollection
             components.Add(id, list);
         }
 
-        var idx = ((GenericComponentList<T>)list).Add(value);
-        return new SetterId(id, idx);
+        var index = ((GenericComponentList<T>)list).Add(value);
+        return new SetterId(id, index);
     }
 
     public void Overwrite<T>(SetterId index, T value) where T : IComponent
@@ -61,10 +61,10 @@ internal class ComponentSetterCollection
         /// </summary>
         internal readonly int Index;
 
-        internal SetterId(ComponentId id, int idx)
+        internal SetterId(ComponentId id, int index)
         {
             Id = id;
-            Index = idx;
+            Index = index;
         }
     }
 
