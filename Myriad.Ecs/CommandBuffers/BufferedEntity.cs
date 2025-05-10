@@ -35,7 +35,7 @@ public readonly record struct BufferedEntity
     }
 
     /// <summary>
-    /// Add a component to this entity.
+    /// Add or overwrite a component attached to this entity.
     /// </summary>
     /// <typeparam name="T">The type of component to add.</typeparam>
     /// <param name="value">The value of the component to add.</param>
