@@ -841,25 +841,25 @@ public class EcsCommandBufferTests
         buffer.Execute().Dispose();
 
         // Check 1 has everything expected
-        Assert.AreEqual(4, entity0.ComponentTypes.Count);
+        Assert.AreEqual(4, entity0.ComponentIds.Count);
         entity0.GetComponent<Component0>();
         entity0.GetComponent<Component1>();
         entity0.GetComponent<Component2>();
         entity0.GetComponent<Component3>();
 
         // Check 2 has everything expected
-        Assert.AreEqual(2, entity1.ComponentTypes.Count);
+        Assert.AreEqual(2, entity1.ComponentIds.Count);
         entity1.GetComponent<Component1>();
         entity1.GetComponent<Component2>();
 
         // Check 3 has everything expected
-        Assert.AreEqual(3, entity2.ComponentTypes.Count);
+        Assert.AreEqual(3, entity2.ComponentIds.Count);
         entity2.GetComponent<Component1>();
         entity2.GetComponent<Component2>();
         entity2.GetComponent<Component4>();
 
         // Check other is unchanged
-        Assert.AreEqual(3, entity3.ComponentTypes.Count);
+        Assert.AreEqual(3, entity3.ComponentIds.Count);
         entity3.GetComponent<Component0>();
         entity3.GetComponent<Component1>();
         entity3.GetComponent<Component2>();

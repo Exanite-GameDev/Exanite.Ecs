@@ -88,20 +88,31 @@ public sealed class World : IDisposable
 
     #endregion
 
-    internal void DestroyImmediate(EntityId destroy)
+    internal void DestroyImmediate(EntityId entityId)
     {
+        // Get entity
+        var entity = entityId.ToEntity(this);
+
         // Get the location for this entity
-        ref var location = ref entities[destroy.Id];
+        ref var location = ref entities[entityId.Id];
 
         // Check this is still a valid entity reference. Early exit if the entity
         // is already dead.
-        if (location.Version != destroy.Version)
+        if (location.Version != entityId.Version)
         {
             return;
         }
 
+        // Raise component removed events
+        foreach (var componentId in entity.ComponentIds)
+        {
+            // TODO: Cache this in Archetype class
+            var eventDispatcher = ComponentRegistry.GetComponentEventDispatcher(componentId);
+            eventDispatcher.RaiseComponentRemoved(this, entity);
+        }
+
         // Raise entity removed event
-        EventBus.Raise(new EntityRemovedEvent(destroy.ToEntity(this)));
+        EventBus.Raise(new EntityDestroyedEvent(entity));
 
         // Notify archetype this entity is dead
         location.Chunk.Archetype.RemoveEntity(location);
@@ -110,7 +121,7 @@ public sealed class World : IDisposable
         location.Version++;
 
         // Store this ID for re-use later
-        deadEntities.Add(destroy);
+        deadEntities.Add(entityId);
     }
 
     internal void DestroyImmediate(Archetype archetype)
@@ -121,8 +132,16 @@ public sealed class World : IDisposable
         {
             foreach (var entity in chunk.Entities.Span)
             {
+                // Raise component removed events
+                foreach (var componentId in entity.ComponentIds)
+                {
+                    // TODO: Cache this in Archetype class
+                    var eventDispatcher = ComponentRegistry.GetComponentEventDispatcher(componentId);
+                    eventDispatcher.RaiseComponentRemoved(this, entity);
+                }
+
                 // Raise entity removed event
-                EventBus.Raise(new EntityRemovedEvent(entity));
+                EventBus.Raise(new EntityDestroyedEvent(entity));
 
                 // Get the location for this entity
                 ref var location = ref entities[entity.EntityId.Id];

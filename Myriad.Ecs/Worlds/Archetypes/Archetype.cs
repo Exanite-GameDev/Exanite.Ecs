@@ -127,7 +127,7 @@ public sealed class Archetype
         var entityLocation = AddEntity(entity, ref location);
 
         // Raise entity added event
-        World.EventBus.Raise(new EntityAddedEvent());
+        World.EventBus.Raise(new EntityCreatedEvent());
 
         return entityLocation;
     }

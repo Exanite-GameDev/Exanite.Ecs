@@ -1,28 +1,28 @@
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
-/// Raised after an entity is added to the world.
+/// Raised after an entity is created and added to the world.
 /// </summary>
-public readonly ref struct EntityAddedEvent
+public readonly ref struct EntityCreatedEvent
 {
     public World World => Entity.World;
     public readonly Entity Entity;
 
-    public EntityAddedEvent(Entity entity)
+    public EntityCreatedEvent(Entity entity)
     {
         Entity = entity;
     }
 }
 
 /// <summary>
-/// Raised before an entity becomes a phantom entity or is destroyed.
+/// Raised before an entity is destroyed and removed from the world.
 /// </summary>
-public readonly ref struct EntityRemovedEvent
+public readonly ref struct EntityDestroyedEvent
 {
     public World World => Entity.World;
     public readonly Entity Entity;
 
-    public EntityRemovedEvent(Entity entity)
+    public EntityDestroyedEvent(Entity entity)
     {
         Entity = entity;
     }

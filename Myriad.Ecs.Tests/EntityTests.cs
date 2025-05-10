@@ -98,8 +98,8 @@ public class EntityTests
         using var resolver = b.Execute();
         var entity = e.Resolve();
 
-        Assert.AreEqual(1, entity.ComponentTypes.Count);
-        Assert.IsTrue(entity.ComponentTypes.Contains(ComponentId.Get<ComponentInt16>()));
+        Assert.AreEqual(1, entity.ComponentIds.Count);
+        Assert.IsTrue(entity.ComponentIds.Contains(ComponentId.Get<ComponentInt16>()));
     }
 
     [TestMethod]
@@ -118,7 +118,7 @@ public class EntityTests
 
         Assert.ThrowsException<ArgumentException>(() =>
         {
-            var c = entity.ComponentTypes.Count;
+            var c = entity.ComponentIds.Count;
         });
     }
 

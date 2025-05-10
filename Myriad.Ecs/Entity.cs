@@ -37,12 +37,12 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get the set of components which this entity currently has
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ComponentTypes => EntityId.GetComponents(World);
+    public ImmutableOrderedListSet<ComponentId> ComponentIds => EntityId.GetComponents(World);
 
     /// <summary>
     /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
     /// </summary>
-    public object[] BoxedComponents => ComponentTypes.Select(GetBoxedComponent).ToArray()!;
+    public object[] BoxedComponents => ComponentIds.Select(GetBoxedComponent).ToArray()!;
 
     internal Entity(EntityId id, World world)
     {
