@@ -5,7 +5,6 @@ using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
