@@ -371,17 +371,19 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Add or overwrite a component attached to an entity.
     /// </summary>
-    public void Set<T>(Entity entity, T value) where T : IComponent
+    public EcsCommandBuffer Set<T>(Entity entity, T value) where T : IComponent
     {
         HasBufferedOperations = true;
 
         SetInternal(entity, value);
+
+        return this;
     }
 
     /// <summary>
     /// Remove a component attached to an entity.
     /// </summary>
-    public void Remove<T>(Entity entity) where T : IComponent
+    public EcsCommandBuffer Remove<T>(Entity entity) where T : IComponent
     {
         HasBufferedOperations = true;
 
@@ -393,32 +395,38 @@ public sealed partial class EcsCommandBuffer
 
         // Remove it from the setters, if it's there
         mod.Sets?.Remove(id);
+
+        return this;
     }
 
     /// <summary>
     /// Destroy an entity.
     /// </summary>
-    public void Destroy(Entity entity)
+    public EcsCommandBuffer Destroy(Entity entity)
     {
         HasBufferedOperations = true;
 
         destroys.Add(entity);
+
+        return this;
     }
 
     /// <summary>
     /// Bulk destroy entities.
     /// </summary>
-    public void Destroy(List<Entity> entities)
+    public EcsCommandBuffer Destroy(List<Entity> entities)
     {
         HasBufferedOperations = true;
 
         destroys.AddRange(entities);
+
+        return this;
     }
 
     /// <summary>
     /// Bulk destroy all entities which match the given query.
     /// </summary>
-    public void Destroy(QueryDescription entities)
+    public EcsCommandBuffer Destroy(QueryDescription entities)
     {
         if (entities.World != World)
         {
@@ -428,6 +436,8 @@ public sealed partial class EcsCommandBuffer
         HasBufferedOperations = true;
 
         queryDestroys.Add(entities);
+
+        return this;
     }
 
     internal void SetBuffered<T>(uint id, T value) where T : IComponent
