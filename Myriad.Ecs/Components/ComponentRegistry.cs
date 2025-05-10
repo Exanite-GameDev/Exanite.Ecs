@@ -83,8 +83,7 @@ internal static class ComponentRegistry
         private readonly Dictionary<ComponentId, Type> typeLookup = [];
         private readonly Dictionary<Type, ComponentId> idLookup = [];
 
-        // Init the first ID to be the one after the default ID. That
-        // means that default is _not_ a valid ID.
+        // 0 represents an invalid ID, so 1 is the first valid ID
         private int nextId = 1;
 
         public ComponentId GetOrAdd(Type type)

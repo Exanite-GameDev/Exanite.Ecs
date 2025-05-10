@@ -9,7 +9,7 @@ namespace Exanite.Myriad.Ecs.Tests;
 public class EventTests
 {
     [TestMethod]
-    public void CreatingEntities_RaisesEvents()
+    public void CreateEntity_RaisesEvent()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -26,10 +26,8 @@ public class EventTests
         Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
     }
 
-    // TODO: Add test cases for destroying entities with phantom components
-
     [TestMethod]
-    public void DestroyingEntities_UsingEntities_RaisesEvents()
+    public void DestroyEntity_UsingEntities_RaisesEvent()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -64,7 +62,7 @@ public class EventTests
     }
 
     [TestMethod]
-    public void DestroyingEntities_UsingQuery_RaisesEvents()
+    public void DestroyEntity_UsingQuery_RaisesEvent()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -86,6 +84,47 @@ public class EventTests
 
         commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.EntityRemovedCount);
+    }
+
+    [TestMethod]
+    public void SetComponent_Once_RaisesAddedEvent()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireEventBuffer();
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create().Set(new Component0());
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
+        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+    }
+
+    [TestMethod]
+    public void SetComponent_Twice_RaisesAddedAndModifiedEvents()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireEventBuffer();
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create()
+                .Set(new Component0())
+                .Set(new Component0());
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityAddedCount);
+        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+        Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
     }
 
     private class WorldEventHandler :
