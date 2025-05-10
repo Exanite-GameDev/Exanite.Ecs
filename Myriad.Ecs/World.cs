@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
-using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
@@ -11,15 +10,6 @@ using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs;
-
-// TODO: Remove after testing
-internal class EventLogger : IAllEventHandler
-{
-    void IAllEventHandler.OnEvent<T>(T e)
-    {
-        typeof(T).Dump("Event type");
-    }
-}
 
 /// <summary>
 /// A world contains all entities.
@@ -50,8 +40,6 @@ public sealed class World : IDisposable
         commandBufferPool = new Pool<EcsCommandBuffer>(
             create: () => new EcsCommandBuffer(this),
             onRelease: commandBuffer => commandBuffer.Clear());
-
-        EventBus.RegisterSendAllTo(new EventLogger());
     }
 
     /// <inheritdoc/>
