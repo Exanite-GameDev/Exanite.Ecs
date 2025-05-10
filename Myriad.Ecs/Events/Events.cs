@@ -49,17 +49,21 @@ public readonly ref struct ComponentAdded<T> where T : IComponent
 /// <br/>
 /// Warning: Modifications without setting through the command buffer will NOT raise this event.
 /// </summary>
+/// <remarks>
+/// This event does not provide the old value because the event cannot guarantee that
+/// the component has not been modified since the previous <see cref="ComponentModified{T}"/> event.
+/// <para/>
+/// Code that relies on the previous component value should store it manually.
+/// </remarks>
 public readonly ref struct ComponentModified<T> where T : IComponent
 {
     public World World => Entity.World;
     public readonly Entity Entity;
-    public readonly T OldValue;
     public readonly ref T NewValue;
 
-    public ComponentModified(Entity entity, T oldValue, ref T newValue)
+    public ComponentModified(Entity entity, ref T newValue)
     {
         Entity = entity;
-        OldValue = oldValue;
         NewValue = ref newValue;
     }
 }
@@ -76,24 +80,6 @@ public readonly ref struct ComponentRemoved<T> where T : IComponent
     public ComponentRemoved(Entity entity, T value)
     {
         Entity = entity;
-        Value = value;
-    }
-}
-
-/// <summary>
-/// Raised after a component is either removed, set, or when a command buffer set is never applied. When setting, this event will contain the old component value.
-/// </summary>
-/// <remarks>
-/// Use this for cleaning up memory and other resources.
-/// </remarks>
-public readonly ref struct ComponentDestroyed<T> where T : IComponent
-{
-    public readonly World World;
-    public readonly T Value;
-
-    public ComponentDestroyed(World world, T value)
-    {
-        World = world;
         Value = value;
     }
 }

@@ -13,7 +13,7 @@ public class EventTests
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireEventBuffer();
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create entities
         var entityAddCount = 10;
@@ -31,7 +31,7 @@ public class EventTests
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireEventBuffer();
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create entities
         var entityAddCount = 10;
@@ -66,7 +66,7 @@ public class EventTests
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireEventBuffer();
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create entities
         var entityAddCount = 10;
@@ -91,7 +91,7 @@ public class EventTests
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireEventBuffer();
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create entities
         var entityAddCount = 10;
@@ -110,7 +110,7 @@ public class EventTests
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireEventBuffer();
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create entities
         var entityAddCount = 10;
@@ -132,8 +132,7 @@ public class EventTests
         IEventHandler<EntityRemovedEvent>,
         IEventHandler<ComponentAdded<Component0>>,
         IEventHandler<ComponentModified<Component0>>,
-        IEventHandler<ComponentRemoved<Component0>>,
-        IEventHandler<ComponentDestroyed<Component0>>
+        IEventHandler<ComponentRemoved<Component0>>
     {
         public int EntityAddedCount { get; private set; }
         public int EntityRemovedCount { get; private set; }
@@ -141,7 +140,6 @@ public class EventTests
         public int ComponentAddedCount { get; private set; }
         public int ComponentModifiedCount { get; private set; }
         public int ComponentRemovedCount { get; private set; }
-        public int ComponentDestroyedCount { get; private set; }
 
         public WorldEventHandler RegisterAll(World world)
         {
@@ -150,7 +148,6 @@ public class EventTests
             world.EventBus.Register<ComponentAdded<Component0>>(this);
             world.EventBus.Register<ComponentModified<Component0>>(this);
             world.EventBus.Register<ComponentRemoved<Component0>>(this);
-            world.EventBus.Register<ComponentDestroyed<Component0>>(this);
 
             return this;
         }
@@ -178,11 +175,6 @@ public class EventTests
         public void OnEvent(ComponentRemoved<Component0> e)
         {
             ComponentRemovedCount++;
-        }
-
-        public void OnEvent(ComponentDestroyed<Component0> e)
-        {
-            ComponentDestroyedCount++;
         }
     }
 }

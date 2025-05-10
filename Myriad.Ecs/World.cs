@@ -62,7 +62,7 @@ public sealed class World : IDisposable
 
     #region Command Buffer Pool
 
-    public Pool<EcsCommandBuffer>.Handle AcquireEventBuffer(out EcsCommandBuffer value)
+    public Pool<EcsCommandBuffer>.Handle AcquireCommandBuffer(out EcsCommandBuffer value)
     {
         lock (commandBufferPool)
         {
@@ -70,7 +70,7 @@ public sealed class World : IDisposable
         }
     }
 
-    public EcsCommandBuffer AcquireEventBuffer()
+    public EcsCommandBuffer AcquireCommandBuffer()
     {
         lock (commandBufferPool)
         {
@@ -78,7 +78,7 @@ public sealed class World : IDisposable
         }
     }
 
-    public void ReleaseEventBuffer(EcsCommandBuffer value)
+    public void ReleaseCommandBuffer(EcsCommandBuffer value)
     {
         lock (commandBufferPool)
         {
