@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Threading;
 
 namespace Exanite.Myriad.Ecs.Components;
 
 /// <summary>
-/// Store a lookup from component type to unique 32 bit ID.
+/// Stores information about component IDs.
 /// </summary>
 internal static class ComponentRegistry
 {
     private static readonly RwLock<State> Lock = new(new State());
 
     /// <summary>
-    /// Get the ID for the given type
+    /// Get the component ID for the given type.
     /// </summary>
-    public static ComponentId Get<T>() where T : IComponent
+    public static ComponentId GetComponentId<T>() where T : IComponent
     {
         var type = typeof(T);
 
         using (var locker = Lock.EnterReadLock())
         {
-            if (locker.Value.TryGet(type, out var value))
+            if (locker.Value.TryGetComponentId(type, out var value))
             {
                 return value;
             }
@@ -30,39 +32,38 @@ internal static class ComponentRegistry
 
         using (var locker = Lock.EnterWriteLock())
         {
-            return locker.Value.GetOrAdd(type);
+            return locker.Value.GetOrAddComponentId(type);
         }
     }
 
     /// <summary>
-    /// Get the ID for the given type
+    /// Get the component ID for the given type.
     /// </summary>
-    public static ComponentId Get(Type type)
+    public static ComponentId GetComponentId(Type type)
     {
-        TypeCheck(type);
-
         using (var locker = Lock.EnterReadLock())
         {
-            if (locker.Value.TryGet(type, out var value))
+            if (locker.Value.TryGetComponentId(type, out var value))
             {
                 return value;
             }
         }
 
+        EnsureIsComponentType(type);
         using (var locker = Lock.EnterWriteLock())
         {
-            return locker.Value.GetOrAdd(type);
+            return locker.Value.GetOrAddComponentId(type);
         }
     }
 
     /// <summary>
-    /// Get the type for a given ID
+    /// Get the type for a given component ID.
     /// </summary>
-    public static Type Get(ComponentId id)
+    public static Type GetComponentType(ComponentId id)
     {
         using var locker = Lock.EnterReadLock();
 
-        if (!locker.Value.TryGet(id, out var type))
+        if (!locker.Value.TryGetComponentType(id, out var type))
         {
             throw new InvalidOperationException("Unknown component ID");
         }
@@ -70,7 +71,22 @@ internal static class ComponentRegistry
         return type;
     }
 
-    private static void TypeCheck(Type type)
+    /// <summary>
+    /// Get the type for a given component ID.
+    /// </summary>
+    internal static ComponentEventDispatcher GetComponentEventDispatcher(ComponentId id)
+    {
+        using var locker = Lock.EnterReadLock();
+
+        if (!locker.Value.TryGetComponentEventDispatcher(id, out var eventDispatcher))
+        {
+            throw new InvalidOperationException("Unknown component ID");
+        }
+
+        return eventDispatcher;
+    }
+
+    private static void EnsureIsComponentType(Type type)
     {
         if (!typeof(IComponent).IsAssignableFrom(type))
         {
@@ -80,39 +96,56 @@ internal static class ComponentRegistry
 
     private class State
     {
-        private readonly Dictionary<ComponentId, Type> typeLookup = [];
-        private readonly Dictionary<Type, ComponentId> idLookup = [];
+        private readonly Dictionary<ComponentId, Type> typesByComponentId = [];
+        private readonly Dictionary<ComponentId, ComponentEventDispatcher> eventDispatchersByComponentId = [];
+
+        private readonly Dictionary<Type, ComponentId> componentIdByType = [];
 
         // 0 represents an invalid ID, so 1 is the first valid ID
         private int nextId = 1;
 
-        public ComponentId GetOrAdd(Type type)
+        public ComponentId GetOrAddComponentId(Type type)
         {
-            if (!idLookup.TryGetValue(type, out var value))
+            if (!componentIdByType.TryGetValue(type, out var componentId))
             {
-                var id = nextId++;
+                // Get component ID
+                componentId = new ComponentId(nextId);
+                nextId++;
 
-                // Store it for future lookups
-                value = new ComponentId(id);
-                idLookup[type] = value;
-                typeLookup[value] = type;
+                // Store for lookups
+                typesByComponentId[componentId] = type;
+                componentIdByType[type] = componentId;
 
-                // Since we've discovered this component we're likely to need
-                // arrays made for it later. Prepare the array factory for that.
-                ArrayFactory.Prepare(type);
+                // Initialize the array factory for this type
+                ArrayFactory.Initialize(type);
+
+                // Initialize the event dispatcher for this type
+                var eventDispatcherType = typeof(ComponentEventDispatcher<>).MakeGenericType(type);
+                var untypedEventDispatcher = Activator.CreateInstance(eventDispatcherType);
+                if (untypedEventDispatcher is not ComponentEventDispatcher eventDispatcher)
+                {
+                    throw new GuardException($"Failed to create event dispatcher for type: {type}");
+                }
+
+                eventDispatchersByComponentId[componentId] = eventDispatcher;
             }
 
-            return value;
+            return componentId;
         }
 
-        public bool TryGet(Type type, out ComponentId id)
+        public bool TryGetComponentId(Type type, out ComponentId id)
         {
-            return idLookup.TryGetValue(type, out id);
+            return componentIdByType.TryGetValue(type, out id);
         }
 
-        public bool TryGet(ComponentId id, [MaybeNullWhen(false)] out Type type)
+        public bool TryGetComponentType(ComponentId id, [MaybeNullWhen(false)] out Type type)
         {
-            return typeLookup.TryGetValue(id, out type);
+            return typesByComponentId.TryGetValue(id, out type);
+        }
+
+        public bool TryGetComponentEventDispatcher(ComponentId id, [MaybeNullWhen(false)] out ComponentEventDispatcher eventDispatcher)
+        {
+            return eventDispatchersByComponentId.TryGetValue(id, out eventDispatcher);
         }
     }
 }

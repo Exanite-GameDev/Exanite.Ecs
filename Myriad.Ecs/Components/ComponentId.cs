@@ -17,7 +17,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// <summary>
     /// The <see cref="System.Type"/> of the component this ID is for.
     /// </summary>
-    public Type Type => ComponentRegistry.Get(this);
+    public Type Type => ComponentRegistry.GetComponentType(this);
 
     internal ComponentId(int value)
     {
@@ -42,7 +42,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/>.</exception>
     public static ComponentId Get(Type type)
     {
-        return ComponentRegistry.Get(type);
+        return ComponentRegistry.GetComponentId(type);
     }
 
     /// <summary>
@@ -50,6 +50,6 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// </summary>
     public static ComponentId Get<T>() where T : IComponent
     {
-        return ComponentRegistry.Get<T>();
+        return ComponentRegistry.GetComponentId<T>();
     }
 }

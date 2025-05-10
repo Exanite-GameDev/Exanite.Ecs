@@ -12,7 +12,7 @@ internal static class ArrayFactory
     /// Prepare this type so that arrays of it can be constructed later
     /// </summary>
     // ReSharper disable once UnusedMember.Global (Used implicity by reflection)
-    public static void Prepare<T>()
+    public static void Initialize<T>()
     {
         Factories ??= [];
 
@@ -25,9 +25,9 @@ internal static class ArrayFactory
     /// <summary>
     /// Prepare this type so that arrays of it can be constructed later
     /// </summary>
-    public static void Prepare(Type type)
+    public static void Initialize(Type type)
     {
-        typeof(ArrayFactory).GetMethod("Prepare", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any, [], null)!
+        typeof(ArrayFactory).GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any, [], null)!
             .MakeGenericMethod(type)
             .Invoke(null, null);
     }
