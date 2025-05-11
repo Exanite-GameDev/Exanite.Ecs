@@ -16,14 +16,24 @@ public sealed class Chunk
     public Archetype Archetype { get; }
 
     /// <summary>
+    /// Map from component index to component type.
+    /// </summary>
+    internal readonly Type[] ComponentTypesByComponentIndex;
+
+    /// <summary>
     /// Map from component index to component ID.
     /// </summary>
-    private readonly IReadOnlyList<ComponentId> componentIdByComponentIndex;
+    internal readonly ComponentId[] ComponentIdByComponentIndex;
 
     /// <summary>
     /// Sparse map from component ID to component index in chunk.
     /// </summary>
-    private readonly IReadOnlyList<int> componentIndexByComponentId;
+    internal readonly int[] ComponentIndexByComponentId;
+
+    /// <summary>
+    /// Sparse map from component ID to component event dispatcher for component types stored by this chunk.
+    /// </summary>
+    internal readonly ComponentEventDispatcher[] ComponentEventDispatcherByComponentId;
 
     /// <remarks>
     /// Indexed using entity index.
@@ -45,23 +55,20 @@ public sealed class Chunk
     /// </summary>
     public ReadOnlyMemory<Entity> Entities => entities.AsMemory(0, EntityCount);
 
-    internal Chunk(
-        Archetype archetype,
-        int entityCapacity,
-        IReadOnlyList<Type> componentTypesByComponentIndex,
-        IReadOnlyList<ComponentId> componentIdByComponentIndex,
-        IReadOnlyList<int> componentIndexByComponentId)
+    internal Chunk(Archetype archetype, int entityCapacity)
     {
         Archetype = archetype;
 
-        this.componentIndexByComponentId = componentIndexByComponentId;
-        this.componentIdByComponentIndex = componentIdByComponentIndex;
+        ComponentTypesByComponentIndex = archetype.ComponentTypesByComponentIndex;
+        ComponentIndexByComponentId = archetype.ComponentIndexByComponentId;
+        ComponentIdByComponentIndex = archetype.ComponentIdByComponentIndex;
+        ComponentEventDispatcherByComponentId = archetype.ComponentEventDispatcherByComponentId;
 
         entities = new Entity[entityCapacity];
-        components = new Array[componentTypesByComponentIndex.Count];
+        components = new Array[ComponentTypesByComponentIndex.Length];
         for (var i = 0; i < components.Length; i++)
         {
-            components[i] = ArrayFactory.Create(componentTypesByComponentIndex[i], entityCapacity);
+            components[i] = ArrayFactory.Create(ComponentTypesByComponentIndex[i], entityCapacity);
         }
     }
 
@@ -89,7 +96,7 @@ public sealed class Chunk
 
     internal Array GetComponentArray(ComponentId id)
     {
-        return components[componentIndexByComponentId[id.Value]];
+        return components[ComponentIndexByComponentId[id.Value]];
     }
 
     internal ref T Get<T>(EntityId entityId, int entityIndex) where T : IComponent
@@ -210,17 +217,17 @@ public sealed class Chunk
         // Copy across everything that exists in the destination archetype
         for (var i = 0; i < components.Length; i++)
         {
-            var id = componentIdByComponentIndex[i].Value;
+            var id = ComponentIdByComponentIndex[i].Value;
 
             // Check if the component is not in the destination, in which case just don't copy it
-            if (id >= dstChunk.componentIndexByComponentId.Count || dstChunk.componentIndexByComponentId[id] == -1)
+            if (id >= dstChunk.ComponentIndexByComponentId.Length || dstChunk.ComponentIndexByComponentId[id] == -1)
             {
                 continue;
             }
 
             // Get the two arrays
             var srcArray = components[i];
-            var dstArray = dstChunk.components[dstChunk.componentIndexByComponentId[id]];
+            var dstArray = dstChunk.components[dstChunk.ComponentIndexByComponentId[id]];
 
             // Copy!
             Array.Copy(srcArray, srcLocation.IndexInChunk, dstArray, dstLocation.IndexInChunk, 1);

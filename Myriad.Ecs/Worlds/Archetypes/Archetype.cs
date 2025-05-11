@@ -56,17 +56,22 @@ public sealed class Archetype
     /// <summary>
     /// Map from component index to component type for chunks in this archetype.
     /// </summary>
-    private readonly Type[] componentTypesByComponentIndex;
+    internal readonly Type[] ComponentTypesByComponentIndex;
 
     /// <summary>
     /// Map from component index to component ID for chunks in this archetype.
     /// </summary>
-    private readonly ComponentId[] componentIdByComponentIndex;
+    internal readonly ComponentId[] ComponentIdByComponentIndex;
 
     /// <summary>
     /// Sparse map from component ID to component index in chunk for chunks in this archetype.
     /// </summary>
-    private readonly int[] componentIndexByComponentId;
+    internal readonly int[] ComponentIndexByComponentId;
+
+    /// <summary>
+    /// Sparse map from component ID to component event dispatcher for component types stored by this archetype.
+    /// </summary>
+    internal readonly ComponentEventDispatcher[] ComponentEventDispatcherByComponentId;
 
     /// <summary>
     /// All chunks in this archetype.
@@ -89,11 +94,8 @@ public sealed class Archetype
         Components = components;
         ComponentsBloomFilter = components.ToBloomFilter();
 
-        // Create arrays to fills in below
-        componentTypesByComponentIndex = new Type[components.Count];
-        componentIdByComponentIndex = new ComponentId[components.Count];
-
-        // Calculate archetype hash and also keep track of the max component ID ever seen
+        // Calculate archetype hash
+        // Also track max component ID
         var maxComponentId = int.MinValue;
         foreach (var component in components)
         {
@@ -104,17 +106,31 @@ public sealed class Archetype
             }
         }
 
-        // Build an array where the number at a given index is the index of the component with that ID
-        componentIndexByComponentId = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
-        Array.Fill(componentIndexByComponentId, -1);
+        // Initialize a map from component index to component type and component ID
+        ComponentTypesByComponentIndex = new Type[components.Count];
+        ComponentIdByComponentIndex = new ComponentId[components.Count];
+
+        // Initialize a sparse map from component ID to component index
+        ComponentIndexByComponentId = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
+        Array.Fill(ComponentIndexByComponentId, -1);
+
+        // Fill previously mentioned maps
         var componentIndex = 0;
         foreach (var component in components)
         {
-            componentTypesByComponentIndex[componentIndex] = component.Type;
-            componentIndexByComponentId[component.Value] = componentIndex;
-            componentIdByComponentIndex[componentIndex] = component;
+            ComponentTypesByComponentIndex[componentIndex] = component.Type;
+            ComponentIdByComponentIndex[componentIndex] = component;
+
+            ComponentIndexByComponentId[component.Value] = componentIndex;
 
             componentIndex++;
+        }
+
+        // Create a sparse map from component ID to component event dispatcher
+        ComponentEventDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentEventDispatcher[maxComponentId + 1];
+        foreach (var component in components)
+        {
+            ComponentEventDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentEventDispatcher(component);
         }
     }
 
@@ -182,7 +198,7 @@ public sealed class Archetype
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, ChunkSize, componentTypesByComponentIndex, componentIdByComponentIndex, componentIndexByComponentId);
+        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, ChunkSize);
         chunks.Add(newChunk);
         chunksWithSpace.Add(newChunk);
 

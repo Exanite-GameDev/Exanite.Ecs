@@ -94,8 +94,7 @@ public sealed class World : IDisposable
         // Raise component removed events
         foreach (var componentId in entity.ComponentIds)
         {
-            // TODO: Cache this in Archetype class
-            var eventDispatcher = ComponentRegistry.GetComponentEventDispatcher(componentId);
+            var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[componentId.Value];
             eventDispatcher.RaiseComponentRemoved(this, entity);
         }
 
@@ -123,8 +122,7 @@ public sealed class World : IDisposable
                 // Raise component removed events
                 foreach (var componentId in entity.ComponentIds)
                 {
-                    // TODO: Cache this in Archetype class
-                    var eventDispatcher = ComponentRegistry.GetComponentEventDispatcher(componentId);
+                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[componentId.Value];
                     eventDispatcher.RaiseComponentRemoved(this, entity);
                 }
 
