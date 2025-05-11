@@ -306,7 +306,12 @@ public sealed partial class EcsCommandBuffer
                 // Write the components into the entity
                 foreach (var setter in components.Values)
                 {
+                    // Write component
                     setters.Write(setter, location);
+
+                    // Raise component added events
+                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.Id.Value];
+                    eventDispatcher.RaiseComponentAdded(World, location.Entity.ToEntity(World));
                 }
 
                 // Recycle
