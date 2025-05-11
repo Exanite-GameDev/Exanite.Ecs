@@ -13,6 +13,12 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
 /// Buffers up modifications to entities and replays them all at once.
+/// <para/>
+/// Warning: The command buffer is allowed to reorder and merge operations together.
+/// <br/>
+/// Example 1: Setting the same component twice is the same as setting it once, with the last taking priority.
+/// <br/>
+/// Example 2: Destroying an entity after making modifications to it is the same as making no modifications to it before destroying it.
 /// </summary>
 public sealed partial class EcsCommandBuffer
 {

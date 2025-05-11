@@ -112,7 +112,7 @@ public class EventTests
     }
 
     [TestMethod]
-    public void SetComponent_Twice_InSameCommandBuffer_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Twice_InSameCommandBuffer_OnBufferedEntity_OnlyRaisesComponentAddedEvent()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -131,7 +131,7 @@ public class EventTests
 
         commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
-        Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
+        Assert.AreEqual(0, handler.ComponentModifiedCount);
     }
 
     [TestMethod]
@@ -206,7 +206,7 @@ public class EventTests
     }
 
     [TestMethod]
-    public void SetComponent_Twice_InSameCommandBuffer_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Twice_InSameCommandBuffer_OnWorldEntity_OnlyRaisesComponentAddedEvent()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -240,7 +240,7 @@ public class EventTests
 
         commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
-        Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
+        Assert.AreEqual(0, handler.ComponentModifiedCount);
     }
 
     [TestMethod]
