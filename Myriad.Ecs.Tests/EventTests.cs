@@ -112,7 +112,7 @@ public class EventTests
     }
 
     [TestMethod]
-    public void SetComponent_Twice_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Twice_InSameCommandBuffer_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -135,7 +135,7 @@ public class EventTests
     }
 
     [TestMethod]
-    public void SetComponent_Once_OnWorldEntity_RaisesComponentAddedEvent()
+    public void SetComponent_Twice_InDifferentCommandBuffers_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -147,7 +147,7 @@ public class EventTests
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
-            commandBuffer.Create();
+            commandBuffer.Create().Set(new Component0());
         }
 
         commandBuffer.Execute().Dispose();
@@ -167,11 +167,11 @@ public class EventTests
         }
 
         commandBuffer.Execute().Dispose();
-        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+        Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
     }
 
     [TestMethod]
-    public void SetComponent_Twice_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Once_OnWorldEntity_RaisesComponentAddedEvent()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -185,6 +185,43 @@ public class EventTests
         {
             commandBuffer.Create();
         }
+
+        commandBuffer.Execute().Dispose();
+
+        // Set components
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        foreach (var archetype in allEntitiesQuery.GetArchetypes())
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    commandBuffer.Set(entity, new Component0());
+                }
+            }
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+    }
+
+    [TestMethod]
+    public void SetComponent_Twice_InSameCommandBuffer_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireCommandBuffer();
+
+        world.EventBus.RegisterSendAllTo(new EventLogger());
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create();
+        }
+
+        commandBuffer.Execute().Dispose();
 
         // Set components
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -203,6 +240,56 @@ public class EventTests
 
         commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+        Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
+    }
+
+    [TestMethod]
+    public void SetComponent_Twice_InDifferentCommandBuffers_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireCommandBuffer();
+
+        world.EventBus.RegisterSendAllTo(new EventLogger());
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create();
+        }
+
+        commandBuffer.Execute().Dispose();
+
+        // Set components
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        foreach (var archetype in allEntitiesQuery.GetArchetypes())
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    commandBuffer.Set(entity, new Component0());
+                }
+            }
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+
+        // Set components again
+        foreach (var archetype in allEntitiesQuery.GetArchetypes())
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    commandBuffer.Set(entity, new Component0());
+                }
+            }
+        }
+
+        commandBuffer.Execute().Dispose();
         Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
     }
 

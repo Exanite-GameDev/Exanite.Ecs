@@ -45,7 +45,7 @@ internal class ComponentSetterCollection
 
     public void Write(SetterId id, EntityStorageLocation location)
     {
-        var list = components[id.Id];
+        var list = components[id.ComponentId];
         list.Write(id.Index, location);
     }
 
@@ -54,16 +54,16 @@ internal class ComponentSetterCollection
         /// <summary>
         /// Component ID of the component being overwritten
         /// </summary>
-        internal readonly ComponentId Id;
+        internal readonly ComponentId ComponentId;
 
         /// <summary>
         /// Index of the setter in the setters list
         /// </summary>
         internal readonly int Index;
 
-        internal SetterId(ComponentId id, int index)
+        internal SetterId(ComponentId componentId, int index)
         {
-            Id = id;
+            ComponentId = componentId;
             Index = index;
         }
     }

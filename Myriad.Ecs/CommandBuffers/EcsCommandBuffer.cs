@@ -214,11 +214,12 @@ public sealed partial class EcsCommandBuffer
             foreach (var (entity, modification) in entityModifications)
             {
                 var archetypeBeforeMove = World.GetArchetype(entity.EntityId);
+                var componentsBeforeMove = archetypeBeforeMove.Components;
 
-                // Initialize componentsAfterMove with the components the entity currently has
+                // Initialize componentsAfterMove with componentsBeforeMove
                 var componentsAfterMove = tempComponentsAfterMove;
                 componentsAfterMove.Clear();
-                componentsAfterMove.UnionWith(archetypeBeforeMove.Components);
+                componentsAfterMove.UnionWith(componentsBeforeMove);
 
                 // Check if a move is required
                 var moveRequired = false;
@@ -260,7 +261,7 @@ public sealed partial class EcsCommandBuffer
                 if (moveRequired)
                 {
                     // Raise component removed events
-                    foreach (var componentId in archetypeBeforeMove.Components)
+                    foreach (var componentId in componentsBeforeMove)
                     {
                         if (!componentsAfterMove.Contains(componentId))
                         {
@@ -282,9 +283,20 @@ public sealed partial class EcsCommandBuffer
                 // Run all setters
                 if (modification.Sets != null)
                 {
-                    foreach (var set in modification.Sets.Values)
+                    foreach (var setter in modification.Sets.Values)
                     {
-                        setters.Write(set, location);
+                        setters.Write(setter, location);
+
+                        // Raise component added/modified events
+                        var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
+                        if (componentsBeforeMove.Contains(setter.ComponentId))
+                        {
+                            eventDispatcher.RaiseComponentModified(World, entity);
+                        }
+                        else
+                        {
+                            eventDispatcher.RaiseComponentAdded(World, entity);
+                        }
                     }
                 }
 
@@ -324,7 +336,7 @@ public sealed partial class EcsCommandBuffer
                     setters.Write(setter, location);
 
                     // Raise component added events
-                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.Id.Value];
+                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
                     eventDispatcher.RaiseComponentAdded(World, location.Entity.ToEntity(World));
                 }
 
