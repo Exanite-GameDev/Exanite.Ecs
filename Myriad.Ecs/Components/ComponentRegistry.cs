@@ -127,6 +127,9 @@ internal static class ComponentRegistry
                 }
 
                 eventDispatchersByComponentId[componentId] = eventDispatcher;
+
+                // Raise component id registered event
+                ComponentId.NotifyComponentIdRegistered(componentId);
             }
 
             return componentId;
