@@ -134,6 +134,7 @@ public sealed partial class EcsCommandBuffer
     public EcsCommandBufferResolver Execute()
     {
         GuardUtility.IsTrue(!World.IsDisposed, "Cannot execute command buffer on a disposed world");
+        EnsureNotExecuting();
 
         // Use this resolver for this execution
         var resolver = nextResolver;
@@ -415,6 +416,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public BufferedEntity Create()
     {
+        EnsureNotExecuting();
         HasBufferedOperations = true;
 
         // Get a set to hold all of the component setters
@@ -434,6 +436,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Set<T>(Entity entity, T value) where T : IComponent
     {
+        EnsureNotExecuting();
         HasBufferedOperations = true;
 
         SetInternal(entity, value);
@@ -446,6 +449,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Remove<T>(Entity entity) where T : IComponent
     {
+        EnsureNotExecuting();
         HasBufferedOperations = true;
 
         var mod = GetModificationData(entity, false, true);
@@ -465,6 +469,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Destroy(Entity entity)
     {
+        EnsureNotExecuting();
         HasBufferedOperations = true;
 
         destroys.Add(entity);
@@ -477,6 +482,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Destroy(List<Entity> entities)
     {
+        EnsureNotExecuting();
         HasBufferedOperations = true;
 
         destroys.AddRange(entities);
@@ -489,11 +495,8 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Destroy(QueryDescription entities)
     {
-        if (entities.World != World)
-        {
-            throw new ArgumentException("Cannot use QueryDescription from one World with CommandBuffer for another World");
-        }
-
+        EnsureNotExecuting();
+        GuardUtility.IsTrue(entities.World == World, "Cannot use query description from one world with a command buffer for another world");
         HasBufferedOperations = true;
 
         queryDestroys.Add(entities);
@@ -595,7 +598,7 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    internal void DestroyEntity(EcsCommandBuffer recursiveCommandBuffer, EntityId entityId)
+    private void DestroyEntity(EcsCommandBuffer recursiveCommandBuffer, EntityId entityId)
     {
         // Get entity
         var entity = entityId.ToEntity(World);
@@ -630,7 +633,7 @@ public sealed partial class EcsCommandBuffer
         World.DeadEntities.Add(entityId);
     }
 
-    internal void DestroyArchetypeEntities(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
+    private void DestroyArchetypeEntities(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
     {
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         World.DeadEntities.EnsureCapacity(World.DeadEntities.Count + archetype.EntityCount);
@@ -661,6 +664,11 @@ public sealed partial class EcsCommandBuffer
 
         // Clear the archetype
         archetype.Clear();
+    }
+
+    private void EnsureNotExecuting()
+    {
+        GuardUtility.IsFalse(IsExecuting, "Command buffer is currently executing");
     }
 
     /// <summary>
