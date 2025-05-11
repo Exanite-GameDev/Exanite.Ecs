@@ -205,7 +205,7 @@ public sealed partial class EcsCommandBuffer
         if (entityModifications.Count > 0)
         {
             // Calculate the new archetype for the entity
-            foreach (var (entity, mod) in entityModifications)
+            foreach (var (entity, modification) in entityModifications)
             {
                 var currentArchetype = World.GetArchetype(entity.EntityId);
 
@@ -218,9 +218,9 @@ public sealed partial class EcsCommandBuffer
                 var hash = currentArchetype.Hash;
                 {
                     // Component adds/sets
-                    if (mod.Sets != null)
+                    if (modification.Sets != null)
                     {
-                        foreach (var id in mod.Sets.Keys)
+                        foreach (var id in modification.Sets.Keys)
                         {
                             if (tempComponentIdSet.Add(id))
                             {
@@ -231,9 +231,9 @@ public sealed partial class EcsCommandBuffer
                     }
 
                     // Component removes
-                    if (mod.Removes != null)
+                    if (modification.Removes != null)
                     {
-                        foreach (var remove in mod.Removes)
+                        foreach (var remove in modification.Removes)
                         {
                             if (tempComponentIdSet.Remove(remove))
                             {
@@ -243,8 +243,8 @@ public sealed partial class EcsCommandBuffer
                         }
 
                         // Recycle remove set
-                        mod.Removes.Clear();
-                        SimplePool.Release(mod.Removes);
+                        modification.Removes.Clear();
+                        SimplePool.Release(modification.Removes);
                     }
                 }
 
@@ -264,19 +264,19 @@ public sealed partial class EcsCommandBuffer
                 }
 
                 // Run all setters
-                if (mod.Sets != null)
+                if (modification.Sets != null)
                 {
-                    foreach (var set in mod.Sets.Values)
+                    foreach (var set in modification.Sets.Values)
                     {
                         setters.Write(set, location);
                     }
                 }
 
                 // Recycle setters
-                if (mod.Sets != null)
+                if (modification.Sets != null)
                 {
-                    mod.Sets.Clear();
-                    SimplePool.Release(mod.Sets);
+                    modification.Sets.Clear();
+                    SimplePool.Release(modification.Sets);
                 }
             }
         }
