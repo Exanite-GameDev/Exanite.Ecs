@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
+using Exanite.Core.Runtime;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
+using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
@@ -14,8 +17,10 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// A world contains all entities.
 /// </summary>
-public sealed class World : IDisposable
+public sealed class World : ITrackedDisposable
 {
+    public bool IsDisposed { get; private set; }
+
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
@@ -45,7 +50,20 @@ public sealed class World : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        // TODO: Make sure events are properly sent out
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        // Destroy all entities
+        using var _ = AcquireCommandBuffer(out var commandBuffer);
+        var allEntitiesQuery = new QueryBuilder().Build(this);
+        commandBuffer.Destroy(allEntitiesQuery);
+        commandBuffer.Execute();
+
+        IsDisposed = true;
+
+        GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
     }
 
     #region Command Buffer Pool

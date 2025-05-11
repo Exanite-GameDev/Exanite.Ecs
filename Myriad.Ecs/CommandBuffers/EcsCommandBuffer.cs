@@ -128,6 +128,8 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBufferResolver Execute()
     {
+        GuardUtility.IsTrue(!World.IsDisposed, "Cannot execute command buffer on a disposed world");
+
         // Use this resolver for this execution
         var resolver = nextResolver;
         if (!HasBufferedOperations)

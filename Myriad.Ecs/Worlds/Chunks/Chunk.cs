@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Allocations;

@@ -1,4 +1,5 @@
 using Exanite.Core.Events;
+using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Queries;
@@ -433,7 +434,7 @@ public class EventTests
     }
 
     [TestMethod]
-    public void DisposeWorld_RaisesComponentRemovedAndEntityDestroyedEvents()
+    public void DisposeWorld_DestroysAllEntities_And_RaisesComponentRemovedAndEntityDestroyedEvents()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -465,7 +466,7 @@ public class EventTests
         var commandBuffer = world.AcquireCommandBuffer();
 
         world.Dispose();
-        Assert.ThrowsException<InvalidOperationException>(() => commandBuffer.Execute());
+        Assert.ThrowsException<GuardException>(() => commandBuffer.Execute());
     }
 
     private class WorldEventHandler :
