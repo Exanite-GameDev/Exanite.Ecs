@@ -38,12 +38,14 @@ public sealed partial class EcsCommandBuffer
     private readonly List<QueryDescription> queryDestroys = [];
 
     /// <summary>
-    /// Stores temporary data. Clear before use.
+    /// Stores an entity's component set after structural changes.
+    /// <para/>
+    /// This is used by <see cref="ApplyStructuralChanges"/> to figure out which archetype to move an entity to when components are added/removed.
     /// </summary>
     /// <remarks>
-    /// This is used by <see cref="ApplyStructuralChanges"/> to figure out which archetype to move an entity to when components are added/removed.
+    /// Stores temporary data. Clear before use.
     /// </remarks>
-    private readonly OrderedListSet<ComponentId> tempComponentIdSet = [];
+    private readonly OrderedListSet<ComponentId> tempComponentsAfterMove = [];
 
     private EcsCommandBufferResolver nextResolver;
 
@@ -211,22 +213,23 @@ public sealed partial class EcsCommandBuffer
             // Calculate the new archetype for the entity
             foreach (var (entity, modification) in entityModifications)
             {
-                var currentArchetype = World.GetArchetype(entity.EntityId);
+                var archetypeBeforeMove = World.GetArchetype(entity.EntityId);
 
-                // Set all of the current archetype components
-                tempComponentIdSet.Clear();
-                tempComponentIdSet.UnionWith(currentArchetype.Components);
+                // Initialize componentsAfterMove with the components the entity currently has
+                var componentsAfterMove = tempComponentsAfterMove;
+                componentsAfterMove.Clear();
+                componentsAfterMove.UnionWith(archetypeBeforeMove.Components);
+
+                // Check if a move is required
                 var moveRequired = false;
-
-                // Calculate the hash and component set of the new archetype
-                var hash = currentArchetype.Hash;
+                var hash = archetypeBeforeMove.Hash;
                 {
                     // Component adds/sets
                     if (modification.Sets != null)
                     {
                         foreach (var id in modification.Sets.Keys)
                         {
-                            if (tempComponentIdSet.Add(id))
+                            if (componentsAfterMove.Add(id))
                             {
                                 hash = hash.Toggle(id);
                                 moveRequired = true;
@@ -239,7 +242,7 @@ public sealed partial class EcsCommandBuffer
                     {
                         foreach (var remove in modification.Removes)
                         {
-                            if (tempComponentIdSet.Remove(remove))
+                            if (componentsAfterMove.Remove(remove))
                             {
                                 hash = hash.Toggle(remove);
                                 moveRequired = true;
@@ -256,8 +259,17 @@ public sealed partial class EcsCommandBuffer
                 EntityStorageLocation location;
                 if (moveRequired)
                 {
+                    // Raise component removed events
+                    foreach (var componentId in archetypeBeforeMove.Components)
+                    {
+                        if (!componentsAfterMove.Contains(componentId))
+                        {
+                            archetypeBeforeMove.ComponentEventDispatcherByComponentId[componentId.Value].RaiseComponentRemoved(World, entity);
+                        }
+                    }
+
                     // Get the new archetype we're moving to
-                    var dstArchetype = World.GetOrCreateArchetype(tempComponentIdSet, hash);
+                    var dstArchetype = World.GetOrCreateArchetype(componentsAfterMove, hash);
 
                     // Migrate the entity across
                     location = World.MigrateEntity(entity.EntityId, dstArchetype);
