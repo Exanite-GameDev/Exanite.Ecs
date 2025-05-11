@@ -37,6 +37,12 @@ public sealed partial class EcsCommandBuffer
     private readonly List<Entity> destroys = [];
     private readonly List<QueryDescription> queryDestroys = [];
 
+    /// <summary>
+    /// Stores temporary data. Clear before use.
+    /// </summary>
+    /// <remarks>
+    /// This is used by <see cref="ApplyStructuralChanges"/> to figure out which archetype to move an entity to when components are added/removed.
+    /// </remarks>
     private readonly OrderedListSet<ComponentId> tempComponentIdSet = [];
 
     private EcsCommandBufferResolver nextResolver;
@@ -94,7 +100,6 @@ public sealed partial class EcsCommandBuffer
 
         destroys.Clear();
         queryDestroys.Clear();
-        tempComponentIdSet.Clear();
 
         HasBufferedOperations = false;
 
@@ -140,7 +145,6 @@ public sealed partial class EcsCommandBuffer
         // Clear all temporary state
         setters.Clear();
         entityModifications.Clear();
-        tempComponentIdSet.Clear();
         archetypeEdges.Clear();
 
         HasBufferedOperations = false;
@@ -284,8 +288,6 @@ public sealed partial class EcsCommandBuffer
 
     private void CreateBufferedEntities(EcsCommandBufferResolver resolver)
     {
-        tempComponentIdSet.Clear();
-
         // Keep a map from archetype key -> archetype.
         // This means we only need to calculate it once per archetype key.
         var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(archetypeEdges.Count + 1);
@@ -320,7 +322,6 @@ public sealed partial class EcsCommandBuffer
             }
 
             bufferedEntities.Clear();
-            tempComponentIdSet.Clear();
         }
         finally
         {
