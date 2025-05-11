@@ -1,3 +1,5 @@
+using Exanite.Myriad.Ecs.CommandBuffers;
+
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
@@ -5,11 +7,21 @@ namespace Exanite.Myriad.Ecs.Events;
 /// </summary>
 public readonly ref struct EntityCreatedEvent
 {
+    /// <summary>
+    /// A command buffer with which further operations can be enqueued.
+    /// This command buffer will run after the command buffer that raised this event has completed.
+    /// </summary>
+    /// <remarks>
+    /// Not the command buffer that raised this event.
+    /// </remarks>
+    public readonly EcsCommandBuffer CommandBuffer;
+
     public World World => Entity.World;
     public readonly Entity Entity;
 
-    public EntityCreatedEvent(Entity entity)
+    public EntityCreatedEvent(EcsCommandBuffer commandBuffer, Entity entity)
     {
+        CommandBuffer = commandBuffer;
         Entity = entity;
     }
 }
@@ -19,11 +31,21 @@ public readonly ref struct EntityCreatedEvent
 /// </summary>
 public readonly ref struct EntityDestroyedEvent
 {
+    /// <summary>
+    /// A command buffer with which further operations can be enqueued.
+    /// This command buffer will run after the command buffer that raised this event has completed.
+    /// </summary>
+    /// <remarks>
+    /// Not the command buffer that raised this event.
+    /// </remarks>
+    public readonly EcsCommandBuffer CommandBuffer;
+
     public World World => Entity.World;
     public readonly Entity Entity;
 
-    public EntityDestroyedEvent(Entity entity)
+    public EntityDestroyedEvent(EcsCommandBuffer commandBuffer, Entity entity)
     {
+        CommandBuffer = commandBuffer;
         Entity = entity;
     }
 }
@@ -33,12 +55,22 @@ public readonly ref struct EntityDestroyedEvent
 /// </summary>
 public readonly ref struct ComponentAdded<T> where T : IComponent
 {
+    /// <summary>
+    /// A command buffer with which further operations can be enqueued.
+    /// This command buffer will run after the command buffer that raised this event has completed.
+    /// </summary>
+    /// <remarks>
+    /// Not the command buffer that raised this event.
+    /// </remarks>
+    public readonly EcsCommandBuffer CommandBuffer;
+
     public World World => Entity.World;
     public readonly Entity Entity;
     public readonly ref T Value;
 
-    public ComponentAdded(Entity entity, ref T value)
+    public ComponentAdded(EcsCommandBuffer commandBuffer, Entity entity, ref T value)
     {
+        CommandBuffer = commandBuffer;
         Entity = entity;
         Value = ref value;
     }
@@ -57,12 +89,22 @@ public readonly ref struct ComponentAdded<T> where T : IComponent
 /// </remarks>
 public readonly ref struct ComponentModified<T> where T : IComponent
 {
+    /// <summary>
+    /// A command buffer with which further operations can be enqueued.
+    /// This command buffer will run after the command buffer that raised this event has completed.
+    /// </summary>
+    /// <remarks>
+    /// Not the command buffer that raised this event.
+    /// </remarks>
+    public readonly EcsCommandBuffer CommandBuffer;
+
     public World World => Entity.World;
     public readonly Entity Entity;
     public readonly ref T NewValue;
 
-    public ComponentModified(Entity entity, ref T newValue)
+    public ComponentModified(EcsCommandBuffer commandBuffer, Entity entity, ref T newValue)
     {
+        CommandBuffer = commandBuffer;
         Entity = entity;
         NewValue = ref newValue;
     }
@@ -73,12 +115,22 @@ public readonly ref struct ComponentModified<T> where T : IComponent
 /// </summary>
 public readonly ref struct ComponentRemoved<T> where T : IComponent
 {
+    /// <summary>
+    /// A command buffer with which further operations can be enqueued.
+    /// This command buffer will run after the command buffer that raised this event has completed.
+    /// </summary>
+    /// <remarks>
+    /// Not the command buffer that raised this event.
+    /// </remarks>
+    public readonly EcsCommandBuffer CommandBuffer;
+
     public World World => Entity.World;
     public readonly Entity Entity;
     public readonly T Value;
 
-    public ComponentRemoved(Entity entity, T value)
+    public ComponentRemoved(EcsCommandBuffer commandBuffer, Entity entity, T value)
     {
+        CommandBuffer = commandBuffer;
         Entity = entity;
         Value = value;
     }

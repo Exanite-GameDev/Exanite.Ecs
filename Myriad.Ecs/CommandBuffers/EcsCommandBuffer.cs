@@ -5,6 +5,7 @@ using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
@@ -20,6 +21,9 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// <br/>
 /// Example 2: Destroying an entity after making modifications to it is the same as making no modifications to it before destroying it.
 /// </summary>
+/// <remarks>
+/// Warning: The command buffer is likely going to be rewritten to guarantee operation order and to avoid merging of operations.
+/// </remarks>
 public sealed partial class EcsCommandBuffer
 {
     internal uint Version { get; private set; }
@@ -30,6 +34,7 @@ public sealed partial class EcsCommandBuffer
     public World World { get; }
 
     public bool HasBufferedOperations { get; private set; }
+    public bool IsExecuting { get; private set; }
 
     /// <summary>
     /// Collection of all components to be set onto entities.
@@ -142,34 +147,46 @@ public sealed partial class EcsCommandBuffer
             return resolver;
         }
 
-        // Create buffered entities.
-        CreateBufferedEntities(resolver);
+        IsExecuting = true;
+        {
+            using var _ = World.AcquireCommandBuffer(out var recursiveCommandBuffer);
 
-        // Destroy entities, this must occur before structural changes because it may trigger new structural changes
-        // by adding a new phantom component.
-        DestroyEntities();
+            // Create buffered entities.
+            CreateBufferedEntities(recursiveCommandBuffer, resolver);
 
-        // Structural changes (add/remove components)
-        // This also includes setting components
-        ApplyStructuralChanges();
+            // Destroy entities, this must occur before structural changes because it may trigger new structural changes
+            // by adding a new phantom component.
+            DestroyEntities(recursiveCommandBuffer);
 
-        // Clear all temporary state
-        setters.Clear();
-        entityModifications.Clear();
-        archetypeEdges.Clear();
+            // Structural changes (add/remove components)
+            // This also includes setting components
+            ApplyStructuralChanges(recursiveCommandBuffer);
 
-        HasBufferedOperations = false;
+            // Clear all temporary state
+            setters.Clear();
+            entityModifications.Clear();
+            archetypeEdges.Clear();
 
-        // Update version and get new resolver
-        unchecked { Version++; }
-        nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
-        nextResolver.Configure(this);
+            HasBufferedOperations = false;
+
+            // Update version and get new resolver
+            unchecked
+            {
+                Version++;
+            }
+
+            nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
+            nextResolver.Configure(this);
+
+            recursiveCommandBuffer.Execute();
+        }
+        IsExecuting = false;
 
         // Return the resolver
         return resolver;
     }
 
-    private void DestroyEntities()
+    private void DestroyEntities(EcsCommandBuffer recursiveCommandBuffer)
     {
         foreach (var query in queryDestroys)
         {
@@ -180,7 +197,7 @@ public sealed partial class EcsCommandBuffer
                     continue;
                 }
 
-                World.DestroyImmediate(archetype);
+                DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
             }
         }
         queryDestroys.Clear();
@@ -194,7 +211,7 @@ public sealed partial class EcsCommandBuffer
             }
 
             // Destroy entity
-            World.DestroyImmediate(entity.EntityId);
+            DestroyEntity(recursiveCommandBuffer, entity.EntityId);
 
             // Return objects to pools
             if (entityModifications.Remove(entity, out var mod))
@@ -215,7 +232,7 @@ public sealed partial class EcsCommandBuffer
         destroys.Clear();
     }
 
-    private void ApplyStructuralChanges()
+    private void ApplyStructuralChanges(EcsCommandBuffer recursiveCommandBuffer)
     {
         if (entityModifications.Count > 0)
         {
@@ -279,7 +296,7 @@ public sealed partial class EcsCommandBuffer
                     {
                         if (!componentsAfterMove.Contains(componentId))
                         {
-                            archetypeBeforeMove.ComponentEventDispatcherByComponentId[componentId.Value].RaiseComponentRemoved(World, entity);
+                            archetypeBeforeMove.ComponentEventDispatcherByComponentId[componentId.Value].RaiseComponentRemoved(recursiveCommandBuffer, World, entity);
                         }
                     }
 
@@ -305,11 +322,11 @@ public sealed partial class EcsCommandBuffer
                         var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
                         if (componentsBeforeMove.Contains(setter.ComponentId))
                         {
-                            eventDispatcher.RaiseComponentModified(World, entity);
+                            eventDispatcher.RaiseComponentModified(recursiveCommandBuffer, World, entity);
                         }
                         else
                         {
-                            eventDispatcher.RaiseComponentAdded(World, entity);
+                            eventDispatcher.RaiseComponentAdded(recursiveCommandBuffer, World, entity);
                         }
                     }
                 }
@@ -324,7 +341,7 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void CreateBufferedEntities(EcsCommandBufferResolver resolver)
+    private void CreateBufferedEntities(EcsCommandBuffer recursiveCommandBuffer, EcsCommandBufferResolver resolver)
     {
         // Keep a map from archetype key -> archetype.
         // This means we only need to calculate it once per archetype key.
@@ -351,7 +368,7 @@ public sealed partial class EcsCommandBuffer
 
                     // Raise component added events
                     var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
-                    eventDispatcher.RaiseComponentAdded(World, location.Entity.ToEntity(World));
+                    eventDispatcher.RaiseComponentAdded(recursiveCommandBuffer, World, location.Entity.ToEntity(World));
                 }
 
                 // Recycle
@@ -576,6 +593,74 @@ public sealed partial class EcsCommandBuffer
 
             return mod;
         }
+    }
+
+    internal void DestroyEntity(EcsCommandBuffer recursiveCommandBuffer, EntityId entityId)
+    {
+        // Get entity
+        var entity = entityId.ToEntity(World);
+
+        // Get the location for this entity
+        ref var location = ref World.Entities[entityId.Id];
+
+        // Check this is still a valid entity reference. Early exit if the entity
+        // is already dead.
+        if (location.Version != entityId.Version)
+        {
+            return;
+        }
+
+        // Raise component removed events
+        foreach (var componentId in entity.ComponentIds)
+        {
+            var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[componentId.Value];
+            eventDispatcher.RaiseComponentRemoved(recursiveCommandBuffer, World, entity);
+        }
+
+        // Raise entity removed event
+        World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
+
+        // Notify archetype this entity is dead
+        location.Chunk.Archetype.RemoveEntity(location);
+
+        // Increment version, this will invalid the handle
+        location.Version++;
+
+        // Store this ID for re-use later
+        World.DeadEntities.Add(entityId);
+    }
+
+    internal void DestroyArchetypeEntities(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
+    {
+        // Mark all of the IDs as dead (as long as they haven't become phantoms)
+        World.DeadEntities.EnsureCapacity(World.DeadEntities.Count + archetype.EntityCount);
+        foreach (var chunk in archetype.Chunks)
+        {
+            foreach (var entity in chunk.Entities)
+            {
+                // Raise component removed events
+                foreach (var componentId in entity.ComponentIds)
+                {
+                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[componentId.Value];
+                    eventDispatcher.RaiseComponentRemoved(recursiveCommandBuffer, World, entity);
+                }
+
+                // Raise entity removed event
+                World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
+
+                // Get the location for this entity
+                ref var location = ref World.Entities[entity.EntityId.Id];
+
+                // Increment version, this will invalidate the handle
+                location.Version++;
+
+                // Store this ID for re-use later
+                World.DeadEntities.Add(entity.EntityId);
+            }
+        }
+
+        // Clear the archetype
+        archetype.Clear();
     }
 
     /// <summary>

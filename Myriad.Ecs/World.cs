@@ -7,7 +7,6 @@ using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
@@ -19,16 +18,17 @@ namespace Exanite.Myriad.Ecs;
 /// </summary>
 public sealed class World : ITrackedDisposable
 {
+    public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
 
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
     // Keep track of dead entities so their ID can be re-used
-    private readonly List<EntityId> deadEntities = [];
+    internal readonly List<EntityId> DeadEntities = [];
     private int nextEntityId = 1;
 
-    private readonly SegmentedList<StorageLocation> entities = new(1024);
+    internal readonly SegmentedList<StorageLocation> Entities = new(1024);
 
     /// <summary>
     /// Get a list of all archetypes in this <see cref="World"/>
@@ -55,12 +55,15 @@ public sealed class World : ITrackedDisposable
             return;
         }
 
+        IsDisposing = true;
+
         // Destroy all entities
         using var _ = AcquireCommandBuffer(out var commandBuffer);
         var allEntitiesQuery = new QueryBuilder().Build(this);
         commandBuffer.Destroy(allEntitiesQuery);
         commandBuffer.Execute();
 
+        IsDisposing = false;
         IsDisposed = true;
 
         GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
@@ -94,77 +97,9 @@ public sealed class World : ITrackedDisposable
 
     #endregion
 
-    internal void DestroyImmediate(EntityId entityId)
-    {
-        // Get entity
-        var entity = entityId.ToEntity(this);
-
-        // Get the location for this entity
-        ref var location = ref entities[entityId.Id];
-
-        // Check this is still a valid entity reference. Early exit if the entity
-        // is already dead.
-        if (location.Version != entityId.Version)
-        {
-            return;
-        }
-
-        // Raise component removed events
-        foreach (var componentId in entity.ComponentIds)
-        {
-            var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[componentId.Value];
-            eventDispatcher.RaiseComponentRemoved(this, entity);
-        }
-
-        // Raise entity removed event
-        EventBus.Raise(new EntityDestroyedEvent(entity));
-
-        // Notify archetype this entity is dead
-        location.Chunk.Archetype.RemoveEntity(location);
-
-        // Increment version, this will invalid the handle
-        location.Version++;
-
-        // Store this ID for re-use later
-        deadEntities.Add(entityId);
-    }
-
-    internal void DestroyImmediate(Archetype archetype)
-    {
-        // Mark all of the IDs as dead (as long as they haven't become phantoms)
-        deadEntities.EnsureCapacity(deadEntities.Count + archetype.EntityCount);
-        foreach (var chunk in archetype.Chunks)
-        {
-            foreach (var entity in chunk.Entities)
-            {
-                // Raise component removed events
-                foreach (var componentId in entity.ComponentIds)
-                {
-                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[componentId.Value];
-                    eventDispatcher.RaiseComponentRemoved(this, entity);
-                }
-
-                // Raise entity removed event
-                EventBus.Raise(new EntityDestroyedEvent(entity));
-
-                // Get the location for this entity
-                ref var location = ref entities[entity.EntityId.Id];
-
-                // Increment version, this will invalidate the handle
-                location.Version++;
-
-                // Store this ID for re-use later
-                deadEntities.Add(entity.EntityId);
-            }
-        }
-
-        // Clear the archetype
-        archetype.Clear();
-    }
-
     internal Archetype GetArchetype(EntityId entity)
     {
-        if (entity.Id < 0 || entity.Id >= entities.TotalCapacity)
+        if (entity.Id < 0 || entity.Id >= Entities.TotalCapacity)
         {
             throw new ArgumentException("Invalid entity ID", nameof(entity));
         }
@@ -178,12 +113,12 @@ public sealed class World : ITrackedDisposable
     /// <returns>The entity ID, or zero if the entity does not exist</returns>
     internal uint GetVersion(int entityId)
     {
-        if (entityId <= 0 || entityId >= entities.TotalCapacity)
+        if (entityId <= 0 || entityId >= Entities.TotalCapacity)
         {
             return 0;
         }
 
-        return entities[entityId].Version;
+        return Entities[entityId].Version;
     }
 
     #region Get/Create Archetype
@@ -268,10 +203,10 @@ public sealed class World : ITrackedDisposable
 
     internal ref StorageLocation AllocateEntity(out EntityId entity)
     {
-        if (deadEntities.Count > 0)
+        if (DeadEntities.Count > 0)
         {
-            var previousId = deadEntities[^1];
-            deadEntities.RemoveAt(deadEntities.Count - 1);
+            var previousId = DeadEntities[^1];
+            DeadEntities.RemoveAt(DeadEntities.Count - 1);
 
             var version = unchecked(previousId.Version + 1);
 
@@ -289,14 +224,14 @@ public sealed class World : ITrackedDisposable
             entity = new EntityId(checked(nextEntityId++), 1);
 
             // Check if the collection of all entities needs to grow
-            if (entity.Id >= entities.TotalCapacity)
+            if (entity.Id >= Entities.TotalCapacity)
             {
-                entities.Grow();
+                Entities.Grow();
             }
         }
 
         // Update the version
-        ref var location = ref entities[entity.Id];
+        ref var location = ref Entities[entity.Id];
         location.Version = entity.Version;
 
         return ref location;
@@ -310,7 +245,7 @@ public sealed class World : ITrackedDisposable
 
     internal ref StorageLocation GetStorageLocation(EntityId entity)
     {
-        ref var location = ref entities[entity.Id];
+        ref var location = ref Entities[entity.Id];
 
         if (location.Version != entity.Version)
         {
