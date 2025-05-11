@@ -54,7 +54,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Destroy(entity);
                 }
@@ -116,7 +116,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Destroy(entity);
                 }
@@ -178,7 +178,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Remove<Component0>(entity);
                 }
@@ -233,7 +233,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Set(entity, new Component0());
                 }
@@ -269,7 +269,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Set(entity, new Component0());
                 }
@@ -304,7 +304,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Set(entity, new Component0());
                 }
@@ -319,7 +319,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Set(entity, new Component0());
                 }
@@ -379,7 +379,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer
                         .Set(entity, new Component0())
@@ -417,7 +417,7 @@ public class EventTests
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities.Span)
+                foreach (var entity in chunk.Entities)
                 {
                     commandBuffer.Set(entity, new Component0());
                     commandBuffer.Set(entity, new Component0());

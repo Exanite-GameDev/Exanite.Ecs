@@ -135,7 +135,7 @@ public sealed class World : ITrackedDisposable
         deadEntities.EnsureCapacity(deadEntities.Count + archetype.EntityCount);
         foreach (var chunk in archetype.Chunks)
         {
-            foreach (var entity in chunk.Entities.Span)
+            foreach (var entity in chunk.Entities)
             {
                 // Raise component removed events
                 foreach (var componentId in entity.ComponentIds)

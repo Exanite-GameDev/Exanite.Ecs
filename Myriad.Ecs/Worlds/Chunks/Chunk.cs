@@ -52,7 +52,7 @@ public sealed class Chunk
     /// <summary>
     /// All entities in this chunk.
     /// </summary>
-    public ReadOnlyMemory<Entity> Entities => entities.AsMemory(0, EntityCount);
+    public ReadOnlySpan<Entity> Entities => entities.AsSpan(0, EntityCount);
 
     internal Chunk(Archetype archetype, int entityCapacity)
     {

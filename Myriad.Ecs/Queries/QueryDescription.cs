@@ -477,7 +477,7 @@ public sealed class QueryDescription
             {
                 if (chunk.EntityCount > 0)
                 {
-                    return chunk.Entities.Span[0];
+                    return chunk.Entities[0];
                 }
             }
         }
@@ -521,7 +521,7 @@ public sealed class QueryDescription
                     throw new InvalidOperationException("QueryDescription.SingleOrDefault() found more than one matching entity");
                 }
 
-                result = chunk.Entities.Span[0];
+                result = chunk.Entities[0];
             }
         }
 
@@ -573,7 +573,7 @@ public sealed class QueryDescription
                     }
                     else
                     {
-                        return chunk.Entities.Span[choice];
+                        return chunk.Entities[choice];
                     }
                 }
             }
