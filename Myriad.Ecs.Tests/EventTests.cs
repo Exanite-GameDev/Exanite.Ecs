@@ -92,6 +92,103 @@ public class EventTests
     }
 
     [TestMethod]
+    public void DestroyEntity_UsingEntities_RaisesComponentRemovedEvent()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireCommandBuffer();
+
+        world.EventBus.RegisterSendAllTo(new EventLogger());
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create().Set(new Component0());
+        }
+
+        commandBuffer.Execute().Dispose();
+
+        // Destroy entities
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        foreach (var archetype in allEntitiesQuery.GetArchetypes())
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    commandBuffer.Destroy(entity);
+                }
+            }
+        }
+        commandBuffer.Destroy(allEntitiesQuery);
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+    }
+
+    [TestMethod]
+    public void DestroyEntity_UsingQuery_RaisesComponentRemovedEvent()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireCommandBuffer();
+
+        world.EventBus.RegisterSendAllTo(new EventLogger());
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create().Set(new Component0());
+        }
+
+        commandBuffer.Execute().Dispose();
+
+        // Destroy entities
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        commandBuffer.Destroy(allEntitiesQuery);
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+    }
+
+    [TestMethod]
+    public void RemoveComponent_RaisesComponentRemovedEvent()
+    {
+        var world = new World();
+        var handler = new WorldEventHandler().RegisterAll(world);
+        var commandBuffer = world.AcquireCommandBuffer();
+
+        world.EventBus.RegisterSendAllTo(new EventLogger());
+
+        // Create entities
+        var entityAddCount = 10;
+        for (var i = 0; i < entityAddCount; i++)
+        {
+            commandBuffer.Create().Set(new Component0());
+        }
+
+        commandBuffer.Execute().Dispose();
+
+        // Remove components
+        var allEntitiesQuery = new QueryBuilder().Build(world);
+        foreach (var archetype in allEntitiesQuery.GetArchetypes())
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities.Span)
+                {
+                    commandBuffer.Remove<Component0>(entity);
+                }
+            }
+        }
+
+        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+    }
+
+    [TestMethod]
     public void SetComponent_Once_OnBufferedEntity_RaisesComponentAddedEvent()
     {
         var world = new World();
@@ -336,7 +433,7 @@ public class EventTests
     }
 
     [TestMethod]
-    public void RemoveComponent_RaisesComponentRemovedEvent()
+    public void DisposeWorld_RaisesComponentRemovedAndEntityDestroyedEvents()
     {
         var world = new World();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -348,88 +445,27 @@ public class EventTests
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
-            commandBuffer.Create().Set(new Component0());
+            commandBuffer.Create()
+                .Set(new Component0());
         }
 
         commandBuffer.Execute().Dispose();
 
-        // Remove components
-        var allEntitiesQuery = new QueryBuilder().Build(world);
-        foreach (var archetype in allEntitiesQuery.GetArchetypes())
-        {
-            foreach (var chunk in archetype.Chunks)
-            {
-                foreach (var entity in chunk.Entities.Span)
-                {
-                    commandBuffer.Remove<Component0>(entity);
-                }
-            }
-        }
+        // Dispose world
+        world.Dispose();
 
-        commandBuffer.Execute().Dispose();
+        Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
         Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
     }
 
     [TestMethod]
-    public void DestroyEntity_UsingEntities_RaisesComponentRemovedEvent()
+    public void CommandBufferExecute_AfterDisposingWorld_ThrowsException()
     {
         var world = new World();
-        var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
-
-        // Create entities
-        var entityAddCount = 10;
-        for (var i = 0; i < entityAddCount; i++)
-        {
-            commandBuffer.Create().Set(new Component0());
-        }
-
-        commandBuffer.Execute().Dispose();
-
-        // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
-        foreach (var archetype in allEntitiesQuery.GetArchetypes())
-        {
-            foreach (var chunk in archetype.Chunks)
-            {
-                foreach (var entity in chunk.Entities.Span)
-                {
-                    commandBuffer.Destroy(entity);
-                }
-            }
-        }
-        commandBuffer.Destroy(allEntitiesQuery);
-
-        commandBuffer.Execute().Dispose();
-        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
-    }
-
-    [TestMethod]
-    public void DestroyEntity_UsingQuery_RaisesComponentRemovedEvent()
-    {
-        var world = new World();
-        var handler = new WorldEventHandler().RegisterAll(world);
-        var commandBuffer = world.AcquireCommandBuffer();
-
-        world.EventBus.RegisterSendAllTo(new EventLogger());
-
-        // Create entities
-        var entityAddCount = 10;
-        for (var i = 0; i < entityAddCount; i++)
-        {
-            commandBuffer.Create().Set(new Component0());
-        }
-
-        commandBuffer.Execute().Dispose();
-
-        // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
-        commandBuffer.Destroy(allEntitiesQuery);
-
-        commandBuffer.Execute().Dispose();
-        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+        world.Dispose();
+        Assert.ThrowsException<InvalidOperationException>(() => commandBuffer.Execute());
     }
 
     private class WorldEventHandler :
