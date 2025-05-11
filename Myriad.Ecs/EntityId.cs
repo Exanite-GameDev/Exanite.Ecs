@@ -49,18 +49,9 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// Check if this Entity still exists.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Exists(World world)
-    {
-        return Id != 0 && world.GetVersion(Id) == Version;
-    }
-
-    /// <summary>
-    /// Check if this Entity still exists and is not a phantom.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsAlive(World world)
     {
-        return Exists(world);
+        return Id != 0 && world.GetVersion(Id) == Version;
     }
 
     /// <inheritdoc/>
@@ -158,7 +149,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object? GetBoxedComponent(World world, ComponentId id)
     {
-        if (!Exists(world))
+        if (!IsAlive(world))
         {
             return null;
         }

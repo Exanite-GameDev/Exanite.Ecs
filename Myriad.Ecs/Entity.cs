@@ -61,12 +61,6 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Check if this Entity still exists.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Exists() => EntityId.Exists(World);
-
-    /// <summary>
-    /// Check if this Entity still exists and is not a phantom.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsAlive() => EntityId.IsAlive(World);
 
     /// <inheritdoc/>

@@ -148,6 +148,7 @@ public sealed partial class EcsCommandBuffer
         DestroyEntities();
 
         // Structural changes (add/remove components)
+        // This also includes setting components
         ApplyStructuralChanges();
 
         // Clear all temporary state
@@ -185,7 +186,7 @@ public sealed partial class EcsCommandBuffer
         foreach (var entity in destroys)
         {
             // Skip destroyed entities
-            if (!entity.Exists())
+            if (!entity.IsAlive())
             {
                 continue;
             }
@@ -219,6 +220,11 @@ public sealed partial class EcsCommandBuffer
             // Calculate the new archetype for the entity
             foreach (var (entity, modification) in entityModifications)
             {
+                if (!entity.IsAlive())
+                {
+                    continue;
+                }
+
                 var archetypeBeforeMove = World.GetArchetype(entity.EntityId);
                 var componentsBeforeMove = archetypeBeforeMove.Components;
 
