@@ -97,6 +97,16 @@ public readonly partial record struct Entity : IComparable<Entity>
     public ValueRef<T> GetComponentRef<T>() where T : IComponent => EntityId.GetComponentRef<T>(World);
 
     /// <summary>
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ComponentRef<T> GetStorableComponentRef<T>() where T : IComponent
+    {
+        return new ComponentRef<T>(this);
+    }
+
+    /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
