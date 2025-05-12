@@ -100,13 +100,13 @@ public readonly ref struct ComponentModified<T> where T : IComponent
 
     public World World => Entity.World;
     public readonly Entity Entity;
-    public readonly ref T NewValue;
+    public readonly ref T Value;
 
-    public ComponentModified(EcsCommandBuffer commandBuffer, Entity entity, ref T newValue)
+    public ComponentModified(EcsCommandBuffer commandBuffer, Entity entity, ref T value)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
-        NewValue = ref newValue;
+        Value = ref value;
     }
 }
 
