@@ -132,6 +132,6 @@ public readonly ref struct ComponentRemoved<T> where T : IComponent
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
-        Value = value;
+        Value = ref value;
     }
 }
