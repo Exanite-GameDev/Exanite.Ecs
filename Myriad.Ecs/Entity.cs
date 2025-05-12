@@ -94,7 +94,7 @@ public readonly partial record struct Entity : IComparable<Entity>
         var u = new Union64
         {
             I0 = EntityId.Id,
-            U1 = EntityId.Version
+            U1 = EntityId.Version,
         };
 
         // Swap around some bytes (this is effectively an injective hash)

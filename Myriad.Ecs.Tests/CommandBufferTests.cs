@@ -351,7 +351,7 @@ public class EcsCommandBufferTests
         {
             buffer.Create().Set(new ComponentFloat(1)),
             buffer.Create().Set(new ComponentFloat(2)),
-            buffer.Create().Set(new ComponentFloat(3))
+            buffer.Create().Set(new ComponentFloat(3)),
         };
 
         using var resolver = buffer.Execute();
@@ -437,7 +437,7 @@ public class EcsCommandBufferTests
         {
             buffer.Create().Set(new ComponentFloat(1)),
             buffer.Create().Set(new ComponentFloat(2)),
-            buffer.Create().Set(new ComponentFloat(3))
+            buffer.Create().Set(new ComponentFloat(3)),
         };
 
         using var resolver = buffer.Execute();
