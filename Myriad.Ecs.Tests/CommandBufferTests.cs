@@ -1,4 +1,6 @@
-﻿using Exanite.Myriad.Ecs.CommandBuffers;
+﻿using Exanite.Core.Runtime;
+using Exanite.Core.Utilities;
+using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -472,7 +474,7 @@ public class EcsCommandBufferTests
 
         var q = new QueryBuilder().Include<Component0>().Build(world2);
 
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsException<GuardException>(() =>
         {
             cmd.Destroy(q);
         });
