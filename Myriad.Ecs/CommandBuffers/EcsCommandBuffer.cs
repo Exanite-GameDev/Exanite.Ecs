@@ -206,7 +206,7 @@ public sealed partial class EcsCommandBuffer
         foreach (var entity in destroys)
         {
             // Skip destroyed entities
-            if (!entity.IsAlive())
+            if (!entity.IsAlive)
             {
                 continue;
             }
@@ -240,7 +240,7 @@ public sealed partial class EcsCommandBuffer
             // Calculate the new archetype for the entity
             foreach (var (entity, modification) in entityModifications)
             {
-                if (!entity.IsAlive())
+                if (!entity.IsAlive)
                 {
                     continue;
                 }

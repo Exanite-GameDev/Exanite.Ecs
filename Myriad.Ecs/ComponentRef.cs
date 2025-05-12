@@ -17,11 +17,11 @@ public readonly struct ComponentRef<T> where T : IComponent
     /// <summary>
     /// Is the component alive? If <see langword="false"/>, accessing <see cref="Value"/> will throw an exception.
     /// </summary>
-    public bool IsAlive => Entity.IsAlive() && Entity.HasComponent<T>();
+    public bool IsAlive => Entity.IsAlive && Entity.HasComponent<T>();
 
     internal ComponentRef(Entity entity)
     {
-        GuardUtility.IsTrue(entity.IsAlive(), "Entity does not exist");
+        GuardUtility.IsTrue(entity.IsAlive, "Entity does not exist");
         GuardUtility.IsTrue(entity.HasComponent<T>(), $"Component does not exist on entity: {entity.GetType().Name}");
 
         Entity = entity;

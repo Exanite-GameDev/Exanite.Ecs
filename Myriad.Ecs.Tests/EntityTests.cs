@@ -10,8 +10,8 @@ public class EntityTests
     [TestMethod]
     public void DefaultEntityIsNotAlive()
     {
-        Assert.IsFalse(default(Entity).IsAlive());
-        Assert.IsFalse(default(Entity).IsAlive());
+        Assert.IsFalse(default(Entity).IsAlive);
+        Assert.IsFalse(default(Entity).IsAlive);
     }
 
     [TestMethod]

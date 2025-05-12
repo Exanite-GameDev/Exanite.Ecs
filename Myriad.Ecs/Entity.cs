@@ -15,7 +15,16 @@ namespace Exanite.Myriad.Ecs;
 public readonly partial record struct Entity : IComparable<Entity>
 {
     /// <summary>
-    /// The <see cref="World"/> this <see cref="Entity"/> is in
+    /// Check if this Entity still exists.
+    /// </summary>
+    public bool IsAlive
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => Id != 0 && World.GetVersion(Id) == Version;
+    }
+
+    /// <summary>
+    /// The <see cref="World"/> this <see cref="Entity"/> is in.
     /// </summary>
     public readonly World World;
 
@@ -35,7 +44,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     internal readonly EntityId EntityId;
 
     /// <summary>
-    /// Get the set of components which this entity currently has
+    /// Get the set of components which this entity currently has.
     /// </summary>
     public ImmutableOrderedListSet<ComponentId> ComponentIds
     {
@@ -47,39 +56,15 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
-    /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
+    /// Get a boxed array of all components.
+    /// <para/>
+    /// This is very slow and the returned data is a copy of the original data.
+    /// Avoid using this for anything other than debugging!
     /// </summary>
     public object[] BoxedComponents => ComponentIds.Select(GetBoxedComponent).ToArray()!;
 
-    internal Entity(EntityId id, World world)
-    {
-        EntityId = id;
-        World = world;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public override string ToString()
-    {
-        return EntityId.ToString();
-    }
-
     /// <summary>
-    /// Check if this Entity still exists.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool IsAlive()
-    {
-        return Id != 0 && World.GetVersion(Id) == Version;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int CompareTo(Entity other)
-    {
-        return EntityId.CompareTo(other.EntityId);
-    }
-
-    /// <summary>
-    /// Check if this entity has a component
+    /// Check if this entity has a component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool HasComponent<T>() where T : IComponent
@@ -125,7 +110,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object? GetBoxedComponent(ComponentId id)
     {
-        if (!IsAlive())
+        if (!IsAlive)
         {
             return null;
         }
@@ -137,5 +122,23 @@ public readonly partial record struct Entity : IComparable<Entity>
 
         ref var entityInfo = ref World.GetStorageLocation(EntityId);
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.IndexInChunk);
+    }
+
+    internal Entity(EntityId id, World world)
+    {
+        EntityId = id;
+        World = world;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public override string ToString()
+    {
+        return EntityId.ToString();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int CompareTo(Entity other)
+    {
+        return EntityId.CompareTo(other.EntityId);
     }
 }

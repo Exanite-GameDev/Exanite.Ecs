@@ -45,7 +45,7 @@ public class EcsCommandBufferTests
         using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
-        Assert.IsTrue(entity.IsAlive());
+        Assert.IsTrue(entity.IsAlive);
         Assert.AreEqual(1, world.Archetypes.Count);
         Assert.AreEqual(0, world.Archetypes.Single().Components.Count);
     }
@@ -76,7 +76,7 @@ public class EcsCommandBufferTests
         for (var i = 0; i < entities.Count; i++)
         {
             var entity = entities[i];
-            Assert.IsTrue(entity.IsAlive());
+            Assert.IsTrue(entity.IsAlive);
             Assert.AreEqual(1, world.Archetypes.Count);
             Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
             Assert.AreEqual(i, entity.GetComponent<ComponentInt32>().Value);
@@ -128,7 +128,7 @@ public class EcsCommandBufferTests
 
                 var index = rng.Next(0, alive.Count);
                 var ent = alive[index];
-                Assert.IsTrue(ent.IsAlive());
+                Assert.IsTrue(ent.IsAlive);
                 buffer.Destroy(ent);
                 alive.RemoveAt(index);
                 dead.Add(ent);
@@ -148,12 +148,12 @@ public class EcsCommandBufferTests
             for (var j = 0; j < alive.Count; j++)
             {
                 var entity = alive[j];
-                Assert.IsTrue(entity.IsAlive());
+                Assert.IsTrue(entity.IsAlive);
             }
             for (var j = 0; j < dead.Count; j++)
             {
                 var entity = dead[j];
-                Assert.IsTrue(!entity.IsAlive());
+                Assert.IsTrue(!entity.IsAlive);
             }
 
             // Check archetypes
@@ -323,7 +323,7 @@ public class EcsCommandBufferTests
         using var resolver = buffer.Execute();
         var entity = eb.Resolve();
 
-        Assert.IsTrue(entity.IsAlive());
+        Assert.IsTrue(entity.IsAlive);
         Assert.AreEqual(1, world.Archetypes.Count);
         Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
         Assert.IsTrue(world.Archetypes.Single().Components.Contains(ComponentId.Get<ComponentFloat>()));
@@ -365,15 +365,15 @@ public class EcsCommandBufferTests
 
         foreach (var entity in entities)
         {
-            Assert.IsTrue(entity.IsAlive());
+            Assert.IsTrue(entity.IsAlive);
         }
 
         buffer.Destroy(entities[1]);
         buffer.Execute();
 
-        Assert.IsTrue(entities[0].IsAlive());
-        Assert.IsFalse(entities[1].IsAlive());
-        Assert.IsTrue(entities[2].IsAlive());
+        Assert.IsTrue(entities[0].IsAlive);
+        Assert.IsFalse(entities[1].IsAlive);
+        Assert.IsTrue(entities[2].IsAlive);
 
         Assert.AreEqual(1, entities[0].GetComponent<ComponentFloat>().Value);
         Assert.AreEqual(3, entities[2].GetComponent<ComponentFloat>().Value);
@@ -388,7 +388,7 @@ public class EcsCommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Execute();
         var entity = buffered.Resolve();
-        Assert.IsTrue(entity.IsAlive());
+        Assert.IsTrue(entity.IsAlive);
 
         buffer.Destroy(entity);
         buffer.Destroy(entity);
@@ -397,7 +397,7 @@ public class EcsCommandBufferTests
         buffer.Destroy(entity);
         buffer.Execute();
 
-        Assert.IsFalse(entity.IsAlive());
+        Assert.IsFalse(entity.IsAlive);
     }
 
     [TestMethod]
@@ -410,7 +410,7 @@ public class EcsCommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Execute();
         var entity = buffered.Resolve();
-        Assert.IsTrue(entity.IsAlive());
+        Assert.IsTrue(entity.IsAlive);
 
         // Setup deletion for that entity
         buffer.Destroy(entity);
@@ -419,12 +419,12 @@ public class EcsCommandBufferTests
         var buffer2 = new EcsCommandBuffer(world);
         buffer2.Destroy(entity);
         buffer2.Execute().Dispose();
-        Assert.IsFalse(entity.IsAlive());
+        Assert.IsFalse(entity.IsAlive);
 
         // Now play the first buffer back
         buffer.Execute().Dispose();
 
-        Assert.IsFalse(entity.IsAlive());
+        Assert.IsFalse(entity.IsAlive);
     }
 
     [TestMethod]
@@ -451,15 +451,15 @@ public class EcsCommandBufferTests
 
         foreach (var entity in entities)
         {
-            Assert.IsTrue(entity.IsAlive());
+            Assert.IsTrue(entity.IsAlive);
         }
 
         buffer.Destroy([entities[0], entities[1]]);
         buffer.Execute();
 
-        Assert.IsFalse(entities[0].IsAlive());
-        Assert.IsFalse(entities[1].IsAlive());
-        Assert.IsTrue(entities[2].IsAlive());
+        Assert.IsFalse(entities[0].IsAlive);
+        Assert.IsFalse(entities[1].IsAlive);
+        Assert.IsTrue(entities[2].IsAlive);
 
         Assert.AreEqual(3, entities[2].GetComponent<ComponentFloat>().Value);
     }
@@ -522,7 +522,7 @@ public class EcsCommandBufferTests
         }
 
         // Check it's dead
-        Assert.IsFalse(dead.IsAlive());
+        Assert.IsFalse(dead.IsAlive);
     }
 
     [TestMethod]
@@ -535,7 +535,7 @@ public class EcsCommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         using var resolver = buffer.Execute();
         var entity = buffered.Resolve();
-        Assert.IsTrue(entity.IsAlive());
+        Assert.IsTrue(entity.IsAlive);
 
         // Modify it _and_ destroy it
         buffer.Set(entity, new ComponentInt64(7));
@@ -545,7 +545,7 @@ public class EcsCommandBufferTests
         buffer.Execute().Dispose();
 
         // Check it's dead
-        Assert.IsFalse(entity.IsAlive());
+        Assert.IsFalse(entity.IsAlive);
         Assert.AreEqual(0, new QueryBuilder().Include<ComponentFloat>().Build(world).Count());
         Assert.AreEqual(0, new QueryBuilder().Include<ComponentInt16>().Build(world).Count());
         Assert.AreEqual(0, new QueryBuilder().Include<ComponentInt32>().Build(world).Count());
@@ -964,7 +964,7 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute().Dispose();
 
-        Assert.IsTrue(e.IsAlive());
+        Assert.IsTrue(e.IsAlive);
         Assert.IsTrue(e.HasComponent<Component0>());
         Assert.IsTrue(e.HasComponent<Component1>());
     }
@@ -986,7 +986,7 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute().Dispose();
 
-        Assert.IsTrue(e.IsAlive());
+        Assert.IsTrue(e.IsAlive);
         Assert.IsTrue(e.HasComponent<Component0>());
         Assert.IsTrue(e.HasComponent<Component1>());
     }
