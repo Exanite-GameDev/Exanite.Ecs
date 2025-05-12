@@ -22,12 +22,18 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// The <see cref="Ecs.Entity"/> of an entity, may be re-used very quickly once an <see cref="Ecs.Entity"/> is destroyed.
     /// </summary>
-    public int Id => EntityId.Id;
+    public int Id
+    {
+        get { return EntityId.Id; }
+    }
 
     /// <summary>
     /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
     /// </summary>
-    public uint Version => EntityId.Version;
+    public uint Version
+    {
+        get { return EntityId.Version; }
+    }
 
     /// <summary>
     /// The raw ID of this <see cref="Entity"/>
@@ -37,7 +43,14 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get the set of components which this entity currently has
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ComponentIds => EntityId.GetComponents(World);
+    public ImmutableOrderedListSet<ComponentId> ComponentIds
+    {
+        get
+        {
+            var location = World.GetStorageLocation(EntityId);
+            return location.Chunk.Archetype.Components;
+        }
+    }
 
     /// <summary>
     /// Get a boxed array of all components. <b>DO NOT</b> use this for anything other than debugging!
@@ -50,7 +63,6 @@ public readonly partial record struct Entity : IComparable<Entity>
         World = world;
     }
 
-    /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString()
     {
@@ -61,9 +73,11 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Check if this Entity still exists.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool IsAlive() => EntityId.IsAlive(World);
+    public bool IsAlive()
+    {
+        return Id != 0 && World.GetVersion(Id) == Version;
+    }
 
-    /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int CompareTo(Entity other)
     {
@@ -74,27 +88,68 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Get a unique 64 bit ID for this entity
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public long UniqueId() => EntityId.UniqueId();
+    public long UniqueId()
+    {
+        // Set the entity ID and version into the hi and lo 32 bits
+        var u = new Union64
+        {
+            I0 = EntityId.Id,
+            U1 = EntityId.Version
+        };
+
+        // Swap around some bytes (this is effectively an injective hash)
+        Swap(ref u.B0, ref u.B1);
+        Swap(ref u.B2, ref u.B3);
+        Swap(ref u.B4, ref u.B5);
+        Swap(ref u.B6, ref u.B7);
+        unchecked
+        {
+            u.I0 *= 1297519;
+            u.I1 *= 722479;
+        }
+        Swap(ref u.B4, ref u.B1);
+        Swap(ref u.B7, ref u.B3);
+        Swap(ref u.B0, ref u.B2);
+        Swap(ref u.B6, ref u.B5);
+
+        return u.Long;
+
+        static void Swap(ref byte a, ref byte b)
+        {
+            (a, b) = (b, a);
+        }
+    }
 
     /// <summary>
     /// Check if this entity has a component
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool HasComponent<T>() where T : IComponent => EntityId.HasComponent<T>(World);
+    public bool HasComponent<T>() where T : IComponent
+    {
+        return ComponentIds.Contains(ComponentId.Get<T>());
+    }
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
     /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ref T GetComponent<T>() where T : IComponent => ref EntityId.GetComponent<T>(World);
+    public ref T GetComponent<T>() where T : IComponent
+    {
+        ref var entityInfo = ref World.GetStorageLocation(EntityId);
+        return ref entityInfo.Chunk.Get<T>(EntityId, entityInfo.IndexInChunk);
+    }
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
     /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ValueRef<T> GetComponentRef<T>() where T : IComponent => EntityId.GetComponentRef<T>(World);
+    public ValueRef<T> GetComponentRef<T>() where T : IComponent
+    {
+        ref var entityInfo = ref World.GetStorageLocation(EntityId);
+        return entityInfo.Chunk.GetRef<T>(EntityId, entityInfo.IndexInChunk);
+    }
 
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
@@ -110,5 +165,19 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public object? GetBoxedComponent(ComponentId id) => EntityId.GetBoxedComponent(World, id);
+    public object? GetBoxedComponent(ComponentId id)
+    {
+        if (!IsAlive())
+        {
+            return null;
+        }
+
+        if (!ComponentIds.Contains(id))
+        {
+            return null;
+        }
+
+        ref var entityInfo = ref World.GetStorageLocation(EntityId);
+        return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.IndexInChunk);
+    }
 }
