@@ -56,24 +56,6 @@ public class EntityTests
     }
 
     [TestMethod]
-    public void EntityUniqueId()
-    {
-        var w = new World();
-        var b = new EcsCommandBuffer(w);
-
-        var eb1 = b.Create();
-        var eb2 = b.Create();
-        using var resolver = b.Execute();
-        var entity1 = eb1.Resolve();
-        var entity2 = eb2.Resolve();
-
-        var id1 = entity1.UniqueId();
-        var id2 = entity2.UniqueId();
-
-        Assert.AreNotEqual(id1, id2);
-    }
-
-    [TestMethod]
     public void GetComponent()
     {
         var w = new World();

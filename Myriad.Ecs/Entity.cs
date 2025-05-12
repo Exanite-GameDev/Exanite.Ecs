@@ -22,18 +22,12 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// The <see cref="Ecs.Entity"/> of an entity, may be re-used very quickly once an <see cref="Ecs.Entity"/> is destroyed.
     /// </summary>
-    public int Id
-    {
-        get { return EntityId.Id; }
-    }
+    public int Id => EntityId.Id;
 
     /// <summary>
     /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
     /// </summary>
-    public uint Version
-    {
-        get { return EntityId.Version; }
-    }
+    public uint Version => EntityId.Version;
 
     /// <summary>
     /// The raw ID of this <see cref="Entity"/>
@@ -82,42 +76,6 @@ public readonly partial record struct Entity : IComparable<Entity>
     public int CompareTo(Entity other)
     {
         return EntityId.CompareTo(other.EntityId);
-    }
-
-    /// <summary>
-    /// Get a unique 64 bit ID for this entity
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public long UniqueId()
-    {
-        // Set the entity ID and version into the hi and lo 32 bits
-        var u = new Union64
-        {
-            I0 = EntityId.Id,
-            U1 = EntityId.Version,
-        };
-
-        // Swap around some bytes (this is effectively an injective hash)
-        Swap(ref u.B0, ref u.B1);
-        Swap(ref u.B2, ref u.B3);
-        Swap(ref u.B4, ref u.B5);
-        Swap(ref u.B6, ref u.B7);
-        unchecked
-        {
-            u.I0 *= 1297519;
-            u.I1 *= 722479;
-        }
-        Swap(ref u.B4, ref u.B1);
-        Swap(ref u.B7, ref u.B3);
-        Swap(ref u.B0, ref u.B2);
-        Swap(ref u.B6, ref u.B5);
-
-        return u.Long;
-
-        static void Swap(ref byte a, ref byte b)
-        {
-            (a, b) = (b, a);
-        }
     }
 
     /// <summary>
