@@ -2,7 +2,7 @@ using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
-public readonly struct ComponentRef<T> where T : IComponent
+public readonly record struct ComponentRef<T> where T : IComponent
 {
     public readonly Entity Entity;
 
