@@ -24,6 +24,6 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
     public override void RaiseComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, World world, Entity entity)
     {
-        world.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, entity.GetComponent<T>()));
+        world.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref entity.GetComponent<T>()));
     }
 }

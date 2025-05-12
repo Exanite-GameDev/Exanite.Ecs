@@ -51,7 +51,7 @@ public readonly ref struct EntityDestroyedEvent
 }
 
 /// <summary>
-/// Raised after a component is either added or set. When setting, this event will contain the new component value.
+/// Raised after a component is either added or set.
 /// </summary>
 public readonly ref struct ComponentAdded<T> where T : IComponent
 {
@@ -111,7 +111,7 @@ public readonly ref struct ComponentModified<T> where T : IComponent
 }
 
 /// <summary>
-/// Raised after a component is either removed or set. When setting, this event will contain the old component value.
+/// Raised before a component is either removed.
 /// </summary>
 public readonly ref struct ComponentRemoved<T> where T : IComponent
 {
@@ -126,9 +126,9 @@ public readonly ref struct ComponentRemoved<T> where T : IComponent
 
     public World World => Entity.World;
     public readonly Entity Entity;
-    public readonly T Value;
+    public readonly ref T Value;
 
-    public ComponentRemoved(EcsCommandBuffer commandBuffer, Entity entity, T value)
+    public ComponentRemoved(EcsCommandBuffer commandBuffer, Entity entity, ref T value)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
