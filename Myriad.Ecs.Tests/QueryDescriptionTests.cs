@@ -13,7 +13,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsIncluded()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<ComponentFloat>()
@@ -28,7 +28,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsExcluded()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Exclude<ComponentFloat>()
@@ -43,7 +43,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsExactlyOneOf()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .ExactlyOneOf<ComponentFloat>()
@@ -59,7 +59,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsAtLeastOneOf()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .AtLeastOneOf<ComponentFloat>()
@@ -75,7 +75,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeMatchNone()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
            .Include<ComponentFloat>()
@@ -90,7 +90,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeMatchNoneNonGeneric()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
            .Include(typeof(ComponentFloat))
@@ -105,7 +105,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeMatchOne()
     {
-        var w = new World();
+        var w = new EcsWorld();
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
 
@@ -124,7 +124,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeMatchCaching()
     {
-        var w = new World();
+        var w = new EcsWorld();
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
 
@@ -164,7 +164,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeMatchMultiple()
     {
-        var w = new World();
+        var w = new EcsWorld();
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
@@ -184,7 +184,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeExclude()
     {
-        var w = new World();
+        var w = new EcsWorld();
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
@@ -209,7 +209,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void ExactlyOne()
     {
-        var w = new World();
+        var w = new EcsWorld();
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
@@ -237,7 +237,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void AtLeastOne()
     {
-        var w = new World();
+        var w = new EcsWorld();
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
@@ -267,7 +267,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void First_ThrowsNoMatch()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -279,7 +279,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void First_MatchSingle()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -296,7 +296,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void First_MatchMultiple()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -315,7 +315,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void FirstOrDefault_NullNoMatch()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -327,7 +327,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void FirstOrDefault_MatchSingle()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -344,7 +344,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void FirstOrDefault_MatchMultiple()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -363,7 +363,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void SingleOrDefault_NullNoMatch()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -375,7 +375,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void SingleOrDefault_ThrowsMultipleMatch()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -392,7 +392,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void SingleOrDefault_MatchSingle()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -409,7 +409,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Single_ThrowsMultipleMatch()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -426,7 +426,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Single_ThrowsNoMatch()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -438,7 +438,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Single_MatchSingle()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -455,7 +455,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Any_True()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -472,7 +472,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Any_False()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -484,7 +484,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Contains_True()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -501,7 +501,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Contains_False()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -518,7 +518,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Random_NullNoMatch()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -532,7 +532,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Random_MatchSingle()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
@@ -551,7 +551,7 @@ public class QueryDescriptionTests
     [TestMethod]
     public void Random_MatchRandom()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<ComponentInt32>()

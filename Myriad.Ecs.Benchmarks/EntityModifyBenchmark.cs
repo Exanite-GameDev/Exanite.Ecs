@@ -10,14 +10,14 @@ public class EntityModifyBenchmark
 {
     private const int Count = 1_000_000;
 
-    private World world = null!;
+    private EcsWorld world = null!;
     private readonly List<Entity> entities = [];
     private EcsCommandBuffer ready = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        world = new World();
+        world = new EcsWorld();
 
         // Create initial entities
         var rng = new Random(1);

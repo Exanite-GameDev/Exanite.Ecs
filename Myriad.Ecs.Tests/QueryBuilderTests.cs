@@ -220,7 +220,7 @@ public class QueryBuilderTests
     [TestMethod]
     public void ConvertQueryToBuilder()
     {
-        var world = new World();
+        var world = new EcsWorld();
 
         var query = new QueryBuilder()
              .Include<ComponentInt16>()
@@ -255,7 +255,7 @@ public class QueryBuilderTests
     [TestMethod]
     public void BuildTwiceSharesParts()
     {
-        var world = new World();
+        var world = new EcsWorld();
 
         var builder = new QueryBuilder()
             .Include<ComponentInt16>()

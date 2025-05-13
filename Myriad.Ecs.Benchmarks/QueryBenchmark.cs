@@ -15,13 +15,13 @@ public class QueryBenchmark
     [Params(100_000, 1_000_000)]
     public int EntityCount = 1_000_000;
 
-    private World world = null!;
+    private EcsWorld world = null!;
     private QueryDescription query = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        world = new World();
+        world = new EcsWorld();
 
         var buffer = new EcsCommandBuffer(world);
         var rng = new Random(2);

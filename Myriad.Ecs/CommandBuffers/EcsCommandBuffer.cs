@@ -31,7 +31,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying.
     /// </summary>
-    public World World { get; }
+    public EcsWorld World { get; }
 
     public bool HasBufferedOperations { get; private set; }
     public bool IsExecuting { get; private set; }
@@ -63,7 +63,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>.
     /// </summary>
-    public EcsCommandBuffer(World world)
+    public EcsCommandBuffer(EcsWorld world)
     {
         World = world;
 

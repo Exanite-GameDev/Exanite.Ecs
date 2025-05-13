@@ -22,7 +22,7 @@ public sealed class EcsCommandBufferResolver : IDisposable
     /// <summary>
     /// The <see cref="World"/> this resolver is for.
     /// </summary>
-    public World World => Parent!.World;
+    public EcsWorld World => Parent!.World;
 
     internal void Configure(EcsCommandBuffer buffer)
     {

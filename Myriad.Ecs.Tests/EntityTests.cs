@@ -23,7 +23,7 @@ public class EntityTests
     [TestMethod]
     public void CompareEntityWithSelf()
     {
-        var w = new World();
+        var w = new EcsWorld();
         var b = new EcsCommandBuffer(w);
 
         var eb = b.Create();
@@ -36,7 +36,7 @@ public class EntityTests
     [TestMethod]
     public void CompareEntityWithAnother()
     {
-        var w = new World();
+        var w = new EcsWorld();
         var b = new EcsCommandBuffer(w);
 
         var eb1 = b.Create();
@@ -58,7 +58,7 @@ public class EntityTests
     [TestMethod]
     public void GetComponent()
     {
-        var w = new World();
+        var w = new EcsWorld();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create()
@@ -73,7 +73,7 @@ public class EntityTests
     [TestMethod]
     public void GetComponents()
     {
-        var w = new World();
+        var w = new EcsWorld();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
@@ -87,7 +87,7 @@ public class EntityTests
     [TestMethod]
     public void GetComponentDead()
     {
-        var w = new World();
+        var w = new EcsWorld();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
@@ -107,7 +107,7 @@ public class EntityTests
     [TestMethod]
     public void GetBoxedComponents()
     {
-        var w = new World();
+        var w = new EcsWorld();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
@@ -121,7 +121,7 @@ public class EntityTests
     [TestMethod]
     public void GetBoxedComponent()
     {
-        var w = new World();
+        var w = new EcsWorld();
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create()

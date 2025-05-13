@@ -26,7 +26,7 @@ public sealed class Archetype
     /// <summary>
     /// The world which this archetype belongs to.
     /// </summary>
-    public World World { get; }
+    public EcsWorld World { get; }
 
     /// <summary>
     /// The chunks contained in this archetype.
@@ -88,7 +88,7 @@ public sealed class Archetype
     /// </summary>
     private readonly Stack<Chunk> spareChunks = new(ChunkHotSpares);
 
-    internal Archetype(World world, ImmutableOrderedListSet<ComponentId> components)
+    internal Archetype(EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
     {
         World = world;
         Components = components;

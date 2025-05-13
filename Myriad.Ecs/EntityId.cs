@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace Exanite.Myriad.Ecs;
 
 /// <summary>
-/// The ID of an <see cref="Ecs.Entity"/> (not carrying a reference to a <see cref="World"/>)
+/// The ID of an <see cref="Ecs.Entity"/> (not carrying a reference to a <see cref="EcsWorld"/>)
 /// </summary>
 [DebuggerDisplay("{Id}v{Version}")]
 internal readonly record struct EntityId : IComparable<EntityId>
@@ -30,7 +30,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     /// Create a new <see cref="Ecs.Entity"/> struct that represents this Entity
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Entity ToEntity(World world)
+    public Entity ToEntity(EcsWorld world)
     {
         return new Entity(this, world);
     }

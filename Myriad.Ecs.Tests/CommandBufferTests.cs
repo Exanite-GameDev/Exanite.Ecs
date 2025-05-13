@@ -13,7 +13,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateCommandBuffer()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
         Assert.IsNotNull(buffer);
     }
@@ -21,7 +21,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void DisposeResolverTwiceThrows()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var r = buffer.Execute();
@@ -36,7 +36,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
@@ -53,7 +53,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateManyEntities()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create lots of entities
@@ -86,7 +86,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ChurnCreateDestroy()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var rng = new Random(46576);
@@ -164,7 +164,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ChurnStructural()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var entities = new List<Entity>();
         using (var setupResolver = TestHelpers.SetupRandomEntities(world, 10_000).Execute())
         {
@@ -238,7 +238,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateEntityLateResolveThrows()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
@@ -255,7 +255,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateEntityCannotResolveFromAnotherBuffer()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer1 = new EcsCommandBuffer(world);
         var buffer2 = new EcsCommandBuffer(world);
 
@@ -276,7 +276,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateEntityCannotResolveFromPreviousPlayback()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer1 = new EcsCommandBuffer(world);
 
         // Create the entity
@@ -296,7 +296,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ModifyBufferedEntityAfterPlaybackThrows()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer1 = new EcsCommandBuffer(world);
 
         // Create the entity
@@ -313,7 +313,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateEntityAndSet()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer
@@ -332,7 +332,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void SetTwiceOnNewEntityWithOverwrite()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var eb = buffer.Create();
@@ -344,7 +344,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void DestroyEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var buffered = new[]
@@ -382,7 +382,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void DestroyEntityTwice()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var buffered = buffer.Create().Set(new ComponentFloat(1));
@@ -403,7 +403,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void DestroyDeadEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -430,7 +430,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void DestroyEntities()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         var buffered = new[]
@@ -467,8 +467,8 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void DestroyByQueryMixedWorlds()
     {
-        var world1 = new World();
-        var world2 = new World();
+        var world1 = new EcsWorld();
+        var world2 = new EcsWorld();
 
         var cmd = new EcsCommandBuffer(world1);
 
@@ -483,7 +483,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void DestroyByQuery()
     {
-        var world = new World();
+        var world = new EcsWorld();
 
         TestHelpers.SetupRandomEntities(world, count: 100000).Execute().Dispose();
 
@@ -528,7 +528,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ModifyThenDestroy()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create entity
@@ -556,7 +556,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void RemoveFromEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
@@ -578,7 +578,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void AddToEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
@@ -602,7 +602,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void SetOnEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
@@ -626,7 +626,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void SetTwiceOnEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
@@ -651,7 +651,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void SetThenRemoveOnEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
@@ -678,7 +678,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void RemoveInvalidComponent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
@@ -703,7 +703,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void RemoveAndSetComponent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create an entity with 2 components
@@ -734,7 +734,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void CreateManyArchetypes()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create entities in lots of different archetypes. The idea is to
@@ -812,7 +812,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void StructuralChanges()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var buffer = new EcsCommandBuffer(world);
 
         // Create some entities
@@ -870,7 +870,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ClearSet()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -891,7 +891,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ClearBufferedSet()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -911,7 +911,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ResolveClearedEntity()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -929,7 +929,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ClearBufferRemove()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -950,7 +950,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ClearBufferDestroy()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var cmd = new EcsCommandBuffer(world);
 
         // Create an entity
@@ -972,7 +972,7 @@ public class EcsCommandBufferTests
     [TestMethod]
     public void ClearBufferDestroyArchetype()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var cmd = new EcsCommandBuffer(world);
 
         // Create an entity

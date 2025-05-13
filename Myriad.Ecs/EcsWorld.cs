@@ -16,7 +16,7 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// A world contains all entities.
 /// </summary>
-public sealed class World : ITrackedDisposable
+public sealed class EcsWorld : ITrackedDisposable
 {
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
@@ -31,7 +31,7 @@ public sealed class World : ITrackedDisposable
     internal readonly SegmentedList<StorageLocation> Entities = new(1024);
 
     /// <summary>
-    /// Get a list of all archetypes in this <see cref="World"/>
+    /// Get a list of all archetypes in this <see cref="EcsWorld"/>
     /// </summary>
     public IReadOnlyList<Archetype> Archetypes => archetypes;
     internal int ArchetypesCount => archetypes.Count;
@@ -40,7 +40,7 @@ public sealed class World : ITrackedDisposable
 
     public EventBus EventBus { get; } = new();
 
-    public World()
+    public EcsWorld()
     {
         commandBufferPool = new Pool<EcsCommandBuffer>(
             create: () => new EcsCommandBuffer(this),

@@ -10,7 +10,7 @@ public class ArchetypeTests
     [TestMethod]
     public void EnumerateManyEntities()
     {
-        var w = new World();
+        var w = new EcsWorld();
 
         var cb = new EcsCommandBuffer(w);
         for (var i = 0; i < 10000; i++)

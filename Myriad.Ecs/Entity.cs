@@ -26,7 +26,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// The <see cref="World"/> this <see cref="Entity"/> is in.
     /// </summary>
-    public readonly World World;
+    public readonly EcsWorld World;
 
     /// <summary>
     /// The <see cref="Ecs.Entity"/> of an entity, may be re-used very quickly once an <see cref="Ecs.Entity"/> is destroyed.
@@ -124,7 +124,7 @@ public readonly partial record struct Entity : IComparable<Entity>
         return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.IndexInChunk);
     }
 
-    internal Entity(EntityId id, World world)
+    internal Entity(EntityId id, EcsWorld world)
     {
         EntityId = id;
         World = world;

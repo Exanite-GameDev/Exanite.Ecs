@@ -4,7 +4,7 @@ namespace Exanite.Myriad.Ecs.Tests;
 
 public static class TestHelpers
 {
-    public static EcsCommandBuffer SetupRandomEntities(World world, uint uniqueComponents = 7, int count = 1_000_000)
+    public static EcsCommandBuffer SetupRandomEntities(EcsWorld world, uint uniqueComponents = 7, int count = 1_000_000)
     {
         uniqueComponents = Math.Clamp(uniqueComponents, 0, 7);
 

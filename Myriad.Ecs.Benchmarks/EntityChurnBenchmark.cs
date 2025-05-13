@@ -7,14 +7,14 @@ namespace Exanite.Myriad.Ecs.Benchmarks;
 [MemoryDiagnoser]
 public class EntityChurnBenchmark
 {
-    private World world = null!;
+    private EcsWorld world = null!;
     private EcsCommandBuffer buffer = null!;
     private readonly List<BufferedEntity> buffered = [];
 
     [GlobalSetup]
     public void Setup()
     {
-        world = new World();
+        world = new EcsWorld();
         buffer = new EcsCommandBuffer(world);
     }
 

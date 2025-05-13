@@ -13,7 +13,7 @@ public class EventTests
     [TestMethod]
     public void CreateEntity_RaisesEntityCreatedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -33,7 +33,7 @@ public class EventTests
     [TestMethod]
     public void DestroyEntity_UsingEntities_RaisesEntityDestroyedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -69,7 +69,7 @@ public class EventTests
     [TestMethod]
     public void DestroyEntity_UsingQuery_RaisesEntityDestroyedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -95,7 +95,7 @@ public class EventTests
     [TestMethod]
     public void DestroyEntity_UsingEntities_RaisesComponentRemovedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -131,7 +131,7 @@ public class EventTests
     [TestMethod]
     public void DestroyEntity_UsingQuery_RaisesComponentRemovedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -157,7 +157,7 @@ public class EventTests
     [TestMethod]
     public void RemoveComponent_RaisesComponentRemovedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -192,7 +192,7 @@ public class EventTests
     [TestMethod]
     public void SetComponent_Once_OnBufferedEntity_RaisesComponentAddedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -212,7 +212,7 @@ public class EventTests
     [TestMethod]
     public void SetComponent_Once_OnWorldEntity_RaisesComponentAddedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -247,7 +247,7 @@ public class EventTests
     [TestMethod]
     public void SetComponent_Twice_InDifferentCommandBuffers_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -283,7 +283,7 @@ public class EventTests
     [TestMethod]
     public void SetComponent_Twice_InDifferentCommandBuffers_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -334,7 +334,7 @@ public class EventTests
     [TestMethod]
     public void SetComponent_Twice_InSameCommandBuffer_OnBufferedEntity_OnlyRaisesComponentAddedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -358,7 +358,7 @@ public class EventTests
     [TestMethod]
     public void SetComponent_Twice_InSameCommandBuffer_OnWorldEntity_OnlyRaisesComponentAddedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -396,7 +396,7 @@ public class EventTests
     [TestMethod]
     public void DestroyEntity_AfterModifyingEntity_InSameCommandBuffer_OnlyRaisesEntityDestroyedEvent()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -436,7 +436,7 @@ public class EventTests
     [TestMethod]
     public void DisposeWorld_DestroysAllEntities_And_RaisesComponentRemovedAndEntityDestroyedEvents()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
@@ -462,7 +462,7 @@ public class EventTests
     [TestMethod]
     public void CommandBufferExecute_AfterDisposingWorld_ThrowsException()
     {
-        var world = new World();
+        var world = new EcsWorld();
         var commandBuffer = world.AcquireCommandBuffer();
 
         world.Dispose();
@@ -483,7 +483,7 @@ public class EventTests
         public int ComponentModifiedCount { get; private set; }
         public int ComponentRemovedCount { get; private set; }
 
-        public WorldEventHandler RegisterAll(World world)
+        public WorldEventHandler RegisterAll(EcsWorld world)
         {
             world.EventBus.Register<EntityCreatedEvent>(this);
             world.EventBus.Register<EntityDestroyedEvent>(this);

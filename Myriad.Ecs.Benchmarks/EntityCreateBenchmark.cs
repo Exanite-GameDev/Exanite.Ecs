@@ -10,12 +10,12 @@ public class EntityCreateBenchmark
 {
     private const int Count = 1_000_000;
 
-    private World world = null!;
+    private EcsWorld world = null!;
 
     [GlobalSetup]
     public void Setup()
     {
-        world = new World();
+        world = new EcsWorld();
     }
 
     private static void AddEntity(EcsCommandBuffer buffer, Random random)

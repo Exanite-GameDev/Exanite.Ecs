@@ -49,7 +49,7 @@ public sealed class QueryBuilder
     /// <summary>
     /// Build a <see cref="QueryDescription"/> from the current state of this builder.
     /// </summary>
-    public QueryDescription Build(World world)
+    public QueryDescription Build(EcsWorld world)
     {
         return new QueryDescription(
             world,

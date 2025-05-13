@@ -24,7 +24,7 @@ public sealed class QueryDescription
     /// <summary>
     /// The World that this query is for
     /// </summary>
-    public World World { get; }
+    public EcsWorld World { get; }
 
     /// <summary>
     /// The components which must be present on an entity for it to match this query
@@ -49,7 +49,7 @@ public sealed class QueryDescription
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
-    internal QueryDescription(World world, ImmutableOrderedListSet<ComponentId> include, ImmutableOrderedListSet<ComponentId> exclude, ImmutableOrderedListSet<ComponentId> atLeastOne, ImmutableOrderedListSet<ComponentId> exactlyOne)
+    internal QueryDescription(EcsWorld world, ImmutableOrderedListSet<ComponentId> include, ImmutableOrderedListSet<ComponentId> exclude, ImmutableOrderedListSet<ComponentId> atLeastOne, ImmutableOrderedListSet<ComponentId> exactlyOne)
     {
         World = world;
 
@@ -396,7 +396,7 @@ public sealed class QueryDescription
             Archetypes = archetypes;
         }
 
-        public bool IsStale(World world)
+        public bool IsStale(EcsWorld world)
         {
             return ArchetypeWatermark < world.ArchetypesCount;
         }

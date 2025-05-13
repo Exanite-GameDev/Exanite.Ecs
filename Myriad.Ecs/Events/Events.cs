@@ -16,7 +16,7 @@ public readonly ref struct EntityCreatedEvent
     /// </remarks>
     public readonly EcsCommandBuffer CommandBuffer;
 
-    public World World => Entity.World;
+    public EcsWorld World => Entity.World;
     public readonly Entity Entity;
 
     public EntityCreatedEvent(EcsCommandBuffer commandBuffer, Entity entity)
@@ -40,7 +40,7 @@ public readonly ref struct EntityDestroyedEvent
     /// </remarks>
     public readonly EcsCommandBuffer CommandBuffer;
 
-    public World World => Entity.World;
+    public EcsWorld World => Entity.World;
     public readonly Entity Entity;
 
     public EntityDestroyedEvent(EcsCommandBuffer commandBuffer, Entity entity)
@@ -64,7 +64,7 @@ public readonly ref struct ComponentAdded<T> where T : IComponent
     /// </remarks>
     public readonly EcsCommandBuffer CommandBuffer;
 
-    public World World => Entity.World;
+    public EcsWorld World => Entity.World;
     public readonly Entity Entity;
     public readonly ref T Value;
 
@@ -98,7 +98,7 @@ public readonly ref struct ComponentModified<T> where T : IComponent
     /// </remarks>
     public readonly EcsCommandBuffer CommandBuffer;
 
-    public World World => Entity.World;
+    public EcsWorld World => Entity.World;
     public readonly Entity Entity;
     public readonly ref T Value;
 
@@ -124,7 +124,7 @@ public readonly ref struct ComponentRemoved<T> where T : IComponent
     /// </remarks>
     public readonly EcsCommandBuffer CommandBuffer;
 
-    public World World => Entity.World;
+    public EcsWorld World => Entity.World;
     public readonly Entity Entity;
     public readonly ref T Value;
 
