@@ -14,6 +14,7 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
 /// Buffers up modifications to entities and replays them all at once.
+/// Events for an entity are reported once all modifications to the entity are completed.
 /// <para/>
 /// Warning: The command buffer is allowed to reorder and merge operations together.
 /// <br/>
@@ -22,7 +23,16 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// Example 2: Destroying an entity after making modifications to it is the same as making no modifications to it before destroying it.
 /// </summary>
 /// <remarks>
-/// Warning: The command buffer is likely going to be rewritten to guarantee operation order and to avoid merging of operations.
+/// The command buffer batches commands to avoid expensive operations
+/// where adding/removing multiple components causes the entity to be
+/// copied between multiple archetypes.
+/// <para/>
+/// Fully ordered events without dropping of intermediate were considered,
+/// but the performance cost is likely too high.
+/// <para/>
+/// If fully ordered events are required, it's possible to submit commands
+/// in smaller batches. This has similar cost to replaying commands without
+/// merging.
 /// </remarks>
 public sealed partial class EcsCommandBuffer
 {
@@ -312,14 +322,17 @@ public sealed partial class EcsCommandBuffer
                     location = World.GetEntityStorageLocation(entity.EntityId);
                 }
 
-                // Run all setters
                 if (modification.Sets != null)
                 {
+                    // Run all setters
                     foreach (var setter in modification.Sets.Values)
                     {
                         setters.Write(setter, location);
+                    }
 
-                        // Raise component added/modified events
+                    // Raise component added/modified events
+                    foreach (var setter in modification.Sets.Values)
+                    {
                         var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
                         if (componentsBeforeMove.Contains(setter.ComponentId))
                         {
@@ -366,8 +379,11 @@ public sealed partial class EcsCommandBuffer
                 {
                     // Write component
                     setters.Write(setter, location);
+                }
 
-                    // Raise component added events
+                // Raise component added events
+                foreach (var setter in components.Values)
+                {
                     var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
                     eventDispatcher.RaiseComponentAdded(recursiveCommandBuffer, World, location.Entity.ToEntity(World));
                 }
