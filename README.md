@@ -32,3 +32,9 @@ Other modifications include:
 - Changing the code to use code from [Exanite.Core](https://github.com/Exanite/Exanite.Core/), where applicable
 - Reformatting of codebase to match conventions used in Exanite.Engine
   - Eg: Myriad.Ecs instead of Myriad.ECS
+
+## License
+
+This project is based on [Myriad.ECS](https://github.com/martindevans/Myriad.ECS), which is licensed under the MIT License.
+
+All modifications made to this library are also licensed under the MIT License.
