@@ -1,4 +1,5 @@
-﻿using Exanite.Myriad.Ecs.CommandBuffers;
+﻿using System;
+using Exanite.Myriad.Ecs.CommandBuffers;
 
 namespace Exanite.Myriad.Ecs.Tests;
 

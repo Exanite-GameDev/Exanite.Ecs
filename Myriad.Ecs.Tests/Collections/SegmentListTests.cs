@@ -1,4 +1,5 @@
-﻿using Exanite.Myriad.Ecs.Collections;
+﻿using System;
+using Exanite.Myriad.Ecs.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;

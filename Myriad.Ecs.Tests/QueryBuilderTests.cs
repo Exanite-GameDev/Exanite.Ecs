@@ -1,4 +1,6 @@
-﻿using Exanite.Myriad.Ecs.Components;
+﻿using System;
+using System.Linq;
+using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

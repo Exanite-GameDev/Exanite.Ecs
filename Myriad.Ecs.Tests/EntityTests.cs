@@ -1,4 +1,5 @@
-﻿using Exanite.Myriad.Ecs.CommandBuffers;
+﻿using System;
+using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

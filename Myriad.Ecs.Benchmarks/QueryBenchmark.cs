@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using BenchmarkDotNet.Attributes;
 using Exanite.Myriad.Ecs.Benchmarks.Components;
 using Exanite.Myriad.Ecs.CommandBuffers;

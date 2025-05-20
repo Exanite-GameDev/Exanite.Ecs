@@ -1,4 +1,5 @@
-﻿using Exanite.Myriad.Ecs.Components;
+﻿using System;
+using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

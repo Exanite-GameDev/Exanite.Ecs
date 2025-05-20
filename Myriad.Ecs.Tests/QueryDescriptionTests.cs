@@ -1,4 +1,7 @@
-﻿using Exanite.Myriad.Ecs.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
