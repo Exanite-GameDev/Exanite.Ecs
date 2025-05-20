@@ -23,12 +23,12 @@ public class EntityTests
     [TestMethod]
     public void CompareEntityWithSelf()
     {
-        var w = new EcsWorld();
-        var b = new EcsCommandBuffer(w);
+        var world = new EcsWorld();
+        var commandBuffer = new EcsCommandBuffer(world);
 
-        var eb = b.Create();
-        using var resolver = b.Execute();
-        var entity = eb.Resolve();
+        var bufferedEntity = commandBuffer.Create();
+        commandBuffer.Execute();
+        var entity = bufferedEntity.Resolve();
 
         Assert.AreEqual(0, entity.CompareTo(entity));
     }
@@ -36,12 +36,13 @@ public class EntityTests
     [TestMethod]
     public void CompareEntityWithAnother()
     {
-        var w = new EcsWorld();
-        var b = new EcsCommandBuffer(w);
+        var world = new EcsWorld();
+        var b = new EcsCommandBuffer(world);
 
         var eb1 = b.Create();
         var eb2 = b.Create();
-        using var resolver = b.Execute();
+
+        b.Execute();
         var entity1 = eb1.Resolve();
         var entity2 = eb2.Resolve();
 
@@ -63,7 +64,8 @@ public class EntityTests
 
         var e = b.Create()
                  .Set(new ComponentInt16(7));
-        using var resolver = b.Execute();
+
+        b.Execute();
         var entity = e.Resolve();
 
         ref var c = ref entity.GetComponent<ComponentInt16>();
@@ -77,7 +79,8 @@ public class EntityTests
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
-        using var resolver = b.Execute();
+
+        b.Execute();
         var entity = e.Resolve();
 
         Assert.AreEqual(1, entity.ComponentIds.Count);
@@ -91,12 +94,12 @@ public class EntityTests
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
-        var resolver = b.Execute();
+
+        b.Execute();
         var entity = e.Resolve();
-        resolver.Dispose();
 
         b.Destroy(entity);
-        b.Execute().Dispose();
+        b.Execute();
 
         Assert.ThrowsException<ArgumentException>(() =>
         {
@@ -111,7 +114,8 @@ public class EntityTests
         var b = new EcsCommandBuffer(w);
 
         var e = b.Create().Set(new ComponentInt16(7));
-        using var resolver = b.Execute();
+
+        b.Execute();
         var entity = e.Resolve();
 
         Assert.AreEqual(1, entity.BoxedComponents.Length);
@@ -126,7 +130,8 @@ public class EntityTests
 
         var e = b.Create()
                  .Set(new ComponentInt16(7));
-        using var resolver = b.Execute();
+
+        b.Execute();
         var entity = e.Resolve();
 
         var c = (ComponentInt16)entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>())!;
@@ -135,7 +140,7 @@ public class EntityTests
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));
 
         b.Destroy(entity);
-        b.Execute().Dispose();
+        b.Execute();
 
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>()));
         Assert.IsNull(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));

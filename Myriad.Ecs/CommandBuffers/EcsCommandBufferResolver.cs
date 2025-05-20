@@ -1,57 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using Exanite.Core.Pooling;
+﻿using System.Collections.Generic;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
-/// Provides a way to resolve created entities. Must be disposed once finished with!
+/// Used to resolve <see cref="Entity"/>s from <see cref="BufferedEntity"/>s.
+/// Can also be used to resolve the list of entities created in the last command buffer execution.
 /// </summary>
-public sealed class EcsCommandBufferResolver : IDisposable
+public sealed class EcsCommandBufferResolver
 {
-    internal SortedList<uint, EntityId> Lookup { get; } = [];
-    internal EcsCommandBuffer? Parent { get; private set; }
-
     internal uint Version { get; private set; }
 
-    /// <summary>
-    /// Get the number of entities in this <see cref="EcsCommandBufferResolver"/>
-    /// </summary>
-    public int Count => Lookup.Count;
+    internal readonly EcsCommandBuffer CommandBuffer;
+    internal readonly SortedList<uint, EntityId> EntityIdsByBufferedEntityId = [];
 
     /// <summary>
     /// The <see cref="World"/> this resolver is for.
     /// </summary>
-    public EcsWorld World => Parent!.World;
+    public EcsWorld World => CommandBuffer.World;
 
-    internal void Configure(EcsCommandBuffer buffer)
+    /// <summary>
+    /// Get the number of entities in this <see cref="EcsCommandBufferResolver"/>
+    /// </summary>
+    public int Count => EntityIdsByBufferedEntityId.Count;
+
+    /// <summary>
+    /// Get the nth entity in this <see cref="EcsCommandBufferResolver"/>. Entities are in an arbitrary order.
+    /// </summary>
+    public Entity this[int index] => EntityIdsByBufferedEntityId.Values[index].ToEntity(World);
+
+    public EcsCommandBufferResolver(EcsCommandBuffer commandBuffer)
     {
-        Lookup.Clear();
-        Parent = buffer;
-        Version = buffer.Version;
+        this.CommandBuffer = commandBuffer;
     }
 
-    /// <inheritdoc/>
-    public void Dispose()
+    internal void Reset()
     {
-        if (Parent == null)
-        {
-            throw new ObjectDisposedException(nameof(EcsCommandBufferResolver));
-        }
+        EntityIdsByBufferedEntityId.Clear();
 
         unchecked
         {
-            Version--;
+            Version = CommandBuffer.Version + 1;
         }
-
-        Parent = null;
-        Lookup.Clear();
-
-        SimplePool.Release(this);
     }
-
-    /// <summary>
-    /// Get the nth item in this <see cref="EcsCommandBufferResolver"/>. Items are in an arbitrary order.
-    /// </summary>
-    public Entity this[int index] => Lookup.Values[index].ToEntity(World);
 }

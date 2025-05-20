@@ -27,7 +27,7 @@ public class EntityModifyBenchmark
             CreateEntity(buffer, rng);
         }
 
-        using var resolver = buffer.Execute();
+        var resolver = buffer.Execute();
         for (var i = 0; i < resolver.Count; i++)
         {
             entities.Add(resolver[i]);
@@ -84,6 +84,6 @@ public class EntityModifyBenchmark
     [Benchmark]
     public void Playback()
     {
-        ready.Execute().Dispose();
+        ready.Execute();
     }
 }

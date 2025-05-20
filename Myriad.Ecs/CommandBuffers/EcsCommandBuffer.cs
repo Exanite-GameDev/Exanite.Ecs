@@ -36,8 +36,6 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// </remarks>
 public sealed partial class EcsCommandBuffer
 {
-    internal uint Version { get; private set; }
-
     /// <summary>
     /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying.
     /// </summary>
@@ -45,6 +43,14 @@ public sealed partial class EcsCommandBuffer
 
     public bool HasBufferedOperations { get; private set; }
     public bool IsExecuting { get; private set; }
+
+    internal uint Version { get; private set; }
+
+    /// <summary>
+    /// Double buffer of resolvers.
+    /// One is readable, the other is writable.
+    /// </summary>
+    private readonly EcsCommandBufferResolver[] resolvers;
 
     /// <summary>
     /// Collection of all components to be set onto entities.
@@ -68,8 +74,6 @@ public sealed partial class EcsCommandBuffer
     /// </remarks>
     private readonly OrderedListSet<ComponentId> tempComponentsAfterMove = [];
 
-    private EcsCommandBufferResolver nextResolver;
-
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>.
     /// </summary>
@@ -77,11 +81,156 @@ public sealed partial class EcsCommandBuffer
     {
         World = world;
 
-        nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
-        nextResolver.Configure(this);
+        resolvers =
+        [
+            new EcsCommandBufferResolver(this),
+            new EcsCommandBufferResolver(this),
+        ];
+
+        // Swap once to initialize
+        SwapResolvers();
     }
 
-    #region Clear
+    /// <summary>
+    /// Create a new <see cref="Entity"/> in the world.
+    /// </summary>
+    public BufferedEntity Create()
+    {
+        EnsureNotExecuting();
+        HasBufferedOperations = true;
+
+        // Get a set to hold all of the component setters
+        var set = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
+        set.Clear();
+
+        // Store this entity in the collection of entities
+        // Put it in aggregate node 0 (i.e. no components)
+        var id = (uint)bufferedEntities.Count;
+        bufferedEntities.Add(new BufferedEntityData(id, set));
+
+        return new BufferedEntity(id, GetWriteableResolver());
+    }
+
+    /// <summary>
+    /// Add or overwrite a component attached to an entity.
+    /// </summary>
+    public EcsCommandBuffer Set<T>(Entity entity, T value) where T : IComponent
+    {
+        EnsureNotExecuting();
+        HasBufferedOperations = true;
+
+        SetInternal(entity, value);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Remove a component attached to an entity.
+    /// </summary>
+    public EcsCommandBuffer Remove<T>(Entity entity) where T : IComponent
+    {
+        EnsureNotExecuting();
+        HasBufferedOperations = true;
+
+        var mod = GetModificationData(entity, false, true);
+
+        // Add a remover to the list
+        var id = ComponentId.Get<T>();
+        mod.Removes!.Add(id);
+
+        // Remove it from the setters, if it's there
+        mod.Sets?.Remove(id);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Destroy an entity.
+    /// </summary>
+    public EcsCommandBuffer Destroy(Entity entity)
+    {
+        EnsureNotExecuting();
+        HasBufferedOperations = true;
+
+        destroys.Add(entity);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Bulk destroy entities.
+    /// </summary>
+    public EcsCommandBuffer Destroy(List<Entity> entities)
+    {
+        EnsureNotExecuting();
+        HasBufferedOperations = true;
+
+        destroys.AddRange(entities);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Bulk destroy all entities which match the given query.
+    /// </summary>
+    public EcsCommandBuffer Destroy(QueryDescription entities)
+    {
+        EnsureNotExecuting();
+        GuardUtility.IsTrue(entities.World == World, "Cannot use query description from one world with a command buffer for another world");
+        HasBufferedOperations = true;
+
+        queryDestroys.Add(entities);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Apply all buffered operations to the <see cref="World"/>. The returned resolver is valid until the next time <see cref="Execute"/> is called.
+    /// </summary>
+    public EcsCommandBufferResolver Execute()
+    {
+        GuardUtility.IsTrue(!World.IsDisposed, "Cannot execute command buffer on a disposed world");
+        EnsureNotExecuting();
+
+        var resolver = GetWriteableResolver();
+        if (!HasBufferedOperations)
+        {
+            SwapResolvers();
+
+            return resolver;
+        }
+
+        IsExecuting = true;
+        {
+            using var _ = World.AcquireCommandBuffer(out var recursiveCommandBuffer);
+
+            // Create buffered entities.
+            CreateBufferedEntities(recursiveCommandBuffer, resolver);
+
+            // Destroy entities, this must occur before structural changes because it may trigger new structural changes
+            // by adding a new phantom component.
+            DestroyEntities(recursiveCommandBuffer);
+
+            // Structural changes (add/remove components)
+            // This also includes setting components
+            ApplyStructuralChanges(recursiveCommandBuffer);
+
+            // Clear all temporary state
+            setters.Clear();
+            entityModifications.Clear();
+            archetypeEdges.Clear();
+
+            HasBufferedOperations = false;
+
+            SwapResolvers();
+
+            recursiveCommandBuffer.Execute();
+        }
+        IsExecuting = false;
+
+        // Return the resolver, which is now set to readable
+        return resolver;
+    }
 
     /// <summary>
     /// Clear this <see cref="EcsCommandBuffer"/>.
@@ -126,75 +275,28 @@ public sealed partial class EcsCommandBuffer
 
         HasBufferedOperations = false;
 
-        nextResolver.Dispose();
-
-        // Update version and get new resolver
-        unchecked { Version++; }
-        nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
-        nextResolver.Configure(this);
+        SwapResolvers();
     }
 
-    #endregion
-
-    #region Playback
-
-    /// <summary>
-    /// Apply all buffered operations to the <see cref="World"/>.
-    /// </summary>
-    public EcsCommandBufferResolver Execute()
+    private EcsCommandBufferResolver GetReadableResolver()
     {
-        GuardUtility.IsTrue(!World.IsDisposed, "Cannot execute command buffer on a disposed world");
-        EnsureNotExecuting();
+        return resolvers[0];
+    }
 
-        // Use this resolver for this execution
-        var resolver = nextResolver;
-        if (!HasBufferedOperations)
-        {
-            // Update version and get new resolver
-            unchecked { Version++; }
-            nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
-            nextResolver.Configure(this);
+    private EcsCommandBufferResolver GetWriteableResolver()
+    {
+        return resolvers[1];
+    }
 
-            return resolver;
-        }
+    private void SwapResolvers()
+    {
+        Version++;
 
-        IsExecuting = true;
-        {
-            using var _ = World.AcquireCommandBuffer(out var recursiveCommandBuffer);
+        var temp = resolvers[0];
+        resolvers[0] = resolvers[1];
+        resolvers[1] = temp;
 
-            // Create buffered entities.
-            CreateBufferedEntities(recursiveCommandBuffer, resolver);
-
-            // Destroy entities, this must occur before structural changes because it may trigger new structural changes
-            // by adding a new phantom component.
-            DestroyEntities(recursiveCommandBuffer);
-
-            // Structural changes (add/remove components)
-            // This also includes setting components
-            ApplyStructuralChanges(recursiveCommandBuffer);
-
-            // Clear all temporary state
-            setters.Clear();
-            entityModifications.Clear();
-            archetypeEdges.Clear();
-
-            HasBufferedOperations = false;
-
-            // Update version and get new resolver
-            unchecked
-            {
-                Version++;
-            }
-
-            nextResolver = SimplePool<EcsCommandBufferResolver>.Acquire();
-            nextResolver.Configure(this);
-
-            recursiveCommandBuffer.Execute();
-        }
-        IsExecuting = false;
-
-        // Return the resolver
-        return resolver;
+        GetWriteableResolver().Reset();
     }
 
     private void DestroyEntities(EcsCommandBuffer recursiveCommandBuffer)
@@ -363,16 +465,16 @@ public sealed partial class EcsCommandBuffer
         Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
         try
         {
-            foreach (var bufferedData in bufferedEntities)
+            foreach (var bufferedEntityData in bufferedEntities)
             {
-                var components = bufferedData.Setters;
+                var components = bufferedEntityData.Setters;
 
-                var archetype = GetArchetype(bufferedData, archetypeLookup);
+                var archetype = GetArchetype(bufferedEntityData, archetypeLookup);
 
                 var location = archetype.CreateEntity();
 
                 // Store the new ID in the resolver so it can be retrieved later
-                resolver.Lookup.Add(bufferedData.Id, location.Entity);
+                resolver.EntityIdsByBufferedEntityId.Add(bufferedEntityData.Id, location.Entity);
 
                 // Write the components into the entity
                 foreach (var setter in components.Values)
@@ -423,101 +525,6 @@ public sealed partial class EcsCommandBuffer
         }
 
         return archetype;
-    }
-
-    #endregion
-
-    /// <summary>
-    /// Create a new <see cref="Entity"/> in the world.
-    /// </summary>
-    public BufferedEntity Create()
-    {
-        EnsureNotExecuting();
-        HasBufferedOperations = true;
-
-        // Get a set to hold all of the component setters
-        var set = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
-        set.Clear();
-
-        // Store this entity in the collection of entities
-        // Put it in aggregate node 0 (i.e. no components)
-        var id = (uint)bufferedEntities.Count;
-        bufferedEntities.Add(new BufferedEntityData(id, set));
-
-        return new BufferedEntity(id, this, nextResolver);
-    }
-
-    /// <summary>
-    /// Add or overwrite a component attached to an entity.
-    /// </summary>
-    public EcsCommandBuffer Set<T>(Entity entity, T value) where T : IComponent
-    {
-        EnsureNotExecuting();
-        HasBufferedOperations = true;
-
-        SetInternal(entity, value);
-
-        return this;
-    }
-
-    /// <summary>
-    /// Remove a component attached to an entity.
-    /// </summary>
-    public EcsCommandBuffer Remove<T>(Entity entity) where T : IComponent
-    {
-        EnsureNotExecuting();
-        HasBufferedOperations = true;
-
-        var mod = GetModificationData(entity, false, true);
-
-        // Add a remover to the list
-        var id = ComponentId.Get<T>();
-        mod.Removes!.Add(id);
-
-        // Remove it from the setters, if it's there
-        mod.Sets?.Remove(id);
-
-        return this;
-    }
-
-    /// <summary>
-    /// Destroy an entity.
-    /// </summary>
-    public EcsCommandBuffer Destroy(Entity entity)
-    {
-        EnsureNotExecuting();
-        HasBufferedOperations = true;
-
-        destroys.Add(entity);
-
-        return this;
-    }
-
-    /// <summary>
-    /// Bulk destroy entities.
-    /// </summary>
-    public EcsCommandBuffer Destroy(List<Entity> entities)
-    {
-        EnsureNotExecuting();
-        HasBufferedOperations = true;
-
-        destroys.AddRange(entities);
-
-        return this;
-    }
-
-    /// <summary>
-    /// Bulk destroy all entities which match the given query.
-    /// </summary>
-    public EcsCommandBuffer Destroy(QueryDescription entities)
-    {
-        EnsureNotExecuting();
-        GuardUtility.IsTrue(entities.World == World, "Cannot use query description from one world with a command buffer for another world");
-        HasBufferedOperations = true;
-
-        queryDestroys.Add(entities);
-
-        return this;
     }
 
     internal void SetBuffered<T>(uint id, T value) where T : IComponent

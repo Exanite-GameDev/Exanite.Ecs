@@ -30,7 +30,7 @@ public class QueryBenchmark
             AddEntity(buffer, rng);
         }
 
-        using var resolver = buffer.Execute();
+        buffer.Execute();
 
         query = new QueryBuilder()
             .Include<Position>()

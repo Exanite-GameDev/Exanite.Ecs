@@ -26,7 +26,7 @@ public class EventTests
             commandBuffer.Create();
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.EntityCreatedCount);
     }
 
@@ -46,7 +46,7 @@ public class EventTests
             commandBuffer.Create();
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Destroy entities
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -62,7 +62,7 @@ public class EventTests
         }
         commandBuffer.Destroy(allEntitiesQuery);
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
     }
 
@@ -82,13 +82,13 @@ public class EventTests
             commandBuffer.Create();
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Destroy entities
         var allEntitiesQuery = new QueryBuilder().Build(world);
         commandBuffer.Destroy(allEntitiesQuery);
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
     }
 
@@ -108,7 +108,7 @@ public class EventTests
             commandBuffer.Create().Set(new Component0());
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Destroy entities
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -124,7 +124,7 @@ public class EventTests
         }
         commandBuffer.Destroy(allEntitiesQuery);
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
     }
 
@@ -144,13 +144,13 @@ public class EventTests
             commandBuffer.Create().Set(new Component0());
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Destroy entities
         var allEntitiesQuery = new QueryBuilder().Build(world);
         commandBuffer.Destroy(allEntitiesQuery);
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
     }
 
@@ -170,7 +170,7 @@ public class EventTests
             commandBuffer.Create().Set(new Component0());
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Remove components
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -185,7 +185,7 @@ public class EventTests
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
     }
 
@@ -205,7 +205,7 @@ public class EventTests
             commandBuffer.Create().Set(new Component0());
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
     }
 
@@ -225,7 +225,7 @@ public class EventTests
             commandBuffer.Create();
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Set components
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -240,7 +240,7 @@ public class EventTests
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
     }
 
@@ -260,7 +260,7 @@ public class EventTests
             commandBuffer.Create().Set(new Component0());
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
 
         // Set components
@@ -276,7 +276,7 @@ public class EventTests
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
     }
 
@@ -296,7 +296,7 @@ public class EventTests
             commandBuffer.Create();
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Set components
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -311,7 +311,7 @@ public class EventTests
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
 
         // Set components again
@@ -326,7 +326,7 @@ public class EventTests
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
     }
 
@@ -349,7 +349,7 @@ public class EventTests
                 .Set(new Component0());
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
         Assert.AreEqual(0, handler.ComponentModifiedCount);
     }
@@ -371,7 +371,7 @@ public class EventTests
             commandBuffer.Create();
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Set components
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -388,7 +388,7 @@ public class EventTests
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
         Assert.AreEqual(0, handler.ComponentModifiedCount);
     }
@@ -409,7 +409,7 @@ public class EventTests
             commandBuffer.Create();
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Modify entity and destroy entity
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -427,7 +427,7 @@ public class EventTests
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
         Assert.AreEqual(0, handler.ComponentAddedCount);
         Assert.AreEqual(0, handler.ComponentModifiedCount);
         Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
@@ -450,7 +450,7 @@ public class EventTests
                 .Set(new Component0());
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
 
         // Dispose world
         world.Dispose();

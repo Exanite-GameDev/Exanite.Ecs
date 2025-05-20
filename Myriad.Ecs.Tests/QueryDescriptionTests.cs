@@ -13,11 +13,11 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsIncluded()
     {
-        var w = new EcsWorld();
+        var world = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<ComponentFloat>()
-               .Build(w);
+               .Build(world);
 
         Assert.IsTrue(q.IsIncluded<ComponentFloat>());
         Assert.IsTrue(q.IsIncluded(typeof(ComponentFloat)));
@@ -28,11 +28,11 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsExcluded()
     {
-        var w = new EcsWorld();
+        var world = new EcsWorld();
 
         var q = new QueryBuilder()
                .Exclude<ComponentFloat>()
-               .Build(w);
+               .Build(world);
 
         Assert.IsTrue(q.IsExcluded<ComponentFloat>());
         Assert.IsTrue(q.IsExcluded(typeof(ComponentFloat)));
@@ -43,28 +43,28 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IsExactlyOneOf()
     {
-        var w = new EcsWorld();
+        var world = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var query = new QueryBuilder()
                .ExactlyOneOf<ComponentFloat>()
                .ExactlyOneOf<ComponentByte>()
-               .Build(w);
+               .Build(world);
 
-        Assert.IsTrue(q.IsExactlyOneOf<ComponentFloat>());
-        Assert.IsTrue(q.IsExactlyOneOf(typeof(ComponentFloat)));
-        Assert.IsFalse(q.IsExactlyOneOf<ComponentInt32>());
-        Assert.IsFalse(q.IsExactlyOneOf(typeof(ComponentInt32)));
+        Assert.IsTrue(query.IsExactlyOneOf<ComponentFloat>());
+        Assert.IsTrue(query.IsExactlyOneOf(typeof(ComponentFloat)));
+        Assert.IsFalse(query.IsExactlyOneOf<ComponentInt32>());
+        Assert.IsFalse(query.IsExactlyOneOf(typeof(ComponentInt32)));
     }
 
     [TestMethod]
     public void IsAtLeastOneOf()
     {
-        var w = new EcsWorld();
+        var world = new EcsWorld();
 
         var q = new QueryBuilder()
                .AtLeastOneOf<ComponentFloat>()
                .AtLeastOneOf<ComponentByte>()
-               .Build(w);
+               .Build(world);
 
         Assert.IsTrue(q.IsAtLeastOneOf<ComponentFloat>());
         Assert.IsTrue(q.IsAtLeastOneOf(typeof(ComponentFloat)));
@@ -75,11 +75,11 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeMatchNone()
     {
-        var w = new EcsWorld();
+        var world = new EcsWorld();
 
         var q = new QueryBuilder()
            .Include<ComponentFloat>()
-           .Build(w);
+           .Build(world);
 
         var a = q.GetArchetypeMatches();
 
@@ -90,11 +90,11 @@ public class QueryDescriptionTests
     [TestMethod]
     public void IncludeMatchNoneNonGeneric()
     {
-        var w = new EcsWorld();
+        var world = new EcsWorld();
 
         var q = new QueryBuilder()
            .Include(typeof(ComponentFloat))
-           .Build(w);
+           .Build(world);
 
         var a = q.GetArchetypeMatches();
 
@@ -279,15 +279,16 @@ public class QueryDescriptionTests
     [TestMethod]
     public void First_MatchSingle()
     {
-        var w = new EcsWorld();
+        var world = new EcsWorld();
 
         var q = new QueryBuilder()
                .Include<Component0>()
-               .Build(w);
+               .Build(world);
 
-        var c = new EcsCommandBuffer(w);
+        var c = new EcsCommandBuffer(world);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.First());
@@ -305,7 +306,8 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
@@ -335,7 +337,8 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.FirstOrDefault());
@@ -353,7 +356,8 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
@@ -384,7 +388,7 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
-        c.Execute().Dispose();
+        c.Execute();
 
         Assert.ThrowsException<InvalidOperationException>(() => q.SingleOrDefault());
     }
@@ -400,7 +404,8 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.SingleOrDefault()!.Value);
@@ -418,7 +423,7 @@ public class QueryDescriptionTests
         var c = new EcsCommandBuffer(w);
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
-        c.Execute().Dispose();
+        c.Execute();
 
         Assert.ThrowsException<InvalidOperationException>(() => q.Single());
     }
@@ -446,7 +451,8 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         Assert.AreEqual(e, q.Single());
@@ -463,7 +469,8 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         Assert.IsTrue(q.Any());
@@ -492,7 +499,8 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         Assert.IsTrue(q.Contains(e));
@@ -509,7 +517,8 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create();
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         Assert.IsFalse(q.Contains(e));
@@ -540,7 +549,8 @@ public class QueryDescriptionTests
 
         var c = new EcsCommandBuffer(w);
         var eb = c.Create().Set(new Component0());
-        using var _ = c.Execute();
+
+        c.Execute();
         var e = eb.Resolve();
 
         var r = new Random(123);
@@ -573,7 +583,7 @@ public class QueryDescriptionTests
             c.Create().Set(new ComponentInt32(i)).Set(new Component1());
         }
 
-        using var resolver = c.Execute();
+        var resolver = c.Execute();
         var entities = new List<Entity>();
         for (var i = 0; i < resolver.Count; i++)
         {

@@ -38,7 +38,7 @@ public class EntityChurnBenchmark
             alive.Clear();
 
             // Execute
-            using var resolver = buffer.Execute();
+            buffer.Execute();
 
             // Resolve results
             foreach (var b in buffered)

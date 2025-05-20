@@ -1,4 +1,5 @@
 ﻿using System;
+using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 
@@ -10,28 +11,20 @@ public readonly record struct BufferedEntity
     private readonly uint id;
     private readonly uint version;
 
-    private readonly EcsCommandBuffer commandBuffer;
     private readonly EcsCommandBufferResolver resolver;
 
     /// <summary>
     /// Get the <see cref="EcsCommandBuffer"/> which this <see cref="BufferedEntity"/> is from.
     /// </summary>
-    public EcsCommandBuffer CommandBuffer
-    {
-        get
-        {
-            EnsureIsMutable();
-            return commandBuffer;
-        }
-    }
+    public EcsCommandBuffer CommandBuffer { get; }
 
-    internal BufferedEntity(uint id, EcsCommandBuffer commandBuffer, EcsCommandBufferResolver resolver)
+    internal BufferedEntity(uint id, EcsCommandBufferResolver resolver)
     {
         this.id = id;
-        this.commandBuffer = commandBuffer;
         this.resolver = resolver;
 
-        version = commandBuffer.Version;
+        CommandBuffer = resolver.CommandBuffer;
+        version = resolver.Version;
     }
 
     /// <summary>
@@ -42,9 +35,12 @@ public readonly record struct BufferedEntity
     /// <returns>This buffered entity.</returns>
     public BufferedEntity Set<T>(T value) where T : IComponent
     {
-        EnsureIsMutable();
+        unchecked
+        {
+            GuardUtility.IsTrue(resolver.Version == version && CommandBuffer.Version == version - 1, "Cannot modify buffered entity after command buffer has been executed");
+        }
 
-        commandBuffer.SetBuffered(id, value);
+        CommandBuffer.SetBuffered(id, value);
         return this;
     }
 
@@ -53,29 +49,8 @@ public readonly record struct BufferedEntity
     /// </summary>
     public Entity Resolve()
     {
-        if (resolver.Parent == null)
-        {
-            throw new ObjectDisposedException("Resolver has already been disposed");
-        }
+        GuardUtility.IsTrue(resolver.Version == version && CommandBuffer.Version == version, "Buffered entity is no longer valid and cannot be resolved");
 
-        if (resolver.Parent != commandBuffer)
-        {
-            throw new InvalidOperationException("Cannot use a resolver from one command buffer with buffered entity from another");
-        }
-
-        if (resolver.Version != version)
-        {
-            throw new ObjectDisposedException("Resolver has already been disposed");
-        }
-
-        return resolver.Lookup[id].ToEntity(resolver.World);
-    }
-
-    private void EnsureIsMutable()
-    {
-        if (version != commandBuffer.Version)
-        {
-            throw new InvalidOperationException("Cannot use buffered entity after command buffer has been executed");
-        }
+        return resolver.EntityIdsByBufferedEntityId[id].ToEntity(resolver.World);
     }
 }
