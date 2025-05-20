@@ -24,27 +24,27 @@ public sealed class QueryDescription
     private readonly ComponentBloomFilter excludeBloom;
 
     /// <summary>
-    /// The World that this query is for
+    /// The <see cref="EcsWorld"/> that this query is for.
     /// </summary>
     public EcsWorld World { get; }
 
     /// <summary>
-    /// The components which must be present on an entity for it to match this query
+    /// The components which must be present on an entity for it to match this query.
     /// </summary>
     public ImmutableOrderedListSet<ComponentId> Include { get; }
 
     /// <summary>
-    /// The components which must not be present on an entity for it to match this query
+    /// The components which must not be present on an entity for it to match this query.
     /// </summary>
     public ImmutableOrderedListSet<ComponentId> Exclude { get; }
 
     /// <summary>
-    /// At least one of these components must be present on an entity for it to match this query
+    /// At least one of these components must be present on an entity for it to match this query.
     /// </summary>
     public ImmutableOrderedListSet<ComponentId> AtLeastOneOf { get; }
 
     /// <summary>
-    /// Exactly one of these components must be present on an entity for it to match this query
+    /// Exactly one of these components must be present on an entity for it to match this query.
     /// </summary>
     public ImmutableOrderedListSet<ComponentId> ExactlyOneOf { get; }
 
@@ -65,7 +65,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Create a query builder which describes this query
+    /// Create a query builder which describes this query.
     /// </summary>
     public QueryBuilder ToBuilder()
     {
@@ -97,16 +97,15 @@ public sealed class QueryDescription
     #region Is In Query
 
     /// <summary>
-    /// Check if this query requires the given component
+    /// Check if this query requires the given component.
     /// </summary>
-    public bool IsIncluded<T>()
-        where T : IComponent
+    public bool IsIncluded<T>() where T : IComponent
     {
         return IsIncluded(ComponentId.Get<T>());
     }
 
     /// <summary>
-    /// Check if this query requires the given component
+    /// Check if this query requires the given component.
     /// </summary>
     public bool IsIncluded(Type type)
     {
@@ -114,7 +113,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query requires the given component
+    /// Check if this query requires the given component.
     /// </summary>
     public bool IsIncluded(ComponentId id)
     {
@@ -122,16 +121,15 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query excludes entities with the given component
+    /// Check if this query excludes entities with the given component.
     /// </summary>
-    public bool IsExcluded<T>()
-        where T : IComponent
+    public bool IsExcluded<T>() where T : IComponent
     {
         return IsExcluded(ComponentId.Get<T>());
     }
 
     /// <summary>
-    /// Check if this query excludes entities with the given component
+    /// Check if this query excludes entities with the given component.
     /// </summary>
     public bool IsExcluded(Type type)
     {
@@ -139,7 +137,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query excludes entities with the given component
+    /// Check if this query excludes entities with the given component.
     /// </summary>
     public bool IsExcluded(ComponentId id)
     {
@@ -147,16 +145,15 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which at least one of must be on the entity
+    /// Check if the given component is one of the components which at least one of must be on the entity.
     /// </summary>
-    public bool IsAtLeastOneOf<T>()
-        where T : IComponent
+    public bool IsAtLeastOneOf<T>() where T : IComponent
     {
         return IsAtLeastOneOf(ComponentId.Get<T>());
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which at least one of must be on the entity
+    /// Check if the given component is one of the components which at least one of must be on the entity.
     /// </summary>
     public bool IsAtLeastOneOf(Type type)
     {
@@ -164,7 +161,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which at least one of must be on the entity
+    /// Check if the given component is one of the components which at least one of must be on the entity.
     /// </summary>
     public bool IsAtLeastOneOf(ComponentId id)
     {
@@ -172,16 +169,15 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which exactly one of must be on the entity
+    /// Check if the given component is one of the components which exactly one of must be on the entity.
     /// </summary>
-    public bool IsExactlyOneOf<T>()
-        where T : IComponent
+    public bool IsExactlyOneOf<T>() where T : IComponent
     {
         return IsExactlyOneOf(ComponentId.Get<T>());
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which exactly one of must be on the entity
+    /// Check if the given component is one of the components which exactly one of must be on the entity.
     /// </summary>
     public bool IsExactlyOneOf(Type type)
     {
@@ -189,7 +185,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which exactly one of must be on the entity
+    /// Check if the given component is one of the components which exactly one of must be on the entity.
     /// </summary>
     public bool IsExactlyOneOf(ComponentId id)
     {
@@ -201,7 +197,7 @@ public sealed class QueryDescription
     #region Archetype Matching
 
     /// <summary>
-    /// Get all archetypes which match this query
+    /// Get all archetypes which match this query.
     /// </summary>
     public IReadOnlyList<Archetype> GetArchetypes()
     {
@@ -209,7 +205,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get all archetypes which match this query
+    /// Get all archetypes which match this query.
     /// </summary>
     public ImmutableOrderedListSet<ArchetypeMatch> GetArchetypeMatches()
     {
@@ -407,11 +403,11 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// An archetype which matches a query
+    /// An archetype which matches a query.
     /// </summary>
-    /// <param name="Archetype">The archetype</param>
-    /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query)</param>
-    /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query)</param>
+    /// <param name="Archetype">The archetype.</param>
+    /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query).</param>
+    /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query).</param>
     public readonly record struct ArchetypeMatch(Archetype Archetype, ImmutableOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne) : IComparable<ArchetypeMatch>
     {
         /// <inheritdoc/>
@@ -426,7 +422,7 @@ public sealed class QueryDescription
     #region LINQ
 
     /// <summary>
-    /// Count how many entities match this query
+    /// Count how many entities match this query.
     /// </summary>
     public int Count()
     {
@@ -440,7 +436,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query matches any entities
+    /// Check if this query matches any entities.
     /// </summary>
     public bool Any()
     {
@@ -456,7 +452,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query description matches the given entity
+    /// Check if this query description matches the given entity.
     /// </summary>
     public bool Contains(Entity entity)
     {
@@ -466,7 +462,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get the first entity which this query matches (or null)
+    /// Get the first entity which this query matches (or null).
     /// </summary>
     public Entity? FirstOrDefault()
     {
@@ -490,9 +486,9 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get the first entity which this query matches (or throw if there are none)
+    /// Get the first entity which this query matches (or throw if there are none).
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if there are no matches</exception>
+    /// <exception cref="InvalidOperationException">Thrown if there are no matches.</exception>
     public Entity First()
     {
         return FirstOrDefault()
@@ -502,7 +498,7 @@ public sealed class QueryDescription
     /// <summary>
     /// Get the single entity which this query matches (or null if there are none).
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if there are more than one matches</exception>
+    /// <exception cref="InvalidOperationException">Thrown if there are more than one matches.</exception>
     public Entity? SingleOrDefault()
     {
         Entity? result = null;
@@ -533,7 +529,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get a single entity which this query matches (throws if there is not exactly one match)
+    /// Get a single entity which this query matches (throws if there is not exactly one match).
     /// </summary>
     /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
     public Entity Single()
