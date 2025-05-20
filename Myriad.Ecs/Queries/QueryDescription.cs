@@ -13,7 +13,9 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// </summary>
 public sealed class QueryDescription
 {
-    // Cache of result from last time TryMatch was called
+    /// <summary>
+    /// Cached result from the last time <see cref="GetArchetypeMatchResult"/> was called.
+    /// </summary>
     private ArchetypeMatchResult? result;
     private readonly ReaderWriterLockSlim resultLock = new();
     private readonly OrderedListSet<ComponentId> temporarySet = [];
@@ -216,7 +218,7 @@ public sealed class QueryDescription
 
     private ArchetypeMatchResult GetArchetypeMatchResult()
     {
-        // Quick check if we already have a non-stale result
+        // Quickly check if we already have a non-stale result
         resultLock.EnterReadLock();
         try
         {
@@ -239,11 +241,11 @@ public sealed class QueryDescription
             {
                 // Check every archetype
                 var matches = new List<ArchetypeMatch>();
-                foreach (var item in World.Archetypes)
+                foreach (var archetype in World.Archetypes)
                 {
-                    if (TryMatch(item) is ArchetypeMatch m)
+                    if (TryMatch(archetype, out var match))
                     {
-                        matches.Add(m);
+                        matches.Add(match);
                     }
                 }
 
@@ -263,8 +265,7 @@ public sealed class QueryDescription
                 // Check every new archetype
                 for (var i = result.Value.ArchetypeWatermark; i < World.Archetypes.Count; i++)
                 {
-                    var m = TryMatch(World.Archetypes[i]);
-                    if (m == null)
+                    if (!TryMatch(World.Archetypes[i], out var match))
                     {
                         continue;
                     }
@@ -273,7 +274,7 @@ public sealed class QueryDescription
                     copy ??= new OrderedListSet<ArchetypeMatch>(result.Value.ArchetypesMatches);
 
                     // Add the match
-                    copy.Add(m.Value);
+                    copy.Add(match);
                 }
 
                 if (copy == null)
@@ -296,19 +297,21 @@ public sealed class QueryDescription
         }
     }
 
-    private ArchetypeMatch? TryMatch(Archetype archetype)
+    private bool TryMatch(Archetype archetype, out ArchetypeMatch match)
     {
+        match = default;
+
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
         if (Include.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in includeBloom))
         {
-            return null;
+            return false;
         }
 
         // Do the full set check for included components
         if (!archetype.Components.IsSupersetOf(Include))
         {
-            return null;
+            return false;
         }
 
         // If this is false it means there is definitely _not_ an intersection, which means we can skip
@@ -317,7 +320,7 @@ public sealed class QueryDescription
         {
             if (archetype.Components.Overlaps(Exclude))
             {
-                return null;
+                return false;
             }
         }
 
@@ -335,7 +338,7 @@ public sealed class QueryDescription
             if (set.Count != 1)
             {
                 set.Clear();
-                return null;
+                return false;
             }
 
             exactlyOne = set.Single();
@@ -351,7 +354,7 @@ public sealed class QueryDescription
             if (set.Count == 0)
             {
                 set.Clear();
-                return null;
+                return false;
             }
         }
         else
@@ -361,8 +364,9 @@ public sealed class QueryDescription
         }
 
         var atLeastOne = set?.ToImmutable();
+        match = new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
 
-        return new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
+        return true;
     }
 
     private readonly struct ArchetypeMatchResult
