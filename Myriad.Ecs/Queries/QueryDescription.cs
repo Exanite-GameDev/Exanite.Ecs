@@ -5,6 +5,7 @@ using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Utilities;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Worlds.Chunks;
 
 namespace Exanite.Myriad.Ecs.Queries;
 
@@ -212,6 +213,33 @@ public sealed class QueryDescription
         return GetArchetypeMatchResult().ArchetypesMatches;
     }
 
+    /// <summary>
+    /// Checks if an entity matches this query.
+    /// </summary>
+    public bool IsMatch(Entity entity)
+    {
+        var matchResult = GetArchetypeMatchResult();
+        return matchResult.ArchetypeSet.Contains(entity.World.GetArchetype(entity.EntityId));
+    }
+
+    /// <summary>
+    /// Checks if a chunk matches this query.
+    /// </summary>
+    public bool IsMatch(Chunk chunk)
+    {
+        var matchResult = GetArchetypeMatchResult();
+        return matchResult.ArchetypeSet.Contains(chunk.Archetype);
+    }
+
+    /// <summary>
+    /// Checks if an archetype matches this query.
+    /// </summary>
+    public bool IsMatch(Archetype archetype)
+    {
+        var matchResult = GetArchetypeMatchResult();
+        return matchResult.ArchetypeSet.Contains(archetype);
+    }
+
     private ArchetypeMatchResult GetArchetypeMatchResult()
     {
         // Quickly check if we already have a non-stale result
@@ -378,6 +406,11 @@ public sealed class QueryDescription
         public List<Archetype> Archetypes { get; }
 
         /// <summary>
+        /// The archetypes matching this query.
+        /// </summary>
+        public HashSet<Archetype> ArchetypeSet { get; }
+
+        /// <summary>
         /// The number of archetypes in the world when this cache was created. Used for caching purposes.
         /// </summary>
         public int ArchetypeWatermark { get; }
@@ -387,13 +420,13 @@ public sealed class QueryDescription
             ArchetypesMatches = archetypesMatches;
             ArchetypeWatermark = watermark;
 
-            var archetypes = new List<Archetype>(archetypesMatches.Count);
+            Archetypes = new List<Archetype>(archetypesMatches.Count);
             foreach (var match in archetypesMatches)
             {
-                archetypes.Add(match.Archetype);
+                Archetypes.Add(match.Archetype);
             }
 
-            Archetypes = archetypes;
+            ArchetypeSet = [..Archetypes];
         }
 
         public bool IsStale(EcsWorld world)
