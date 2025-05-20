@@ -259,8 +259,8 @@ public sealed class QueryDescription
             // If the number of archetypes has changed since last time regenerate the cache
             if (result.Value.IsStale(World))
             {
-                // Lazy copy of the match set, in case there are no matches
-                var copy = default(OrderedListSet<ArchetypeMatch>?);
+                // Lazily allocated set of new archetype matches
+                var newMatches = default(OrderedListSet<ArchetypeMatch>?);
 
                 // Check every new archetype
                 for (var i = result.Value.ArchetypeWatermark; i < World.Archetypes.Count; i++)
@@ -270,22 +270,22 @@ public sealed class QueryDescription
                         continue;
                     }
 
-                    // Lazy copy the set now that we know we need it
-                    copy ??= new OrderedListSet<ArchetypeMatch>(result.Value.ArchetypesMatches);
+                    // Initialize new matches now that we know we need it
+                    newMatches ??= new OrderedListSet<ArchetypeMatch>(result.Value.ArchetypesMatches);
 
                     // Add the match
-                    copy.Add(match);
+                    newMatches.Add(match);
                 }
 
-                if (copy == null)
+                if (newMatches == null)
                 {
-                    // Copy is null, that means nothing new was found, just use the old result with the new watermark
+                    // Copy is null, meaning nothing new was found, just use the old result with the new watermark
                     result = new ArchetypeMatchResult(World.Archetypes.Count, result.Value.ArchetypesMatches);
                 }
                 else
                 {
                     // Create a new match result
-                    result = new ArchetypeMatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(copy));
+                    result = new ArchetypeMatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
                 }
             }
 
