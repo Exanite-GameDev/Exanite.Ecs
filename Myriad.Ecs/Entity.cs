@@ -80,7 +80,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     public ref T GetComponent<T>() where T : IComponent
     {
         ref var entityInfo = ref World.GetStorageLocation(EntityId);
-        return ref entityInfo.Chunk.Get<T>(EntityId, entityInfo.IndexInChunk);
+        return ref entityInfo.Chunk.Get<T>(entityInfo.IndexInChunk);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     public ValueRef<T> GetComponentRef<T>() where T : IComponent
     {
         ref var entityInfo = ref World.GetStorageLocation(EntityId);
-        return entityInfo.Chunk.GetRef<T>(EntityId, entityInfo.IndexInChunk);
+        return entityInfo.Chunk.GetRef<T>(entityInfo.IndexInChunk);
     }
 
     /// <summary>

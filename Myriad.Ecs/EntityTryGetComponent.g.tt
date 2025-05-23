@@ -3,6 +3,7 @@
 using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs;
 using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Components;
 
 namespace Exanite.Myriad.Ecs;
 
@@ -17,6 +18,8 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
 #>
     public bool TryGetComponent<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
     {
+        var location = World.GetStorageLocation(EntityId);
+
 <#
     for (var t = 0; t < paramCount; t++)
     {
@@ -30,7 +33,8 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
     {
 #>
 
-        if (!HasComponent<T<#= t #>>())
+        var componentId<#= t #> = ComponentId.Get<T<#= t #>>();
+        if (!location.Chunk.Archetype.Components.Contains(componentId<#= t #>))
         {
             return false;
         }
@@ -42,7 +46,7 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
     for (var t = 0; t < paramCount; t++)
     {
 #>
-        ref<#= t #> = GetComponentRef<T<#= t #>>();
+        ref<#= t #> = location.Chunk.GetRef<T<#= t #>>(location.IndexInChunk, componentId<#= t #>);
 <#
     }
 #>

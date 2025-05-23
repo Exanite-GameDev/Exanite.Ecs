@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Allocations;
@@ -73,49 +74,55 @@ public sealed class Chunk
 
     #region Get component
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> GetSpan<T>() where T : IComponent
     {
         return GetSpan<T>(ComponentId.Get<T>());
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> GetSpan<T>(ComponentId id) where T : IComponent
     {
-        return GetComponentArray<T>(id).AsSpan(0, EntityCount);
+        return ((T[])GetComponentArray(id)).AsSpan(0, EntityCount);
     }
 
-    internal T[] GetComponentArray<T>() where T : IComponent
-    {
-        return GetComponentArray<T>(ComponentId.Get<T>());
-    }
-
-    internal T[] GetComponentArray<T>(ComponentId id) where T : IComponent
-    {
-        return (T[])GetComponentArray(id);
-    }
-
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Array GetComponentArray(ComponentId id)
     {
         return components[ComponentIndexByComponentId[id.Value]];
     }
 
-    internal ref T Get<T>(EntityId entityId, int entityIndex) where T : IComponent
+    /// <remarks>
+    /// Providing the component ID can prevent repeated component ID lookups.
+    /// </remarks>>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal ValueRef<T> GetRef<T>(int entityIndex) where T : IComponent
     {
-        AssertUtility.IsTrue(entities[entityIndex].EntityId == entityId, "Mismatched entities in chunk");
-        return ref Get<T>(entityIndex);
-    }
-
-    internal ValueRef<T> GetRef<T>(EntityId entityId, int entityIndex) where T : IComponent
-    {
-        AssertUtility.IsTrue(entities[entityIndex].EntityId == entityId, "Mismatched entities in chunk");
-
         return new ValueRef<T>(ref Get<T>(entityIndex));
     }
 
+    /// <remarks>
+    /// Providing the component ID can prevent repeated component ID lookups.
+    /// </remarks>>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal ValueRef<T> GetRef<T>(int entityIndex, ComponentId id) where T : IComponent
+    {
+        return new ValueRef<T>(ref Get<T>(entityIndex, id));
+    }
+
+    /// <remarks>
+    /// Providing the component ID can prevent repeated component ID lookups.
+    /// </remarks>>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref T Get<T>(int entityIndex) where T : IComponent
     {
         return ref Get<T>(entityIndex, ComponentId.Get<T>());
     }
 
+    /// <remarks>
+    /// Providing the component ID can prevent repeated component ID lookups.
+    /// </remarks>>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref T Get<T>(int entityIndex, ComponentId id) where T : IComponent
     {
         return ref GetSpan<T>(id)[entityIndex];

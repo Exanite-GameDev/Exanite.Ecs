@@ -31,6 +31,6 @@ internal readonly record struct EntityStorageLocation
 
     public ref T GetMutable<T>() where T : IComponent
     {
-        return ref Chunk.Get<T>(Entity, IndexInChunk);
+        return ref Chunk.Get<T>(IndexInChunk);
     }
 }
