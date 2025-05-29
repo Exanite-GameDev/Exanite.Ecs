@@ -208,7 +208,7 @@ public sealed class EcsWorld : ITrackedDisposable
             var previousId = DeadEntities[^1];
             DeadEntities.RemoveAt(DeadEntities.Count - 1);
 
-            var version = unchecked(previousId.Version + 1);
+            var version = previousId.Version + 1;
 
             // Ensure ID 0 is not assigned even after wrapping around 2^32 entities
             if (version == 0)

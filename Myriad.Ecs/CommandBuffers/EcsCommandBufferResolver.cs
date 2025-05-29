@@ -30,16 +30,12 @@ public sealed class EcsCommandBufferResolver
 
     public EcsCommandBufferResolver(EcsCommandBuffer commandBuffer)
     {
-        this.CommandBuffer = commandBuffer;
+        CommandBuffer = commandBuffer;
     }
 
     internal void Reset()
     {
         EntityIdsByBufferedEntityId.Clear();
-
-        unchecked
-        {
-            Version = CommandBuffer.Version + 1;
-        }
+        Version = CommandBuffer.Version + 1;
     }
 }
