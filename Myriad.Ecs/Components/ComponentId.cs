@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -10,12 +11,12 @@ namespace Exanite.Myriad.Ecs.Components;
 [DebuggerDisplay("{Type} ({Value})")]
 public readonly record struct ComponentId : IComparable<ComponentId>
 {
-    private static List<ComponentId> registeredComponentIds = new();
+    private static readonly ConcurrentBag<ComponentId> registeredComponentIds = new();
 
     /// <summary>
     /// All component IDs that have been discovered and registered so far.
     /// </summary>
-    public static IReadOnlyList<ComponentId> RegisteredComponentIds => registeredComponentIds;
+    public static IReadOnlyCollection<ComponentId> RegisteredComponentIds => registeredComponentIds;
 
     /// <summary>
     /// Raised when a new component ID is registered. May be called from any thread.
@@ -69,6 +70,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     internal static void NotifyComponentIdRegistered(ComponentId componentId)
     {
         registeredComponentIds.Add(componentId);
+
         ComponentIdRegistered?.Invoke(componentId);
     }
 }
