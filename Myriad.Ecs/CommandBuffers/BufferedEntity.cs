@@ -1,5 +1,4 @@
-﻿using System;
-using Exanite.Core.Utilities;
+﻿using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 
