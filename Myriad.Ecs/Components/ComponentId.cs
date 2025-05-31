@@ -63,7 +63,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// </summary>
     public static ComponentId Get<T>() where T : IComponent
     {
-        return ComponentRegistry.GetComponentId<T>();
+        return ComponentId<T>.Id;
     }
 
     internal static void NotifyComponentIdRegistered(ComponentId componentId)
@@ -71,4 +71,15 @@ public readonly record struct ComponentId : IComparable<ComponentId>
         registeredComponentIds.Add(componentId);
         ComponentIdRegistered?.Invoke(componentId);
     }
+}
+
+internal static class ComponentId<T> where T : IComponent
+{
+    /// <summary>
+    /// The component ID for <typeparamref name="T"/>.
+    /// </summary>
+    /// <remarks>
+    /// This property is cached, making repeated accesses very efficient.
+    /// </remarks>
+    public static readonly ComponentId Id = ComponentRegistry.GetComponentId<T>();
 }
