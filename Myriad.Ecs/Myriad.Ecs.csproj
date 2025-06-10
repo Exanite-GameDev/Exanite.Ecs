@@ -2,7 +2,6 @@
   <PropertyGroup>
     <AssemblyName>Exanite.Myriad.Ecs</AssemblyName>
     <RootNamespace>Exanite.Myriad.Ecs</RootNamespace>
-    <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
 
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
