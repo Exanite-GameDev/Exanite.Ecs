@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Exanite.Core.Runtime;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Allocations;
 using Exanite.Myriad.Ecs.Threading;
 
@@ -107,6 +108,8 @@ internal static class ComponentRegistry
         {
             if (!componentIdByType.TryGetValue(type, out var componentId))
             {
+                GuardUtility.IsTrue(!type.IsClass, "Components cannot be classes");
+
                 // Get component ID
                 componentId = new ComponentId(nextId);
                 nextId++;
