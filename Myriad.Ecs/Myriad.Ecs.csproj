@@ -7,13 +7,6 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup>
-    <AnalysisLevel>latest</AnalysisLevel>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <EnableTrimAnalzyer>true</EnableTrimAnalzyer>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <WarningsAsErrors>true</WarningsAsErrors>
-  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Exanite.Core\Exanite.Core.csproj"/>
