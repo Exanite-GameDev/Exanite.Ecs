@@ -1,3 +1,4 @@
+using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
@@ -25,5 +26,21 @@ public readonly record struct ComponentRef<T> where T : IComponent
         GuardUtility.IsTrue(entity.HasComponent<T>(), $"Component does not exist on entity: {entity.GetType().Name}");
 
         Entity = entity;
+    }
+
+    /// <summary>
+    /// Checks if the component is alive before returning a mutable reference to the component data.
+    /// It is not safe to access the <see cref="ValueRef{T}"/> if this method returns false.
+    /// </summary>
+    public bool TryGetValue(out ValueRef<T> value)
+    {
+        if (!IsAlive)
+        {
+            value = default;
+            return false;
+        }
+
+        value = new ValueRef<T>(ref Value);
+        return true;
     }
 }
