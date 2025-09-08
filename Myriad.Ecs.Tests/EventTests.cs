@@ -17,7 +17,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -37,7 +37,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -73,7 +73,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -99,7 +99,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -135,7 +135,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -161,7 +161,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -196,7 +196,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -216,7 +216,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -251,7 +251,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -287,7 +287,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -338,7 +338,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -362,7 +362,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -400,7 +400,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
@@ -440,7 +440,7 @@ public class EventTests
         var handler = new WorldEventHandler().RegisterAll(world);
         var commandBuffer = world.AcquireCommandBuffer();
 
-        world.EventBus.RegisterSendAllTo(new EventLogger());
+        world.EventBus.RegisterForwardAllTo(new EventLogger());
 
         // Create entities
         var entityAddCount = 10;
