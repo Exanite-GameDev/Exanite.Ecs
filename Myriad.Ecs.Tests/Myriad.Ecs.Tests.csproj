@@ -3,7 +3,7 @@
     <AssemblyName>Exanite.Myriad.Ecs.Tests</AssemblyName>
     <RootNamespace>Exanite.Myriad.Ecs.Tests</RootNamespace>
 
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
