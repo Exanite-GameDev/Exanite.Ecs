@@ -66,13 +66,13 @@ public readonly ref struct ComponentAdded<T> where T : IComponent
 
     public EcsWorld World => Entity.World;
     public readonly Entity Entity;
-    public readonly ref T Value;
+    public readonly ref T Component;
 
-    public ComponentAdded(EcsCommandBuffer commandBuffer, Entity entity, ref T value)
+    public ComponentAdded(EcsCommandBuffer commandBuffer, Entity entity, ref T component)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
-        Value = ref value;
+        Component = ref component;
     }
 }
 
@@ -100,13 +100,13 @@ public readonly ref struct ComponentModified<T> where T : IComponent
 
     public EcsWorld World => Entity.World;
     public readonly Entity Entity;
-    public readonly ref T Value;
+    public readonly ref T Component;
 
-    public ComponentModified(EcsCommandBuffer commandBuffer, Entity entity, ref T value)
+    public ComponentModified(EcsCommandBuffer commandBuffer, Entity entity, ref T component)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
-        Value = ref value;
+        Component = ref component;
     }
 }
 
@@ -126,12 +126,12 @@ public readonly ref struct ComponentRemoved<T> where T : IComponent
 
     public EcsWorld World => Entity.World;
     public readonly Entity Entity;
-    public readonly ref T Value;
+    public readonly ref T Component;
 
-    public ComponentRemoved(EcsCommandBuffer commandBuffer, Entity entity, ref T value)
+    public ComponentRemoved(EcsCommandBuffer commandBuffer, Entity entity, ref T component)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
-        Value = ref value;
+        Component = ref component;
     }
 }
