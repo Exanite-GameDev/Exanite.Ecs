@@ -63,6 +63,9 @@ public sealed class EcsWorld : ITrackedDisposable
         commandBuffer.Destroy(allEntitiesQuery);
         commandBuffer.Execute();
 
+        // Clear event handlers
+        EventBus.Dispose();
+
         IsDisposing = false;
         IsDisposed = true;
 
