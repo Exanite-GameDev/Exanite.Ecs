@@ -219,6 +219,11 @@ public sealed class QueryDescription
     /// </summary>
     public bool IsMatch(Entity entity)
     {
+        if (!entity.IsAlive)
+        {
+            return false;
+        }
+
         var matchResult = GetArchetypeMatchResult();
         return matchResult.ArchetypeSet.Contains(entity.World.GetArchetype(entity.EntityId));
     }
@@ -483,16 +488,6 @@ public sealed class QueryDescription
         }
 
         return false;
-    }
-
-    /// <summary>
-    /// Check if this query description matches the given entity.
-    /// </summary>
-    public bool Contains(Entity entity)
-    {
-        var location = entity.World.GetStorageLocation(entity.EntityId);
-        var archetype = new ArchetypeMatch(location.Chunk.Archetype, null, null);
-        return GetArchetypeMatches().Contains(archetype);
     }
 
     /// <summary>

@@ -506,7 +506,7 @@ public class QueryDescriptionTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.IsTrue(q.Contains(e));
+        Assert.IsTrue(q.IsMatch(e));
     }
 
     [TestMethod]
@@ -524,7 +524,7 @@ public class QueryDescriptionTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.IsFalse(q.Contains(e));
+        Assert.IsFalse(q.IsMatch(e));
     }
 
     [TestMethod]
