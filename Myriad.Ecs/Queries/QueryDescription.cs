@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Utilities;
@@ -495,9 +496,9 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get the first entity which this query matches (or null).
+    /// Get the first entity which this query matches or a default entity.
     /// </summary>
-    public Entity? FirstOrDefault()
+    public Entity FirstOrDefault()
     {
         foreach (var archetype in GetArchetypes())
         {
@@ -521,20 +522,19 @@ public sealed class QueryDescription
     /// <summary>
     /// Get the first entity which this query matches (or throw if there are none).
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if there are no matches.</exception>
     public Entity First()
     {
-        return FirstOrDefault()
-            ?? throw new InvalidOperationException("QueryDescription.First() found no matching entities");
+        var entity = FirstOrDefault();
+        GuardUtility.IsTrue(entity.IsAlive, "QueryDescription.First() found no matching entities");
+        return entity;
     }
 
     /// <summary>
-    /// Get the single entity which this query matches (or null if there are none).
+    /// Get the single entity which this query matches or a default entity.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if there are more than one matches.</exception>
-    public Entity? SingleOrDefault()
+    public Entity SingleOrDefault()
     {
-        Entity? result = null;
+        Entity result = default;
         foreach (var archetype in GetArchetypes())
         {
             if (archetype.EntityCount == 0)
@@ -549,10 +549,7 @@ public sealed class QueryDescription
                     continue;
                 }
 
-                if (chunk.EntityCount > 1 || result.HasValue)
-                {
-                    throw new InvalidOperationException("QueryDescription.SingleOrDefault() found more than one matching entity");
-                }
+                GuardUtility.IsFalse(chunk.EntityCount > 1 || result.IsAlive, "QueryDescription.SingleOrDefault() found more than one matching entity");
 
                 result = chunk.Entities[0];
             }
@@ -567,8 +564,9 @@ public sealed class QueryDescription
     /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
     public Entity Single()
     {
-        return SingleOrDefault()
-            ?? throw new InvalidOperationException("QueryDescription.SingleOrDefault() found no matching entities");
+        var entity = SingleOrDefault();
+        GuardUtility.IsTrue(entity.IsAlive, "QueryDescription.SingleOrDefault() found no matching entities");
+        return entity;
     }
 
     /// <summary>

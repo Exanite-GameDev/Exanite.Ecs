@@ -364,7 +364,7 @@ public class QueryDescriptionTests
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
-        Assert.IsTrue(new[] { e1, e2 }.Contains(q.FirstOrDefault()!.Value));
+        Assert.IsTrue(new[] { e1, e2 }.Contains(q.FirstOrDefault()));
     }
 
     [TestMethod]
@@ -411,7 +411,7 @@ public class QueryDescriptionTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.AreEqual(e, q.SingleOrDefault()!.Value);
+        Assert.AreEqual(e, q.SingleOrDefault());
     }
 
     [TestMethod]

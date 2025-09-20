@@ -448,7 +448,7 @@ public class EcsCommandBufferTests
         var q = new QueryBuilder().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world);
 
         // Get an entity we're going to destroy
-        var dead = q.FirstOrDefault()!.Value;
+        var dead = q.FirstOrDefault();
 
         // Destroy it
         var buffer = new EcsCommandBuffer(world);
