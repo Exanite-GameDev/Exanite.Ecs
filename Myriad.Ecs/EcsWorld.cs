@@ -249,12 +249,22 @@ public sealed class EcsWorld : ITrackedDisposable
     internal ref StorageLocation GetStorageLocation(EntityId entity)
     {
         ref var location = ref Entities[entity.Id];
-
-        if (location.Version != entity.Version)
-        {
-            throw new ArgumentException("Entity is not alive", nameof(entity));
-        }
+        GuardUtility.IsTrue(location.Version == entity.Version, "Entity is not alive");
 
         return ref location;
+    }
+
+    internal bool TryGetStorageLocation(EntityId entity, out ValueRef<StorageLocation> storageLocation)
+    {
+        storageLocation = default;
+
+        ref var location = ref Entities[entity.Id];
+        if (location.Version != entity.Version)
+        {
+            return false;
+        }
+
+        storageLocation = new ValueRef<StorageLocation>(ref location);
+        return true;
     }
 }

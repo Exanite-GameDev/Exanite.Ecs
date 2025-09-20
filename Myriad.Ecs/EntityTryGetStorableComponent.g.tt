@@ -14,14 +14,14 @@ public readonly partial record struct Entity
 for (var paramCount = 1; paramCount <= 16; paramCount++)
 {
     var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
-    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out ValueRef<T{t}> ref{t}"));
+    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out ComponentRef<T{t}> ref{t}"));
     var queryConstraints = string.Join(" ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
 #>
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
+    public bool TryGetStorableComponentRef<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
     {
 <#
     for (var t = 0; t < paramCount; t++)
@@ -37,8 +37,7 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 <#
     for (var t = 0; t < paramCount; t++)
     {
@@ -57,7 +56,7 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
     for (var t = 0; t < paramCount; t++)
     {
 #>
-        ref<#= t #> = location.Chunk.GetRef<T<#= t #>>(location.IndexInChunk, componentId<#= t #>);
+        ref<#= t #> = new ComponentRef<T<#= t #>>(this);
 <#
     }
 #>

@@ -1,5 +1,4 @@
 using Exanite.Core.Runtime;
-using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
@@ -22,9 +21,6 @@ public readonly record struct ComponentRef<T> where T : IComponent
 
     internal ComponentRef(Entity entity)
     {
-        GuardUtility.IsTrue(entity.IsAlive, "Entity does not exist");
-        GuardUtility.IsTrue(entity.HasComponent<T>(), $"Component does not exist on entity: {entity.GetType().Name}");
-
         Entity = entity;
     }
 

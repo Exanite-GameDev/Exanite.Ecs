@@ -18,12 +18,21 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EntityTryGetComponent.g.cs</LastGenOutput>
     </None>
+    <None Update="EntityTryGetStorableComponent.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EntityTryGetStorableComponent.g.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="EntityTryGetComponent.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityTryGetComponent.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="EntityTryGetStorableComponent.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityTryGetStorableComponent.g.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

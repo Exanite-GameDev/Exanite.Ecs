@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
@@ -84,8 +85,8 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
-    /// Get a reference to a component of the given type. If the entity
-    /// does not have this component an exception will be thrown.
+    /// Get a reference to a component of the given type.
+    /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueRef<T> GetComponentRef<T>() where T : IComponent
@@ -95,12 +96,15 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
-    /// Get a reference to a component of the given type. If the entity
-    /// does not have this component an exception will be thrown.
+    /// Get a reference to a component of the given type.
+    /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ComponentRef<T> GetStorableComponentRef<T>() where T : IComponent
     {
+        GuardUtility.IsTrue(IsAlive, "Entity does not exist");
+        GuardUtility.IsTrue(HasComponent<T>(), $"Component does not exist on entity: {GetType().Name}");
+
         return new ComponentRef<T>(this);
     }
 

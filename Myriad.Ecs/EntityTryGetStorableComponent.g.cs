@@ -9,10 +9,10 @@ namespace Exanite.Myriad.Ecs;
 public readonly partial record struct Entity
 {
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0>(out ValueRef<T0> ref0) where T0 : IComponent
+    public bool TryGetStorableComponentRef<T0>(out ComponentRef<T0> ref0) where T0 : IComponent
     {
         ref0 = default;
 
@@ -21,8 +21,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -30,16 +29,16 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
+        ref0 = new ComponentRef<T0>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1>(out ValueRef<T0> ref0, out ValueRef<T1> ref1) where T0 : IComponent where T1 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1) where T0 : IComponent where T1 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -49,8 +48,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -64,17 +62,17 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2) where T0 : IComponent where T1 : IComponent where T2 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2) where T0 : IComponent where T1 : IComponent where T2 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -85,8 +83,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -106,18 +103,18 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -129,8 +126,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -156,19 +152,19 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -181,8 +177,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -214,20 +209,20 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -241,8 +236,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -280,21 +274,21 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -309,8 +303,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -354,22 +347,22 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -385,8 +378,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -436,23 +428,23 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -469,8 +461,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -526,24 +517,24 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8, out ValueRef<T9> ref9) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -561,8 +552,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -624,25 +614,25 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
-        ref9 = location.Chunk.GetRef<T9>(location.IndexInChunk, componentId9);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
+        ref9 = new ComponentRef<T9>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8, out ValueRef<T9> ref9, out ValueRef<T10> ref10) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -661,8 +651,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -730,26 +719,26 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
-        ref9 = location.Chunk.GetRef<T9>(location.IndexInChunk, componentId9);
-        ref10 = location.Chunk.GetRef<T10>(location.IndexInChunk, componentId10);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
+        ref9 = new ComponentRef<T9>(this);
+        ref10 = new ComponentRef<T10>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8, out ValueRef<T9> ref9, out ValueRef<T10> ref10, out ValueRef<T11> ref11) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -769,8 +758,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -844,27 +832,27 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
-        ref9 = location.Chunk.GetRef<T9>(location.IndexInChunk, componentId9);
-        ref10 = location.Chunk.GetRef<T10>(location.IndexInChunk, componentId10);
-        ref11 = location.Chunk.GetRef<T11>(location.IndexInChunk, componentId11);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
+        ref9 = new ComponentRef<T9>(this);
+        ref10 = new ComponentRef<T10>(this);
+        ref11 = new ComponentRef<T11>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8, out ValueRef<T9> ref9, out ValueRef<T10> ref10, out ValueRef<T11> ref11, out ValueRef<T12> ref12) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -885,8 +873,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -966,28 +953,28 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
-        ref9 = location.Chunk.GetRef<T9>(location.IndexInChunk, componentId9);
-        ref10 = location.Chunk.GetRef<T10>(location.IndexInChunk, componentId10);
-        ref11 = location.Chunk.GetRef<T11>(location.IndexInChunk, componentId11);
-        ref12 = location.Chunk.GetRef<T12>(location.IndexInChunk, componentId12);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
+        ref9 = new ComponentRef<T9>(this);
+        ref10 = new ComponentRef<T10>(this);
+        ref11 = new ComponentRef<T11>(this);
+        ref12 = new ComponentRef<T12>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8, out ValueRef<T9> ref9, out ValueRef<T10> ref10, out ValueRef<T11> ref11, out ValueRef<T12> ref12, out ValueRef<T13> ref13) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -1009,8 +996,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -1096,29 +1082,29 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
-        ref9 = location.Chunk.GetRef<T9>(location.IndexInChunk, componentId9);
-        ref10 = location.Chunk.GetRef<T10>(location.IndexInChunk, componentId10);
-        ref11 = location.Chunk.GetRef<T11>(location.IndexInChunk, componentId11);
-        ref12 = location.Chunk.GetRef<T12>(location.IndexInChunk, componentId12);
-        ref13 = location.Chunk.GetRef<T13>(location.IndexInChunk, componentId13);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
+        ref9 = new ComponentRef<T9>(this);
+        ref10 = new ComponentRef<T10>(this);
+        ref11 = new ComponentRef<T11>(this);
+        ref12 = new ComponentRef<T12>(this);
+        ref13 = new ComponentRef<T13>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8, out ValueRef<T9> ref9, out ValueRef<T10> ref10, out ValueRef<T11> ref11, out ValueRef<T12> ref12, out ValueRef<T13> ref13, out ValueRef<T14> ref14) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13, out ComponentRef<T14> ref14) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -1141,8 +1127,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -1234,30 +1219,30 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
-        ref9 = location.Chunk.GetRef<T9>(location.IndexInChunk, componentId9);
-        ref10 = location.Chunk.GetRef<T10>(location.IndexInChunk, componentId10);
-        ref11 = location.Chunk.GetRef<T11>(location.IndexInChunk, componentId11);
-        ref12 = location.Chunk.GetRef<T12>(location.IndexInChunk, componentId12);
-        ref13 = location.Chunk.GetRef<T13>(location.IndexInChunk, componentId13);
-        ref14 = location.Chunk.GetRef<T14>(location.IndexInChunk, componentId14);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
+        ref9 = new ComponentRef<T9>(this);
+        ref10 = new ComponentRef<T10>(this);
+        ref11 = new ComponentRef<T11>(this);
+        ref12 = new ComponentRef<T12>(this);
+        ref13 = new ComponentRef<T13>(this);
+        ref14 = new ComponentRef<T14>(this);
 
         return true;
     }
 
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Try to get a storable reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(out ValueRef<T0> ref0, out ValueRef<T1> ref1, out ValueRef<T2> ref2, out ValueRef<T3> ref3, out ValueRef<T4> ref4, out ValueRef<T5> ref5, out ValueRef<T6> ref6, out ValueRef<T7> ref7, out ValueRef<T8> ref8, out ValueRef<T9> ref9, out ValueRef<T10> ref10, out ValueRef<T11> ref11, out ValueRef<T12> ref12, out ValueRef<T13> ref13, out ValueRef<T14> ref14, out ValueRef<T15> ref15) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent where T15 : IComponent
+    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13, out ComponentRef<T14> ref14, out ComponentRef<T15> ref15) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent where T15 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -1281,8 +1266,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        var location = storageLocation.Value;
-        var components = location.Chunk.Archetype.Components;
+        var components = storageLocation.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -1380,22 +1364,22 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Chunk.GetRef<T0>(location.IndexInChunk, componentId0);
-        ref1 = location.Chunk.GetRef<T1>(location.IndexInChunk, componentId1);
-        ref2 = location.Chunk.GetRef<T2>(location.IndexInChunk, componentId2);
-        ref3 = location.Chunk.GetRef<T3>(location.IndexInChunk, componentId3);
-        ref4 = location.Chunk.GetRef<T4>(location.IndexInChunk, componentId4);
-        ref5 = location.Chunk.GetRef<T5>(location.IndexInChunk, componentId5);
-        ref6 = location.Chunk.GetRef<T6>(location.IndexInChunk, componentId6);
-        ref7 = location.Chunk.GetRef<T7>(location.IndexInChunk, componentId7);
-        ref8 = location.Chunk.GetRef<T8>(location.IndexInChunk, componentId8);
-        ref9 = location.Chunk.GetRef<T9>(location.IndexInChunk, componentId9);
-        ref10 = location.Chunk.GetRef<T10>(location.IndexInChunk, componentId10);
-        ref11 = location.Chunk.GetRef<T11>(location.IndexInChunk, componentId11);
-        ref12 = location.Chunk.GetRef<T12>(location.IndexInChunk, componentId12);
-        ref13 = location.Chunk.GetRef<T13>(location.IndexInChunk, componentId13);
-        ref14 = location.Chunk.GetRef<T14>(location.IndexInChunk, componentId14);
-        ref15 = location.Chunk.GetRef<T15>(location.IndexInChunk, componentId15);
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
+        ref6 = new ComponentRef<T6>(this);
+        ref7 = new ComponentRef<T7>(this);
+        ref8 = new ComponentRef<T8>(this);
+        ref9 = new ComponentRef<T9>(this);
+        ref10 = new ComponentRef<T10>(this);
+        ref11 = new ComponentRef<T11>(this);
+        ref12 = new ComponentRef<T12>(this);
+        ref13 = new ComponentRef<T13>(this);
+        ref14 = new ComponentRef<T14>(this);
+        ref15 = new ComponentRef<T15>(this);
 
         return true;
     }
