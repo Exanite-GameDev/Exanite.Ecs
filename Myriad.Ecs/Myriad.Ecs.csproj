@@ -14,25 +14,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="EntityTryGetComponent.g.tt">
+    <None Update="Entity.TryGetComponent.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EntityTryGetComponent.g.cs</LastGenOutput>
     </None>
-    <None Update="EntityTryGetStorableComponent.g.tt">
+    <None Update="Entity.TryGetStorableComponent.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EntityTryGetStorableComponent.g.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="EntityTryGetComponent.g.cs">
+    <Compile Update="Entity.TryGetComponent.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EntityTryGetComponent.g.tt</DependentUpon>
+      <DependentUpon>Entity.TryGetComponent.g.tt</DependentUpon>
     </Compile>
-    <Compile Update="EntityTryGetStorableComponent.g.cs">
+    <Compile Update="Entity.TryGetStorableComponent.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EntityTryGetStorableComponent.g.tt</DependentUpon>
+      <DependentUpon>Entity.TryGetStorableComponent.g.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
