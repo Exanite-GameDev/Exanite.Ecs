@@ -19,7 +19,7 @@ public readonly partial record struct Entity
     {
         ref0 = new ComponentRef<T0>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -47,7 +47,7 @@ public readonly partial record struct Entity
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -82,7 +82,7 @@ public readonly partial record struct Entity
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -124,7 +124,7 @@ public readonly partial record struct Entity
         ref2 = new ComponentRef<T2>(this);
         ref3 = new ComponentRef<T3>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -173,7 +173,7 @@ public readonly partial record struct Entity
         ref3 = new ComponentRef<T3>(this);
         ref4 = new ComponentRef<T4>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -229,7 +229,7 @@ public readonly partial record struct Entity
         ref4 = new ComponentRef<T4>(this);
         ref5 = new ComponentRef<T5>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -292,7 +292,7 @@ public readonly partial record struct Entity
         ref5 = new ComponentRef<T5>(this);
         ref6 = new ComponentRef<T6>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -362,7 +362,7 @@ public readonly partial record struct Entity
         ref6 = new ComponentRef<T6>(this);
         ref7 = new ComponentRef<T7>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -439,7 +439,7 @@ public readonly partial record struct Entity
         ref7 = new ComponentRef<T7>(this);
         ref8 = new ComponentRef<T8>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -523,7 +523,7 @@ public readonly partial record struct Entity
         ref8 = new ComponentRef<T8>(this);
         ref9 = new ComponentRef<T9>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -614,7 +614,7 @@ public readonly partial record struct Entity
         ref9 = new ComponentRef<T9>(this);
         ref10 = new ComponentRef<T10>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -712,7 +712,7 @@ public readonly partial record struct Entity
         ref10 = new ComponentRef<T10>(this);
         ref11 = new ComponentRef<T11>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -817,7 +817,7 @@ public readonly partial record struct Entity
         ref11 = new ComponentRef<T11>(this);
         ref12 = new ComponentRef<T12>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -929,7 +929,7 @@ public readonly partial record struct Entity
         ref12 = new ComponentRef<T12>(this);
         ref13 = new ComponentRef<T13>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -1048,7 +1048,7 @@ public readonly partial record struct Entity
         ref13 = new ComponentRef<T13>(this);
         ref14 = new ComponentRef<T14>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }
@@ -1174,7 +1174,7 @@ public readonly partial record struct Entity
         ref14 = new ComponentRef<T14>(this);
         ref15 = new ComponentRef<T15>(this);
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }

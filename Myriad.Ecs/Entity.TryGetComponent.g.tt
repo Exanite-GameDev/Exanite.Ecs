@@ -32,7 +32,7 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
     }
 #>
 
-        if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
             return false;
         }

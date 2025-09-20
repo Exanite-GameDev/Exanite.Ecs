@@ -25,6 +25,15 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
+    /// Check if this Entity is default initialized.
+    /// </summary>
+    internal bool IsDefault
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => Id == 0;
+    }
+
+    /// <summary>
     /// The <see cref="World"/> this <see cref="Entity"/> is in.
     /// </summary>
     public readonly EcsWorld World;

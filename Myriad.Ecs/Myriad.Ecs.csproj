@@ -16,7 +16,7 @@
   <ItemGroup>
     <None Update="Entity.TryGetComponent.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>EntityTryGetComponent.g.cs</LastGenOutput>
+      <LastGenOutput>Entity.TryGetComponent.g.cs</LastGenOutput>
     </None>
     <None Update="Entity.TryGetStorableComponent.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
