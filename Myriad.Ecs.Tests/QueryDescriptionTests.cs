@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
@@ -276,7 +277,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.First());
+        Assert.ThrowsException<GuardException>(() => q.First());
     }
 
     [TestMethod]
@@ -326,7 +327,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.IsNull(q.FirstOrDefault());
+        Assert.IsFalse(q.FirstOrDefault().IsAlive);
     }
 
     [TestMethod]
@@ -376,7 +377,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.IsNull(q.SingleOrDefault());
+        Assert.IsFalse(q.SingleOrDefault().IsAlive);
     }
 
     [TestMethod]
@@ -393,7 +394,7 @@ public class QueryDescriptionTests
         c.Create().Set(new Component0());
         c.Execute();
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.SingleOrDefault());
+        Assert.ThrowsException<GuardException>(() => q.SingleOrDefault());
     }
 
     [TestMethod]
@@ -428,7 +429,7 @@ public class QueryDescriptionTests
         c.Create().Set(new Component0());
         c.Execute();
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.Single());
+        Assert.ThrowsException<GuardException>(() => q.Single());
     }
 
     [TestMethod]
@@ -440,7 +441,7 @@ public class QueryDescriptionTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.ThrowsException<InvalidOperationException>(() => q.Single());
+        Assert.ThrowsException<GuardException>(() => q.Single());
     }
 
     [TestMethod]
@@ -538,7 +539,7 @@ public class QueryDescriptionTests
 
         var rng = new Random(123);
 
-        Assert.IsNull(q.RandomOrDefault(rng));
+        Assert.IsFalse(q.RandomOrDefault(rng).IsAlive);
     }
 
     [TestMethod]
@@ -597,7 +598,7 @@ public class QueryDescriptionTests
 
         for (var i = 0; i < 1000; i++)
         {
-            Assert.IsTrue(entities.Contains(q.RandomOrDefault(r)!.Value));
+            Assert.IsTrue(entities.Contains(q.RandomOrDefault(r)));
         }
     }
 }

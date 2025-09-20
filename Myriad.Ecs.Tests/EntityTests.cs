@@ -1,4 +1,5 @@
 ﻿using System;
+using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -102,7 +103,7 @@ public class EntityTests
         b.Destroy(entity);
         b.Execute();
 
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsException<GuardException>(() =>
         {
             var c = entity.ComponentIds.Count;
         });
