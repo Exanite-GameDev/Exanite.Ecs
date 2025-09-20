@@ -10,11 +10,14 @@ public readonly partial record struct Entity
 {
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0>(out ComponentRef<T0> ref0) where T0 : IComponent
+    public bool TryGetStorableComponent<T0>(out ComponentRef<T0> ref0) where T0 : IComponent
     {
-        ref0 = default;
+        ref0 = new ComponentRef<T0>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -29,19 +32,20 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = new ComponentRef<T0>(this);
-
         return true;
     }
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1) where T0 : IComponent where T1 : IComponent
+    public bool TryGetStorableComponent<T0, T1>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1) where T0 : IComponent where T1 : IComponent
     {
-        ref0 = default;
-        ref1 = default;
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -62,21 +66,21 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = new ComponentRef<T0>(this);
-        ref1 = new ComponentRef<T1>(this);
-
         return true;
     }
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2) where T0 : IComponent where T1 : IComponent where T2 : IComponent
+    public bool TryGetStorableComponent<T0, T1, T2>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2) where T0 : IComponent where T1 : IComponent where T2 : IComponent
     {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -103,23 +107,22 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = new ComponentRef<T0>(this);
-        ref1 = new ComponentRef<T1>(this);
-        ref2 = new ComponentRef<T2>(this);
-
         return true;
     }
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent
+    public bool TryGetStorableComponent<T0, T1, T2, T3>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent
     {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -152,25 +155,23 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = new ComponentRef<T0>(this);
-        ref1 = new ComponentRef<T1>(this);
-        ref2 = new ComponentRef<T2>(this);
-        ref3 = new ComponentRef<T3>(this);
-
         return true;
     }
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent
     {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -209,27 +210,24 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = new ComponentRef<T0>(this);
-        ref1 = new ComponentRef<T1>(this);
-        ref2 = new ComponentRef<T2>(this);
-        ref3 = new ComponentRef<T3>(this);
-        ref4 = new ComponentRef<T4>(this);
-
         return true;
     }
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent
     {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
+        ref0 = new ComponentRef<T0>(this);
+        ref1 = new ComponentRef<T1>(this);
+        ref2 = new ComponentRef<T2>(this);
+        ref3 = new ComponentRef<T3>(this);
+        ref4 = new ComponentRef<T4>(this);
+        ref5 = new ComponentRef<T5>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -274,29 +272,25 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
         ref3 = new ComponentRef<T3>(this);
         ref4 = new ComponentRef<T4>(this);
         ref5 = new ComponentRef<T5>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
+        ref6 = new ComponentRef<T6>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -347,6 +341,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -354,24 +360,7 @@ public readonly partial record struct Entity
         ref4 = new ComponentRef<T4>(this);
         ref5 = new ComponentRef<T5>(this);
         ref6 = new ComponentRef<T6>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
+        ref7 = new ComponentRef<T7>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -428,6 +417,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -436,25 +437,7 @@ public readonly partial record struct Entity
         ref5 = new ComponentRef<T5>(this);
         ref6 = new ComponentRef<T6>(this);
         ref7 = new ComponentRef<T7>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
+        ref8 = new ComponentRef<T8>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -517,6 +500,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -526,26 +521,7 @@ public readonly partial record struct Entity
         ref6 = new ComponentRef<T6>(this);
         ref7 = new ComponentRef<T7>(this);
         ref8 = new ComponentRef<T8>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
-        ref9 = default;
+        ref9 = new ComponentRef<T9>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -614,6 +590,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -624,27 +612,7 @@ public readonly partial record struct Entity
         ref7 = new ComponentRef<T7>(this);
         ref8 = new ComponentRef<T8>(this);
         ref9 = new ComponentRef<T9>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
-        ref9 = default;
-        ref10 = default;
+        ref10 = new ComponentRef<T10>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -719,6 +687,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -730,28 +710,7 @@ public readonly partial record struct Entity
         ref8 = new ComponentRef<T8>(this);
         ref9 = new ComponentRef<T9>(this);
         ref10 = new ComponentRef<T10>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
-        ref9 = default;
-        ref10 = default;
-        ref11 = default;
+        ref11 = new ComponentRef<T11>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -832,6 +791,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -844,29 +815,7 @@ public readonly partial record struct Entity
         ref9 = new ComponentRef<T9>(this);
         ref10 = new ComponentRef<T10>(this);
         ref11 = new ComponentRef<T11>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
-        ref9 = default;
-        ref10 = default;
-        ref11 = default;
-        ref12 = default;
+        ref12 = new ComponentRef<T12>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -953,6 +902,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -966,30 +927,7 @@ public readonly partial record struct Entity
         ref10 = new ComponentRef<T10>(this);
         ref11 = new ComponentRef<T11>(this);
         ref12 = new ComponentRef<T12>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
-        ref9 = default;
-        ref10 = default;
-        ref11 = default;
-        ref12 = default;
-        ref13 = default;
+        ref13 = new ComponentRef<T13>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -1082,6 +1020,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13, out ComponentRef<T14> ref14) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -1096,31 +1046,7 @@ public readonly partial record struct Entity
         ref11 = new ComponentRef<T11>(this);
         ref12 = new ComponentRef<T12>(this);
         ref13 = new ComponentRef<T13>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13, out ComponentRef<T14> ref14) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
-        ref9 = default;
-        ref10 = default;
-        ref11 = default;
-        ref12 = default;
-        ref13 = default;
-        ref14 = default;
+        ref14 = new ComponentRef<T14>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -1219,6 +1145,18 @@ public readonly partial record struct Entity
             return false;
         }
 
+        return true;
+    }
+
+    /// <summary>
+    /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13, out ComponentRef<T14> ref14, out ComponentRef<T15> ref15) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent where T15 : IComponent
+    {
         ref0 = new ComponentRef<T0>(this);
         ref1 = new ComponentRef<T1>(this);
         ref2 = new ComponentRef<T2>(this);
@@ -1234,32 +1172,7 @@ public readonly partial record struct Entity
         ref12 = new ComponentRef<T12>(this);
         ref13 = new ComponentRef<T13>(this);
         ref14 = new ComponentRef<T14>(this);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Try to get a storable reference to a component of the given type.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(out ComponentRef<T0> ref0, out ComponentRef<T1> ref1, out ComponentRef<T2> ref2, out ComponentRef<T3> ref3, out ComponentRef<T4> ref4, out ComponentRef<T5> ref5, out ComponentRef<T6> ref6, out ComponentRef<T7> ref7, out ComponentRef<T8> ref8, out ComponentRef<T9> ref9, out ComponentRef<T10> ref10, out ComponentRef<T11> ref11, out ComponentRef<T12> ref12, out ComponentRef<T13> ref13, out ComponentRef<T14> ref14, out ComponentRef<T15> ref15) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent where T15 : IComponent
-    {
-        ref0 = default;
-        ref1 = default;
-        ref2 = default;
-        ref3 = default;
-        ref4 = default;
-        ref5 = default;
-        ref6 = default;
-        ref7 = default;
-        ref8 = default;
-        ref9 = default;
-        ref10 = default;
-        ref11 = default;
-        ref12 = default;
-        ref13 = default;
-        ref14 = default;
-        ref15 = default;
+        ref15 = new ComponentRef<T15>(this);
 
         if (!World.TryGetStorageLocation(EntityId, out var storageLocation))
         {
@@ -1363,23 +1276,6 @@ public readonly partial record struct Entity
         {
             return false;
         }
-
-        ref0 = new ComponentRef<T0>(this);
-        ref1 = new ComponentRef<T1>(this);
-        ref2 = new ComponentRef<T2>(this);
-        ref3 = new ComponentRef<T3>(this);
-        ref4 = new ComponentRef<T4>(this);
-        ref5 = new ComponentRef<T5>(this);
-        ref6 = new ComponentRef<T6>(this);
-        ref7 = new ComponentRef<T7>(this);
-        ref8 = new ComponentRef<T8>(this);
-        ref9 = new ComponentRef<T9>(this);
-        ref10 = new ComponentRef<T10>(this);
-        ref11 = new ComponentRef<T11>(this);
-        ref12 = new ComponentRef<T12>(this);
-        ref13 = new ComponentRef<T13>(this);
-        ref14 = new ComponentRef<T14>(this);
-        ref15 = new ComponentRef<T15>(this);
 
         return true;
     }

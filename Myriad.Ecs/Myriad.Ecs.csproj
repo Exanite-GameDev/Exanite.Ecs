@@ -20,7 +20,7 @@
     </None>
     <None Update="Entity.TryGetStorableComponent.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>EntityTryGetStorableComponent.g.cs</LastGenOutput>
+      <LastGenOutput>Entity.TryGetStorableComponent.g.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

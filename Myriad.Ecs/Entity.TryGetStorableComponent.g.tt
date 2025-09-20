@@ -19,15 +19,18 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
 #>
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
+    /// It is safe to use the returned ComponentRefs even when this method returns false,
+    /// the ComponentRefs are just not guaranteed to point to a component in this case.
+    /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponentRef<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
+    public bool TryGetStorableComponent<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
     {
 <#
     for (var t = 0; t < paramCount; t++)
     {
 #>
-        ref<#= t #> = default;
+        ref<#= t #> = new ComponentRef<T<#= t #>>(this);
 <#
     }
 #>
@@ -48,15 +51,6 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
         {
             return false;
         }
-<#
-    }
-#>
-
-<#
-    for (var t = 0; t < paramCount; t++)
-    {
-#>
-        ref<#= t #> = new ComponentRef<T<#= t #>>(this);
 <#
     }
 #>

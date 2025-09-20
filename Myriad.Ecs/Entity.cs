@@ -100,7 +100,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ComponentRef<T> GetStorableComponentRef<T>() where T : IComponent
+    public ComponentRef<T> GetStorableComponent<T>() where T : IComponent
     {
         GuardUtility.IsTrue(IsAlive, "Entity does not exist");
         GuardUtility.IsTrue(HasComponent<T>(), $"Component does not exist on entity: {GetType().Name}");
