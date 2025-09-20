@@ -491,7 +491,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get the first entity which this query matches or a default entity.
+    /// Get the first entity this query matches. Returns default if none.
     /// </summary>
     public Entity FirstOrDefault()
     {
@@ -515,7 +515,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get the first entity which this query matches (or throw if there are none).
+    /// Get the first entity this query matches. Throws if none.
     /// </summary>
     public Entity First()
     {
@@ -525,7 +525,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get the single entity which this query matches or a default entity.
+    /// Get the single entity this query matches. Returns default if none.
     /// </summary>
     public Entity SingleOrDefault()
     {
@@ -554,9 +554,8 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get a single entity which this query matches (throws if there is not exactly one match).
+    /// Get the single entity this query matches. Throws if none.
     /// </summary>
-    /// <exception cref="InvalidOperationException">If none or multiple entities were found.</exception>
     public Entity Single()
     {
         var entity = SingleOrDefault();
@@ -565,9 +564,9 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Get a random entity matched by this query (or null if there are none).
+    /// Get a random entity this query matches. Returns default if none.
     /// </summary>
-    public Entity? RandomOrDefault(Random random)
+    public Entity RandomOrDefault(Random random)
     {
         // Get total entity count
         var count = Count();
@@ -607,6 +606,16 @@ public sealed class QueryDescription
 
         // This shouldn't happen
         return default;
+    }
+
+    /// <summary>
+    /// Get a random entity this query matches. Throws if none.
+    /// </summary>
+    public Entity Random(Random random)
+    {
+        var entity = RandomOrDefault(random);
+        GuardUtility.IsTrue(entity.IsAlive, "QueryDescription.RandomOrDefault() found no matching entities");
+        return entity;
     }
 
     #endregion
