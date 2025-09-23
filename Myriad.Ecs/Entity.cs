@@ -146,7 +146,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString()
     {
-        return EntityId.ToString();
+        return $"{EntityId}{(IsAlive ? "" : " (Dead)")}";
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
