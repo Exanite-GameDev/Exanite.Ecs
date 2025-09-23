@@ -39,4 +39,9 @@ public readonly record struct ComponentRef<T> where T : IComponent
         value = new ValueRef<T>(ref Value);
         return true;
     }
+
+    public override string ToString()
+    {
+        return Entity.ToString();
+    }
 }
