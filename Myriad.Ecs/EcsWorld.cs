@@ -33,7 +33,7 @@ public sealed class EcsWorld : ITrackedDisposable
     /// <summary>
     /// Get a list of all archetypes in this <see cref="EcsWorld"/>
     /// </summary>
-    public IReadOnlyList<Archetype> Archetypes => archetypes;
+    public ReadOnlySpan<Archetype> Archetypes => archetypes.AsSpan();
     internal int ArchetypesCount => archetypes.Count;
 
     private readonly Pool<EcsCommandBuffer> commandBufferPool;

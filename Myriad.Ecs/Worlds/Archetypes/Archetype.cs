@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
@@ -31,7 +32,7 @@ public sealed class Archetype
     /// <summary>
     /// The chunks contained in this archetype.
     /// </summary>
-    public IReadOnlyList<Chunk> Chunks => chunks;
+    public ReadOnlySpan<Chunk> Chunks => chunks.AsSpan();
 
     /// <summary>
     /// The components of entities in this archetype.

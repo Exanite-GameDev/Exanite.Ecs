@@ -201,9 +201,9 @@ public sealed class QueryDescription
     /// <summary>
     /// Get all archetypes which match this query.
     /// </summary>
-    public IReadOnlyList<Archetype> GetArchetypes()
+    public ReadOnlySpan<Archetype> GetArchetypes()
     {
-        return GetArchetypeMatchResult().Archetypes;
+        return GetArchetypeMatchResult().Archetypes.AsSpan();
     }
 
     /// <summary>
@@ -280,7 +280,7 @@ public sealed class QueryDescription
                 }
 
                 // Store result for next time
-                result = new ArchetypeMatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
+                result = new ArchetypeMatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
                 return result.Value;
@@ -293,7 +293,7 @@ public sealed class QueryDescription
                 var newMatches = default(OrderedListSet<ArchetypeMatch>?);
 
                 // Check every new archetype
-                for (var i = result.Value.ArchetypeWatermark; i < World.Archetypes.Count; i++)
+                for (var i = result.Value.ArchetypeWatermark; i < World.Archetypes.Length; i++)
                 {
                     if (!TryMatch(World.Archetypes[i], out var match))
                     {
@@ -310,12 +310,12 @@ public sealed class QueryDescription
                 if (newMatches == null)
                 {
                     // Copy is null, meaning nothing new was found, just use the old result with the new watermark
-                    result = new ArchetypeMatchResult(World.Archetypes.Count, result.Value.ArchetypesMatches);
+                    result = new ArchetypeMatchResult(World.Archetypes.Length, result.Value.ArchetypesMatches);
                 }
                 else
                 {
                     // Create a new match result
-                    result = new ArchetypeMatchResult(World.Archetypes.Count, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
+                    result = new ArchetypeMatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
                 }
             }
 
