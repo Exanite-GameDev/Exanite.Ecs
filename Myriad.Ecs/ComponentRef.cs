@@ -1,4 +1,5 @@
 using Exanite.Core.Runtime;
+using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
@@ -42,6 +43,6 @@ public readonly record struct ComponentRef<T> where T : IComponent
 
     public override string ToString()
     {
-        return Entity.ToString();
+        return $"{Entity} ({TypeUtility.FormatConciseName<T>()})";
     }
 }
