@@ -31,9 +31,18 @@ public sealed class EcsWorld : ITrackedDisposable
     internal readonly SegmentedList<StorageLocation> Entities = new(1024);
 
     /// <summary>
-    /// Get a list of all archetypes in this <see cref="EcsWorld"/>
+    /// Get a span of all archetypes in this <see cref="EcsWorld"/>
     /// </summary>
     public ReadOnlySpan<Archetype> Archetypes => archetypes.AsSpan();
+
+    /// <summary>
+    /// Get a list of all archetypes in this <see cref="EcsWorld"/>
+    /// </summary>
+    /// <remarks>
+    /// Enumerating over this will slightly allocate due to the List enumerator being boxed.
+    /// </remarks>
+    public IReadOnlyList<Archetype> ArchetypesList => archetypes;
+
     internal int ArchetypesCount => archetypes.Count;
 
     private readonly Pool<EcsCommandBuffer> commandBufferPool;

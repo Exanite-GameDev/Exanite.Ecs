@@ -33,8 +33,8 @@ public class EcsCommandBufferTests
         var entity = eb.Resolve();
 
         Assert.IsTrue(entity.IsAlive);
-        Assert.AreEqual(1, world.Archetypes.Count);
-        Assert.AreEqual(0, world.Archetypes.Single().Components.Count);
+        Assert.AreEqual(1, world.ArchetypesList.Count);
+        Assert.AreEqual(0, world.ArchetypesList.Single().Components.Count);
     }
 
     [TestMethod]
@@ -64,8 +64,8 @@ public class EcsCommandBufferTests
         {
             var entity = entities[i];
             Assert.IsTrue(entity.IsAlive);
-            Assert.AreEqual(1, world.Archetypes.Count);
-            Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
+            Assert.AreEqual(1, world.ArchetypesList.Count);
+            Assert.AreEqual(1, world.ArchetypesList.Single().Components.Count);
             Assert.AreEqual(i, entity.GetComponent<ComponentInt32>().Value);
         }
     }
@@ -143,7 +143,7 @@ public class EcsCommandBufferTests
             }
 
             // Check archetypes
-            Assert.AreEqual(alive.Count, world.Archetypes.Select(a => a.EntityCount).Sum());
+            Assert.AreEqual(alive.Count, world.ArchetypesList.Select(a => a.EntityCount).Sum());
         }
     }
 
@@ -268,9 +268,9 @@ public class EcsCommandBufferTests
         var entity = bufferedEntity.Resolve();
 
         Assert.IsTrue(entity.IsAlive);
-        Assert.AreEqual(1, world.Archetypes.Count);
-        Assert.AreEqual(1, world.Archetypes.Single().Components.Count);
-        Assert.IsTrue(world.Archetypes.Single().Components.Contains(ComponentId.Get<ComponentFloat>()));
+        Assert.AreEqual(1, world.ArchetypesList.Count);
+        Assert.AreEqual(1, world.ArchetypesList.Single().Components.Count);
+        Assert.IsTrue(world.ArchetypesList.Single().Components.Contains(ComponentId.Get<ComponentFloat>()));
     }
 
     [TestMethod]
@@ -433,14 +433,14 @@ public class EcsCommandBufferTests
         TestHelpers.SetupRandomEntities(world, count: 100000).Execute();
 
         // Get the archetypes we're about to destroy
-        var deleting = (from archetype in world.Archetypes
+        var deleting = (from archetype in world.ArchetypesList
                         where archetype.Components.Contains(ComponentId.Get<Component0>())
                         where archetype.Components.Contains(ComponentId.Get<Component1>())
                         where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
                         select archetype).ToArray();
 
         // Get all other archetypes
-        var others = (from archetype in world.Archetypes
+        var others = (from archetype in world.ArchetypesList
                       where !deleting.Contains(archetype)
                       select (archetype, archetype.EntityCount)).ToArray();
 

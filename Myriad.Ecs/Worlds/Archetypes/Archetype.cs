@@ -32,7 +32,15 @@ public sealed class Archetype
     /// <summary>
     /// The chunks contained in this archetype.
     /// </summary>
-    public ReadOnlySpan<Chunk> Chunks => chunks.AsSpan();
+    public ReadOnlySpan<Chunk> Chunks => chunksList.AsSpan();
+
+    /// <summary>
+    /// The chunks contained in this archetype.
+    /// </summary>
+    /// <remarks>
+    /// Enumerating over this will slightly allocate due to the List enumerator being boxed.
+    /// </remarks>
+    public IReadOnlyList<Chunk> ChunksList => chunksList;
 
     /// <summary>
     /// The components of entities in this archetype.
@@ -77,7 +85,7 @@ public sealed class Archetype
     /// <summary>
     /// All chunks in this archetype.
     /// </summary>
-    private readonly List<Chunk> chunks = [];
+    private readonly List<Chunk> chunksList = [];
 
     /// <summary>
     /// A list of chunks which might have space to put an entity in.
@@ -155,13 +163,13 @@ public sealed class Archetype
     internal void Clear()
     {
         // Clear all the chunks
-        foreach (var chunk in chunks)
+        foreach (var chunk in chunksList)
         {
             chunk.Clear();
         }
 
         // Move some chunks to hot spares and then destroy the rest
-        foreach (var chunk in chunks)
+        foreach (var chunk in chunksList)
         {
             if (spareChunks.Count < ChunkHotSpares)
             {
@@ -173,7 +181,7 @@ public sealed class Archetype
             }
         }
         chunksWithSpace.Clear();
-        chunks.Clear();
+        chunksList.Clear();
 
         // Done! No entities left.
         EntityCount = 0;
@@ -200,7 +208,7 @@ public sealed class Archetype
 
         // No space in any chunks, create a new chunk
         var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, ChunkSize);
-        chunks.Add(newChunk);
+        chunksList.Add(newChunk);
         chunksWithSpace.Add(newChunk);
 
         // The chunk obviously has space, so this cannot fail!
@@ -245,7 +253,7 @@ public sealed class Archetype
             case 0:
             {
                 chunksWithSpace.Remove(chunk);
-                chunks.Remove(chunk);
+                chunksList.Remove(chunk);
                 if (spareChunks.Count < ChunkHotSpares)
                 {
                     spareChunks.Push(chunk);
