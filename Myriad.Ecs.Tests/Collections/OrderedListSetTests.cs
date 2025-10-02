@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
 using Exanite.Myriad.Ecs.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;
 
-[TestClass]
+[TestFixture]
 public class OrderedListSetTests
 {
-    [TestMethod]
+    [Test]
     public void Create()
     {
         var set = new OrderedListSet<int>();
 
-        Assert.AreEqual(0, set.Count);
+        Assert.That(set.Count, Is.EqualTo(0));
     }
 
-    [TestMethod]
+    [Test]
     public void Create_NonEmpty()
     {
         var set = new OrderedListSet<int>
@@ -25,14 +26,14 @@ public class OrderedListSetTests
             3,
         };
 
-        Assert.AreEqual(3, set.Count);
-        Assert.IsTrue(set.Contains(1));
-        Assert.IsTrue(set.Contains(2));
-        Assert.IsTrue(set.Contains(3));
-        Assert.IsFalse(set.Contains(4));
+        Assert.That(set.Count, Is.EqualTo(3));
+        Assert.That(set.Contains(1), Is.True);
+        Assert.That(set.Contains(2), Is.True);
+        Assert.That(set.Contains(3), Is.True);
+        Assert.That(set.Contains(4), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void UnionWith()
     {
         var set = new OrderedListSet<int>
@@ -53,14 +54,14 @@ public class OrderedListSetTests
         var immutable = ImmutableOrderedListSet<int>.Create(ints);
         set.UnionWith(immutable);
 
-        Assert.AreEqual(4, set.Count);
-        Assert.IsTrue(set.Contains(1));
-        Assert.IsTrue(set.Contains(2));
-        Assert.IsTrue(set.Contains(3));
-        Assert.IsTrue(set.Contains(4));
+        Assert.That(set.Count, Is.EqualTo(4));
+        Assert.That(set.Contains(1), Is.True);
+        Assert.That(set.Contains(2), Is.True);
+        Assert.That(set.Contains(3), Is.True);
+        Assert.That(set.Contains(4), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void AddUnique()
     {
         var set = new OrderedListSet<int>
@@ -72,10 +73,10 @@ public class OrderedListSetTests
             5,
         };
 
-        Assert.AreEqual(5, set.Count);
+        Assert.That(set.Count, Is.EqualTo(5));
     }
 
-    [TestMethod]
+    [Test]
     public void AddDuplicates()
     {
         var set = new OrderedListSet<int>
@@ -89,10 +90,10 @@ public class OrderedListSetTests
             11,
         };
 
-        Assert.AreEqual(4, set.Count);
+        Assert.That(set.Count, Is.EqualTo(4));
     }
 
-    [TestMethod]
+    [Test]
     public void SetEquals_True()
     {
         var a = new OrderedListSet<int>
@@ -109,10 +110,10 @@ public class OrderedListSetTests
             1,
         };
 
-        Assert.IsTrue(a.SetEquals(b));
+        Assert.That(a.SetEquals(b), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void SetEquals_False_SameCount()
     {
         var a = new OrderedListSet<int>
@@ -129,10 +130,10 @@ public class OrderedListSetTests
             0,
         };
 
-        Assert.IsFalse(a.ToImmutable().SetEquals(b.ToImmutable()));
+        Assert.That(a.ToImmutable().SetEquals(b.ToImmutable()), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void SetEquals_False_Superset()
     {
         var a = new OrderedListSet<int>
@@ -150,10 +151,10 @@ public class OrderedListSetTests
             4,
         };
 
-        Assert.IsFalse(a.SetEquals(b));
+        Assert.That(a.SetEquals(b), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void SetEquals_False_Subset()
     {
         var a = new OrderedListSet<int>
@@ -169,10 +170,10 @@ public class OrderedListSetTests
             2,
         };
 
-        Assert.IsFalse(a.SetEquals(b));
+        Assert.That(a.SetEquals(b), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void SetEquals_Enumerable_True()
     {
         var a = new OrderedListSet<int>
@@ -189,10 +190,10 @@ public class OrderedListSetTests
             1,
         };
 
-        Assert.IsTrue(a.SetEquals(b));
+        Assert.That(a.SetEquals(b), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void SetEquals_Enumerable_False_SameCount()
     {
         var a = new OrderedListSet<int>
@@ -209,10 +210,10 @@ public class OrderedListSetTests
             0,
         };
 
-        Assert.IsFalse(a.SetEquals(b));
+        Assert.That(a.SetEquals(b), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void SetEquals_Enumerable_False_DifferentCount()
     {
         var a = new OrderedListSet<int>
@@ -230,10 +231,10 @@ public class OrderedListSetTests
             0,
         };
 
-        Assert.IsFalse(a.SetEquals(b));
+        Assert.That(a.SetEquals(b), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void IsSuperset()
     {
         var a = new OrderedListSet<int>
@@ -249,11 +250,11 @@ public class OrderedListSetTests
             3,
         };
 
-        Assert.IsTrue(a.ToImmutable().IsSupersetOf(b.ToImmutable()));
-        Assert.IsFalse(b.ToImmutable().IsSupersetOf(a.ToImmutable()));
+        Assert.That(a.ToImmutable().IsSupersetOf(b.ToImmutable()), Is.True);
+        Assert.That(b.ToImmutable().IsSupersetOf(a.ToImmutable()), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void Overlaps_True()
     {
         var a = new OrderedListSet<int>
@@ -269,11 +270,11 @@ public class OrderedListSetTests
             3,
         };
 
-        Assert.IsTrue(a.Overlaps(b));
-        Assert.IsTrue(b.Overlaps(a));
+        Assert.That(a.Overlaps(b), Is.True);
+        Assert.That(b.Overlaps(a), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void Overlaps_False()
     {
         var a = new OrderedListSet<int>
@@ -289,11 +290,11 @@ public class OrderedListSetTests
             5,
         };
 
-        Assert.IsFalse(a.Overlaps(b));
-        Assert.IsFalse(b.Overlaps(a));
+        Assert.That(a.Overlaps(b), Is.False);
+        Assert.That(b.Overlaps(a), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void Overlaps_False_Empty()
     {
         var a = new OrderedListSet<int>
@@ -305,7 +306,7 @@ public class OrderedListSetTests
 
         var b = new OrderedListSet<int>();
 
-        Assert.IsFalse(a.Overlaps(b));
-        Assert.IsFalse(b.Overlaps(a));
+        Assert.That(a.Overlaps(b), Is.False);
+        Assert.That(b.Overlaps(a), Is.False);
     }
 }

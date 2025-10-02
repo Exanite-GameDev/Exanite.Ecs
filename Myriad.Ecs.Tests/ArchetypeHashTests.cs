@@ -1,14 +1,15 @@
 ﻿using System;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestClass]
+[TestFixture]
 public class ArchetypeHashTests
 {
-    [TestMethod]
+    [Test]
     public void ArchetypeHashEqual()
     {
         var hash1 = new ArchetypeHash()
@@ -19,10 +20,10 @@ public class ArchetypeHashTests
            .Toggle(ComponentId.Get<ComponentFloat>());
         Console.WriteLine(hash1);
 
-        Assert.AreEqual(hash1, hash2);
+        Assert.That(hash2, Is.EqualTo(hash1));
     }
 
-    [TestMethod]
+    [Test]
     public void ArchetypeHashNotEqual()
     {
         var hash1 = new ArchetypeHash();
@@ -33,10 +34,10 @@ public class ArchetypeHashTests
         hash2 = hash2.Toggle(ComponentId.Get<ComponentFloat>());
         Console.WriteLine(hash2);
 
-        Assert.AreNotEqual(hash1, hash2);
+        Assert.That(hash2, Is.Not.EqualTo(hash1));
     }
 
-    [TestMethod]
+    [Test]
     public void ArchetypeHashRemoveComponents()
     {
         var hash1 = new ArchetypeHash()
@@ -50,10 +51,10 @@ public class ArchetypeHashTests
            .Toggle(ComponentId.Get<ComponentFloat>())
            .Toggle(ComponentId.Get<ComponentInt32>());
         Console.WriteLine(hash2);
-        Assert.AreNotEqual(hash1, hash2);
+        Assert.That(hash2, Is.Not.EqualTo(hash1));
 
         // Remove the extra item
         hash2 = hash2.Toggle(ComponentId.Get<ComponentInt32>());
-        Assert.AreEqual(hash1, hash2);
+        Assert.That(hash2, Is.EqualTo(hash1));
     }
 }

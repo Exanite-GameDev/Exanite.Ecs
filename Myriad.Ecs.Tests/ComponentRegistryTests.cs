@@ -1,23 +1,23 @@
 using System;
 using System.Linq;
 using Exanite.Myriad.Ecs.Components;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestClass]
+[TestFixture]
 public class ComponentRegistryTests
 {
-    [TestMethod]
+    [Test]
     public void CannotAssignNonComponent()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.Throws<ArgumentException>(() =>
         {
             ComponentId.Get(typeof(int));
         });
     }
 
-    [TestMethod]
+    [Test]
     public void AssignsDistinctIds()
     {
         var ids = new[]
@@ -28,24 +28,24 @@ public class ComponentRegistryTests
             ComponentId.Get(typeof(ComponentFloat)),
         };
 
-        Assert.AreEqual(4, ids.Distinct().Count());
+        Assert.That(ids.Distinct().Count(), Is.EqualTo(4));
 
-        Assert.AreEqual(typeof(ComponentInt16), ComponentId.Get<ComponentInt16>().Type);
+        Assert.That(ComponentId.Get<ComponentInt16>().Type, Is.EqualTo(typeof(ComponentInt16)));
     }
 
-    [TestMethod]
+    [Test]
     public void DoesNotReassign()
     {
         var id = ComponentId.Get<ComponentInt32>();
         var id2 = ComponentId.Get<ComponentInt32>();
 
-        Assert.AreEqual(id, id2);
+        Assert.That(id2, Is.EqualTo(id));
     }
 
-    [TestMethod]
+    [Test]
     public void ThrowsForUnknownId()
     {
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             _ = default(ComponentId).Type;
         });

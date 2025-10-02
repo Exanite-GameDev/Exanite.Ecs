@@ -1,21 +1,21 @@
 ﻿using System;
 using Exanite.Myriad.Ecs.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;
 
-[TestClass]
+[TestFixture]
 public class SegmentListTests
 {
-    [TestMethod]
+    [Test]
     public void Create()
     {
         var list = new SegmentedList<int>(128);
 
-        Assert.AreEqual(128, list.SegmentCapacity);
+        Assert.That(list.SegmentCapacity, Is.EqualTo(128));
     }
 
-    [TestMethod]
+    [Test]
     public void IndexSingleSegment()
     {
         var list = new SegmentedList<int>(16);
@@ -29,36 +29,36 @@ public class SegmentListTests
         // Read index from each slot
         for (var i = 0; i < list.SegmentCapacity; i++)
         {
-            Assert.AreEqual(i, list[i]);
+            Assert.That(list[i], Is.EqualTo(i));
         }
     }
 
-    [TestMethod]
+    [Test]
     public void IndexSingleSegmentOutOfRange()
     {
         var list = new SegmentedList<int>(16);
 
-        Assert.ThrowsException<IndexOutOfRangeException>(() => { _ = list[-1]; });
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => { _ = list[16]; });
+        Assert.Throws<IndexOutOfRangeException>(() => { _ = list[-1]; });
+        Assert.Throws<ArgumentOutOfRangeException>(() => { _ = list[16]; });
     }
 
-    [TestMethod]
+    [Test]
     public void Grow()
     {
         var list = new SegmentedList<int>(16);
 
-        Assert.AreEqual(16, list.SegmentCapacity);
-        Assert.AreEqual(16, list.TotalCapacity);
-        Assert.AreEqual(0, list[15]);
+        Assert.That(list.SegmentCapacity, Is.EqualTo(16));
+        Assert.That(list.TotalCapacity, Is.EqualTo(16));
+        Assert.That(list[15], Is.EqualTo(0));
 
         list.Grow();
-        Assert.AreEqual(16, list.SegmentCapacity);
-        Assert.AreEqual(32, list.TotalCapacity);
-        Assert.AreEqual(0, list[31]);
+        Assert.That(list.SegmentCapacity, Is.EqualTo(16));
+        Assert.That(list.TotalCapacity, Is.EqualTo(32));
+        Assert.That(list[31], Is.EqualTo(0));
 
         list.Grow();
-        Assert.AreEqual(16, list.SegmentCapacity);
-        Assert.AreEqual(48, list.TotalCapacity);
-        Assert.AreEqual(0, list[47]);
+        Assert.That(list.SegmentCapacity, Is.EqualTo(16));
+        Assert.That(list.TotalCapacity, Is.EqualTo(48));
+        Assert.That(list[47], Is.EqualTo(0));
     }
 }

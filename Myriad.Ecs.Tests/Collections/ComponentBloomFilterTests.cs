@@ -1,22 +1,23 @@
 ﻿using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;
 
-[TestClass]
+[TestFixture]
 public class ComponentBloomFilterTests
 {
-    [TestMethod]
+    [Test]
     public void EmptyNotIntersect()
     {
         var a = new ComponentBloomFilter();
         var b = new ComponentBloomFilter();
 
-        Assert.IsFalse(a.MaybeIntersects(ref b));
+        Assert.That(a.MaybeIntersects(ref b), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void DisjointNotIntersect()
     {
         var a = new ComponentBloomFilter();
@@ -32,12 +33,12 @@ public class ComponentBloomFilterTests
         b.Add(ComponentId.Get<Component11>());
 
         var i = a.MaybeIntersects(ref b);
-        Assert.IsFalse(i);
+        Assert.That(i, Is.False);
 
         // Note that this test _can_ fail, since the bloom filter is probabilistic and errors on the side of caution.
     }
 
-    [TestMethod]
+    [Test]
     public void IntersectingIntersect()
     {
         var a = new ComponentBloomFilter();
@@ -50,10 +51,10 @@ public class ComponentBloomFilterTests
         b.Add(ComponentId.Get<Component3>());
         b.Add(ComponentId.Get<Component4>());
 
-        Assert.IsTrue(a.MaybeIntersects(ref b));
+        Assert.That(a.MaybeIntersects(ref b), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void UnionIntersects()
     {
         var a = new ComponentBloomFilter();
@@ -69,14 +70,14 @@ public class ComponentBloomFilterTests
         var c = new ComponentBloomFilter();
         c.Add(ComponentId.Get<Component0>());
 
-        Assert.IsFalse(a.MaybeIntersects(ref b));
-        Assert.IsFalse(b.MaybeIntersects(ref c));
-        Assert.IsTrue(a.MaybeIntersects(ref c));
+        Assert.That(a.MaybeIntersects(ref b), Is.False);
+        Assert.That(b.MaybeIntersects(ref c), Is.False);
+        Assert.That(a.MaybeIntersects(ref c), Is.True);
 
         var d = new ComponentBloomFilter();
         d.Union(ref b);
         d.Union(ref c);
 
-        Assert.IsTrue(a.MaybeIntersects(ref d));
+        Assert.That(a.MaybeIntersects(ref d), Is.True);
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Queries;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestClass]
+[TestFixture]
 public class ArchetypeTests
 {
-    [TestMethod]
+    [Test]
     public void EnumerateManyEntities()
     {
         var w = new EcsWorld();
@@ -32,11 +32,11 @@ public class ArchetypeTests
                 entityCount += chunk.EntityCount;
             }
 
-            Assert.AreEqual(archetype.EntityCount, entityCount);
+            Assert.That(entityCount, Is.EqualTo(archetype.EntityCount));
         }
 
         var query = new QueryBuilder().Include<ComponentInt32>().Include<ComponentInt64>().Build(w);
-        Assert.AreEqual(10000, query.Count());
+        Assert.That(query.Count(), Is.EqualTo(10000));
 
         foreach (var archetypeMatch in query.GetArchetypes())
         {
@@ -47,7 +47,7 @@ public class ArchetypeTests
 
                 for (var i = 0; i < chunk.EntityCount; i++)
                 {
-                    Assert.AreEqual(a[i].Value, (int)b[i].Value);
+                    Assert.That((int)b[i].Value, Is.EqualTo(a[i].Value));
                 }
             }
         }

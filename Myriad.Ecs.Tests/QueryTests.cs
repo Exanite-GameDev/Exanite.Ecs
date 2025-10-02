@@ -7,14 +7,15 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestClass]
+[TestFixture]
 public class QueryTests
 {
-    [TestMethod]
+    [Test]
     public void IncludeMatchNone()
     {
         var world = new EcsWorld();
@@ -24,10 +25,10 @@ public class QueryTests
            .Build(world);
 
         var archetypes = q.GetArchetypes();
-        Assert.AreEqual(0, archetypes.Length);
+        Assert.That(archetypes.Length, Is.EqualTo(0));
     }
 
-    [TestMethod]
+    [Test]
     public void IncludeMatchOne()
     {
         var w = new EcsWorld();
@@ -39,10 +40,10 @@ public class QueryTests
            .Build(w);
 
         var a = q.GetArchetypes();
-        Assert.AreEqual(1, a.Length);
+        Assert.That(a.Length, Is.EqualTo(1));
     }
 
-    [TestMethod]
+    [Test]
     public void IncludeMatchCaching()
     {
         var w = new EcsWorld();
@@ -56,7 +57,7 @@ public class QueryTests
 
         // Match once, check it matches one archetype
         var a = q.GetArchetypes();
-        Assert.AreEqual(1, a.Length);
+        Assert.That(a.Length, Is.EqualTo(1));
 
         // Add an archetype to the world that the query should match
         var c1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentFloat>() });
@@ -64,10 +65,10 @@ public class QueryTests
 
         // Check it now matches 2 archetypes
         var b = q.GetArchetypes();
-        Assert.AreEqual(2, b.Length);
+        Assert.That(b.Length, Is.EqualTo(2));
         foreach (var archetype in b)
         {
-            Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+            Assert.That(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()), Is.True);
         }
 
         // Add an archetype to the world that the query should NOT match
@@ -76,14 +77,14 @@ public class QueryTests
 
         // Check it now matches 2 archetypes
         var c = q.GetArchetypes();
-        Assert.AreEqual(2, c.Length);
+        Assert.That(c.Length, Is.EqualTo(2));
         foreach (var archetype in c)
         {
-            Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+            Assert.That(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()), Is.True);
         }
     }
 
-    [TestMethod]
+    [Test]
     public void IncludeMatchMultiple()
     {
         var w = new EcsWorld();
@@ -96,12 +97,12 @@ public class QueryTests
            .Build(w);
 
         var archetypes = q.GetArchetypesList();
-        Assert.AreEqual(2, archetypes.Count);
+        Assert.That(archetypes.Count, Is.EqualTo(2));
 
-        Assert.IsTrue(archetypes.All(x => x.Components.Contains(ComponentId.Get<ComponentFloat>())));
+        Assert.That(archetypes.All(x => x.Components.Contains(ComponentId.Get<ComponentFloat>())), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void IncludeExclude()
     {
         var w = new EcsWorld();
@@ -115,14 +116,14 @@ public class QueryTests
             .Build(w);
 
         var archetypes = q.GetArchetypes();
-        Assert.AreEqual(1, archetypes.Length);
+        Assert.That(archetypes.Length, Is.EqualTo(1));
 
         var archetype = archetypes[0];
-        Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
-        Assert.IsFalse(archetype.Components.Contains(ComponentId.Get<ComponentInt32>()));
+        Assert.That(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()), Is.True);
+        Assert.That(archetype.Components.Contains(ComponentId.Get<ComponentInt32>()), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void ExactlyOne()
     {
         var w = new EcsWorld();
@@ -137,15 +138,15 @@ public class QueryTests
                 .Build(w);
 
         var archetypes = q.GetArchetypes();
-        Assert.AreEqual(2, archetypes.Length);
+        Assert.That(archetypes.Length, Is.EqualTo(2));
 
         foreach (var archetype in archetypes)
         {
-            Assert.IsTrue(archetype.Components.Count == 1);
+            Assert.That(archetype.Components.Count == 1, Is.True);
         }
     }
 
-    [TestMethod]
+    [Test]
     public void AtLeastOne()
     {
         var w = new EcsWorld();
@@ -160,16 +161,16 @@ public class QueryTests
             .Build(w);
 
         var archetypes = q.GetArchetypes();
-        Assert.AreEqual(3, archetypes.Length);
+        Assert.That(archetypes.Length, Is.EqualTo(3));
 
         foreach (var archetype in archetypes)
         {
-            Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
-                       || archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+            Assert.That(archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
+                       || archetype.Components.Contains(ComponentId.Get<ComponentFloat>()), Is.True);
         }
     }
 
-    [TestMethod]
+    [Test]
     public void NotAll()
     {
         var w = new EcsWorld();
@@ -185,10 +186,10 @@ public class QueryTests
             .Build(w);
 
         var archetypes = q.GetArchetypes();
-        Assert.AreEqual(3, archetypes.Length);
+        Assert.That(archetypes.Length, Is.EqualTo(3));
     }
 
-    [TestMethod]
+    [Test]
     public void First_ThrowsNoMatch()
     {
         var w = new EcsWorld();
@@ -197,10 +198,10 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.ThrowsException<GuardException>(() => q.First());
+        Assert.Throws<GuardException>(() => q.First());
     }
 
-    [TestMethod]
+    [Test]
     public void First_MatchSingle()
     {
         var world = new EcsWorld();
@@ -215,10 +216,10 @@ public class QueryTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.AreEqual(e, q.First());
+        Assert.That(q.First(), Is.EqualTo(e));
     }
 
-    [TestMethod]
+    [Test]
     public void First_MatchMultiple()
     {
         var w = new EcsWorld();
@@ -235,10 +236,10 @@ public class QueryTests
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
-        Assert.IsTrue(new[] { e1, e2 }.Contains(q.First()));
+        Assert.That(new[] { e1, e2 }.Contains(q.First()), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void FirstOrDefault_NullNoMatch()
     {
         var w = new EcsWorld();
@@ -247,10 +248,10 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.IsFalse(q.FirstOrDefault().IsAlive);
+        Assert.That(q.FirstOrDefault().IsAlive, Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void FirstOrDefault_MatchSingle()
     {
         var w = new EcsWorld();
@@ -265,10 +266,10 @@ public class QueryTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.AreEqual(e, q.FirstOrDefault());
+        Assert.That(q.FirstOrDefault(), Is.EqualTo(e));
     }
 
-    [TestMethod]
+    [Test]
     public void FirstOrDefault_MatchMultiple()
     {
         var w = new EcsWorld();
@@ -285,10 +286,10 @@ public class QueryTests
         var e1 = eb1.Resolve();
         var e2 = eb2.Resolve();
 
-        Assert.IsTrue(new[] { e1, e2 }.Contains(q.FirstOrDefault()));
+        Assert.That(new[] { e1, e2 }.Contains(q.FirstOrDefault()), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void SingleOrDefault_NullNoMatch()
     {
         var w = new EcsWorld();
@@ -297,10 +298,10 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.IsFalse(q.SingleOrDefault().IsAlive);
+        Assert.That(q.SingleOrDefault().IsAlive, Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void SingleOrDefault_ThrowsMultipleMatch()
     {
         var w = new EcsWorld();
@@ -314,10 +315,10 @@ public class QueryTests
         c.Create().Set(new Component0());
         c.Execute();
 
-        Assert.ThrowsException<GuardException>(() => q.SingleOrDefault());
+        Assert.Throws<GuardException>(() => q.SingleOrDefault());
     }
 
-    [TestMethod]
+    [Test]
     public void SingleOrDefault_MatchSingle()
     {
         var w = new EcsWorld();
@@ -332,10 +333,10 @@ public class QueryTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.AreEqual(e, q.SingleOrDefault());
+        Assert.That(q.SingleOrDefault(), Is.EqualTo(e));
     }
 
-    [TestMethod]
+    [Test]
     public void Single_ThrowsMultipleMatch()
     {
         var w = new EcsWorld();
@@ -349,10 +350,10 @@ public class QueryTests
         c.Create().Set(new Component0());
         c.Execute();
 
-        Assert.ThrowsException<GuardException>(() => q.Single());
+        Assert.Throws<GuardException>(() => q.Single());
     }
 
-    [TestMethod]
+    [Test]
     public void Single_ThrowsNoMatch()
     {
         var w = new EcsWorld();
@@ -361,10 +362,10 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.ThrowsException<GuardException>(() => q.Single());
+        Assert.Throws<GuardException>(() => q.Single());
     }
 
-    [TestMethod]
+    [Test]
     public void Single_MatchSingle()
     {
         var w = new EcsWorld();
@@ -379,10 +380,10 @@ public class QueryTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.AreEqual(e, q.Single());
+        Assert.That(q.Single(), Is.EqualTo(e));
     }
 
-    [TestMethod]
+    [Test]
     public void Any_True()
     {
         var w = new EcsWorld();
@@ -397,10 +398,10 @@ public class QueryTests
         c.Execute();
         _ = eb.Resolve();
 
-        Assert.IsTrue(q.Any());
+        Assert.That(q.Any(), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void Any_False()
     {
         var w = new EcsWorld();
@@ -409,10 +410,10 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        Assert.IsFalse(q.Any());
+        Assert.That(q.Any(), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void Contains_True()
     {
         var w = new EcsWorld();
@@ -427,10 +428,10 @@ public class QueryTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.IsTrue(q.IsMatch(e));
+        Assert.That(q.IsMatch(e), Is.True);
     }
 
-    [TestMethod]
+    [Test]
     public void Contains_False()
     {
         var w = new EcsWorld();
@@ -445,10 +446,10 @@ public class QueryTests
         c.Execute();
         var e = eb.Resolve();
 
-        Assert.IsFalse(q.IsMatch(e));
+        Assert.That(q.IsMatch(e), Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void Random_NullNoMatch()
     {
         var w = new EcsWorld();
@@ -459,10 +460,10 @@ public class QueryTests
 
         var rng = new Random(123);
 
-        Assert.IsFalse(q.RandomOrDefault(rng).IsAlive);
+        Assert.That(q.RandomOrDefault(rng).IsAlive, Is.False);
     }
 
-    [TestMethod]
+    [Test]
     public void Random_MatchSingle()
     {
         var w = new EcsWorld();
@@ -479,10 +480,10 @@ public class QueryTests
 
         var r = new Random(123);
 
-        Assert.AreEqual(e, q.RandomOrDefault(r));
+        Assert.That(q.RandomOrDefault(r), Is.EqualTo(e));
     }
 
-    [TestMethod]
+    [Test]
     public void Random_MatchRandom()
     {
         var w = new EcsWorld();
@@ -518,7 +519,7 @@ public class QueryTests
 
         for (var i = 0; i < 1000; i++)
         {
-            Assert.IsTrue(entities.Contains(q.RandomOrDefault(r)));
+            Assert.That(entities.Contains(q.RandomOrDefault(r)), Is.True);
         }
     }
 }

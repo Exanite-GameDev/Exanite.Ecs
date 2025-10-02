@@ -3,14 +3,14 @@ using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Queries;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestClass]
+[TestFixture]
 public class EventTests
 {
-    [TestMethod]
+    [Test]
     public void CreateEntity_RaisesEntityCreatedEvent()
     {
         var world = new EcsWorld();
@@ -27,10 +27,10 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.EntityCreatedCount);
+        Assert.That(handler.EntityCreatedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void DestroyEntity_UsingEntities_RaisesEntityDestroyedEvent()
     {
         var world = new EcsWorld();
@@ -63,10 +63,10 @@ public class EventTests
         commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
+        Assert.That(handler.EntityDestroyedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void DestroyEntity_UsingQuery_RaisesEntityDestroyedEvent()
     {
         var world = new EcsWorld();
@@ -89,10 +89,10 @@ public class EventTests
         commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
+        Assert.That(handler.EntityDestroyedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void DestroyEntity_UsingEntities_RaisesComponentRemovedEvent()
     {
         var world = new EcsWorld();
@@ -125,10 +125,10 @@ public class EventTests
         commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+        Assert.That(handler.ComponentRemovedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void DestroyEntity_UsingQuery_RaisesComponentRemovedEvent()
     {
         var world = new EcsWorld();
@@ -151,10 +151,10 @@ public class EventTests
         commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+        Assert.That(handler.ComponentRemovedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void RemoveComponent_RaisesComponentRemovedEvent()
     {
         var world = new EcsWorld();
@@ -186,10 +186,10 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+        Assert.That(handler.ComponentRemovedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void SetComponent_Once_OnBufferedEntity_RaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
@@ -206,10 +206,10 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+        Assert.That(handler.ComponentAddedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void SetComponent_Once_OnWorldEntity_RaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
@@ -241,10 +241,10 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+        Assert.That(handler.ComponentAddedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void SetComponent_Twice_InDifferentCommandBuffers_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new EcsWorld();
@@ -261,7 +261,7 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+        Assert.That(handler.ComponentAddedCount, Is.EqualTo(entityAddCount));
 
         // Set components
         var allEntitiesQuery = new QueryBuilder().Build(world);
@@ -277,10 +277,10 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
+        Assert.That(handler.ComponentModifiedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void SetComponent_Twice_InDifferentCommandBuffers_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new EcsWorld();
@@ -312,7 +312,7 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
+        Assert.That(handler.ComponentAddedCount, Is.EqualTo(entityAddCount));
 
         // Set components again
         foreach (var archetype in allEntitiesQuery.GetArchetypes())
@@ -327,11 +327,11 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentModifiedCount);
+        Assert.That(handler.ComponentModifiedCount, Is.EqualTo(entityAddCount));
     }
 
     // TODO: Consider changing behavior
-    [TestMethod]
+    [Test]
     public void SetComponent_Twice_InSameCommandBuffer_OnBufferedEntity_OnlyRaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
@@ -350,12 +350,12 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
-        Assert.AreEqual(0, handler.ComponentModifiedCount);
+        Assert.That(handler.ComponentAddedCount, Is.EqualTo(entityAddCount));
+        Assert.That(handler.ComponentModifiedCount, Is.EqualTo(0));
     }
 
     // TODO: Consider changing behavior
-    [TestMethod]
+    [Test]
     public void SetComponent_Twice_InSameCommandBuffer_OnWorldEntity_OnlyRaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
@@ -389,11 +389,11 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(entityAddCount, handler.ComponentAddedCount);
-        Assert.AreEqual(0, handler.ComponentModifiedCount);
+        Assert.That(handler.ComponentAddedCount, Is.EqualTo(entityAddCount));
+        Assert.That(handler.ComponentModifiedCount, Is.EqualTo(0));
     }
 
-    [TestMethod]
+    [Test]
     public void DestroyEntity_AfterModifyingEntity_InSameCommandBuffer_OnlyRaisesEntityDestroyedEvent()
     {
         var world = new EcsWorld();
@@ -428,12 +428,12 @@ public class EventTests
         }
 
         commandBuffer.Execute();
-        Assert.AreEqual(0, handler.ComponentAddedCount);
-        Assert.AreEqual(0, handler.ComponentModifiedCount);
-        Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
+        Assert.That(handler.ComponentAddedCount, Is.EqualTo(0));
+        Assert.That(handler.ComponentModifiedCount, Is.EqualTo(0));
+        Assert.That(handler.EntityDestroyedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void DisposeWorld_DestroysAllEntities_And_RaisesComponentRemovedAndEntityDestroyedEvents()
     {
         var world = new EcsWorld();
@@ -455,18 +455,18 @@ public class EventTests
         // Dispose world
         world.Dispose();
 
-        Assert.AreEqual(entityAddCount, handler.EntityDestroyedCount);
-        Assert.AreEqual(entityAddCount, handler.ComponentRemovedCount);
+        Assert.That(handler.EntityDestroyedCount, Is.EqualTo(entityAddCount));
+        Assert.That(handler.ComponentRemovedCount, Is.EqualTo(entityAddCount));
     }
 
-    [TestMethod]
+    [Test]
     public void CommandBufferExecute_AfterDisposingWorld_ThrowsException()
     {
         var world = new EcsWorld();
         var commandBuffer = world.AcquireCommandBuffer();
 
         world.Dispose();
-        Assert.ThrowsException<GuardException>(() => commandBuffer.Execute());
+        Assert.Throws<GuardException>(() => commandBuffer.Execute());
     }
 
     private class WorldEventHandler :
