@@ -2,7 +2,6 @@
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 
 namespace Exanite.Myriad.Ecs.Tests;
 

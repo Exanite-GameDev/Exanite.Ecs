@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exanite.Myriad.Ecs.Collections;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;
 

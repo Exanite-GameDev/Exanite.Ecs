@@ -8,7 +8,6 @@ using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
