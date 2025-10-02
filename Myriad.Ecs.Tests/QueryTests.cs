@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Exanite.Myriad.Ecs.Tests;
 
 [TestClass]
-public class QueryDescriptionTests
+public class QueryTests
 {
     [TestMethod]
     public void IncludeMatchNone()
@@ -21,21 +21,6 @@ public class QueryDescriptionTests
 
         var q = new QueryBuilder()
            .Include<ComponentFloat>()
-           .Build(world);
-
-        var a = q.GetArchetypeMatches();
-
-        Assert.IsNotNull(a);
-        Assert.AreEqual(0, a.Count);
-    }
-
-    [TestMethod]
-    public void IncludeMatchNoneNonGeneric()
-    {
-        var world = new EcsWorld();
-
-        var q = new QueryBuilder()
-           .Include(typeof(ComponentFloat))
            .Build(world);
 
         var a = q.GetArchetypeMatches();
@@ -181,7 +166,6 @@ public class QueryDescriptionTests
     {
         var w = new EcsWorld();
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
@@ -204,6 +188,27 @@ public class QueryDescriptionTests
             Assert.IsTrue(match.Archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
                        || match.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
         }
+    }
+
+    [TestMethod]
+    public void NotAll()
+    {
+        var w = new EcsWorld();
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentInt64>()]);
+
+        var q = new QueryBuilder()
+            .NotAll<ComponentFloat>()
+            .NotAll<ComponentInt32>()
+            .Build(w);
+
+        var matches = q.GetArchetypeMatches();
+
+        Assert.IsNotNull(matches);
+        Assert.AreEqual(3, matches.Count);
     }
 
     [TestMethod]
