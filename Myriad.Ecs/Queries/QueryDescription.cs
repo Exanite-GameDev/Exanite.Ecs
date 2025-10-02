@@ -51,9 +51,20 @@ public sealed class QueryDescription
     public ImmutableOrderedListSet<ComponentId> ExactlyOneOf { get; }
 
     /// <summary>
+    /// Not all of these components must be present on an entity for it to match this query.
+    /// </summary>
+    public ImmutableOrderedListSet<ComponentId> NotAllOf { get; }
+
+    /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
-    internal QueryDescription(EcsWorld world, ImmutableOrderedListSet<ComponentId> include, ImmutableOrderedListSet<ComponentId> exclude, ImmutableOrderedListSet<ComponentId> atLeastOne, ImmutableOrderedListSet<ComponentId> exactlyOne)
+    internal QueryDescription(
+        EcsWorld world,
+        ImmutableOrderedListSet<ComponentId> include,
+        ImmutableOrderedListSet<ComponentId> exclude,
+        ImmutableOrderedListSet<ComponentId> atLeastOne,
+        ImmutableOrderedListSet<ComponentId> exactlyOne,
+        ImmutableOrderedListSet<ComponentId> notAllOf)
     {
         World = world;
 
@@ -61,6 +72,7 @@ public sealed class QueryDescription
         Exclude = exclude;
         AtLeastOneOf = atLeastOne;
         ExactlyOneOf = exactlyOne;
+        NotAllOf = notAllOf;
 
         includeBloom = include.ToBloomFilter();
         excludeBloom = exclude.ToBloomFilter();
@@ -99,7 +111,7 @@ public sealed class QueryDescription
     #region Is In Query
 
     /// <summary>
-    /// Check if this query requires the given component.
+    /// Check if the specified component is part of the Include filter.
     /// </summary>
     public bool IsIncluded<T>() where T : IComponent
     {
@@ -107,7 +119,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query requires the given component.
+    /// Check if the specified component is part of the Include filter.
     /// </summary>
     public bool IsIncluded(Type type)
     {
@@ -115,7 +127,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query requires the given component.
+    /// Check if the specified component is part of the Include filter.
     /// </summary>
     public bool IsIncluded(ComponentId id)
     {
@@ -123,7 +135,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query excludes entities with the given component.
+    /// Check if the specified component is part of the Exclude filter.
     /// </summary>
     public bool IsExcluded<T>() where T : IComponent
     {
@@ -131,7 +143,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query excludes entities with the given component.
+    /// Check if the specified component is part of the Exclude filter.
     /// </summary>
     public bool IsExcluded(Type type)
     {
@@ -139,7 +151,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if this query excludes entities with the given component.
+    /// Check if the specified component is part of the Exclude filter.
     /// </summary>
     public bool IsExcluded(ComponentId id)
     {
@@ -147,7 +159,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which at least one of must be on the entity.
+    /// Check if the specified component is part of the AtLeastOneOf filter.
     /// </summary>
     public bool IsAtLeastOneOf<T>() where T : IComponent
     {
@@ -155,7 +167,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which at least one of must be on the entity.
+    /// Check if the specified component is part of the AtLeastOneOf filter.
     /// </summary>
     public bool IsAtLeastOneOf(Type type)
     {
@@ -163,7 +175,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which at least one of must be on the entity.
+    /// Check if the specified component is part of the AtLeastOneOf filter.
     /// </summary>
     public bool IsAtLeastOneOf(ComponentId id)
     {
@@ -171,7 +183,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which exactly one of must be on the entity.
+    /// Check if the specified component is part of the ExactlyOneOf filter.
     /// </summary>
     public bool IsExactlyOneOf<T>() where T : IComponent
     {
@@ -179,7 +191,7 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which exactly one of must be on the entity.
+    /// Check if the specified component is part of the ExactlyOneOf filter.
     /// </summary>
     public bool IsExactlyOneOf(Type type)
     {
@@ -187,11 +199,35 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the given component is one of the components which exactly one of must be on the entity.
+    /// Check if the specified component is part of the ExactlyOneOf filter.
     /// </summary>
     public bool IsExactlyOneOf(ComponentId id)
     {
         return ExactlyOneOf.Contains(id);
+    }
+
+    /// <summary>
+    /// Check if the specified component is part of the NotAllOf filter.
+    /// </summary>
+    public bool IsNotAllOf<T>() where T : IComponent
+    {
+        return IsNotAllOf(ComponentId.Get<T>());
+    }
+
+    /// <summary>
+    /// Check if the specified component is part of the NotAllOf filter.
+    /// </summary>
+    public bool IsNotAllOf(Type type)
+    {
+        return IsNotAllOf(ComponentId.Get(type));
+    }
+
+    /// <summary>
+    /// Check if the specified component is part of the NotAllOf filter.
+    /// </summary>
+    public bool IsNotAllOf(ComponentId id)
+    {
+        return NotAllOf.Contains(id);
     }
 
     #endregion
@@ -331,6 +367,7 @@ public sealed class QueryDescription
     {
         match = default;
 
+        // Apply the Include filter
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
         if (Include.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in includeBloom))
@@ -344,6 +381,7 @@ public sealed class QueryDescription
             return false;
         }
 
+        // Apply the Exclude filter
         // If this is false it means there is definitely _not_ an intersection, which means we can skip
         // the inner check.
         if (Exclude.Count > 0 && excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
@@ -354,11 +392,17 @@ public sealed class QueryDescription
             }
         }
 
+        // Apply the NotAll filter
+        if (NotAllOf.Count > 0 && archetype.Components.IsSupersetOf(NotAllOf))
+        {
+            return false;
+        }
+
         // Use the temp hashset to do this
         var set = temporarySet;
         set.Clear();
 
-        // Check if there are any "exactly one" items
+        // Apply the ExactlyOne filter
         var exactlyOne = default(ComponentId?);
         if (ExactlyOneOf.Count > 0)
         {
@@ -375,7 +419,7 @@ public sealed class QueryDescription
             set.Clear();
         }
 
-        // Check if there are any "at least one" items
+        // Apply the AtLeastOne filter
         if (AtLeastOneOf.Count > 0)
         {
             set.Clear();
