@@ -15,68 +15,6 @@ namespace Exanite.Myriad.Ecs.Tests;
 public class QueryDescriptionTests
 {
     [TestMethod]
-    public void IsIncluded()
-    {
-        var world = new EcsWorld();
-
-        var q = new QueryBuilder()
-               .Include<ComponentFloat>()
-               .Build(world);
-
-        Assert.IsTrue(q.IsIncluded<ComponentFloat>());
-        Assert.IsTrue(q.IsIncluded(typeof(ComponentFloat)));
-        Assert.IsFalse(q.IsIncluded<ComponentInt32>());
-        Assert.IsFalse(q.IsIncluded(typeof(ComponentInt32)));
-    }
-
-    [TestMethod]
-    public void IsExcluded()
-    {
-        var world = new EcsWorld();
-
-        var q = new QueryBuilder()
-               .Exclude<ComponentFloat>()
-               .Build(world);
-
-        Assert.IsTrue(q.IsExcluded<ComponentFloat>());
-        Assert.IsTrue(q.IsExcluded(typeof(ComponentFloat)));
-        Assert.IsFalse(q.IsExcluded<ComponentInt32>());
-        Assert.IsFalse(q.IsExcluded(typeof(ComponentInt32)));
-    }
-
-    [TestMethod]
-    public void IsExactlyOne()
-    {
-        var world = new EcsWorld();
-
-        var query = new QueryBuilder()
-               .ExactlyOne<ComponentFloat>()
-               .ExactlyOne<ComponentByte>()
-               .Build(world);
-
-        Assert.IsTrue(query.IsExactlyOne<ComponentFloat>());
-        Assert.IsTrue(query.IsExactlyOne(typeof(ComponentFloat)));
-        Assert.IsFalse(query.IsExactlyOne<ComponentInt32>());
-        Assert.IsFalse(query.IsExactlyOne(typeof(ComponentInt32)));
-    }
-
-    [TestMethod]
-    public void IsAtLeastOne()
-    {
-        var world = new EcsWorld();
-
-        var q = new QueryBuilder()
-               .AtLeastOne<ComponentFloat>()
-               .AtLeastOne<ComponentByte>()
-               .Build(world);
-
-        Assert.IsTrue(q.IsAtLeastOne<ComponentFloat>());
-        Assert.IsTrue(q.IsAtLeastOne(typeof(ComponentFloat)));
-        Assert.IsFalse(q.IsAtLeastOne<ComponentInt32>());
-        Assert.IsFalse(q.IsAtLeastOne(typeof(ComponentInt32)));
-    }
-
-    [TestMethod]
     public void IncludeMatchNone()
     {
         var world = new EcsWorld();

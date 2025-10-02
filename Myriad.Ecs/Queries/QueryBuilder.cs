@@ -96,7 +96,7 @@ public sealed class QueryBuilder
         }
     }
 
-    #region Include
+    #region Filter Methods
 
     /// <summary>
     /// The given component must exist for an entity to be matched by this query.
@@ -126,34 +126,6 @@ public sealed class QueryBuilder
     }
 
     /// <summary>
-    /// Check if the specified component is part of the Include filter.
-    /// </summary>
-    public bool IsIncluded(Type type)
-    {
-        return include.Contains(type);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Include filter.
-    /// </summary>
-    public bool IsIncluded<T>() where T : IComponent
-    {
-        return include.Contains<T>();
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Include filter.
-    /// </summary>
-    public bool IsIncluded(ComponentId id)
-    {
-        return include.Contains(id);
-    }
-
-    #endregion
-
-    #region Exclude
-
-    /// <summary>
     /// The given component must not exist for an entity to be matched by this query.
     /// </summary>
     public QueryBuilder Exclude<T>() where T : IComponent
@@ -179,34 +151,6 @@ public sealed class QueryBuilder
         exclude.Add(id);
         return this;
     }
-
-    /// <summary>
-    /// Check if the specified component is part of the Exclude filter.
-    /// </summary>
-    public bool IsExcluded(Type type)
-    {
-        return exclude.Contains(type);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Exclude filter.
-    /// </summary>
-    public bool IsExcluded<T>() where T : IComponent
-    {
-        return exclude.Contains<T>();
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Exclude filter.
-    /// </summary>
-    public bool IsExcluded(ComponentId id)
-    {
-        return exclude.Contains(id);
-    }
-
-    #endregion
-
-    #region AtLeastOne
 
     /// <summary>
     /// At least one of all components specified as AtLeastOne must exist for an entity to be matched by this query.
@@ -236,34 +180,6 @@ public sealed class QueryBuilder
     }
 
     /// <summary>
-    /// Check if the specified component is part of the AtLeastOne filter.
-    /// </summary>
-    public bool IsAtLeastOne(Type type)
-    {
-        return atLeastOne.Contains(type);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the AtLeastOne filter.
-    /// </summary>
-    public bool IsAtLeastOne<T>() where T : IComponent
-    {
-        return atLeastOne.Contains<T>();
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the AtLeastOne filter.
-    /// </summary>
-    public bool IsAtLeastOne(ComponentId id)
-    {
-        return atLeastOne.Contains(id);
-    }
-
-    #endregion
-
-    #region ExactlyOne
-
-    /// <summary>
     /// Exactly one of all components specified as ExactlyOne must exist for an entity to be matched by this query.
     /// </summary>
     public QueryBuilder ExactlyOne<T>() where T : IComponent
@@ -291,34 +207,6 @@ public sealed class QueryBuilder
     }
 
     /// <summary>
-    /// Check if the specified component is part of the ExactlyOne filter.
-    /// </summary>
-    public bool IsExactlyOne(Type type)
-    {
-        return exactlyOne.Contains(type);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the ExactlyOne filter.
-    /// </summary>
-    public bool IsExactlyOne<T>() where T : IComponent
-    {
-        return exactlyOne.Contains<T>();
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the ExactlyOne filter.
-    /// </summary>
-    public bool IsExactlyOne(ComponentId id)
-    {
-        return exactlyOne.Contains(id);
-    }
-
-    #endregion
-
-    #region NotAll
-
-    /// <summary>
     /// Not all of the components specified as NotAll must exist for an entity to be matched by this query.
     /// </summary>
     public QueryBuilder NotAll<T>() where T : IComponent
@@ -343,30 +231,6 @@ public sealed class QueryBuilder
     {
         notAll.Add(id);
         return this;
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the IsNotAll filter.
-    /// </summary>
-    public bool IsNotAll(Type type)
-    {
-        return notAll.Contains(type);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the IsNotAll filter.
-    /// </summary>
-    public bool IsNotAll<T>() where T : IComponent
-    {
-        return notAll.Contains<T>();
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the IsNotAll filter.
-    /// </summary>
-    public bool IsNotAll(ComponentId id)
-    {
-        return notAll.Contains(id);
     }
 
     #endregion

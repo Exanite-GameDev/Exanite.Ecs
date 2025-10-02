@@ -64,7 +64,7 @@ public sealed class QueryDescription
         ImmutableOrderedListSet<ComponentId> exclude,
         ImmutableOrderedListSet<ComponentId> atLeastOne,
         ImmutableOrderedListSet<ComponentId> exactlyOne,
-        ImmutableOrderedListSet<ComponentId> NotAll)
+        ImmutableOrderedListSet<ComponentId> notAll)
     {
         World = world;
 
@@ -72,7 +72,7 @@ public sealed class QueryDescription
         Exclude = exclude;
         AtLeastOne = atLeastOne;
         ExactlyOne = exactlyOne;
-        NotAll = NotAll;
+        NotAll = notAll;
 
         includeBloom = include.ToBloomFilter();
         excludeBloom = exclude.ToBloomFilter();
@@ -107,130 +107,6 @@ public sealed class QueryDescription
 
         return builder;
     }
-
-    #region Is In Query
-
-    /// <summary>
-    /// Check if the specified component is part of the Include filter.
-    /// </summary>
-    public bool IsIncluded<T>() where T : IComponent
-    {
-        return IsIncluded(ComponentId.Get<T>());
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Include filter.
-    /// </summary>
-    public bool IsIncluded(Type type)
-    {
-        return IsIncluded(ComponentId.Get(type));
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Include filter.
-    /// </summary>
-    public bool IsIncluded(ComponentId id)
-    {
-        return Include.Contains(id);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Exclude filter.
-    /// </summary>
-    public bool IsExcluded<T>() where T : IComponent
-    {
-        return IsExcluded(ComponentId.Get<T>());
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Exclude filter.
-    /// </summary>
-    public bool IsExcluded(Type type)
-    {
-        return IsExcluded(ComponentId.Get(type));
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the Exclude filter.
-    /// </summary>
-    public bool IsExcluded(ComponentId id)
-    {
-        return Exclude.Contains(id);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the AtLeastOne filter.
-    /// </summary>
-    public bool IsAtLeastOne<T>() where T : IComponent
-    {
-        return IsAtLeastOne(ComponentId.Get<T>());
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the AtLeastOne filter.
-    /// </summary>
-    public bool IsAtLeastOne(Type type)
-    {
-        return IsAtLeastOne(ComponentId.Get(type));
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the AtLeastOne filter.
-    /// </summary>
-    public bool IsAtLeastOne(ComponentId id)
-    {
-        return AtLeastOne.Contains(id);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the ExactlyOne filter.
-    /// </summary>
-    public bool IsExactlyOne<T>() where T : IComponent
-    {
-        return IsExactlyOne(ComponentId.Get<T>());
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the ExactlyOne filter.
-    /// </summary>
-    public bool IsExactlyOne(Type type)
-    {
-        return IsExactlyOne(ComponentId.Get(type));
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the ExactlyOne filter.
-    /// </summary>
-    public bool IsExactlyOne(ComponentId id)
-    {
-        return ExactlyOne.Contains(id);
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the NotAll filter.
-    /// </summary>
-    public bool IsNotAll<T>() where T : IComponent
-    {
-        return IsNotAll(ComponentId.Get<T>());
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the NotAll filter.
-    /// </summary>
-    public bool IsNotAll(Type type)
-    {
-        return IsNotAll(ComponentId.Get(type));
-    }
-
-    /// <summary>
-    /// Check if the specified component is part of the NotAll filter.
-    /// </summary>
-    public bool IsNotAll(ComponentId id)
-    {
-        return NotAll.Contains(id);
-    }
-
-    #endregion
 
     #region Archetype Matching
 
