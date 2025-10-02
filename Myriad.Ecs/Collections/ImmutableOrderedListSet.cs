@@ -10,7 +10,7 @@ namespace Exanite.Myriad.Ecs.Collections;
 public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<T>, IEquatable<T>
 {
     /// <summary>
-    /// An empty set
+    /// An empty set.
     /// </summary>
     public static readonly ImmutableOrderedListSet<T> Empty = new([]);
 
@@ -19,8 +19,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     public T this[int i] => items[i];
 
     public int Count => items.Count;
-
-    #region Constructors
 
     private ImmutableOrderedListSet(OrderedListSet<T> dangerousItems)
     {
@@ -79,8 +77,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
         return new ImmutableOrderedListSet<T>(set);
     }
 
-    #endregion
-
     /// <summary>
     /// Copy this set to the given list
     /// </summary>
@@ -88,8 +84,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     {
         items.CopyTo(dest);
     }
-
-    #region GetEnumerator
 
     /// <summary>
     /// Get an enumerator over the items in this set
@@ -110,8 +104,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
         return GetEnumerator();
     }
 
-    #endregion
-
     /// <summary>
     /// Check if this set contains the given item
     /// </summary>
@@ -120,9 +112,7 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
         return items.Contains(item);
     }
 
-    //todo: other set methods when needed
-
-    //#region IsProperSubsetOf
+    // TODO: other set methods when needed
 
     //public bool IsProperSubsetOf(OrderedListSet<TItem> other)
     //{
@@ -134,10 +124,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     //    return _items.IsProperSubsetOf(other._items);
     //}
 
-    //#endregion
-
-    //#region IsProperSupersetOf
-
     //public bool IsProperSupersetOf(OrderedListSet<TItem> other)
     //{
     //    return _items.IsProperSupersetOf(other);
@@ -148,10 +134,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     //    return _items.IsProperSupersetOf(other._items);
     //}
 
-    //#endregion
-
-    //#region IsSubsetOf
-
     //public bool IsSubsetOf(OrderedListSet<TItem> other)
     //{
     //    return _items.IsSubsetOf(other);
@@ -161,10 +143,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     //{
     //    return _items.IsSubsetOf(other._items);
     //}
-
-    //#endregion
-
-    #region IsSupersetOf
 
     /// <summary>
     /// Check if this set is a superset of another set. i.e. contains all the items in the other set.
@@ -182,10 +160,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
         return IsSupersetOf(other.items);
     }
 
-    #endregion
-
-    #region Overlaps
-
     /// <summary>
     /// Check if this set overlaps another set. i.e. contains at least one item which is in the other set.
     /// </summary>
@@ -201,9 +175,6 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     {
         return Overlaps(other.items);
     }
-    #endregion
-
-    #region SetEquals
 
     /// <summary>
     /// Check if this set contains exactly the same items as another set
@@ -228,6 +199,4 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     {
         return items.SetEquals(other);
     }
-
-    #endregion
 }
