@@ -38,8 +38,8 @@ public sealed class QueryBuilder
     /// <summary>
     /// Not all of these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> NotAllOfs => notAllOf.Items;
-    private readonly ComponentSet notAllOf;
+    public IReadOnlyList<ComponentId> NotAlls => notAll.Items;
+    private readonly ComponentSet notAll;
 
     /// <summary>
     /// Create a new <see cref="QueryBuilder"/>
@@ -50,7 +50,7 @@ public sealed class QueryBuilder
         exclude = new ComponentSet(ContainsComponent, 1);
         atLeastOne = new ComponentSet(ContainsComponent, 2);
         exactlyOne = new ComponentSet(ContainsComponent, 3);
-        notAllOf = new ComponentSet(ContainsComponent, 4);
+        notAll = new ComponentSet(ContainsComponent, 4);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public sealed class QueryBuilder
             exclude.ToImmutableSet(),
             atLeastOne.ToImmutableSet(),
             exactlyOne.ToImmutableSet(),
-            notAllOf.ToImmutableSet()
+            notAll.ToImmutableSet()
         );
     }
 
@@ -90,9 +90,9 @@ public sealed class QueryBuilder
             throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the ExactlyOne filter");
         }
 
-        if (index != notAllOf.Index && notAllOf.Contains(id))
+        if (index != notAll.Index && notAll.Contains(id))
         {
-            throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the NotAllOf filter");
+            throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the NotAll filter");
         }
     }
 
@@ -206,167 +206,167 @@ public sealed class QueryBuilder
 
     #endregion
 
-    #region AtLeastOneOf
+    #region AtLeastOne
 
     /// <summary>
-    /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query.
+    /// At least one of all components specified as AtLeastOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder AtLeastOneOf<T>() where T : IComponent
+    public QueryBuilder AtLeastOne<T>() where T : IComponent
     {
         atLeastOne.Add<T>();
         return this;
     }
 
     /// <summary>
-    /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query.
+    /// At least one of all components specified as AtLeastOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder AtLeastOneOf(Type type)
+    public QueryBuilder AtLeastOne(Type type)
     {
         atLeastOne.Add(type);
         return this;
     }
 
     /// <summary>
-    /// At least one of all components specified as AtLeastOneOf must exist for an entity to be matched by this query.
+    /// At least one of all components specified as AtLeastOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder AtLeastOneOf(ComponentId id)
+    public QueryBuilder AtLeastOne(ComponentId id)
     {
         atLeastOne.Add(id);
         return this;
     }
 
     /// <summary>
-    /// Check if the specified component is part of the AtLeastOneOf filter.
+    /// Check if the specified component is part of the AtLeastOne filter.
     /// </summary>
-    public bool IsAtLeastOneOf(Type type)
+    public bool IsAtLeastOne(Type type)
     {
         return atLeastOne.Contains(type);
     }
 
     /// <summary>
-    /// Check if the specified component is part of the AtLeastOneOf filter.
+    /// Check if the specified component is part of the AtLeastOne filter.
     /// </summary>
-    public bool IsAtLeastOneOf<T>() where T : IComponent
+    public bool IsAtLeastOne<T>() where T : IComponent
     {
         return atLeastOne.Contains<T>();
     }
 
     /// <summary>
-    /// Check if the specified component is part of the AtLeastOneOf filter.
+    /// Check if the specified component is part of the AtLeastOne filter.
     /// </summary>
-    public bool IsAtLeastOneOf(ComponentId id)
+    public bool IsAtLeastOne(ComponentId id)
     {
         return atLeastOne.Contains(id);
     }
 
     #endregion
 
-    #region ExactlyOneOf
+    #region ExactlyOne
 
     /// <summary>
-    /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query.
+    /// Exactly one of all components specified as ExactlyOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder ExactlyOneOf<T>() where T : IComponent
+    public QueryBuilder ExactlyOne<T>() where T : IComponent
     {
         exactlyOne.Add<T>();
         return this;
     }
 
     /// <summary>
-    /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query.
+    /// Exactly one of all components specified as ExactlyOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder ExactlyOneOf(Type type)
+    public QueryBuilder ExactlyOne(Type type)
     {
         exactlyOne.Add(type);
         return this;
     }
 
     /// <summary>
-    /// Exactly one of all components specified as ExactlyOneOf must exist for an entity to be matched by this query.
+    /// Exactly one of all components specified as ExactlyOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder ExactlyOneOf(ComponentId id)
+    public QueryBuilder ExactlyOne(ComponentId id)
     {
         exactlyOne.Add(id);
         return this;
     }
 
     /// <summary>
-    /// Check if the specified component is part of the ExactlyOneOf filter.
+    /// Check if the specified component is part of the ExactlyOne filter.
     /// </summary>
-    public bool IsExactlyOneOf(Type type)
+    public bool IsExactlyOne(Type type)
     {
         return exactlyOne.Contains(type);
     }
 
     /// <summary>
-    /// Check if the specified component is part of the ExactlyOneOf filter.
+    /// Check if the specified component is part of the ExactlyOne filter.
     /// </summary>
-    public bool IsExactlyOneOf<T>() where T : IComponent
+    public bool IsExactlyOne<T>() where T : IComponent
     {
         return exactlyOne.Contains<T>();
     }
 
     /// <summary>
-    /// Check if the specified component is part of the ExactlyOneOf filter.
+    /// Check if the specified component is part of the ExactlyOne filter.
     /// </summary>
-    public bool IsExactlyOneOf(ComponentId id)
+    public bool IsExactlyOne(ComponentId id)
     {
         return exactlyOne.Contains(id);
     }
 
     #endregion
 
-    #region NotAllOf
+    #region NotAll
 
     /// <summary>
-    /// Not all of the components specified as NotAllOf must exist for an entity to be matched by this query.
+    /// Not all of the components specified as NotAll must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder NotAllOf<T>() where T : IComponent
+    public QueryBuilder NotAll<T>() where T : IComponent
     {
-        notAllOf.Add<T>();
+        notAll.Add<T>();
         return this;
     }
 
     /// <summary>
-    /// Not all of the components specified as NotAllOf must exist for an entity to be matched by this query.
+    /// Not all of the components specified as NotAll must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder NotAllOf(Type type)
+    public QueryBuilder NotAll(Type type)
     {
-        notAllOf.Add(type);
+        notAll.Add(type);
         return this;
     }
 
     /// <summary>
-    /// Not all of the components specified as NotAllOf must exist for an entity to be matched by this query.
+    /// Not all of the components specified as NotAll must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryBuilder NotAllOf(ComponentId id)
+    public QueryBuilder NotAll(ComponentId id)
     {
-        notAllOf.Add(id);
+        notAll.Add(id);
         return this;
     }
 
     /// <summary>
-    /// Check if the specified component is part of the IsNotAllOf filter.
+    /// Check if the specified component is part of the IsNotAll filter.
     /// </summary>
-    public bool IsNotAllOf(Type type)
+    public bool IsNotAll(Type type)
     {
-        return notAllOf.Contains(type);
+        return notAll.Contains(type);
     }
 
     /// <summary>
-    /// Check if the specified component is part of the IsNotAllOf filter.
+    /// Check if the specified component is part of the IsNotAll filter.
     /// </summary>
-    public bool IsNotAllOf<T>() where T : IComponent
+    public bool IsNotAll<T>() where T : IComponent
     {
-        return notAllOf.Contains<T>();
+        return notAll.Contains<T>();
     }
 
     /// <summary>
-    /// Check if the specified component is part of the IsNotAllOf filter.
+    /// Check if the specified component is part of the IsNotAll filter.
     /// </summary>
-    public bool IsNotAllOf(ComponentId id)
+    public bool IsNotAll(ComponentId id)
     {
-        return notAllOf.Contains(id);
+        return notAll.Contains(id);
     }
 
     #endregion

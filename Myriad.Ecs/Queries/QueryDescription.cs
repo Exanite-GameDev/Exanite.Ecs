@@ -43,17 +43,17 @@ public sealed class QueryDescription
     /// <summary>
     /// At least one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> AtLeastOneOf { get; }
+    public ImmutableOrderedListSet<ComponentId> AtLeastOne { get; }
 
     /// <summary>
     /// Exactly one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ExactlyOneOf { get; }
+    public ImmutableOrderedListSet<ComponentId> ExactlyOne { get; }
 
     /// <summary>
     /// Not all of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> NotAllOf { get; }
+    public ImmutableOrderedListSet<ComponentId> NotAll { get; }
 
     /// <summary>
     /// Describes a query for entities, bound to a world.
@@ -64,15 +64,15 @@ public sealed class QueryDescription
         ImmutableOrderedListSet<ComponentId> exclude,
         ImmutableOrderedListSet<ComponentId> atLeastOne,
         ImmutableOrderedListSet<ComponentId> exactlyOne,
-        ImmutableOrderedListSet<ComponentId> notAllOf)
+        ImmutableOrderedListSet<ComponentId> NotAll)
     {
         World = world;
 
         Include = include;
         Exclude = exclude;
-        AtLeastOneOf = atLeastOne;
-        ExactlyOneOf = exactlyOne;
-        NotAllOf = notAllOf;
+        AtLeastOne = atLeastOne;
+        ExactlyOne = exactlyOne;
+        NotAll = NotAll;
 
         includeBloom = include.ToBloomFilter();
         excludeBloom = exclude.ToBloomFilter();
@@ -95,14 +95,14 @@ public sealed class QueryDescription
             builder.Exclude(id);
         }
 
-        foreach (var id in AtLeastOneOf)
+        foreach (var id in AtLeastOne)
         {
-            builder.AtLeastOneOf(id);
+            builder.AtLeastOne(id);
         }
 
-        foreach (var id in ExactlyOneOf)
+        foreach (var id in ExactlyOne)
         {
-            builder.ExactlyOneOf(id);
+            builder.ExactlyOne(id);
         }
 
         return builder;
@@ -159,75 +159,75 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// Check if the specified component is part of the AtLeastOneOf filter.
+    /// Check if the specified component is part of the AtLeastOne filter.
     /// </summary>
-    public bool IsAtLeastOneOf<T>() where T : IComponent
+    public bool IsAtLeastOne<T>() where T : IComponent
     {
-        return IsAtLeastOneOf(ComponentId.Get<T>());
+        return IsAtLeastOne(ComponentId.Get<T>());
     }
 
     /// <summary>
-    /// Check if the specified component is part of the AtLeastOneOf filter.
+    /// Check if the specified component is part of the AtLeastOne filter.
     /// </summary>
-    public bool IsAtLeastOneOf(Type type)
+    public bool IsAtLeastOne(Type type)
     {
-        return IsAtLeastOneOf(ComponentId.Get(type));
+        return IsAtLeastOne(ComponentId.Get(type));
     }
 
     /// <summary>
-    /// Check if the specified component is part of the AtLeastOneOf filter.
+    /// Check if the specified component is part of the AtLeastOne filter.
     /// </summary>
-    public bool IsAtLeastOneOf(ComponentId id)
+    public bool IsAtLeastOne(ComponentId id)
     {
-        return AtLeastOneOf.Contains(id);
+        return AtLeastOne.Contains(id);
     }
 
     /// <summary>
-    /// Check if the specified component is part of the ExactlyOneOf filter.
+    /// Check if the specified component is part of the ExactlyOne filter.
     /// </summary>
-    public bool IsExactlyOneOf<T>() where T : IComponent
+    public bool IsExactlyOne<T>() where T : IComponent
     {
-        return IsExactlyOneOf(ComponentId.Get<T>());
+        return IsExactlyOne(ComponentId.Get<T>());
     }
 
     /// <summary>
-    /// Check if the specified component is part of the ExactlyOneOf filter.
+    /// Check if the specified component is part of the ExactlyOne filter.
     /// </summary>
-    public bool IsExactlyOneOf(Type type)
+    public bool IsExactlyOne(Type type)
     {
-        return IsExactlyOneOf(ComponentId.Get(type));
+        return IsExactlyOne(ComponentId.Get(type));
     }
 
     /// <summary>
-    /// Check if the specified component is part of the ExactlyOneOf filter.
+    /// Check if the specified component is part of the ExactlyOne filter.
     /// </summary>
-    public bool IsExactlyOneOf(ComponentId id)
+    public bool IsExactlyOne(ComponentId id)
     {
-        return ExactlyOneOf.Contains(id);
+        return ExactlyOne.Contains(id);
     }
 
     /// <summary>
-    /// Check if the specified component is part of the NotAllOf filter.
+    /// Check if the specified component is part of the NotAll filter.
     /// </summary>
-    public bool IsNotAllOf<T>() where T : IComponent
+    public bool IsNotAll<T>() where T : IComponent
     {
-        return IsNotAllOf(ComponentId.Get<T>());
+        return IsNotAll(ComponentId.Get<T>());
     }
 
     /// <summary>
-    /// Check if the specified component is part of the NotAllOf filter.
+    /// Check if the specified component is part of the NotAll filter.
     /// </summary>
-    public bool IsNotAllOf(Type type)
+    public bool IsNotAll(Type type)
     {
-        return IsNotAllOf(ComponentId.Get(type));
+        return IsNotAll(ComponentId.Get(type));
     }
 
     /// <summary>
-    /// Check if the specified component is part of the NotAllOf filter.
+    /// Check if the specified component is part of the NotAll filter.
     /// </summary>
-    public bool IsNotAllOf(ComponentId id)
+    public bool IsNotAll(ComponentId id)
     {
-        return NotAllOf.Contains(id);
+        return NotAll.Contains(id);
     }
 
     #endregion
@@ -393,7 +393,7 @@ public sealed class QueryDescription
         }
 
         // Apply the NotAll filter
-        if (NotAllOf.Count > 0 && archetype.Components.IsSupersetOf(NotAllOf))
+        if (NotAll.Count > 0 && archetype.Components.IsSupersetOf(NotAll))
         {
             return false;
         }
@@ -404,11 +404,11 @@ public sealed class QueryDescription
 
         // Apply the ExactlyOne filter
         var exactlyOne = default(ComponentId?);
-        if (ExactlyOneOf.Count > 0)
+        if (ExactlyOne.Count > 0)
         {
             set.Clear();
             set.UnionWith(archetype.Components);
-            set.IntersectWith(ExactlyOneOf);
+            set.IntersectWith(ExactlyOne);
             if (set.Count != 1)
             {
                 set.Clear();
@@ -420,11 +420,11 @@ public sealed class QueryDescription
         }
 
         // Apply the AtLeastOne filter
-        if (AtLeastOneOf.Count > 0)
+        if (AtLeastOne.Count > 0)
         {
             set.Clear();
             set.UnionWith(archetype.Components);
-            set.IntersectWith(AtLeastOneOf);
+            set.IntersectWith(AtLeastOne);
             if (set.Count == 0)
             {
                 set.Clear();

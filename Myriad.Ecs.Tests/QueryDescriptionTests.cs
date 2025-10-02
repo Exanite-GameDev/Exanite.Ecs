@@ -45,35 +45,35 @@ public class QueryDescriptionTests
     }
 
     [TestMethod]
-    public void IsExactlyOneOf()
+    public void IsExactlyOne()
     {
         var world = new EcsWorld();
 
         var query = new QueryBuilder()
-               .ExactlyOneOf<ComponentFloat>()
-               .ExactlyOneOf<ComponentByte>()
+               .ExactlyOne<ComponentFloat>()
+               .ExactlyOne<ComponentByte>()
                .Build(world);
 
-        Assert.IsTrue(query.IsExactlyOneOf<ComponentFloat>());
-        Assert.IsTrue(query.IsExactlyOneOf(typeof(ComponentFloat)));
-        Assert.IsFalse(query.IsExactlyOneOf<ComponentInt32>());
-        Assert.IsFalse(query.IsExactlyOneOf(typeof(ComponentInt32)));
+        Assert.IsTrue(query.IsExactlyOne<ComponentFloat>());
+        Assert.IsTrue(query.IsExactlyOne(typeof(ComponentFloat)));
+        Assert.IsFalse(query.IsExactlyOne<ComponentInt32>());
+        Assert.IsFalse(query.IsExactlyOne(typeof(ComponentInt32)));
     }
 
     [TestMethod]
-    public void IsAtLeastOneOf()
+    public void IsAtLeastOne()
     {
         var world = new EcsWorld();
 
         var q = new QueryBuilder()
-               .AtLeastOneOf<ComponentFloat>()
-               .AtLeastOneOf<ComponentByte>()
+               .AtLeastOne<ComponentFloat>()
+               .AtLeastOne<ComponentByte>()
                .Build(world);
 
-        Assert.IsTrue(q.IsAtLeastOneOf<ComponentFloat>());
-        Assert.IsTrue(q.IsAtLeastOneOf(typeof(ComponentFloat)));
-        Assert.IsFalse(q.IsAtLeastOneOf<ComponentInt32>());
-        Assert.IsFalse(q.IsAtLeastOneOf(typeof(ComponentInt32)));
+        Assert.IsTrue(q.IsAtLeastOne<ComponentFloat>());
+        Assert.IsTrue(q.IsAtLeastOne(typeof(ComponentFloat)));
+        Assert.IsFalse(q.IsAtLeastOne<ComponentInt32>());
+        Assert.IsFalse(q.IsAtLeastOne(typeof(ComponentInt32)));
     }
 
     [TestMethod]
@@ -220,8 +220,8 @@ public class QueryDescriptionTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
         var q = new QueryBuilder()
-                .ExactlyOneOf<ComponentFloat>()
-                .ExactlyOneOf<ComponentInt32>()
+                .ExactlyOne<ComponentFloat>()
+                .ExactlyOne<ComponentInt32>()
                 .Build(w);
 
         var matches = q.GetArchetypeMatches();
@@ -249,8 +249,8 @@ public class QueryDescriptionTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
 
         var q = new QueryBuilder()
-            .AtLeastOneOf<ComponentFloat>()
-            .AtLeastOneOf<ComponentInt32>()
+            .AtLeastOne<ComponentFloat>()
+            .AtLeastOne<ComponentInt32>()
             .Build(w);
 
         var matches = q.GetArchetypeMatches();

@@ -63,22 +63,22 @@ public class QueryBuilderTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.ExactlyOneOf<ComponentFloat>();
+            q.ExactlyOne<ComponentFloat>();
         });
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.ExactlyOneOf(typeof(ComponentFloat));
+            q.ExactlyOne(typeof(ComponentFloat));
         });
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.AtLeastOneOf<ComponentFloat>();
+            q.AtLeastOne<ComponentFloat>();
         });
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.AtLeastOneOf(typeof(ComponentFloat));
+            q.AtLeastOne(typeof(ComponentFloat));
         });
     }
 
@@ -114,30 +114,30 @@ public class QueryBuilderTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.ExactlyOneOf<ComponentFloat>();
+            q.ExactlyOne<ComponentFloat>();
         });
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.AtLeastOneOf<ComponentFloat>();
+            q.AtLeastOne<ComponentFloat>();
         });
     }
 
     [TestMethod]
-    public void CreateAtLeastOneOf()
+    public void CreateAtLeastOne()
     {
         var q = new QueryBuilder()
-           .AtLeastOneOf<ComponentFloat>()
-           .AtLeastOneOf(typeof(ComponentFloat));
+           .AtLeastOne<ComponentFloat>()
+           .AtLeastOne(typeof(ComponentFloat));
 
-        Assert.IsTrue(q.IsAtLeastOneOf<ComponentFloat>());
-        Assert.IsTrue(q.IsAtLeastOneOf(typeof(ComponentFloat)));
-        Assert.IsTrue(q.IsAtLeastOneOf(ComponentId.Get<ComponentFloat>()));
+        Assert.IsTrue(q.IsAtLeastOne<ComponentFloat>());
+        Assert.IsTrue(q.IsAtLeastOne(typeof(ComponentFloat)));
+        Assert.IsTrue(q.IsAtLeastOne(ComponentId.Get<ComponentFloat>()));
         CollectionAssert.Contains(q.AtLeastOnes.ToArray(), ComponentId.Get<ComponentFloat>());
 
-        Assert.IsFalse(q.IsAtLeastOneOf<ComponentInt32>());
-        Assert.IsFalse(q.IsAtLeastOneOf(typeof(ComponentInt32)));
-        Assert.IsFalse(q.IsAtLeastOneOf(ComponentId.Get<ComponentInt32>()));
+        Assert.IsFalse(q.IsAtLeastOne<ComponentInt32>());
+        Assert.IsFalse(q.IsAtLeastOne(typeof(ComponentInt32)));
+        Assert.IsFalse(q.IsAtLeastOne(ComponentId.Get<ComponentInt32>()));
         CollectionAssert.DoesNotContain(q.AtLeastOnes.ToArray(), ComponentId.Get<ComponentInt32>());
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
@@ -147,13 +147,13 @@ public class QueryBuilderTests
     }
 
     [TestMethod]
-    public void AtLeastOneOfDuplicateThrows()
+    public void AtLeastOneDuplicateThrows()
     {
         var q = new QueryBuilder()
-               .AtLeastOneOf<ComponentFloat>()
-               .AtLeastOneOf<ComponentInt16>()
-               .AtLeastOneOf<ComponentInt32>()
-               .AtLeastOneOf<ComponentFloat>();
+               .AtLeastOne<ComponentFloat>()
+               .AtLeastOne<ComponentInt16>()
+               .AtLeastOne<ComponentInt32>()
+               .AtLeastOne<ComponentFloat>();
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
@@ -162,7 +162,7 @@ public class QueryBuilderTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.ExactlyOneOf<ComponentFloat>();
+            q.ExactlyOne<ComponentFloat>();
         });
 
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -175,17 +175,17 @@ public class QueryBuilderTests
     public void CreateExactyOneOf()
     {
         var q = new QueryBuilder()
-           .ExactlyOneOf<ComponentFloat>()
-           .ExactlyOneOf(typeof(ComponentFloat));
+           .ExactlyOne<ComponentFloat>()
+           .ExactlyOne(typeof(ComponentFloat));
 
-        Assert.IsTrue(q.IsExactlyOneOf<ComponentFloat>());
-        Assert.IsTrue(q.IsExactlyOneOf(typeof(ComponentFloat)));
-        Assert.IsTrue(q.IsExactlyOneOf(ComponentId.Get<ComponentFloat>()));
+        Assert.IsTrue(q.IsExactlyOne<ComponentFloat>());
+        Assert.IsTrue(q.IsExactlyOne(typeof(ComponentFloat)));
+        Assert.IsTrue(q.IsExactlyOne(ComponentId.Get<ComponentFloat>()));
         CollectionAssert.Contains(q.ExactlyOnes.ToArray(), ComponentId.Get<ComponentFloat>());
 
-        Assert.IsFalse(q.IsExactlyOneOf<ComponentInt32>());
-        Assert.IsFalse(q.IsExactlyOneOf(typeof(ComponentInt32)));
-        Assert.IsFalse(q.IsExactlyOneOf(ComponentId.Get<ComponentInt32>()));
+        Assert.IsFalse(q.IsExactlyOne<ComponentInt32>());
+        Assert.IsFalse(q.IsExactlyOne(typeof(ComponentInt32)));
+        Assert.IsFalse(q.IsExactlyOne(ComponentId.Get<ComponentInt32>()));
         CollectionAssert.DoesNotContain(q.ExactlyOnes.ToArray(), ComponentId.Get<ComponentInt32>());
 
         Assert.IsFalse(q.IsIncluded<ComponentInt32>());
@@ -198,10 +198,10 @@ public class QueryBuilderTests
     public void ExactyOneOfDuplicateThrows()
     {
         var q = new QueryBuilder()
-               .ExactlyOneOf<ComponentFloat>()
-               .ExactlyOneOf<ComponentInt16>()
-               .ExactlyOneOf<ComponentInt32>()
-               .ExactlyOneOf<ComponentFloat>();
+               .ExactlyOne<ComponentFloat>()
+               .ExactlyOne<ComponentInt16>()
+               .ExactlyOne<ComponentInt32>()
+               .ExactlyOne<ComponentFloat>();
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
@@ -210,7 +210,7 @@ public class QueryBuilderTests
 
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            q.AtLeastOneOf<ComponentFloat>();
+            q.AtLeastOne<ComponentFloat>();
         });
 
         Assert.ThrowsException<InvalidOperationException>(() =>
@@ -227,8 +227,8 @@ public class QueryBuilderTests
         var query = new QueryBuilder()
              .Include<ComponentInt16>()
              .Exclude<ComponentInt32>()
-             .ExactlyOneOf<ComponentFloat>()
-             .AtLeastOneOf<ComponentInt64>()
+             .ExactlyOne<ComponentFloat>()
+             .AtLeastOne<ComponentInt64>()
              .Build(world);
 
         var builder = query.ToBuilder();
@@ -243,15 +243,15 @@ public class QueryBuilderTests
         Assert.IsFalse(builder.IsExcluded<ComponentFloat>());
         Assert.IsFalse(builder.IsExcluded<ComponentInt64>());
 
-        Assert.IsFalse(builder.IsExactlyOneOf<ComponentInt16>());
-        Assert.IsFalse(builder.IsExactlyOneOf<ComponentInt32>());
-        Assert.IsTrue(builder.IsExactlyOneOf<ComponentFloat>());
-        Assert.IsFalse(builder.IsExactlyOneOf<ComponentInt64>());
+        Assert.IsFalse(builder.IsExactlyOne<ComponentInt16>());
+        Assert.IsFalse(builder.IsExactlyOne<ComponentInt32>());
+        Assert.IsTrue(builder.IsExactlyOne<ComponentFloat>());
+        Assert.IsFalse(builder.IsExactlyOne<ComponentInt64>());
 
-        Assert.IsFalse(builder.IsAtLeastOneOf<ComponentInt16>());
-        Assert.IsFalse(builder.IsAtLeastOneOf<ComponentInt32>());
-        Assert.IsFalse(builder.IsAtLeastOneOf<ComponentFloat>());
-        Assert.IsTrue(builder.IsAtLeastOneOf<ComponentInt64>());
+        Assert.IsFalse(builder.IsAtLeastOne<ComponentInt16>());
+        Assert.IsFalse(builder.IsAtLeastOne<ComponentInt32>());
+        Assert.IsFalse(builder.IsAtLeastOne<ComponentFloat>());
+        Assert.IsTrue(builder.IsAtLeastOne<ComponentInt64>());
     }
 
     [TestMethod]
@@ -262,15 +262,15 @@ public class QueryBuilderTests
         var builder = new QueryBuilder()
             .Include<ComponentInt16>()
             .Exclude<ComponentInt32>()
-            .ExactlyOneOf<ComponentFloat>()
-            .AtLeastOneOf<ComponentInt64>();
+            .ExactlyOne<ComponentFloat>()
+            .AtLeastOne<ComponentInt64>();
 
         var q1 = builder.Build(world);
         var q2 = builder.Build(world);
 
         Assert.AreSame(q1.Include, q2.Include);
         Assert.AreSame(q1.Exclude, q2.Exclude);
-        Assert.AreSame(q1.ExactlyOneOf, q2.ExactlyOneOf);
-        Assert.AreSame(q1.AtLeastOneOf, q2.AtLeastOneOf);
+        Assert.AreSame(q1.ExactlyOne, q2.ExactlyOne);
+        Assert.AreSame(q1.AtLeastOne, q2.AtLeastOne);
     }
 }
