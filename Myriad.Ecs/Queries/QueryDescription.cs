@@ -33,49 +33,49 @@ public sealed class QueryDescription
     /// <summary>
     /// The components which must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> Include { get; }
+    public ImmutableOrderedListSet<ComponentId> IncludeFilter { get; }
 
     /// <summary>
     /// The components which must not be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> Exclude { get; }
+    public ImmutableOrderedListSet<ComponentId> ExcludeFilter { get; }
 
     /// <summary>
     /// At least one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> AtLeastOne { get; }
+    public ImmutableOrderedListSet<ComponentId> AtLeastOneFilter { get; }
 
     /// <summary>
     /// Exactly one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ExactlyOne { get; }
+    public ImmutableOrderedListSet<ComponentId> ExactlyOneFilter { get; }
 
     /// <summary>
     /// Not all of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> NotAll { get; }
+    public ImmutableOrderedListSet<ComponentId> NotAllFilter { get; }
 
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
     internal QueryDescription(
         EcsWorld world,
-        ImmutableOrderedListSet<ComponentId> include,
-        ImmutableOrderedListSet<ComponentId> exclude,
-        ImmutableOrderedListSet<ComponentId> atLeastOne,
-        ImmutableOrderedListSet<ComponentId> exactlyOne,
-        ImmutableOrderedListSet<ComponentId> notAll)
+        ImmutableOrderedListSet<ComponentId> includeFilter,
+        ImmutableOrderedListSet<ComponentId> excludeFilter,
+        ImmutableOrderedListSet<ComponentId> atLeastOneFilter,
+        ImmutableOrderedListSet<ComponentId> exactlyOneFilter,
+        ImmutableOrderedListSet<ComponentId> notAllFilter)
     {
         World = world;
 
-        Include = include;
-        Exclude = exclude;
-        AtLeastOne = atLeastOne;
-        ExactlyOne = exactlyOne;
-        NotAll = notAll;
+        IncludeFilter = includeFilter;
+        ExcludeFilter = excludeFilter;
+        AtLeastOneFilter = atLeastOneFilter;
+        ExactlyOneFilter = exactlyOneFilter;
+        NotAllFilter = notAllFilter;
 
-        includeBloom = include.ToBloomFilter();
-        excludeBloom = exclude.ToBloomFilter();
+        includeBloom = includeFilter.ToBloomFilter();
+        excludeBloom = excludeFilter.ToBloomFilter();
     }
 
     /// <summary>
@@ -85,22 +85,22 @@ public sealed class QueryDescription
     {
         var builder = new QueryBuilder();
 
-        foreach (var id in Include)
+        foreach (var id in IncludeFilter)
         {
             builder.Include(id);
         }
 
-        foreach (var id in Exclude)
+        foreach (var id in ExcludeFilter)
         {
             builder.Exclude(id);
         }
 
-        foreach (var id in AtLeastOne)
+        foreach (var id in AtLeastOneFilter)
         {
             builder.AtLeastOne(id);
         }
 
-        foreach (var id in ExactlyOne)
+        foreach (var id in ExactlyOneFilter)
         {
             builder.ExactlyOne(id);
         }
@@ -249,13 +249,13 @@ public sealed class QueryDescription
         // Apply the Include filter
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
-        if (Include.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in includeBloom))
+        if (IncludeFilter.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in includeBloom))
         {
             return false;
         }
 
         // Do the full set check for included components
-        if (!archetype.Components.IsSupersetOf(Include))
+        if (!archetype.Components.IsSupersetOf(IncludeFilter))
         {
             return false;
         }
@@ -263,20 +263,20 @@ public sealed class QueryDescription
         // Apply the Exclude filter
         // If this is false it means there is definitely _not_ an intersection, which means we can skip
         // the inner check.
-        if (Exclude.Count > 0 && excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
+        if (ExcludeFilter.Count > 0 && excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
         {
-            if (archetype.Components.Overlaps(Exclude))
+            if (archetype.Components.Overlaps(ExcludeFilter))
             {
                 return false;
             }
         }
 
         // Apply the ExactlyOne filter
-        if (ExactlyOne.Count > 0)
+        if (ExactlyOneFilter.Count > 0)
         {
             temporarySet.Clear();
             temporarySet.UnionWith(archetype.Components);
-            temporarySet.IntersectWith(ExactlyOne);
+            temporarySet.IntersectWith(ExactlyOneFilter);
             if (temporarySet.Count != 1)
             {
                 temporarySet.Clear();
@@ -285,11 +285,11 @@ public sealed class QueryDescription
         }
 
         // Apply the AtLeastOne filter
-        if (AtLeastOne.Count > 0)
+        if (AtLeastOneFilter.Count > 0)
         {
             temporarySet.Clear();
             temporarySet.UnionWith(archetype.Components);
-            temporarySet.IntersectWith(AtLeastOne);
+            temporarySet.IntersectWith(AtLeastOneFilter);
             if (temporarySet.Count == 0)
             {
                 temporarySet.Clear();
@@ -298,7 +298,7 @@ public sealed class QueryDescription
         }
 
         // Apply the NotAll filter
-        if (NotAll.Count > 0 && archetype.Components.IsSupersetOf(NotAll))
+        if (NotAllFilter.Count > 0 && archetype.Components.IsSupersetOf(NotAllFilter))
         {
             return false;
         }

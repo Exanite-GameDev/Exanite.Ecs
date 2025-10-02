@@ -13,43 +13,43 @@ public sealed class QueryBuilder
     /// <summary>
     /// An Entity must include all of these components to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> Included => include.Items;
-    private readonly ComponentSet include;
+    public IReadOnlyList<ComponentId> IncludeFilter => includeFilter.Items;
+    private readonly ComponentSet includeFilter;
 
     /// <summary>
     /// Entities with these components will not be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> Excluded => exclude.Items;
-    private readonly ComponentSet exclude;
+    public IReadOnlyList<ComponentId> ExcludeFilter => excludeFilter.Items;
+    private readonly ComponentSet excludeFilter;
 
     /// <summary>
     /// At least one of all these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> AtLeastOnes => atLeastOne.Items;
-    private readonly ComponentSet atLeastOne;
+    public IReadOnlyList<ComponentId> AtLeastOneFiler => atLeastOneFilter.Items;
+    private readonly ComponentSet atLeastOneFilter;
 
     /// <summary>
     /// Exactly one of all these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> ExactlyOnes => exactlyOne.Items;
-    private readonly ComponentSet exactlyOne;
+    public IReadOnlyList<ComponentId> ExactlyOneFilter => exactlyOneFilter.Items;
+    private readonly ComponentSet exactlyOneFilter;
 
     /// <summary>
     /// Not all of these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> NotAlls => notAll.Items;
-    private readonly ComponentSet notAll;
+    public IReadOnlyList<ComponentId> NotAllFilter => notAllFilter.Items;
+    private readonly ComponentSet notAllFilter;
 
     /// <summary>
     /// Create a new <see cref="QueryBuilder"/>
     /// </summary>
     public QueryBuilder()
     {
-        include = new ComponentSet();
-        exclude = new ComponentSet();
-        atLeastOne = new ComponentSet();
-        exactlyOne = new ComponentSet();
-        notAll = new ComponentSet();
+        includeFilter = new ComponentSet();
+        excludeFilter = new ComponentSet();
+        atLeastOneFilter = new ComponentSet();
+        exactlyOneFilter = new ComponentSet();
+        notAllFilter = new ComponentSet();
     }
 
     /// <summary>
@@ -59,11 +59,11 @@ public sealed class QueryBuilder
     {
         return new QueryDescription(
             world,
-            include.ToImmutableSet(),
-            exclude.ToImmutableSet(),
-            atLeastOne.ToImmutableSet(),
-            exactlyOne.ToImmutableSet(),
-            notAll.ToImmutableSet()
+            includeFilter.ToImmutableSet(),
+            excludeFilter.ToImmutableSet(),
+            atLeastOneFilter.ToImmutableSet(),
+            exactlyOneFilter.ToImmutableSet(),
+            notAllFilter.ToImmutableSet()
         );
     }
 
@@ -72,7 +72,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder Include<T>() where T : IComponent
     {
-        include.Add<T>();
+        includeFilter.Add<T>();
         return this;
     }
 
@@ -81,7 +81,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder Include(Type type)
     {
-        include.Add(type);
+        includeFilter.Add(type);
         return this;
     }
 
@@ -90,7 +90,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder Include(ComponentId id)
     {
-        include.Add(id);
+        includeFilter.Add(id);
         return this;
     }
 
@@ -99,7 +99,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder Exclude<T>() where T : IComponent
     {
-        exclude.Add<T>();
+        excludeFilter.Add<T>();
         return this;
     }
 
@@ -108,7 +108,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder Exclude(Type type)
     {
-        exclude.Add(type);
+        excludeFilter.Add(type);
         return this;
     }
 
@@ -117,7 +117,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder Exclude(ComponentId id)
     {
-        exclude.Add(id);
+        excludeFilter.Add(id);
         return this;
     }
 
@@ -126,7 +126,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder AtLeastOne<T>() where T : IComponent
     {
-        atLeastOne.Add<T>();
+        atLeastOneFilter.Add<T>();
         return this;
     }
 
@@ -135,7 +135,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder AtLeastOne(Type type)
     {
-        atLeastOne.Add(type);
+        atLeastOneFilter.Add(type);
         return this;
     }
 
@@ -144,7 +144,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder AtLeastOne(ComponentId id)
     {
-        atLeastOne.Add(id);
+        atLeastOneFilter.Add(id);
         return this;
     }
 
@@ -153,7 +153,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder ExactlyOne<T>() where T : IComponent
     {
-        exactlyOne.Add<T>();
+        exactlyOneFilter.Add<T>();
         return this;
     }
 
@@ -162,7 +162,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder ExactlyOne(Type type)
     {
-        exactlyOne.Add(type);
+        exactlyOneFilter.Add(type);
         return this;
     }
 
@@ -171,7 +171,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder ExactlyOne(ComponentId id)
     {
-        exactlyOne.Add(id);
+        exactlyOneFilter.Add(id);
         return this;
     }
 
@@ -180,7 +180,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder NotAll<T>() where T : IComponent
     {
-        notAll.Add<T>();
+        notAllFilter.Add<T>();
         return this;
     }
 
@@ -189,7 +189,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder NotAll(Type type)
     {
-        notAll.Add(type);
+        notAllFilter.Add(type);
         return this;
     }
 
@@ -198,7 +198,7 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder NotAll(ComponentId id)
     {
-        notAll.Add(id);
+        notAllFilter.Add(id);
         return this;
     }
 
