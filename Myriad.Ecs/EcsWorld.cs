@@ -45,6 +45,8 @@ public sealed class EcsWorld : ITrackedDisposable
 
     internal int ArchetypesCount => archetypes.Count;
 
+    internal readonly Dictionary<QueryCacheKey, QueryDescription> QueryDescriptionCache = new();
+
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
 
     public EventBus EventBus { get; } = new();

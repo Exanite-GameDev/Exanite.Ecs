@@ -57,14 +57,28 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryDescription Build(EcsWorld world)
     {
-        return new QueryDescription(
-            world,
+        var key = new QueryCacheKey(
             includeFilter.ToImmutableSet(),
             excludeFilter.ToImmutableSet(),
             atLeastOneFilter.ToImmutableSet(),
             exactlyOneFilter.ToImmutableSet(),
-            notAllFilter.ToImmutableSet()
-        );
+            notAllFilter.ToImmutableSet());
+
+        if (!world.QueryDescriptionCache.TryGetValue(key, out var query))
+        {
+            query = new QueryDescription(
+                world,
+                includeFilter.ToImmutableSet(),
+                excludeFilter.ToImmutableSet(),
+                atLeastOneFilter.ToImmutableSet(),
+                exactlyOneFilter.ToImmutableSet(),
+                notAllFilter.ToImmutableSet()
+            );
+
+            world.QueryDescriptionCache[key] = query;
+        }
+
+        return query;
     }
 
     /// <summary>

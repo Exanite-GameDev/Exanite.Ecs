@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
 /// An immutable set of objects.
 /// </summary>
-public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<T>, IEquatable<T>
+public class ImmutableOrderedListSet<T> : IReadOnlyList<T>, IEquatable<ImmutableOrderedListSet<T>> where T : struct, IComparable<T>, IEquatable<T>
 {
     /// <summary>
     /// An empty set.
@@ -15,6 +16,7 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     public static readonly ImmutableOrderedListSet<T> Empty = new([]);
 
     private readonly OrderedListSet<T> items;
+    private int? hashCode;
 
     public T this[int i] => items[i];
 
@@ -198,5 +200,51 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T> where T : struct, ICo
     public bool SetEquals<TValue>(Dictionary<T, TValue> other)
     {
         return items.SetEquals(other);
+    }
+
+    public bool Equals(ImmutableOrderedListSet<T>? other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+
+        if (other.Count != Count)
+        {
+            return false;
+        }
+
+        for (var i = 0; i < other.Count; i++)
+        {
+            if (!items[i].Equals(other[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ImmutableOrderedListSet<T> other && Equals(other);
+    }
+
+    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
+    public override int GetHashCode()
+    {
+        if (hashCode.HasValue)
+        {
+            return hashCode.Value;
+        }
+
+        var result = 0;
+        foreach (var item in items)
+        {
+            result = HashCode.Combine(result, item);
+        }
+
+        hashCode = result;
+        return result;
     }
 }
