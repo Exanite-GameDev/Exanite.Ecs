@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
@@ -46,11 +45,11 @@ public sealed class QueryBuilder
     /// </summary>
     public QueryBuilder()
     {
-        include = new ComponentSet(ContainsComponent, 0);
-        exclude = new ComponentSet(ContainsComponent, 1);
-        atLeastOne = new ComponentSet(ContainsComponent, 2);
-        exactlyOne = new ComponentSet(ContainsComponent, 3);
-        notAll = new ComponentSet(ContainsComponent, 4);
+        include = new ComponentSet();
+        exclude = new ComponentSet();
+        atLeastOne = new ComponentSet();
+        exactlyOne = new ComponentSet();
+        notAll = new ComponentSet();
     }
 
     /// <summary>
@@ -67,36 +66,6 @@ public sealed class QueryBuilder
             notAll.ToImmutableSet()
         );
     }
-
-    private void ContainsComponent(ComponentId id, int index, string caller)
-    {
-        if (index != include.Index && include.Contains(id))
-        {
-            throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the Include filter");
-        }
-
-        if (index != exclude.Index && exclude.Contains(id))
-        {
-            throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the Exclude filter");
-        }
-
-        if (index != atLeastOne.Index && atLeastOne.Contains(id))
-        {
-            throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the AtLeastOne filter");
-        }
-
-        if (index != exactlyOne.Index && exactlyOne.Contains(id))
-        {
-            throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the ExactlyOne filter");
-        }
-
-        if (index != notAll.Index && notAll.Contains(id))
-        {
-            throw new InvalidOperationException($"Cannot add to the '{caller} filter'. Component is already part of the NotAll filter");
-        }
-    }
-
-    #region Filter Methods
 
     /// <summary>
     /// The given component must exist for an entity to be matched by this query.
@@ -233,12 +202,8 @@ public sealed class QueryBuilder
         return this;
     }
 
-    #endregion
-
-    private class ComponentSet(Action<ComponentId, int, string> check, int index)
+    private class ComponentSet
     {
-        public int Index { get; } = index;
-
         public readonly OrderedListSet<ComponentId> Items = [];
 
         private ImmutableOrderedListSet<ComponentId>? immutableSet;
@@ -254,41 +219,22 @@ public sealed class QueryBuilder
             return immutableSet;
         }
 
-        public bool Add(ComponentId id, [CallerMemberName] string caller = "")
+        public void Add(ComponentId id)
         {
-            check(id, Index, caller);
             if (Items.Add(id))
             {
                 immutableSet = null;
-                return true;
             }
-
-            return false;
         }
 
-        public bool Add(Type type, [CallerMemberName] string caller = "")
+        public void Add(Type type)
         {
-            return Add(ComponentId.Get(type), caller);
+            Add(ComponentId.Get(type));
         }
 
-        public bool Add<T>([CallerMemberName] string caller = "") where T : IComponent
+        public void Add<T>() where T : IComponent
         {
-            return Add(ComponentId.Get<T>(), caller);
-        }
-
-        public bool Contains(ComponentId id)
-        {
-            return Items.Contains(id);
-        }
-
-        public bool Contains(Type type)
-        {
-            return Contains(ComponentId.Get(type));
-        }
-
-        public bool Contains<T>() where T : IComponent
-        {
-            return Contains(ComponentId.Get<T>());
+            Add(ComponentId.Get<T>());
         }
     }
 }
