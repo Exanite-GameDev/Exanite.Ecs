@@ -395,7 +395,7 @@ public class QueryTests
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
-        var e = eb.Resolve();
+        _ = eb.Resolve();
 
         Assert.IsTrue(q.Any());
     }

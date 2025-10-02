@@ -47,7 +47,7 @@ public class ComponentRegistryTests
     {
         Assert.ThrowsException<InvalidOperationException>(() =>
         {
-            var t = default(ComponentId).Type;
+            _ = default(ComponentId).Type;
         });
     }
 }

@@ -131,14 +131,13 @@ public class EcsCommandBufferTests
             }
 
             // Check all the entities
-            for (var j = 0; j < alive.Count; j++)
+            foreach (var entity in alive)
             {
-                var entity = alive[j];
                 Assert.IsTrue(entity.IsAlive);
             }
-            for (var j = 0; j < dead.Count; j++)
+
+            foreach (var entity in dead)
             {
-                var entity = dead[j];
                 Assert.IsTrue(!entity.IsAlive);
             }
 
@@ -849,7 +848,7 @@ public class EcsCommandBufferTests
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
         cmd.Execute();
-        var e = eb.Resolve();
+        _ = eb.Resolve();
 
         // Create another entity then clear
         cmd.Create().Set(new Component0());

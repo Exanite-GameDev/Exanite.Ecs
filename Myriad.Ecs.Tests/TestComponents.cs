@@ -1,14 +1,10 @@
-﻿using System.Numerics;
-
-namespace Exanite.Myriad.Ecs.Tests;
+﻿namespace Exanite.Myriad.Ecs.Tests;
 
 public record struct ComponentByte(byte Value) : IComponent;
 public record struct ComponentInt16(short Value) : IComponent;
 public record struct ComponentFloat(float Value) : IComponent;
 public record struct ComponentInt32(int Value) : IComponent;
 public record struct ComponentInt64(long Value) : IComponent;
-public record struct ComponentObject(object Value) : IComponent;
-public record struct ComponentVector3(Vector3 Value) : IComponent;
 
 public record struct Component0 : IComponent;
 public record struct Component1 : IComponent;

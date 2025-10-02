@@ -10,7 +10,7 @@ public static class TestHelpers
         uniqueComponents = Math.Clamp(uniqueComponents, 0, 7);
 
         var b = new EcsCommandBuffer(world);
-        var r = new Random(3452);
+        var r = new Random(123);
         for (var i = 0; i < count; i++)
         {
             var eb = b.Create();
