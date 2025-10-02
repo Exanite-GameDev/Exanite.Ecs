@@ -268,12 +268,6 @@ public sealed class QueryDescription
             }
         }
 
-        // Apply the NotAll filter
-        if (NotAll.Count > 0 && archetype.Components.IsSupersetOf(NotAll))
-        {
-            return false;
-        }
-
         // Use the temp hashset to do this
         var set = temporarySet;
         set.Clear();
@@ -292,7 +286,6 @@ public sealed class QueryDescription
             }
 
             exactlyOne = set.Single();
-            set.Clear();
         }
 
         // Apply the AtLeastOne filter
@@ -312,8 +305,14 @@ public sealed class QueryDescription
             set.Clear();
             set = null;
         }
-
         var atLeastOne = set?.ToImmutable();
+
+        // Apply the NotAll filter
+        if (NotAll.Count > 0 && archetype.Components.IsSupersetOf(NotAll))
+        {
+            return false;
+        }
+
         match = new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
 
         return true;
