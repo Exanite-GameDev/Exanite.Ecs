@@ -23,10 +23,8 @@ public class QueryTests
            .Include<ComponentFloat>()
            .Build(world);
 
-        var a = q.GetArchetypeMatches();
-
-        Assert.IsNotNull(a);
-        Assert.AreEqual(0, a.Count);
+        var archetypes = q.GetArchetypes();
+        Assert.AreEqual(0, archetypes.Length);
     }
 
     [TestMethod]
@@ -40,12 +38,8 @@ public class QueryTests
            .Include<ComponentFloat>()
            .Build(w);
 
-        var a = q.GetArchetypeMatches();
-
-        Assert.IsNotNull(a);
-        Assert.AreEqual(1, a.Count);
-        Assert.IsNull(a.Single().AtLeastOne);
-        Assert.IsNull(a.Single().ExactlyOne);
+        var a = q.GetArchetypes();
+        Assert.AreEqual(1, a.Length);
     }
 
     [TestMethod]
@@ -61,31 +55,32 @@ public class QueryTests
            .Build(w);
 
         // Match once, check it matches one archetype
-        var a = q.GetArchetypeMatches();
-        Assert.IsNotNull(a);
-        Assert.AreEqual(1, a.Count);
-        Assert.IsNull(a.Single().AtLeastOne);
-        Assert.IsNull(a.Single().ExactlyOne);
+        var a = q.GetArchetypes();
+        Assert.AreEqual(1, a.Length);
 
         // Add an archetype to the world that the query should match
         var c1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentFloat>() });
         w.GetOrCreateArchetype(c1, ArchetypeHash.Create(c1));
 
         // Check it now matches 2 archetypes
-        var b = q.GetArchetypeMatches();
-        Assert.IsNotNull(b);
-        Assert.AreEqual(2, b.Count);
-        Assert.IsTrue(a.All(x => x.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>())));
+        var b = q.GetArchetypes();
+        Assert.AreEqual(2, b.Length);
+        foreach (var archetype in b)
+        {
+            Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+        }
 
         // Add an archetype to the world that the query should NOT match
         var c2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentByte>() });
         w.GetOrCreateArchetype(c2, ArchetypeHash.Create(c2));
 
         // Check it now matches 2 archetypes
-        var c = q.GetArchetypeMatches();
-        Assert.IsNotNull(c);
-        Assert.AreEqual(2, c.Count);
-        Assert.IsTrue(c.All(x => x.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>())));
+        var c = q.GetArchetypes();
+        Assert.AreEqual(2, c.Length);
+        foreach (var archetype in c)
+        {
+            Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+        }
     }
 
     [TestMethod]
@@ -100,12 +95,10 @@ public class QueryTests
            .Include<ComponentFloat>()
            .Build(w);
 
-        var a = q.GetArchetypeMatches();
+        var archetypes = q.GetArchetypesList();
+        Assert.AreEqual(2, archetypes.Count);
 
-        Assert.IsNotNull(a);
-        Assert.AreEqual(2, a.Count);
-
-        Assert.IsTrue(a.All(x => x.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>())));
+        Assert.IsTrue(archetypes.All(x => x.Components.Contains(ComponentId.Get<ComponentFloat>())));
     }
 
     [TestMethod]
@@ -121,16 +114,12 @@ public class QueryTests
             .Exclude<ComponentInt32>()
             .Build(w);
 
-        var a = q.GetArchetypeMatches();
+        var archetypes = q.GetArchetypes();
+        Assert.AreEqual(1, archetypes.Length);
 
-        Assert.IsNotNull(a);
-        Assert.AreEqual(1, a.Count);
-
-        var single = a.Single();
-        Assert.IsNull(single.AtLeastOne);
-        Assert.IsNull(single.ExactlyOne);
-        Assert.IsTrue(single.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
-        Assert.IsFalse(single.Archetype.Components.Contains(ComponentId.Get<ComponentInt32>()));
+        var archetype = archetypes[0];
+        Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+        Assert.IsFalse(archetype.Components.Contains(ComponentId.Get<ComponentInt32>()));
     }
 
     [TestMethod]
@@ -147,17 +136,12 @@ public class QueryTests
                 .ExactlyOne<ComponentInt32>()
                 .Build(w);
 
-        var matches = q.GetArchetypeMatches();
+        var archetypes = q.GetArchetypes();
+        Assert.AreEqual(2, archetypes.Length);
 
-        Assert.IsNotNull(matches);
-        Assert.AreEqual(2, matches.Count);
-
-        foreach (var match in matches)
+        foreach (var archetype in archetypes)
         {
-            Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == ComponentId.Get<ComponentInt32>() || match.ExactlyOne == ComponentId.Get<ComponentFloat>());
-            Assert.IsTrue(match.AtLeastOne == null);
-            Assert.IsTrue(match.Archetype.Components.Count == 1);
+            Assert.IsTrue(archetype.Components.Count == 1);
         }
     }
 
@@ -175,18 +159,13 @@ public class QueryTests
             .AtLeastOne<ComponentInt32>()
             .Build(w);
 
-        var matches = q.GetArchetypeMatches();
+        var archetypes = q.GetArchetypes();
+        Assert.AreEqual(3, archetypes.Length);
 
-        Assert.IsNotNull(matches);
-        Assert.AreEqual(3, matches.Count);
-
-        foreach (var match in matches)
+        foreach (var archetype in archetypes)
         {
-            Assert.IsNotNull(match);
-            Assert.IsTrue(match.ExactlyOne == null);
-
-            Assert.IsTrue(match.Archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
-                       || match.Archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+            Assert.IsTrue(archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
+                       || archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
         }
     }
 
@@ -205,10 +184,8 @@ public class QueryTests
             .NotAll<ComponentInt32>()
             .Build(w);
 
-        var matches = q.GetArchetypeMatches();
-
-        Assert.IsNotNull(matches);
-        Assert.AreEqual(3, matches.Count);
+        var archetypes = q.GetArchetypes();
+        Assert.AreEqual(3, archetypes.Length);
     }
 
     [TestMethod]

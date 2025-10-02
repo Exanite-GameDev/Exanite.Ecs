@@ -18,7 +18,7 @@ public sealed class QueryDescription
     /// <summary>
     /// Cached result from the last time <see cref="GetArchetypeMatchResult"/> was called.
     /// </summary>
-    private ArchetypeMatchResult? result;
+    private ArchetypeMatches? result;
     private readonly ReaderWriterLockSlim resultLock = new();
     private readonly OrderedListSet<ComponentId> temporarySet = [];
 
@@ -121,9 +121,12 @@ public sealed class QueryDescription
     /// <summary>
     /// Get all archetypes which match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ArchetypeMatch> GetArchetypeMatches()
+    /// <remarks>
+    /// Enumerating over this will slightly allocate due to the List enumerator being boxed.
+    /// </remarks>
+    public IReadOnlyList<Archetype> GetArchetypesList()
     {
-        return GetArchetypeMatchResult().ArchetypesMatches;
+        return GetArchetypeMatchResult().Archetypes;
     }
 
     /// <summary>
@@ -158,7 +161,7 @@ public sealed class QueryDescription
         return matchResult.ArchetypeSet.Contains(archetype);
     }
 
-    private ArchetypeMatchResult GetArchetypeMatchResult()
+    private ArchetypeMatches GetArchetypeMatchResult()
     {
         // Quickly check if we already have a non-stale result
         resultLock.EnterReadLock();
@@ -192,7 +195,7 @@ public sealed class QueryDescription
                 }
 
                 // Store result for next time
-                result = new ArchetypeMatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
+                result = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
                 return result.Value;
@@ -222,12 +225,12 @@ public sealed class QueryDescription
                 if (newMatches == null)
                 {
                     // Copy is null, meaning nothing new was found, just use the old result with the new watermark
-                    result = new ArchetypeMatchResult(World.Archetypes.Length, result.Value.ArchetypesMatches);
+                    result = new ArchetypeMatches(World.Archetypes.Length, result.Value.ArchetypesMatches);
                 }
                 else
                 {
                     // Create a new match result
-                    result = new ArchetypeMatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
+                    result = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
                 }
             }
 
@@ -268,44 +271,31 @@ public sealed class QueryDescription
             }
         }
 
-        // Use the temp hashset to do this
-        var set = temporarySet;
-        set.Clear();
-
         // Apply the ExactlyOne filter
-        var exactlyOne = default(ComponentId?);
         if (ExactlyOne.Count > 0)
         {
-            set.Clear();
-            set.UnionWith(archetype.Components);
-            set.IntersectWith(ExactlyOne);
-            if (set.Count != 1)
+            temporarySet.Clear();
+            temporarySet.UnionWith(archetype.Components);
+            temporarySet.IntersectWith(ExactlyOne);
+            if (temporarySet.Count != 1)
             {
-                set.Clear();
+                temporarySet.Clear();
                 return false;
             }
-
-            exactlyOne = set.Single();
         }
 
         // Apply the AtLeastOne filter
         if (AtLeastOne.Count > 0)
         {
-            set.Clear();
-            set.UnionWith(archetype.Components);
-            set.IntersectWith(AtLeastOne);
-            if (set.Count == 0)
+            temporarySet.Clear();
+            temporarySet.UnionWith(archetype.Components);
+            temporarySet.IntersectWith(AtLeastOne);
+            if (temporarySet.Count == 0)
             {
-                set.Clear();
+                temporarySet.Clear();
                 return false;
             }
         }
-        else
-        {
-            set.Clear();
-            set = null;
-        }
-        var atLeastOne = set?.ToImmutable();
 
         // Apply the NotAll filter
         if (NotAll.Count > 0 && archetype.Components.IsSupersetOf(NotAll))
@@ -313,12 +303,13 @@ public sealed class QueryDescription
             return false;
         }
 
-        match = new ArchetypeMatch(archetype, atLeastOne, exactlyOne);
+        temporarySet.Clear();
+        match = new ArchetypeMatch(archetype);
 
         return true;
     }
 
-    private readonly struct ArchetypeMatchResult
+    private readonly struct ArchetypeMatches
     {
         /// <summary>
         /// The archetypes matching this query.
@@ -340,7 +331,7 @@ public sealed class QueryDescription
         /// </summary>
         public int ArchetypeWatermark { get; }
 
-        public ArchetypeMatchResult(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
+        public ArchetypeMatches(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
         {
             ArchetypesMatches = archetypesMatches;
             ArchetypeWatermark = watermark;
@@ -361,12 +352,9 @@ public sealed class QueryDescription
     }
 
     /// <summary>
-    /// An archetype which matches a query.
+    /// An archetype that matched a query.
     /// </summary>
-    /// <param name="Archetype">The archetype.</param>
-    /// <param name="AtLeastOne">All of the "at least one" components present (if there are any in this query).</param>
-    /// <param name="ExactlyOne">The "exactly one" component present (if there is one in this query).</param>
-    public readonly record struct ArchetypeMatch(Archetype Archetype, ImmutableOrderedListSet<ComponentId>? AtLeastOne, ComponentId? ExactlyOne) : IComparable<ArchetypeMatch>
+    private readonly record struct ArchetypeMatch(Archetype Archetype) : IComparable<ArchetypeMatch>
     {
         /// <inheritdoc/>
         public int CompareTo(ArchetypeMatch other)
@@ -448,7 +436,7 @@ public sealed class QueryDescription
     /// </summary>
     public Entity SingleOrDefault()
     {
-        Entity result = default;
+        Entity entity = default;
         foreach (var archetype in GetArchetypes())
         {
             if (archetype.EntityCount == 0)
@@ -463,13 +451,13 @@ public sealed class QueryDescription
                     continue;
                 }
 
-                GuardUtility.IsFalse(chunk.EntityCount > 1 || result.IsAlive, "QueryDescription.SingleOrDefault() found more than one matching entity");
+                GuardUtility.IsFalse(chunk.EntityCount > 1 || entity.IsAlive, "QueryDescription.SingleOrDefault() found more than one matching entity");
 
-                result = chunk.Entities[0];
+                entity = chunk.Entities[0];
             }
         }
 
-        return result;
+        return entity;
     }
 
     /// <summary>
