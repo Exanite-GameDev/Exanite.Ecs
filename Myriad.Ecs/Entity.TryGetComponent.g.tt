@@ -1,5 +1,7 @@
 <#@ template language="C#" #>
 <#@ import namespace="System.Linq" #>
+#nullable enable
+
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs;
