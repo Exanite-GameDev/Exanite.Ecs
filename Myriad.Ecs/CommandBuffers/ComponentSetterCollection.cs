@@ -6,7 +6,8 @@ using Exanite.Myriad.Ecs.Worlds;
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
-/// Collection of components of all different types, keyed by ComponentId, involves no boxing.
+/// Contains collections of components to be set onto entities.
+/// Involves no boxing.
 /// </summary>
 internal class ComponentSetterCollection
 {
@@ -51,12 +52,12 @@ internal class ComponentSetterCollection
     public readonly struct SetterId
     {
         /// <summary>
-        /// Component ID of the component being overwritten
+        /// Component ID of the component being overwritten.
         /// </summary>
         internal readonly ComponentId ComponentId;
 
         /// <summary>
-        /// Index of the setter in the setters list
+        /// Index of the setter in the setters list.
         /// </summary>
         internal readonly int Index;
 
