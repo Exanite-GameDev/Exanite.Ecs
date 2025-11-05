@@ -87,6 +87,11 @@ internal class ComponentSetterCollection
 
         public void Overwrite(SetterId index, T value)
         {
+            if (value is IDisposable)
+            {
+                ((IDisposable)values[index.Index]).Dispose();
+            }
+
             values[index.Index] = value;
         }
 
