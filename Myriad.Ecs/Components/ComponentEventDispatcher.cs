@@ -1,3 +1,4 @@
+using System;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Events;
 
@@ -14,16 +15,32 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 {
     public override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, EcsWorld world, Entity entity)
     {
-        world.EventBus.Raise(new ComponentAdded<T>(recursiveCommandBuffer, entity, ref entity.GetComponent<T>()));
+        ref var component = ref entity.GetComponent<T>();
+
+        // ReSharper disable once MergeCastWithTypeCheck
+        if (component is IComponentSelfReference<T>)
+        {
+            ((IComponentSelfReference<T>)component).Self = entity.GetStorableComponent<T>();
+        }
+
+        world.EventBus.Raise(new ComponentAdded<T>(recursiveCommandBuffer, entity, ref component));
     }
 
     public override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, EcsWorld world, Entity entity)
     {
-        world.EventBus.Raise(new ComponentModified<T>(recursiveCommandBuffer, entity, ref entity.GetComponent<T>()));
+        ref var component = ref entity.GetComponent<T>();
+        world.EventBus.Raise(new ComponentModified<T>(recursiveCommandBuffer, entity, ref component));
     }
 
     public override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, EcsWorld world, Entity entity)
     {
-        world.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref entity.GetComponent<T>()));
+        ref var component = ref entity.GetComponent<T>();
+        world.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
+
+        // ReSharper disable once MergeCastWithTypeCheck
+        if (component is IDisposable)
+        {
+            ((IDisposable)component).Dispose();
+        }
     }
 }
