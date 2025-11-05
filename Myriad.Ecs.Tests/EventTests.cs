@@ -331,7 +331,6 @@ public class EventTests
         Assert.That(handler.ComponentModifiedCount, Is.EqualTo(entityAddCount));
     }
 
-    // TODO: Consider changing behavior
     [Test]
     public void SetComponent_Twice_InSameCommandBuffer_OnBufferedEntity_OnlyRaisesComponentAddedEvent()
     {
@@ -355,7 +354,6 @@ public class EventTests
         Assert.That(handler.ComponentModifiedCount, Is.EqualTo(0));
     }
 
-    // TODO: Consider changing behavior
     [Test]
     public void SetComponent_Twice_InSameCommandBuffer_OnWorldEntity_OnlyRaisesComponentAddedEvent()
     {
