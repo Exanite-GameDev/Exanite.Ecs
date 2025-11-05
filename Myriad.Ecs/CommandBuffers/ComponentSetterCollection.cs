@@ -69,21 +69,15 @@ internal class ComponentSetterCollection
 
     private interface IComponentList
     {
+        public void Write(int index, EntityStorageLocation location);
+
         public void Clear();
-
-        void Recycle();
-
-        void Write(int index, EntityStorageLocation location);
+        public void Recycle();
     }
 
     private class GenericComponentList<T> : IComponentList where T : IComponent
     {
         private readonly List<T> values = [];
-
-        public void Clear()
-        {
-            values.Clear();
-        }
 
         public int Add(T value)
         {
@@ -94,6 +88,11 @@ internal class ComponentSetterCollection
         public void Overwrite(SetterId index, T value)
         {
             values[index.Index] = value;
+        }
+
+        public void Clear()
+        {
+            values.Clear();
         }
 
         public void Recycle()
