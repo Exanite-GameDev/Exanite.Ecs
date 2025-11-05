@@ -59,7 +59,7 @@ public sealed partial class EcsCommandBuffer
 
     private readonly List<BufferedEntityData> bufferedEntities = [];
 
-    private readonly Dictionary<Entity, EntityModificationData> entityModifications = [];
+    private readonly Dictionary<Entity, QueuedEntityModification> entityModifications = [];
 
     private readonly List<Entity> destroys = [];
     private readonly List<QueryDescription> queryDestroys = [];
@@ -119,22 +119,22 @@ public sealed partial class EcsCommandBuffer
         EnsureNotExecuting();
         HasBufferedOperations = true;
 
-        var mod = GetModificationData(entity, true, false);
+        var modification = GetQueuedModification(entity, true, false);
 
         // Create a setter and store it in the list (recycling the old one, if it's there)
         var id = ComponentId.Get<T>();
-        if (mod.Sets!.TryGetValue(id, out var existing))
+        if (modification.Sets!.TryGetValue(id, out var existing))
         {
             setters.Overwrite(existing, value);
         }
         else
         {
             var index = setters.Add(value);
-            mod.Sets!.Add(id, index);
+            modification.Sets!.Add(id, index);
         }
 
         // Remove it from the "remove" set. In case it was previously removed
-        mod.Removes?.Remove(id);
+        modification.Removes?.Remove(id);
 
         return this;
     }
@@ -147,14 +147,14 @@ public sealed partial class EcsCommandBuffer
         EnsureNotExecuting();
         HasBufferedOperations = true;
 
-        var mod = GetModificationData(entity, false, true);
+        var modification = GetQueuedModification(entity, false, true);
 
         // Add a remover to the list
         var id = ComponentId.Get<T>();
-        mod.Removes!.Add(id);
+        modification.Removes!.Add(id);
 
         // Remove it from the setters, if it's there
-        mod.Sets?.Remove(id);
+        modification.Sets?.Remove(id);
 
         return this;
     }
@@ -573,46 +573,46 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
+    private QueuedEntityModification GetQueuedModification(Entity entity, bool ensureSet, bool ensureRemove)
     {
         // Add it if it's missing
         if (!entityModifications.TryGetValue(entity, out var existing))
         {
-            var mod = new EntityModificationData(
+            var modification = new QueuedEntityModification(
                 ensureSet ? SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire() : null,
                 ensureRemove ? SimplePool<OrderedListSet<ComponentId>>.Acquire() : null
             );
-            mod.Sets?.Clear();
-            mod.Removes?.Clear();
+            modification.Sets?.Clear();
+            modification.Removes?.Clear();
 
-            entityModifications.Add(entity, mod);
+            entityModifications.Add(entity, modification);
 
-            return mod;
+            return modification;
         }
         else
         {
             // Found it, now modify it (if necessary)
-            var mod = existing;
+            var modification = existing;
 
-            var overwrite = false;
-            if (mod.Sets == null && ensureSet)
+            var needsUpdate = false;
+            if (modification.Sets == null && ensureSet)
             {
-                mod.Sets = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
-                overwrite = true;
+                modification.Sets = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
+                needsUpdate = true;
             }
 
-            if (mod.Removes == null && ensureRemove)
+            if (modification.Removes == null && ensureRemove)
             {
-                mod.Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
-                overwrite = true;
+                modification.Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
+                needsUpdate = true;
             }
 
-            if (overwrite)
+            if (needsUpdate)
             {
-                entityModifications[entity] = mod;
+                entityModifications[entity] = modification;
             }
 
-            return mod;
+            return modification;
         }
     }
 
@@ -721,5 +721,5 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private record struct EntityModificationData(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
+    private record struct QueuedEntityModification(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
 }
