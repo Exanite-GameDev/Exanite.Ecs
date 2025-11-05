@@ -22,23 +22,23 @@ public class EntityModifyBenchmark
         world = new EcsWorld();
 
         // Create initial entities
-        var rng = new Random(1);
-        var buffer = world.AcquireCommandBuffer();
+        var random = new Random(1);
+        var commandBuffer = world.AcquireCommandBuffer();
         for (var i = 0; i < Count; i++)
         {
-            CreateEntity(buffer, rng);
+            CreateEntity(commandBuffer, random);
         }
 
-        var resolver = buffer.Execute();
+        var resolver = commandBuffer.Execute();
         for (var i = 0; i < resolver.Count; i++)
         {
             entities.Add(resolver[i]);
         }
     }
 
-    private static void CreateEntity(EcsCommandBuffer buffer, Random random)
+    private static void CreateEntity(EcsCommandBuffer commandBuffer, Random random)
     {
-        var entity = buffer.Create();
+        var entity = commandBuffer.Create();
 
         for (var i = 0; i < 5; i++)
         {
@@ -53,17 +53,17 @@ public class EntityModifyBenchmark
         }
     }
 
-    private static void ModifyEntity(EcsCommandBuffer buffer, Random random, Entity entity)
+    private static void ModifyEntity(EcsCommandBuffer commandBuffer, Random random, Entity entity)
     {
         for (var i = 0; i < 5; i++)
         {
             switch (random.Next(0, 6))
             {
-                case 0: buffer.Set(entity, new ComponentByte((byte)i)); break;
-                case 1: buffer.Set(entity, new ComponentInt16((short)i)); break;
-                case 2: buffer.Set(entity, new ComponentFloat(i)); break;
-                case 3: buffer.Set(entity, new ComponentInt32(i)); break;
-                case 4: buffer.Set(entity, new ComponentInt64(i)); break;
+                case 0: commandBuffer.Set(entity, new ComponentByte((byte)i)); break;
+                case 1: commandBuffer.Set(entity, new ComponentInt16((short)i)); break;
+                case 2: commandBuffer.Set(entity, new ComponentFloat(i)); break;
+                case 3: commandBuffer.Set(entity, new ComponentInt32(i)); break;
+                case 4: commandBuffer.Set(entity, new ComponentInt64(i)); break;
                 case 5: break;
             }
         }
@@ -73,14 +73,14 @@ public class EntityModifyBenchmark
     public void IterationSetup()
     {
         // Setup modifications in a buffer
-        var rng = new Random();
-        var ready = world.AcquireCommandBuffer();
+        var random = new Random();
+        var commandBuffer = world.AcquireCommandBuffer();
         foreach (var entity in entities)
         {
-            ModifyEntity(ready, rng, entity);
+            ModifyEntity(commandBuffer, random, entity);
         }
 
-        this.ready = ready;
+        this.ready = commandBuffer;
     }
 
     [Benchmark]

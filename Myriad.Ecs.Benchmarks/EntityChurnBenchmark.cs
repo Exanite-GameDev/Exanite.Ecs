@@ -22,7 +22,7 @@ public class EntityChurnBenchmark
     [Benchmark]
     public void Churn()
     {
-        // keep track of every single entity currently alive
+        // Keep track of every single entity currently alive
         var alive = new List<Entity>();
 
         // Do lots of rounds of creation and destruction

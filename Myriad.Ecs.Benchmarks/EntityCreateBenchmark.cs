@@ -39,27 +39,27 @@ public class EntityCreateBenchmark
     [Benchmark]
     public void CreateBuffered()
     {
-        var rng = new Random(1);
-        var buffer = world.AcquireCommandBuffer();
+        var random = new Random(1);
+        var commandBuffer = world.AcquireCommandBuffer();
 
         for (var i = 0; i < Count; i++)
         {
-            AddEntity(buffer, rng);
+            AddEntity(commandBuffer, random);
         }
 
-        buffer.Execute();
+        commandBuffer.Execute();
     }
 
     [Benchmark]
     public void CreateUnbuffered()
     {
-        var rng = new Random(1);
-        var buffer = world.AcquireCommandBuffer();
+        var random = new Random(1);
+        var commandBuffer = world.AcquireCommandBuffer();
 
         for (var i = 0; i < Count; i++)
         {
-            AddEntity(buffer, rng);
-            buffer.Execute();
+            AddEntity(commandBuffer, random);
+            commandBuffer.Execute();
         }
     }
 }
