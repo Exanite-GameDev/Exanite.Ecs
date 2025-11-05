@@ -23,6 +23,13 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
             ((IComponentSelfReference<T>)component).Self = entity.GetStorableComponent<T>();
         }
 
+        // ReSharper disable once MergeCastWithTypeCheck
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        if (component is IComponentSetup)
+        {
+            ((IComponentSetup)component).Setup();
+        }
+
         world.EventBus.Raise(new ComponentAdded<T>(recursiveCommandBuffer, entity, ref component));
     }
 
@@ -36,6 +43,13 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
     {
         ref var component = ref entity.GetComponent<T>();
         world.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
+
+        // ReSharper disable once MergeCastWithTypeCheck
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        if (component is IComponentTeardown)
+        {
+            ((IComponentTeardown)component).Teardown();
+        }
 
         // ReSharper disable once MergeCastWithTypeCheck
         if (component is IDisposable)
