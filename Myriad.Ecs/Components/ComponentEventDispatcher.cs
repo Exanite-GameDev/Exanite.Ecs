@@ -11,19 +11,24 @@ internal abstract class ComponentEventDispatcher
     public abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, EcsWorld world, Entity entity);
     public abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, EcsWorld world, Entity entity);
 
-    internal static void SetSelf<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
+    internal static void SelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
     {
         component.Self = entity.GetStorableComponent<T>();
     }
 
-    internal static void Setup<T>(ref T component) where T : IComponent, IComponentSetup
+    internal static void SelfAdded<T>(ref T component) where T : IComponent, IComponentSelfAdded
     {
-        component.Setup();
+        component.OnAdded();
     }
 
-    internal static void Teardown<T>(ref T component) where T : IComponent, IComponentTeardown
+    internal static void SelfSet<T>(ref T component) where T : IComponent, IComponentSelfSet
     {
-        component.Teardown();
+        component.OnSet();
+    }
+
+    internal static void SelfRemoved<T>(ref T component) where T : IComponent, IComponentSelfRemoved
+    {
+        component.OnRemoved();
     }
 
     internal static void Dispose<T>(ref T component) where T : IComponent, IDisposable
@@ -34,44 +39,50 @@ internal abstract class ComponentEventDispatcher
 
 internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : IComponent
 {
-    private delegate void SetSelfAction(ref T component, Entity entity);
-    private delegate void SetupAction(ref T component);
-    private delegate void TeardownAction(ref T component);
-    private delegate void DisposeAction(ref T component);
+    private delegate void SelfReferenceAction(ref T component, Entity entity);
+    private delegate void ComponentAction(ref T component);
 
-    private readonly SetSelfAction? setSelf;
-    private readonly SetupAction? setup;
-    private readonly TeardownAction? teardown;
-    private readonly DisposeAction? dispose;
+    private readonly SelfReferenceAction? selfReference;
+    private readonly ComponentAction? selfAdded;
+    private readonly ComponentAction? selfSet;
+    private readonly ComponentAction? selfRemoved;
+    private readonly ComponentAction? dispose;
 
     public ComponentEventDispatcher()
     {
         if (typeof(T).IsAssignableTo(typeof(IComponentSelfReference<T>)))
         {
-            setSelf = (SetSelfAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SetSelf), BindingFlags.NonPublic | BindingFlags.Static)!
+            selfReference = (SelfReferenceAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfReference), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(SetSelfAction), null);
+                .CreateDelegate(typeof(SelfReferenceAction), null);
         }
 
-        if (typeof(T).IsAssignableTo(typeof(IComponentSetup)))
+        if (typeof(T).IsAssignableTo(typeof(IComponentSelfAdded)))
         {
-            setup = (SetupAction)typeof(ComponentEventDispatcher).GetMethod(nameof(Setup), BindingFlags.NonPublic | BindingFlags.Static)!
+            selfAdded = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfAdded), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(SetupAction), null);
+                .CreateDelegate(typeof(ComponentAction), null);
         }
 
-        if (typeof(T).IsAssignableTo(typeof(IComponentTeardown)))
+        if (typeof(T).IsAssignableTo(typeof(IComponentSelfSet)))
         {
-            teardown = (TeardownAction)typeof(ComponentEventDispatcher).GetMethod(nameof(Teardown), BindingFlags.NonPublic | BindingFlags.Static)!
+            selfSet = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfSet), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(TeardownAction), null);
+                .CreateDelegate(typeof(ComponentAction), null);
+        }
+
+        if (typeof(T).IsAssignableTo(typeof(IComponentSelfRemoved)))
+        {
+            selfRemoved = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
+                .MakeGenericMethod(typeof(T))
+                .CreateDelegate(typeof(ComponentAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IDisposable)))
         {
-            dispose = (DisposeAction)typeof(ComponentEventDispatcher).GetMethod(nameof(Dispose), BindingFlags.NonPublic | BindingFlags.Static)!
+            dispose = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(Dispose), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(DisposeAction), null);
+                .CreateDelegate(typeof(ComponentAction), null);
         }
     }
 
@@ -81,12 +92,12 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
         if (component is IComponentSelfReference<T>)
         {
-            setSelf!.Invoke(ref component, entity);
+            selfReference!.Invoke(ref component, entity);
         }
 
-        if (component is IComponentSetup)
+        if (component is IComponentSelfAdded)
         {
-            setup!.Invoke(ref component);
+            selfAdded!.Invoke(ref component);
         }
 
         world.EventBus.Raise(new ComponentAdded<T>(recursiveCommandBuffer, entity, ref component));
@@ -95,6 +106,12 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
     public override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, EcsWorld world, Entity entity)
     {
         ref var component = ref entity.GetComponent<T>();
+
+        if (component is IComponentSelfSet)
+        {
+            selfSet!.Invoke(ref component);
+        }
+
         world.EventBus.Raise(new ComponentModified<T>(recursiveCommandBuffer, entity, ref component));
     }
 
@@ -103,9 +120,9 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
         ref var component = ref entity.GetComponent<T>();
         world.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
 
-        if (component is IComponentTeardown)
+        if (component is IComponentSelfRemoved)
         {
-            teardown!.Invoke(ref component);
+            selfRemoved!.Invoke(ref component);
         }
 
         if (component is IDisposable)

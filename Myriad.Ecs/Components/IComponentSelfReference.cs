@@ -6,7 +6,7 @@ public interface IComponentSelfReference<T> where T : IComponent
     /// A reference to this component when attached to an entity.
     /// </summary>
     /// <remarks>
-    /// This will be set before <see cref="IComponentSetup"/>'s <see cref="IComponentSetup.Setup()"/> is called.
+    /// This will be set before <see cref="IComponentSelfAdded"/>'s <see cref="IComponentSelfAdded.Added"/> is called.
     /// </remarks>
     public ComponentRef<T> Self { get; set; }
 }
