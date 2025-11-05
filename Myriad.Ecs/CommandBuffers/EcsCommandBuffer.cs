@@ -119,7 +119,22 @@ public sealed partial class EcsCommandBuffer
         EnsureNotExecuting();
         HasBufferedOperations = true;
 
-        SetInternal(entity, value);
+        var mod = GetModificationData(entity, true, false);
+
+        // Create a setter and store it in the list (recycling the old one, if it's there)
+        var id = ComponentId.Get<T>();
+        if (mod.Sets!.TryGetValue(id, out var existing))
+        {
+            setters.Overwrite(existing, value);
+        }
+        else
+        {
+            var index = setters.Add(value);
+            mod.Sets!.Add(id, index);
+        }
+
+        // Remove it from the "remove" set. In case it was previously removed
+        mod.Removes?.Remove(id);
 
         return this;
     }
@@ -556,26 +571,6 @@ public sealed partial class EcsCommandBuffer
                 bufferedEntities[(int)id] = bufferedEntity;
             }
         }
-    }
-
-    private void SetInternal<T>(Entity entity, T value) where T : IComponent
-    {
-        var mod = GetModificationData(entity, true, false);
-
-        // Create a setter and store it in the list (recycling the old one, if it's there)
-        var id = ComponentId.Get<T>();
-        if (mod.Sets!.TryGetValue(id, out var existing))
-        {
-            setters.Overwrite(existing, value);
-        }
-        else
-        {
-            var index = setters.Add(value);
-            mod.Sets!.Add(id, index);
-        }
-
-        // Remove it from the "remove" set. In case it was previously removed
-        mod.Removes?.Remove(id);
     }
 
     private EntityModificationData GetModificationData(Entity entity, bool ensureSet, bool ensureRemove)
