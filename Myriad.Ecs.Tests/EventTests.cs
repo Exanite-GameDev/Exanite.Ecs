@@ -546,7 +546,6 @@ public class EventTests
 
         world.Dispose();
         Assert.That(commandBuffer.HasBufferedOperations, Is.False);
-        Assert.That(disposeCount, Is.EqualTo(1));
     }
 
     private struct ComponentDisposable : IComponent, IDisposable

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
@@ -47,7 +48,9 @@ public sealed class EcsWorld : ITrackedDisposable
 
     internal readonly Dictionary<QueryCacheKey, QueryDescription> QueryDescriptionCache = new();
 
+    private readonly Lock commandBufferPoolLock = new();
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
+    private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
 
     public EventBus EventBus { get; } = new();
 
@@ -55,7 +58,15 @@ public sealed class EcsWorld : ITrackedDisposable
     {
         commandBufferPool = new Pool<EcsCommandBuffer>(
             create: () => new EcsCommandBuffer(this),
-            onRelease: commandBuffer => commandBuffer.Clear());
+            onAcquire: commandBuffer =>
+            {
+                activeCommandBuffers.Add(commandBuffer);
+            },
+            onRelease: commandBuffer =>
+            {
+                commandBuffer.Clear();
+                activeCommandBuffers.Remove(commandBuffer);
+            });
     }
 
     /// <inheritdoc/>
@@ -74,6 +85,13 @@ public sealed class EcsWorld : ITrackedDisposable
         commandBuffer.Destroy(allEntitiesQuery);
         commandBuffer.Execute();
 
+        // Clear all active command buffers
+        foreach (var activeCommandBuffer in activeCommandBuffers)
+        {
+            activeCommandBuffer.Clear();
+        }
+        activeCommandBuffers.Clear();
+
         // Clear event handlers
         EventBus.Dispose();
 
@@ -87,7 +105,7 @@ public sealed class EcsWorld : ITrackedDisposable
 
     public Pool<EcsCommandBuffer>.Handle AcquireCommandBuffer(out EcsCommandBuffer value)
     {
-        lock (commandBufferPool)
+        lock (commandBufferPoolLock)
         {
             return commandBufferPool.Acquire(out value);
         }
@@ -95,7 +113,7 @@ public sealed class EcsWorld : ITrackedDisposable
 
     public EcsCommandBuffer AcquireCommandBuffer()
     {
-        lock (commandBufferPool)
+        lock (commandBufferPoolLock)
         {
             return commandBufferPool.Acquire();
         }
@@ -103,7 +121,7 @@ public sealed class EcsWorld : ITrackedDisposable
 
     public void ReleaseCommandBuffer(EcsCommandBuffer value)
     {
-        lock (commandBufferPool)
+        lock (commandBufferPoolLock)
         {
             commandBufferPool.Release(value);
         }
