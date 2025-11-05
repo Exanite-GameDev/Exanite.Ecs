@@ -94,7 +94,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public BufferedEntity Create()
     {
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
         // Get a set to hold all of the component setters
@@ -114,7 +114,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Set<T>(Entity entity, T value) where T : IComponent
     {
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
         var modification = GetBufferedModification(entity, true, false);
@@ -142,7 +142,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Remove<T>(Entity entity) where T : IComponent
     {
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
         var modification = GetBufferedModification(entity, false, true);
@@ -162,7 +162,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Destroy(Entity entity)
     {
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
         destroys.Add(entity);
@@ -175,7 +175,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Destroy(List<Entity> entities)
     {
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
         destroys.AddRange(entities);
@@ -188,7 +188,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBuffer Destroy(QueryDescription entities)
     {
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
         GuardUtility.IsTrue(entities.World == World, "Cannot use query description from one world with a command buffer for another world");
         HasBufferedOperations = true;
 
@@ -202,7 +202,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsCommandBufferResolver Execute()
     {
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
 
         var resolver = GetWriteableResolver();
         if (!HasBufferedOperations)
@@ -254,7 +254,7 @@ public sealed partial class EcsCommandBuffer
             return;
         }
 
-        EnsureIsExternalMutable();
+        EnsureIsExternallyMutable();
 
         setters.Clear(true);
 
@@ -673,7 +673,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Used to check if it is safe for external calls to modify the command buffer.
     /// </summary>
-    private void EnsureIsExternalMutable()
+    private void EnsureIsExternallyMutable()
     {
         GuardUtility.IsFalse(World.IsDisposed, "World has been disposed");
         GuardUtility.IsFalse(IsExecuting, "Command buffer is currently executing");
