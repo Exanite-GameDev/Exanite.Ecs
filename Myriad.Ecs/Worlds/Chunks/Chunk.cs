@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Allocations;
+using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
