@@ -59,7 +59,7 @@ public sealed partial class EcsCommandBuffer
 
     private readonly List<BufferedEntityData> bufferedEntities = [];
 
-    private readonly Dictionary<Entity, QueuedEntityModification> entityModifications = [];
+    private readonly Dictionary<Entity, BufferedEntityModification> entityModifications = [];
 
     private readonly List<Entity> destroys = [];
     private readonly List<QueryDescription> queryDestroys = [];
@@ -119,7 +119,7 @@ public sealed partial class EcsCommandBuffer
         EnsureNotExecuting();
         HasBufferedOperations = true;
 
-        var modification = GetQueuedModification(entity, true, false);
+        var modification = GetBufferedModification(entity, true, false);
 
         // Create a setter and store it in the list (recycling the old one, if it's there)
         var id = ComponentId.Get<T>();
@@ -147,7 +147,7 @@ public sealed partial class EcsCommandBuffer
         EnsureNotExecuting();
         HasBufferedOperations = true;
 
-        var modification = GetQueuedModification(entity, false, true);
+        var modification = GetBufferedModification(entity, false, true);
 
         // Add a remover to the list
         var id = ComponentId.Get<T>();
@@ -573,11 +573,11 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private QueuedEntityModification GetQueuedModification(Entity entity, bool ensureSet, bool ensureRemove)
+    private BufferedEntityModification GetBufferedModification(Entity entity, bool ensureSet, bool ensureRemove)
     {
         if (!entityModifications.TryGetValue(entity, out var modification))
         {
-            modification = new QueuedEntityModification(null, null);
+            modification = new BufferedEntityModification(null, null);
             entityModifications[entity] = modification;
         }
 
@@ -709,5 +709,5 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private record struct QueuedEntityModification(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
+    private record struct BufferedEntityModification(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
 }
