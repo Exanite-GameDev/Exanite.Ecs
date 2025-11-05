@@ -320,11 +320,6 @@ public sealed partial class EcsCommandBuffer
         {
             foreach (var archetype in query.GetArchetypes())
             {
-                if (archetype.EntityCount == 0)
-                {
-                    continue;
-                }
-
                 DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
             }
         }
@@ -332,14 +327,8 @@ public sealed partial class EcsCommandBuffer
 
         foreach (var entity in destroys)
         {
-            // Skip destroyed entities
-            if (!entity.IsAlive)
-            {
-                continue;
-            }
-
             // Destroy entity
-            DestroyEntity(recursiveCommandBuffer, entity.EntityId);
+            DestroyEntity(recursiveCommandBuffer, entity);
 
             // Return objects to pools
             if (entityModifications.Remove(entity, out var mod))
@@ -604,17 +593,20 @@ public sealed partial class EcsCommandBuffer
         return modification;
     }
 
-    private void DestroyEntity(EcsCommandBuffer recursiveCommandBuffer, EntityId entityId)
+    private void DestroyEntity(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
-        // Get entity
-        var entity = entityId.ToEntity(World);
+        // Ignore destroyed entities
+        if (!entity.IsAlive)
+        {
+            return;
+        }
 
         // Get the location for this entity
-        ref var location = ref World.Entities[entityId.Id];
+        ref var location = ref World.Entities[entity.Id];
 
         // Check this is still a valid entity reference. Early exit if the entity
         // is already dead.
-        if (location.Version != entityId.Version)
+        if (location.Version != entity.Version)
         {
             return;
         }
@@ -636,11 +628,16 @@ public sealed partial class EcsCommandBuffer
         location.Version++;
 
         // Store this ID for re-use later
-        World.DeadEntities.Add(entityId);
+        World.DeadEntities.Add(entity.EntityId);
     }
 
     private void DestroyArchetypeEntities(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
     {
+        if (archetype.EntityCount == 0)
+        {
+            return;
+        }
+
         // Mark all of the IDs as dead (as long as they haven't become phantoms)
         World.DeadEntities.EnsureCapacity(World.DeadEntities.Count + archetype.EntityCount);
         foreach (var chunk in archetype.Chunks)
