@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using Exanite.Core.Pooling;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds;
@@ -68,8 +67,6 @@ internal class ComponentSetterCollection
         }
     }
 
-    #region Component list
-
     private interface IComponentList
     {
         public void Clear();
@@ -79,7 +76,6 @@ internal class ComponentSetterCollection
         void Write(int index, EntityStorageLocation location);
     }
 
-    [DebuggerDisplay("Count = {values.Count}")]
     private class GenericComponentList<T> : IComponentList where T : IComponent
     {
         private readonly List<T> values = [];
@@ -111,6 +107,4 @@ internal class ComponentSetterCollection
             location.GetMutable<T>() = values[index];
         }
     }
-
-    #endregion
 }
