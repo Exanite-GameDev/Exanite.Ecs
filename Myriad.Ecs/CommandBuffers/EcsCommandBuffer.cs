@@ -228,7 +228,7 @@ public sealed partial class EcsCommandBuffer
             ApplyStructuralChanges(recursiveCommandBuffer);
 
             // Clear all temporary state
-            setters.Clear();
+            setters.Clear(false);
             entityModifications.Clear();
             archetypeEdges.Clear();
 
@@ -256,7 +256,7 @@ public sealed partial class EcsCommandBuffer
 
         EnsureIsExternalMutable();
 
-        setters.Clear();
+        setters.Clear(true);
 
         foreach (var bufferedEntity in bufferedEntities)
         {

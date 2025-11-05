@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Exanite.Core.Pooling;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds;
@@ -13,11 +14,11 @@ internal class ComponentSetterCollection
 {
     private readonly Dictionary<ComponentId, IComponentList> components = [];
 
-    public void Clear()
+    public void Clear(bool disposeComponents)
     {
         foreach (var (_, value) in components)
         {
-            value.Recycle();
+            value.Recycle(disposeComponents);
         }
 
         components.Clear();
@@ -71,9 +72,7 @@ internal class ComponentSetterCollection
     private interface IComponentList
     {
         public void Write(int index, EntityStorageLocation location);
-
-        public void Clear();
-        public void Recycle();
+        public void Recycle(bool disposeComponents);
     }
 
     private class GenericComponentList<T> : IComponentList where T : IComponent
@@ -91,14 +90,17 @@ internal class ComponentSetterCollection
             values[index.Index] = value;
         }
 
-        public void Clear()
+        public void Recycle(bool disposeComponents)
         {
-            values.Clear();
-        }
+            if (disposeComponents && values.Count > 0 && values[0] is IDisposable)
+            {
+                foreach (var component in values)
+                {
+                    ((IDisposable)component).Dispose();
+                }
+            }
 
-        public void Recycle()
-        {
-            Clear();
+            values.Clear();
             SimplePool.Release(this);
         }
 
