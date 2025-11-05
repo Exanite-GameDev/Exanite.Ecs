@@ -77,7 +77,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>.
     /// </summary>
-    public EcsCommandBuffer(EcsWorld world)
+    internal EcsCommandBuffer(EcsWorld world)
     {
         World = world;
 

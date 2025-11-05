@@ -12,7 +12,7 @@ public class ArchetypeTests
     {
         var w = new EcsWorld();
 
-        var cb = new EcsCommandBuffer(w);
+        var cb = w.AcquireCommandBuffer();
         for (var i = 0; i < 10000; i++)
         {
             var e = cb.Create();

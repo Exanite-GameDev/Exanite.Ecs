@@ -40,7 +40,7 @@ public class EntityCreateBenchmark
     public void CreateBuffered()
     {
         var rng = new Random(1);
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         for (var i = 0; i < Count; i++)
         {
@@ -54,7 +54,7 @@ public class EntityCreateBenchmark
     public void CreateUnbuffered()
     {
         var rng = new Random(1);
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         for (var i = 0; i < Count; i++)
         {

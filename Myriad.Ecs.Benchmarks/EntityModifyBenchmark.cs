@@ -23,7 +23,7 @@ public class EntityModifyBenchmark
 
         // Create initial entities
         var rng = new Random(1);
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
         for (var i = 0; i < Count; i++)
         {
             CreateEntity(buffer, rng);
@@ -74,7 +74,7 @@ public class EntityModifyBenchmark
     {
         // Setup modifications in a buffer
         var rng = new Random();
-        var ready = new EcsCommandBuffer(world);
+        var ready = world.AcquireCommandBuffer();
         foreach (var entity in entities)
         {
             ModifyEntity(ready, rng, entity);

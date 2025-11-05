@@ -24,7 +24,7 @@ public class QueryBenchmark
     {
         world = new EcsWorld();
 
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
         var rng = new Random(2);
         for (var i = 0; i < EntityCount; i++)
         {

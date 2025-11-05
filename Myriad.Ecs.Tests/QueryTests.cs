@@ -209,7 +209,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(world);
 
-        var c = new EcsCommandBuffer(world);
+        var c = world.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
@@ -227,7 +227,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
 
@@ -259,7 +259,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
@@ -277,7 +277,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb1 = c.Create().Set(new Component0());
         var eb2 = c.Create().Set(new Component0());
 
@@ -309,7 +309,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
         c.Execute();
@@ -326,7 +326,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
@@ -344,7 +344,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         c.Create().Set(new Component0());
         c.Create().Set(new Component0());
         c.Execute();
@@ -373,7 +373,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
@@ -391,7 +391,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
@@ -421,7 +421,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
@@ -439,7 +439,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb = c.Create();
 
         c.Execute();
@@ -471,7 +471,7 @@ public class QueryTests
                .Include<Component0>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
 
         c.Execute();
@@ -491,7 +491,7 @@ public class QueryTests
                .Include<ComponentInt32>()
                .Build(w);
 
-        var c = new EcsCommandBuffer(w);
+        var c = w.AcquireCommandBuffer();
         for (var i = 0; i < 10000; i++)
         {
             c.Create().Set(new ComponentInt32(i));

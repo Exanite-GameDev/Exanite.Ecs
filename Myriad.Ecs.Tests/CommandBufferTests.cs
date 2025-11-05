@@ -16,7 +16,7 @@ public class EcsCommandBufferTests
     public void CreateCommandBuffer()
     {
         var world = new EcsWorld();
-        var commandBuffer = new EcsCommandBuffer(world);
+        var commandBuffer = world.AcquireCommandBuffer();
         Assert.That(commandBuffer, Is.Not.Null);
     }
 
@@ -24,7 +24,7 @@ public class EcsCommandBufferTests
     public void CreateEntity()
     {
         var world = new EcsWorld();
-        var commandBuffer = new EcsCommandBuffer(world);
+        var commandBuffer = world.AcquireCommandBuffer();
 
         var eb = commandBuffer.Create();
         Assert.That(eb.CommandBuffer, Is.EqualTo(commandBuffer));
@@ -41,7 +41,7 @@ public class EcsCommandBufferTests
     public void CreateManyEntities()
     {
         var world = new EcsWorld();
-        var commandBuffer = new EcsCommandBuffer(world);
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create lots of entities
         var buffered = new List<BufferedEntity>();
@@ -74,7 +74,7 @@ public class EcsCommandBufferTests
     public void ChurnCreateDestroy()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         var rng = new Random(46576);
 
@@ -158,7 +158,7 @@ public class EcsCommandBufferTests
             entities.Add(setupResolver[i]);
         }
 
-        var commandBuffer = new EcsCommandBuffer(world);
+        var commandBuffer = world.AcquireCommandBuffer();
         var random = new Random(551514);
         for (var i = 0; i < 16; i++)
         {
@@ -222,7 +222,7 @@ public class EcsCommandBufferTests
     public void ResolveBufferedEntity_AfterSecondExecute_Throws()
     {
         var world = new EcsWorld();
-        var commandBuffer = new EcsCommandBuffer(world);
+        var commandBuffer = world.AcquireCommandBuffer();
 
         var bufferedEntity = commandBuffer.Create();
         commandBuffer.Execute();
@@ -240,7 +240,7 @@ public class EcsCommandBufferTests
     public void ModifyBufferedEntity_AfterExecute_Throws()
     {
         var world = new EcsWorld();
-        var commandBuffer = new EcsCommandBuffer(world);
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create the entity
         var bufferedEntity = commandBuffer.Create();
@@ -257,7 +257,7 @@ public class EcsCommandBufferTests
     public void CreateEntityAndSet()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         var bufferedEntity = buffer
                 .Create()
@@ -276,7 +276,7 @@ public class EcsCommandBufferTests
     public void SetTwiceOnNewEntityWithOverwrite()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         var bufferedEntity = buffer.Create();
 
@@ -288,7 +288,7 @@ public class EcsCommandBufferTests
     public void DestroyEntity()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         var bufferedEntities = new[]
         {
@@ -326,7 +326,7 @@ public class EcsCommandBufferTests
     public void DestroyEntityTwice()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         buffer.Execute();
@@ -347,7 +347,7 @@ public class EcsCommandBufferTests
     public void DestroyDeadEntity()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create an entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
@@ -360,7 +360,7 @@ public class EcsCommandBufferTests
         buffer.Destroy(entity);
 
         // Destroy that entity before playing back the first buffer
-        var buffer2 = new EcsCommandBuffer(world);
+        var buffer2 = world.AcquireCommandBuffer();
         buffer2.Destroy(entity);
         buffer2.Execute();
         Assert.That(entity.IsAlive, Is.False);
@@ -375,7 +375,7 @@ public class EcsCommandBufferTests
     public void DestroyEntities()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         var buffered = new[]
         {
@@ -414,7 +414,7 @@ public class EcsCommandBufferTests
         var world1 = new EcsWorld();
         var world2 = new EcsWorld();
 
-        var cmd = new EcsCommandBuffer(world1);
+        var cmd = world1.AcquireCommandBuffer();
 
         var q = new QueryBuilder().Include<Component0>().Build(world2);
 
@@ -450,7 +450,7 @@ public class EcsCommandBufferTests
         var dead = q.FirstOrDefault();
 
         // Destroy it
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
         buffer.Destroy(q);
         buffer.Execute();
 
@@ -473,7 +473,7 @@ public class EcsCommandBufferTests
     public void ModifyThenDestroy()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create entity
         var buffered = buffer.Create().Set(new ComponentFloat(1));
@@ -502,7 +502,7 @@ public class EcsCommandBufferTests
     public void RemoveFromEntity()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
         var eb = buffer
@@ -525,7 +525,7 @@ public class EcsCommandBufferTests
     public void AddToEntity()
     {
         var world = new EcsWorld();
-        var commandBuffer = new EcsCommandBuffer(world);
+        var commandBuffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
         var bufferedEntity = commandBuffer
@@ -550,7 +550,7 @@ public class EcsCommandBufferTests
     public void SetOnEntity()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
         var eb = buffer
@@ -575,7 +575,7 @@ public class EcsCommandBufferTests
     public void SetTwiceOnEntity()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
         var eb = buffer
@@ -601,7 +601,7 @@ public class EcsCommandBufferTests
     public void SetThenRemoveOnEntity()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
         var eb = buffer
@@ -629,7 +629,7 @@ public class EcsCommandBufferTests
     public void RemoveInvalidComponent()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
         var eb = buffer
@@ -655,7 +655,7 @@ public class EcsCommandBufferTests
     public void RemoveAndSetComponent()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
         var eb = buffer
@@ -687,7 +687,7 @@ public class EcsCommandBufferTests
     public void CreateManyArchetypes()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create entities in lots of different archetypes. The idea is to
         // create so many the entity runs out of aggregation buffers.
@@ -765,7 +765,7 @@ public class EcsCommandBufferTests
     public void StructuralChanges()
     {
         var world = new EcsWorld();
-        var buffer = new EcsCommandBuffer(world);
+        var buffer = world.AcquireCommandBuffer();
 
         // Create some entities
         buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
@@ -822,7 +822,7 @@ public class EcsCommandBufferTests
     public void ClearSet()
     {
         var world = new EcsWorld();
-        var cmd = new EcsCommandBuffer(world);
+        var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -843,7 +843,7 @@ public class EcsCommandBufferTests
     public void ClearBufferedSet()
     {
         var world = new EcsWorld();
-        var cmd = new EcsCommandBuffer(world);
+        var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -862,7 +862,7 @@ public class EcsCommandBufferTests
     public void ResolveClearedEntity()
     {
         var world = new EcsWorld();
-        var cmd = new EcsCommandBuffer(world);
+        var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0());
@@ -880,7 +880,7 @@ public class EcsCommandBufferTests
     public void ClearBufferRemove()
     {
         var world = new EcsWorld();
-        var cmd = new EcsCommandBuffer(world);
+        var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());
@@ -900,7 +900,7 @@ public class EcsCommandBufferTests
     public void ClearBufferDestroy()
     {
         var world = new EcsWorld();
-        var cmd = new EcsCommandBuffer(world);
+        var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());
@@ -921,7 +921,7 @@ public class EcsCommandBufferTests
     public void ClearBufferDestroyArchetype()
     {
         var world = new EcsWorld();
-        var cmd = new EcsCommandBuffer(world);
+        var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
         var eb = cmd.Create().Set(new Component0()).Set(new Component1());

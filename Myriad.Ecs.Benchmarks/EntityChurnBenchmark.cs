@@ -16,7 +16,7 @@ public class EntityChurnBenchmark
     public void Setup()
     {
         world = new EcsWorld();
-        buffer = new EcsCommandBuffer(world);
+        buffer = world.AcquireCommandBuffer();
     }
 
     [Benchmark]
