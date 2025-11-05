@@ -574,14 +574,16 @@ public sealed partial class EcsCommandBuffer
         if (modification.Sets == null && ensureSet)
         {
             modification.Sets = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
-            // TODO: Ensure cleared
+            modification.Sets.Clear();
+
             needsUpdate = true;
         }
 
         if (modification.Removes == null && ensureRemove)
         {
             modification.Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
-            // TODO: Ensure cleared
+            modification.Removes.Clear();
+
             needsUpdate = true;
         }
 
