@@ -575,45 +575,33 @@ public sealed partial class EcsCommandBuffer
 
     private QueuedEntityModification GetQueuedModification(Entity entity, bool ensureSet, bool ensureRemove)
     {
-        // Add it if it's missing
-        if (!entityModifications.TryGetValue(entity, out var existing))
+        if (!entityModifications.TryGetValue(entity, out var modification))
         {
-            var modification = new QueuedEntityModification(
-                ensureSet ? SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire() : null,
-                ensureRemove ? SimplePool<OrderedListSet<ComponentId>>.Acquire() : null
-            );
-            modification.Sets?.Clear();
-            modification.Removes?.Clear();
-
-            entityModifications.Add(entity, modification);
-
-            return modification;
+            modification = new QueuedEntityModification(null, null);
+            entityModifications[entity] = modification;
         }
-        else
+
+        var needsUpdate = false;
+        if (modification.Sets == null && ensureSet)
         {
-            // Found it, now modify it (if necessary)
-            var modification = existing;
-
-            var needsUpdate = false;
-            if (modification.Sets == null && ensureSet)
-            {
-                modification.Sets = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
-                needsUpdate = true;
-            }
-
-            if (modification.Removes == null && ensureRemove)
-            {
-                modification.Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
-                needsUpdate = true;
-            }
-
-            if (needsUpdate)
-            {
-                entityModifications[entity] = modification;
-            }
-
-            return modification;
+            modification.Sets = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
+            // TODO: Ensure cleared
+            needsUpdate = true;
         }
+
+        if (modification.Removes == null && ensureRemove)
+        {
+            modification.Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
+            // TODO: Ensure cleared
+            needsUpdate = true;
+        }
+
+        if (needsUpdate)
+        {
+            entityModifications[entity] = modification;
+        }
+
+        return modification;
     }
 
     private void DestroyEntity(EcsCommandBuffer recursiveCommandBuffer, EntityId entityId)
