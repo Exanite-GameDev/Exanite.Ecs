@@ -27,7 +27,7 @@ internal static class ArrayFactory
     /// </summary>
     public static void Initialize(Type type)
     {
-        typeof(ArrayFactory).GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any, [], null)!
+        typeof(ArrayFactory).GetMethod(nameof(Initialize), BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any, [], null)!
             .MakeGenericMethod(type)
             .Invoke(null, null);
     }
