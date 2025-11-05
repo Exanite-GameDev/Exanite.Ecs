@@ -409,7 +409,7 @@ public sealed partial class EcsCommandBuffer
                     {
                         if (!componentsAfterMove.Contains(componentId))
                         {
-                            archetypeBeforeMove.ComponentEventDispatcherByComponentId[componentId.Value].RaiseComponentRemoved(recursiveCommandBuffer, World, entity);
+                            archetypeBeforeMove.ComponentEventDispatcherByComponentId[componentId.Value].OnComponentRemoved(recursiveCommandBuffer, World, entity);
                         }
                     }
 
@@ -438,11 +438,11 @@ public sealed partial class EcsCommandBuffer
                         var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
                         if (componentsBeforeMove.Contains(setter.ComponentId))
                         {
-                            eventDispatcher.RaiseComponentModified(recursiveCommandBuffer, World, entity);
+                            eventDispatcher.OnComponentModified(recursiveCommandBuffer, World, entity);
                         }
                         else
                         {
-                            eventDispatcher.RaiseComponentAdded(recursiveCommandBuffer, World, entity);
+                            eventDispatcher.OnComponentAdded(recursiveCommandBuffer, World, entity);
                         }
                     }
                 }
@@ -487,7 +487,7 @@ public sealed partial class EcsCommandBuffer
                 foreach (var setter in components.Values)
                 {
                     var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
-                    eventDispatcher.RaiseComponentAdded(recursiveCommandBuffer, World, location.Entity.ToEntity(World));
+                    eventDispatcher.OnComponentAdded(recursiveCommandBuffer, World, location.Entity.ToEntity(World));
                 }
 
                 // Recycle
@@ -640,7 +640,7 @@ public sealed partial class EcsCommandBuffer
         foreach (var componentId in entity.ComponentIds)
         {
             var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[componentId.Value];
-            eventDispatcher.RaiseComponentRemoved(recursiveCommandBuffer, World, entity);
+            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, World, entity);
         }
 
         // Raise entity removed event
@@ -668,7 +668,7 @@ public sealed partial class EcsCommandBuffer
                 foreach (var componentId in entity.ComponentIds)
                 {
                     var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[componentId.Value];
-                    eventDispatcher.RaiseComponentRemoved(recursiveCommandBuffer, World, entity);
+                    eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, World, entity);
                 }
 
                 // Raise entity removed event
