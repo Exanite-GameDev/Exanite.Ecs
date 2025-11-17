@@ -91,7 +91,7 @@ public class EcsCommandBufferTests
                 var b = buffer.Create().Set(new ComponentInt32(j));
                 buffered.Add(b);
 
-                for (int k = 0; k < 3; k++)
+                for (var k = 0; k < 3; k++)
                 {
                     switch (rng.Next(0, 6))
                     {
