@@ -5,39 +5,38 @@ using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
-using NUnit.Framework;
+using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestFixture]
 public class EcsCommandBufferTests
 {
-    [Test]
+    [Fact]
     public void CreateCommandBuffer()
     {
         var world = new EcsWorld();
         var commandBuffer = world.AcquireCommandBuffer();
-        Assert.That(commandBuffer, Is.Not.Null);
+        Assert.NotNull(commandBuffer);
     }
 
-    [Test]
+    [Fact]
     public void CreateEntity()
     {
         var world = new EcsWorld();
         var commandBuffer = world.AcquireCommandBuffer();
 
         var eb = commandBuffer.Create();
-        Assert.That(eb.CommandBuffer, Is.EqualTo(commandBuffer));
+        Assert.Equal(commandBuffer, eb.CommandBuffer);
 
         commandBuffer.Execute();
         var entity = eb.Resolve();
 
-        Assert.That(entity.IsAlive, Is.True);
-        Assert.That(world.ArchetypesList.Count, Is.EqualTo(1));
-        Assert.That(world.ArchetypesList.Single().Components.Count, Is.EqualTo(0));
+        Assert.True(entity.IsAlive);
+        Assert.Equal(1, world.ArchetypesList.Count);
+        Assert.Equal(0, world.ArchetypesList.Single().Components.Count);
     }
 
-    [Test]
+    [Fact]
     public void CreateManyEntities()
     {
         var world = new EcsWorld();
@@ -63,14 +62,14 @@ public class EcsCommandBufferTests
         for (var i = 0; i < entities.Count; i++)
         {
             var entity = entities[i];
-            Assert.That(entity.IsAlive, Is.True);
-            Assert.That(world.ArchetypesList.Count, Is.EqualTo(1));
-            Assert.That(world.ArchetypesList.Single().Components.Count, Is.EqualTo(1));
-            Assert.That(entity.GetComponent<ComponentInt32>().Value, Is.EqualTo(i));
+            Assert.True(entity.IsAlive);
+            Assert.Equal(1, world.ArchetypesList.Count);
+            Assert.Equal(1, world.ArchetypesList.Single().Components.Count);
+            Assert.Equal(i, entity.GetComponent<ComponentInt32>().Value);
         }
     }
 
-    [Test]
+    [Fact]
     public void ChurnCreateDestroy()
     {
         var world = new EcsWorld();
@@ -115,7 +114,7 @@ public class EcsCommandBufferTests
 
                 var index = rng.Next(0, alive.Count);
                 var ent = alive[index];
-                Assert.That(ent.IsAlive, Is.True);
+                Assert.True(ent.IsAlive);
                 buffer.Destroy(ent);
                 alive.RemoveAt(index);
                 dead.Add(ent);
@@ -133,20 +132,20 @@ public class EcsCommandBufferTests
             // Check all the entities
             foreach (var entity in alive)
             {
-                Assert.That(entity.IsAlive, Is.True);
+                Assert.True(entity.IsAlive);
             }
 
             foreach (var entity in dead)
             {
-                Assert.That(!entity.IsAlive, Is.True);
+                Assert.True(!entity.IsAlive);
             }
 
             // Check archetypes
-            Assert.That(world.ArchetypesList.Select(a => a.EntityCount).Sum(), Is.EqualTo(alive.Count));
+            Assert.Equal(alive.Count, world.ArchetypesList.Select(a => a.EntityCount).Sum());
         }
     }
 
-    [Test]
+    [Fact]
     public void ChurnStructural()
     {
         var world = new EcsWorld();
@@ -218,7 +217,7 @@ public class EcsCommandBufferTests
         }
     }
 
-    [Test]
+    [Fact]
     public void ResolveBufferedEntity_AfterSecondExecute_Throws()
     {
         var world = new EcsWorld();
@@ -236,7 +235,7 @@ public class EcsCommandBufferTests
         });
     }
 
-    [Test]
+    [Fact]
     public void ModifyBufferedEntity_AfterExecute_Throws()
     {
         var world = new EcsWorld();
@@ -253,7 +252,7 @@ public class EcsCommandBufferTests
         });
     }
 
-    [Test]
+    [Fact]
     public void CreateEntityAndSet()
     {
         var world = new EcsWorld();
@@ -266,13 +265,13 @@ public class EcsCommandBufferTests
         buffer.Execute();
         var entity = bufferedEntity.Resolve();
 
-        Assert.That(entity.IsAlive, Is.True);
-        Assert.That(world.ArchetypesList.Count, Is.EqualTo(1));
-        Assert.That(world.ArchetypesList.Single().Components.Count, Is.EqualTo(1));
-        Assert.That(world.ArchetypesList.Single().Components.Contains(ComponentId.Get<ComponentFloat>()), Is.True);
+        Assert.True(entity.IsAlive);
+        Assert.Equal(1, world.ArchetypesList.Count);
+        Assert.Equal(1, world.ArchetypesList.Single().Components.Count);
+        Assert.True(world.ArchetypesList.Single().Components.Contains(ComponentId.Get<ComponentFloat>()));
     }
 
-    [Test]
+    [Fact]
     public void SetTwiceOnNewEntityWithOverwrite()
     {
         var world = new EcsWorld();
@@ -284,7 +283,7 @@ public class EcsCommandBufferTests
         bufferedEntity.Set(new ComponentFloat(2));
     }
 
-    [Test]
+    [Fact]
     public void DestroyEntity()
     {
         var world = new EcsWorld();
@@ -308,21 +307,21 @@ public class EcsCommandBufferTests
 
         foreach (var entity in entities)
         {
-            Assert.That(entity.IsAlive, Is.True);
+            Assert.True(entity.IsAlive);
         }
 
         buffer.Destroy(entities[1]);
         buffer.Execute();
 
-        Assert.That(entities[0].IsAlive, Is.True);
-        Assert.That(entities[1].IsAlive, Is.False);
-        Assert.That(entities[2].IsAlive, Is.True);
+        Assert.True(entities[0].IsAlive);
+        Assert.False(entities[1].IsAlive);
+        Assert.True(entities[2].IsAlive);
 
-        Assert.That(entities[0].GetComponent<ComponentFloat>().Value, Is.EqualTo(1));
-        Assert.That(entities[2].GetComponent<ComponentFloat>().Value, Is.EqualTo(3));
+        Assert.Equal(1, entities[0].GetComponent<ComponentFloat>().Value);
+        Assert.Equal(3, entities[2].GetComponent<ComponentFloat>().Value);
     }
 
-    [Test]
+    [Fact]
     public void DestroyEntityTwice()
     {
         var world = new EcsWorld();
@@ -331,7 +330,7 @@ public class EcsCommandBufferTests
         var buffered = buffer.Create().Set(new ComponentFloat(1));
         buffer.Execute();
         var entity = buffered.Resolve();
-        Assert.That(entity.IsAlive, Is.True);
+        Assert.True(entity.IsAlive);
 
         buffer.Destroy(entity);
         buffer.Destroy(entity);
@@ -340,10 +339,10 @@ public class EcsCommandBufferTests
         buffer.Destroy(entity);
         buffer.Execute();
 
-        Assert.That(entity.IsAlive, Is.False);
+        Assert.False(entity.IsAlive);
     }
 
-    [Test]
+    [Fact]
     public void DestroyDeadEntity()
     {
         var world = new EcsWorld();
@@ -354,7 +353,7 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         var entity = buffered.Resolve();
-        Assert.That(entity.IsAlive, Is.True);
+        Assert.True(entity.IsAlive);
 
         // Setup deletion for that entity
         buffer.Destroy(entity);
@@ -363,15 +362,15 @@ public class EcsCommandBufferTests
         var buffer2 = world.AcquireCommandBuffer();
         buffer2.Destroy(entity);
         buffer2.Execute();
-        Assert.That(entity.IsAlive, Is.False);
+        Assert.False(entity.IsAlive);
 
         // Now play the first buffer back
         buffer.Execute();
 
-        Assert.That(entity.IsAlive, Is.False);
+        Assert.False(entity.IsAlive);
     }
 
-    [Test]
+    [Fact]
     public void DestroyEntities()
     {
         var world = new EcsWorld();
@@ -395,20 +394,20 @@ public class EcsCommandBufferTests
 
         foreach (var entity in entities)
         {
-            Assert.That(entity.IsAlive, Is.True);
+            Assert.True(entity.IsAlive);
         }
 
         buffer.Destroy([entities[0], entities[1]]);
         buffer.Execute();
 
-        Assert.That(entities[0].IsAlive, Is.False);
-        Assert.That(entities[1].IsAlive, Is.False);
-        Assert.That(entities[2].IsAlive, Is.True);
+        Assert.False(entities[0].IsAlive);
+        Assert.False(entities[1].IsAlive);
+        Assert.True(entities[2].IsAlive);
 
-        Assert.That(entities[2].GetComponent<ComponentFloat>().Value, Is.EqualTo(3));
+        Assert.Equal(3, entities[2].GetComponent<ComponentFloat>().Value);
     }
 
-    [Test]
+    [Fact]
     public void DestroyByQueryMixedWorlds()
     {
         var world1 = new EcsWorld();
@@ -424,7 +423,7 @@ public class EcsCommandBufferTests
         });
     }
 
-    [Test]
+    [Fact]
     public void DestroyByQuery()
     {
         var world = new EcsWorld();
@@ -457,19 +456,19 @@ public class EcsCommandBufferTests
         // Check the archetypes
         foreach (var archetype in deleting)
         {
-            Assert.That(archetype.EntityCount, Is.EqualTo(0));
+            Assert.Equal(0, archetype.EntityCount);
         }
 
         foreach (var (archetype, count) in others)
         {
-            Assert.That(archetype.EntityCount, Is.EqualTo(count));
+            Assert.Equal(count, archetype.EntityCount);
         }
 
         // Check it's dead
-        Assert.That(dead.IsAlive, Is.False);
+        Assert.False(dead.IsAlive);
     }
 
-    [Test]
+    [Fact]
     public void ModifyThenDestroy()
     {
         var world = new EcsWorld();
@@ -480,7 +479,7 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         var entity = buffered.Resolve();
-        Assert.That(entity.IsAlive, Is.True);
+        Assert.True(entity.IsAlive);
 
         // Modify it _and_ destroy it
         buffer.Set(entity, new ComponentInt64(7));
@@ -490,15 +489,15 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check it's dead
-        Assert.That(entity.IsAlive, Is.False);
-        Assert.That(new QueryBuilder().Include<ComponentFloat>().Build(world).Count(), Is.EqualTo(0));
-        Assert.That(new QueryBuilder().Include<ComponentInt16>().Build(world).Count(), Is.EqualTo(0));
-        Assert.That(new QueryBuilder().Include<ComponentInt32>().Build(world).Count(), Is.EqualTo(0));
-        Assert.That(new QueryBuilder().Include<ComponentInt64>().Build(world).Count(), Is.EqualTo(0));
-        Assert.That(new QueryBuilder().Include<ComponentFloat>().Build(world).Count(), Is.EqualTo(0));
+        Assert.False(entity.IsAlive);
+        Assert.Equal(0, new QueryBuilder().Include<ComponentFloat>().Build(world).Count());
+        Assert.Equal(0, new QueryBuilder().Include<ComponentInt16>().Build(world).Count());
+        Assert.Equal(0, new QueryBuilder().Include<ComponentInt32>().Build(world).Count());
+        Assert.Equal(0, new QueryBuilder().Include<ComponentInt64>().Build(world).Count());
+        Assert.Equal(0, new QueryBuilder().Include<ComponentFloat>().Build(world).Count());
     }
 
-    [Test]
+    [Fact]
     public void RemoveFromEntity()
     {
         var world = new EcsWorld();
@@ -517,11 +516,11 @@ public class EcsCommandBufferTests
         buffer.Remove<ComponentInt16>(entity);
         buffer.Execute();
 
-        Assert.That(entity.GetComponent<ComponentFloat>().Value, Is.EqualTo(123));
-        Assert.That(entity.HasComponent<ComponentInt16>(), Is.False);
+        Assert.Equal(123, entity.GetComponent<ComponentFloat>().Value);
+        Assert.False(entity.HasComponent<ComponentInt16>());
     }
 
-    [Test]
+    [Fact]
     public void AddToEntity()
     {
         var world = new EcsWorld();
@@ -541,12 +540,12 @@ public class EcsCommandBufferTests
         commandBuffer.Execute();
 
         // Check they are all present
-        Assert.That(entity.HasComponent<ComponentFloat>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt16>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt32>(), Is.True);
+        Assert.True(entity.HasComponent<ComponentFloat>());
+        Assert.True(entity.HasComponent<ComponentInt16>());
+        Assert.True(entity.HasComponent<ComponentInt32>());
     }
 
-    [Test]
+    [Fact]
     public void SetOnEntity()
     {
         var world = new EcsWorld();
@@ -566,12 +565,12 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check the value has changed
-        Assert.That(entity.HasComponent<ComponentFloat>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt16>(), Is.True);
-        Assert.That(entity.GetComponent<ComponentInt16>().Value, Is.EqualTo(789));
+        Assert.True(entity.HasComponent<ComponentFloat>());
+        Assert.True(entity.HasComponent<ComponentInt16>());
+        Assert.Equal(789, entity.GetComponent<ComponentInt16>().Value);
     }
 
-    [Test]
+    [Fact]
     public void SetTwiceOnEntity()
     {
         var world = new EcsWorld();
@@ -592,12 +591,12 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check the value has changed to the latest value
-        Assert.That(entity.HasComponent<ComponentFloat>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt16>(), Is.True);
-        Assert.That(entity.GetComponent<ComponentInt16>().Value, Is.EqualTo(987));
+        Assert.True(entity.HasComponent<ComponentFloat>());
+        Assert.True(entity.HasComponent<ComponentInt16>());
+        Assert.Equal(987, entity.GetComponent<ComponentInt16>().Value);
     }
 
-    [Test]
+    [Fact]
     public void SetThenRemoveOnEntity()
     {
         var world = new EcsWorld();
@@ -621,11 +620,11 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check the value is gone
-        Assert.That(entity.HasComponent<ComponentFloat>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt16>(), Is.False);
+        Assert.True(entity.HasComponent<ComponentFloat>());
+        Assert.False(entity.HasComponent<ComponentInt16>());
     }
 
-    [Test]
+    [Fact]
     public void RemoveInvalidComponent()
     {
         var world = new EcsWorld();
@@ -646,12 +645,12 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check entity is unchanged
-        Assert.That(entity.HasComponent<ComponentFloat>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt16>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt32>(), Is.False);
+        Assert.True(entity.HasComponent<ComponentFloat>());
+        Assert.True(entity.HasComponent<ComponentInt16>());
+        Assert.False(entity.HasComponent<ComponentInt32>());
     }
 
-    [Test]
+    [Fact]
     public void RemoveAndSetComponent()
     {
         var world = new EcsWorld();
@@ -675,15 +674,15 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check entity structure is unchanged
-        Assert.That(entity.HasComponent<ComponentFloat>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt16>(), Is.True);
-        Assert.That(entity.HasComponent<ComponentInt32>(), Is.False);
+        Assert.True(entity.HasComponent<ComponentFloat>());
+        Assert.True(entity.HasComponent<ComponentInt16>());
+        Assert.False(entity.HasComponent<ComponentInt32>());
 
         // Check value is correct
-        Assert.That(entity.GetComponent<ComponentInt16>().Value, Is.EqualTo(789));
+        Assert.Equal(789, entity.GetComponent<ComponentInt16>().Value);
     }
 
-    [Test]
+    [Fact]
     public void CreateManyArchetypes()
     {
         var world = new EcsWorld();
@@ -726,7 +725,7 @@ public class EcsCommandBufferTests
         }
 
         var resolver = buffer.Execute();
-        Assert.That(resolver.Count, Is.EqualTo(1024));
+        Assert.Equal(1024, resolver.Count);
 
         // Ensure this is identical to the loop above!
         rng = new Random(17);
@@ -738,30 +737,30 @@ public class EcsCommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: Assert.That(entity.HasComponent<Component0>(), Is.True); break;
-                    case 1: Assert.That(entity.HasComponent<Component1>(), Is.True); break;
-                    case 2: Assert.That(entity.HasComponent<Component2>(), Is.True); break;
-                    case 3: Assert.That(entity.HasComponent<Component3>(), Is.True); break;
-                    case 4: Assert.That(entity.HasComponent<Component4>(), Is.True); break;
-                    case 5: Assert.That(entity.HasComponent<Component5>(), Is.True); break;
-                    case 6: Assert.That(entity.HasComponent<Component6>(), Is.True); break;
-                    case 7: Assert.That(entity.HasComponent<Component7>(), Is.True); break;
-                    case 8: Assert.That(entity.HasComponent<Component8>(), Is.True); break;
-                    case 9: Assert.That(entity.HasComponent<Component9>(), Is.True); break;
-                    case 10: Assert.That(entity.HasComponent<Component10>(), Is.True); break;
-                    case 11: Assert.That(entity.HasComponent<Component11>(), Is.True); break;
-                    case 12: Assert.That(entity.HasComponent<Component12>(), Is.True); break;
-                    case 13: Assert.That(entity.HasComponent<Component13>(), Is.True); break;
-                    case 14: Assert.That(entity.HasComponent<Component14>(), Is.True); break;
-                    case 15: Assert.That(entity.HasComponent<Component15>(), Is.True); break;
-                    case 16: Assert.That(entity.HasComponent<Component16>(), Is.True); break;
-                    case 17: Assert.That(entity.HasComponent<Component17>(), Is.True); break;
+                    case 0: Assert.True(entity.HasComponent<Component0>()); break;
+                    case 1: Assert.True(entity.HasComponent<Component1>()); break;
+                    case 2: Assert.True(entity.HasComponent<Component2>()); break;
+                    case 3: Assert.True(entity.HasComponent<Component3>()); break;
+                    case 4: Assert.True(entity.HasComponent<Component4>()); break;
+                    case 5: Assert.True(entity.HasComponent<Component5>()); break;
+                    case 6: Assert.True(entity.HasComponent<Component6>()); break;
+                    case 7: Assert.True(entity.HasComponent<Component7>()); break;
+                    case 8: Assert.True(entity.HasComponent<Component8>()); break;
+                    case 9: Assert.True(entity.HasComponent<Component9>()); break;
+                    case 10: Assert.True(entity.HasComponent<Component10>()); break;
+                    case 11: Assert.True(entity.HasComponent<Component11>()); break;
+                    case 12: Assert.True(entity.HasComponent<Component12>()); break;
+                    case 13: Assert.True(entity.HasComponent<Component13>()); break;
+                    case 14: Assert.True(entity.HasComponent<Component14>()); break;
+                    case 15: Assert.True(entity.HasComponent<Component15>()); break;
+                    case 16: Assert.True(entity.HasComponent<Component16>()); break;
+                    case 17: Assert.True(entity.HasComponent<Component17>()); break;
                 }
             }
         }
     }
 
-    [Test]
+    [Fact]
     public void StructuralChanges()
     {
         var world = new EcsWorld();
@@ -794,31 +793,31 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check 1 has everything expected
-        Assert.That(entity0.ComponentIds.Count, Is.EqualTo(4));
+        Assert.Equal(4, entity0.ComponentIds.Count);
         entity0.GetComponent<Component0>();
         entity0.GetComponent<Component1>();
         entity0.GetComponent<Component2>();
         entity0.GetComponent<Component3>();
 
         // Check 2 has everything expected
-        Assert.That(entity1.ComponentIds.Count, Is.EqualTo(2));
+        Assert.Equal(2, entity1.ComponentIds.Count);
         entity1.GetComponent<Component1>();
         entity1.GetComponent<Component2>();
 
         // Check 3 has everything expected
-        Assert.That(entity2.ComponentIds.Count, Is.EqualTo(3));
+        Assert.Equal(3, entity2.ComponentIds.Count);
         entity2.GetComponent<Component1>();
         entity2.GetComponent<Component2>();
         entity2.GetComponent<Component4>();
 
         // Check other is unchanged
-        Assert.That(entity3.ComponentIds.Count, Is.EqualTo(3));
+        Assert.Equal(3, entity3.ComponentIds.Count);
         entity3.GetComponent<Component0>();
         entity3.GetComponent<Component1>();
         entity3.GetComponent<Component2>();
     }
 
-    [Test]
+    [Fact]
     public void ClearSet()
     {
         var world = new EcsWorld();
@@ -835,11 +834,11 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute();
 
-        Assert.That(e.HasComponent<Component0>(), Is.True);
-        Assert.That(e.HasComponent<Component1>(), Is.False);
+        Assert.True(e.HasComponent<Component0>());
+        Assert.False(e.HasComponent<Component1>());
     }
 
-    [Test]
+    [Fact]
     public void ClearBufferedSet()
     {
         var world = new EcsWorld();
@@ -855,10 +854,10 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute();
 
-        Assert.That(new QueryBuilder().Include<Component0>().Build(world).Count(), Is.EqualTo(1));
+        Assert.Equal(1, new QueryBuilder().Include<Component0>().Build(world).Count());
     }
 
-    [Test]
+    [Fact]
     public void ResolveClearedEntity()
     {
         var world = new EcsWorld();
@@ -876,7 +875,7 @@ public class EcsCommandBufferTests
     }
 
 
-    [Test]
+    [Fact]
     public void ClearBufferRemove()
     {
         var world = new EcsWorld();
@@ -892,11 +891,11 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute();
 
-        Assert.That(e.HasComponent<Component0>(), Is.True);
-        Assert.That(e.HasComponent<Component1>(), Is.True);
+        Assert.True(e.HasComponent<Component0>());
+        Assert.True(e.HasComponent<Component1>());
     }
 
-    [Test]
+    [Fact]
     public void ClearBufferDestroy()
     {
         var world = new EcsWorld();
@@ -912,12 +911,12 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute();
 
-        Assert.That(e.IsAlive, Is.True);
-        Assert.That(e.HasComponent<Component0>(), Is.True);
-        Assert.That(e.HasComponent<Component1>(), Is.True);
+        Assert.True(e.IsAlive);
+        Assert.True(e.HasComponent<Component0>());
+        Assert.True(e.HasComponent<Component1>());
     }
 
-    [Test]
+    [Fact]
     public void ClearBufferDestroyArchetype()
     {
         var world = new EcsWorld();
@@ -933,8 +932,8 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute();
 
-        Assert.That(e.IsAlive, Is.True);
-        Assert.That(e.HasComponent<Component0>(), Is.True);
-        Assert.That(e.HasComponent<Component1>(), Is.True);
+        Assert.True(e.IsAlive);
+        Assert.True(e.HasComponent<Component0>());
+        Assert.True(e.HasComponent<Component1>());
     }
 }

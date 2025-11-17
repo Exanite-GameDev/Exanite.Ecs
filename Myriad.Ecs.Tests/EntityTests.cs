@@ -1,27 +1,25 @@
 ﻿using Exanite.Core.Runtime;
-using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
-using NUnit.Framework;
+using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestFixture]
 public class EntityTests
 {
-    [Test]
+    [Fact]
     public void DefaultEntityIsNotAlive()
     {
-        Assert.That(default(Entity).IsAlive, Is.False);
-        Assert.That(default(Entity).IsAlive, Is.False);
+        Assert.False(default(Entity).IsAlive);
+        Assert.False(default(Entity).IsAlive);
     }
 
-    [Test]
+    [Fact]
     public void CompareDefaultEntity()
     {
-        Assert.That(default(Entity).CompareTo(default), Is.EqualTo(0));
+        Assert.Equal(0, default(Entity).CompareTo(default));
     }
 
-    [Test]
+    [Fact]
     public void CompareEntityWithSelf()
     {
         var world = new EcsWorld();
@@ -31,10 +29,10 @@ public class EntityTests
         commandBuffer.Execute();
         var entity = bufferedEntity.Resolve();
 
-        Assert.That(entity.CompareTo(entity), Is.EqualTo(0));
+        Assert.Equal(0, entity.CompareTo(entity));
     }
 
-    [Test]
+    [Fact]
     public void CompareEntityWithAnother()
     {
         var world = new EcsWorld();
@@ -50,14 +48,14 @@ public class EntityTests
         var c1 = entity1.CompareTo(entity2);
         var c2 = entity2.CompareTo(entity1);
 
-        Assert.That(c2, Is.Not.EqualTo(c1));
-        Assert.That(c1, Is.Not.EqualTo(0));
-        Assert.That(c2, Is.Not.EqualTo(0));
+        Assert.NotEqual(c1, c2);
+        Assert.NotEqual(0, c1);
+        Assert.NotEqual(0, c2);
 
-        Assert.That(entity2.ToString(), Is.Not.EqualTo(entity1.ToString()));
+        Assert.NotEqual(entity1.ToString(), entity2.ToString());
     }
 
-    [Test]
+    [Fact]
     public void GetComponent()
     {
         var w = new EcsWorld();
@@ -70,10 +68,10 @@ public class EntityTests
         var entity = e.Resolve();
 
         ref var c = ref entity.GetComponent<ComponentInt16>();
-        Assert.That(c.Value, Is.EqualTo(7));
+        Assert.Equal(7, c.Value);
     }
 
-    [Test]
+    [Fact]
     public void GetComponents()
     {
         var w = new EcsWorld();
@@ -84,11 +82,11 @@ public class EntityTests
         b.Execute();
         var entity = e.Resolve();
 
-        Assert.That(entity.ComponentIds.Count, Is.EqualTo(1));
-        Assert.That(entity.ComponentIds.Contains(ComponentId.Get<ComponentInt16>()), Is.True);
+        Assert.Equal(1, entity.ComponentIds.Count);
+        Assert.True(entity.ComponentIds.Contains(ComponentId.Get<ComponentInt16>()));
     }
 
-    [Test]
+    [Fact]
     public void GetComponentDead()
     {
         var w = new EcsWorld();
@@ -108,7 +106,7 @@ public class EntityTests
         });
     }
 
-    [Test]
+    [Fact]
     public void GetBoxedComponents()
     {
         var w = new EcsWorld();
@@ -119,11 +117,11 @@ public class EntityTests
         b.Execute();
         var entity = e.Resolve();
 
-        Assert.That(entity.BoxedComponents.Length, Is.EqualTo(1));
-        Assert.That((ComponentInt16)entity.BoxedComponents[0], Is.EqualTo(new ComponentInt16(7)));
+        Assert.Equal(1, entity.BoxedComponents.Length);
+        Assert.Equal(new ComponentInt16(7), (ComponentInt16)entity.BoxedComponents[0]);
     }
 
-    [Test]
+    [Fact]
     public void GetBoxedComponent()
     {
         var w = new EcsWorld();
@@ -136,14 +134,14 @@ public class EntityTests
         var entity = e.Resolve();
 
         var c = (ComponentInt16)entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>())!;
-        Assert.That(c.Value, Is.EqualTo(7));
+        Assert.Equal(7, c.Value);
 
-        Assert.That(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()), Is.Null);
+        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));
 
         b.Destroy(entity);
         b.Execute();
 
-        Assert.That(entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>()), Is.Null);
-        Assert.That(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()), Is.Null);
+        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>()));
+        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));
     }
 }

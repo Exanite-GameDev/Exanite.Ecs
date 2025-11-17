@@ -1,22 +1,21 @@
 ﻿using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
-using NUnit.Framework;
+using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;
 
-[TestFixture]
 public class ComponentBloomFilterTests
 {
-    [Test]
+    [Fact]
     public void EmptyNotIntersect()
     {
         var a = new ComponentBloomFilter();
         var b = new ComponentBloomFilter();
 
-        Assert.That(a.MaybeIntersects(ref b), Is.False);
+        Assert.False(a.MaybeIntersects(ref b));
     }
 
-    [Test]
+    [Fact]
     public void DisjointNotIntersect()
     {
         var a = new ComponentBloomFilter();
@@ -32,12 +31,12 @@ public class ComponentBloomFilterTests
         b.Add(ComponentId.Get<Component11>());
 
         var i = a.MaybeIntersects(ref b);
-        Assert.That(i, Is.False);
+        Assert.False(i);
 
         // Note that this test _can_ fail, since the bloom filter is probabilistic and errors on the side of caution.
     }
 
-    [Test]
+    [Fact]
     public void IntersectingIntersect()
     {
         var a = new ComponentBloomFilter();
@@ -50,10 +49,10 @@ public class ComponentBloomFilterTests
         b.Add(ComponentId.Get<Component3>());
         b.Add(ComponentId.Get<Component4>());
 
-        Assert.That(a.MaybeIntersects(ref b), Is.True);
+        Assert.True(a.MaybeIntersects(ref b));
     }
 
-    [Test]
+    [Fact]
     public void UnionIntersects()
     {
         var a = new ComponentBloomFilter();
@@ -69,14 +68,14 @@ public class ComponentBloomFilterTests
         var c = new ComponentBloomFilter();
         c.Add(ComponentId.Get<Component0>());
 
-        Assert.That(a.MaybeIntersects(ref b), Is.False);
-        Assert.That(b.MaybeIntersects(ref c), Is.False);
-        Assert.That(a.MaybeIntersects(ref c), Is.True);
+        Assert.False(a.MaybeIntersects(ref b));
+        Assert.False(b.MaybeIntersects(ref c));
+        Assert.True(a.MaybeIntersects(ref c));
 
         var d = new ComponentBloomFilter();
         d.Union(ref b);
         d.Union(ref c);
 
-        Assert.That(a.MaybeIntersects(ref d), Is.True);
+        Assert.True(a.MaybeIntersects(ref d));
     }
 }

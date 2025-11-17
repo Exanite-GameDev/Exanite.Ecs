@@ -1,14 +1,13 @@
 using System;
 using System.Linq;
 using Exanite.Myriad.Ecs.Components;
-using NUnit.Framework;
+using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-[TestFixture]
 public class ComponentRegistryTests
 {
-    [Test]
+    [Fact]
     public void CannotAssignNonComponent()
     {
         Assert.Throws<ArgumentException>(() =>
@@ -17,7 +16,7 @@ public class ComponentRegistryTests
         });
     }
 
-    [Test]
+    [Fact]
     public void AssignsDistinctIds()
     {
         var ids = new[]
@@ -28,21 +27,21 @@ public class ComponentRegistryTests
             ComponentId.Get(typeof(ComponentFloat)),
         };
 
-        Assert.That(ids.Distinct().Count(), Is.EqualTo(4));
+        Assert.Equal(4, ids.Distinct().Count());
 
-        Assert.That(ComponentId.Get<ComponentInt16>().Type, Is.EqualTo(typeof(ComponentInt16)));
+        Assert.Equal(typeof(ComponentInt16), ComponentId.Get<ComponentInt16>().Type);
     }
 
-    [Test]
+    [Fact]
     public void DoesNotReassign()
     {
         var id = ComponentId.Get<ComponentInt32>();
         var id2 = ComponentId.Get<ComponentInt32>();
 
-        Assert.That(id2, Is.EqualTo(id));
+        Assert.Equal(id, id2);
     }
 
-    [Test]
+    [Fact]
     public void ThrowsForUnknownId()
     {
         Assert.Throws<InvalidOperationException>(() =>

@@ -1,21 +1,20 @@
 ﻿using System;
 using Exanite.Myriad.Ecs.Collections;
-using NUnit.Framework;
+using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;
 
-[TestFixture]
 public class SegmentListTests
 {
-    [Test]
+    [Fact]
     public void Create()
     {
         var list = new SegmentedList<int>(128);
 
-        Assert.That(list.SegmentCapacity, Is.EqualTo(128));
+        Assert.Equal(128, list.SegmentCapacity);
     }
 
-    [Test]
+    [Fact]
     public void IndexSingleSegment()
     {
         var list = new SegmentedList<int>(16);
@@ -29,11 +28,11 @@ public class SegmentListTests
         // Read index from each slot
         for (var i = 0; i < list.SegmentCapacity; i++)
         {
-            Assert.That(list[i], Is.EqualTo(i));
+            Assert.Equal(i, list[i]);
         }
     }
 
-    [Test]
+    [Fact]
     public void IndexSingleSegmentOutOfRange()
     {
         var list = new SegmentedList<int>(16);
@@ -42,23 +41,23 @@ public class SegmentListTests
         Assert.Throws<ArgumentOutOfRangeException>(() => { _ = list[16]; });
     }
 
-    [Test]
+    [Fact]
     public void Grow()
     {
         var list = new SegmentedList<int>(16);
 
-        Assert.That(list.SegmentCapacity, Is.EqualTo(16));
-        Assert.That(list.TotalCapacity, Is.EqualTo(16));
-        Assert.That(list[15], Is.EqualTo(0));
+        Assert.Equal(16, list.SegmentCapacity);
+        Assert.Equal(16, list.TotalCapacity);
+        Assert.Equal(0, list[15]);
 
         list.Grow();
-        Assert.That(list.SegmentCapacity, Is.EqualTo(16));
-        Assert.That(list.TotalCapacity, Is.EqualTo(32));
-        Assert.That(list[31], Is.EqualTo(0));
+        Assert.Equal(16, list.SegmentCapacity);
+        Assert.Equal(32, list.TotalCapacity);
+        Assert.Equal(0, list[31]);
 
         list.Grow();
-        Assert.That(list.SegmentCapacity, Is.EqualTo(16));
-        Assert.That(list.TotalCapacity, Is.EqualTo(48));
-        Assert.That(list[47], Is.EqualTo(0));
+        Assert.Equal(16, list.SegmentCapacity);
+        Assert.Equal(48, list.TotalCapacity);
+        Assert.Equal(0, list[47]);
     }
 }
