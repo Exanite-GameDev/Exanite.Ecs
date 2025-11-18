@@ -1,5 +1,4 @@
-﻿using Exanite.Myriad.Ecs.CommandBuffers;
-using Exanite.Myriad.Ecs.Queries;
+﻿using Exanite.Myriad.Ecs.Queries;
 using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;
