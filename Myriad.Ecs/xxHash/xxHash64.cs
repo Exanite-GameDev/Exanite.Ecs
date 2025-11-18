@@ -167,6 +167,7 @@ namespace Myriad.Ecs.xxHash
                 h64 = XXH_rotl64(h64, 27) * XXH_PRIME64_1 + XXH_PRIME64_4;
                 len -= 8;
             }
+
             if (len >= 4)
             {
                 h64 ^= *(uint*)input * XXH_PRIME64_1;
@@ -174,6 +175,7 @@ namespace Myriad.Ecs.xxHash
                 h64 = XXH_rotl64(h64, 23) * XXH_PRIME64_2 + XXH_PRIME64_3;
                 len -= 4;
             }
+
             while (len > 0)
             {
                 h64 ^= (*input++) * XXH_PRIME64_5;
