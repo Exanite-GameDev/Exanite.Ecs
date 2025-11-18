@@ -11,11 +11,11 @@ public class ArchetypeHashTests
     public void ArchetypeHashEqual()
     {
         var hash1 = new ArchetypeHash()
-           .Toggle(ComponentId.Get<ComponentFloat>());
+            .Toggle(ComponentId.Get<ComponentFloat>());
         Console.WriteLine(hash1);
 
         var hash2 = new ArchetypeHash()
-           .Toggle(ComponentId.Get<ComponentFloat>());
+            .Toggle(ComponentId.Get<ComponentFloat>());
         Console.WriteLine(hash1);
 
         Assert.Equal(hash1, hash2);
@@ -39,15 +39,15 @@ public class ArchetypeHashTests
     public void ArchetypeHashRemoveComponents()
     {
         var hash1 = new ArchetypeHash()
-           .Toggle(ComponentId.Get<ComponentInt16>())
+            .Toggle(ComponentId.Get<ComponentInt16>())
             .Toggle(ComponentId.Get<ComponentFloat>());
         Console.WriteLine(hash1);
 
         // Create the same hash again, with one extra item
         var hash2 = new ArchetypeHash()
-           .Toggle(ComponentId.Get<ComponentInt16>())
-           .Toggle(ComponentId.Get<ComponentFloat>())
-           .Toggle(ComponentId.Get<ComponentInt32>());
+            .Toggle(ComponentId.Get<ComponentInt16>())
+            .Toggle(ComponentId.Get<ComponentFloat>())
+            .Toggle(ComponentId.Get<ComponentInt32>());
         Console.WriteLine(hash2);
         Assert.NotEqual(hash1, hash2);
 

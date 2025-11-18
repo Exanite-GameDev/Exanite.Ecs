@@ -124,6 +124,7 @@ public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<
             }
         }
     }
+
     #endregion
 
     public void IntersectWith(ImmutableOrderedListSet<T> other)

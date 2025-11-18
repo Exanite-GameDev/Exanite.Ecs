@@ -37,8 +37,15 @@ public class SegmentListTests
     {
         var list = new SegmentedList<int>(16);
 
-        Assert.Throws<IndexOutOfRangeException>(() => { _ = list[-1]; });
-        Assert.Throws<ArgumentOutOfRangeException>(() => { _ = list[16]; });
+        Assert.Throws<IndexOutOfRangeException>(() =>
+        {
+            _ = list[-1];
+        });
+
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            _ = list[16];
+        });
     }
 
     [Fact]

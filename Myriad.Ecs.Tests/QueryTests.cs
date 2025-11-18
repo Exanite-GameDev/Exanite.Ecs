@@ -18,8 +18,8 @@ public class QueryTests
         var world = new EcsWorld();
 
         var q = new QueryBuilder()
-           .Include<ComponentFloat>()
-           .Build(world);
+            .Include<ComponentFloat>()
+            .Build(world);
 
         var archetypes = q.GetArchetypes();
         Assert.Equal(0, archetypes.Length);
@@ -33,8 +33,8 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
 
         var q = new QueryBuilder()
-           .Include<ComponentFloat>()
-           .Build(w);
+            .Include<ComponentFloat>()
+            .Build(w);
 
         var a = q.GetArchetypes();
         Assert.Equal(1, a.Length);
@@ -49,8 +49,8 @@ public class QueryTests
 
         // Query that matches just one of the archetypes in the world
         var q = new QueryBuilder()
-           .Include<ComponentFloat>()
-           .Build(w);
+            .Include<ComponentFloat>()
+            .Build(w);
 
         // Match once, check it matches one archetype
         var a = q.GetArchetypes();
@@ -90,8 +90,8 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
         var q = new QueryBuilder()
-           .Include<ComponentFloat>()
-           .Build(w);
+            .Include<ComponentFloat>()
+            .Build(w);
 
         var archetypes = q.GetArchetypesList();
         Assert.Equal(2, archetypes.Count);
@@ -130,9 +130,9 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
         var q = new QueryBuilder()
-                .ExactlyOne<ComponentFloat>()
-                .ExactlyOne<ComponentInt32>()
-                .Build(w);
+            .ExactlyOne<ComponentFloat>()
+            .ExactlyOne<ComponentInt32>()
+            .Build(w);
 
         var archetypes = q.GetArchetypes();
         Assert.Equal(2, archetypes.Length);
@@ -191,8 +191,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         Assert.Throws<GuardException>(() => q.First());
     }
@@ -203,8 +203,8 @@ public class QueryTests
         var world = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(world);
+            .Include<Component0>()
+            .Build(world);
 
         var c = world.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
@@ -221,8 +221,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb1 = c.Create().Set(new Component0());
@@ -241,8 +241,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         Assert.False(q.FirstOrDefault().IsAlive);
     }
@@ -253,8 +253,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
@@ -271,8 +271,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb1 = c.Create().Set(new Component0());
@@ -291,8 +291,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         Assert.False(q.SingleOrDefault().IsAlive);
     }
@@ -303,8 +303,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         c.Create().Set(new Component0());
@@ -320,8 +320,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
@@ -338,8 +338,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         c.Create().Set(new Component0());
@@ -355,8 +355,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         Assert.Throws<GuardException>(() => q.Single());
     }
@@ -367,8 +367,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
@@ -385,8 +385,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
@@ -403,8 +403,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         Assert.False(q.Any());
     }
@@ -415,8 +415,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
@@ -433,8 +433,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb = c.Create();
@@ -451,8 +451,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var rng = new Random(123);
 
@@ -465,8 +465,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<Component0>()
-               .Build(w);
+            .Include<Component0>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         var eb = c.Create().Set(new Component0());
@@ -485,8 +485,8 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryBuilder()
-               .Include<ComponentInt32>()
-               .Build(w);
+            .Include<ComponentInt32>()
+            .Build(w);
 
         var c = w.AcquireCommandBuffer();
         for (var i = 0; i < 10000; i++)

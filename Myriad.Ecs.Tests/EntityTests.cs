@@ -62,7 +62,7 @@ public class EntityTests
         var b = w.AcquireCommandBuffer();
 
         var e = b.Create()
-                 .Set(new ComponentInt16(7));
+            .Set(new ComponentInt16(7));
 
         b.Execute();
         var entity = e.Resolve();
@@ -128,7 +128,7 @@ public class EntityTests
         var b = w.AcquireCommandBuffer();
 
         var e = b.Create()
-                 .Set(new ComponentInt16(7));
+            .Set(new ComponentInt16(7));
 
         b.Execute();
         var entity = e.Resolve();

@@ -58,9 +58,9 @@ internal struct ComponentBloomFilter
 
         // Bitwise & each matching element in the two sets together
         var abcd = System.Runtime.Intrinsics.Vector256.Create(a, b, c, d)
-                 & System.Runtime.Intrinsics.Vector256.Create(other.a, other.b, other.c, other.d);
+            & System.Runtime.Intrinsics.Vector256.Create(other.a, other.b, other.c, other.d);
         var ef = System.Runtime.Intrinsics.Vector128.Create(e, f)
-               & System.Runtime.Intrinsics.Vector128.Create(other.e, other.f);
+            & System.Runtime.Intrinsics.Vector128.Create(other.e, other.f);
 
         // Check if any of the elements had any matching bits
         var abz = System.Runtime.Intrinsics.Vector256.EqualsAny(abcd, System.Runtime.Intrinsics.Vector256<ulong>.Zero);

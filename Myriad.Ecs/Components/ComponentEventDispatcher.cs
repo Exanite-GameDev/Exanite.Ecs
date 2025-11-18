@@ -40,6 +40,7 @@ internal abstract class ComponentEventDispatcher
 internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : IComponent
 {
     private delegate void SelfReferenceAction(ref T component, Entity entity);
+
     private delegate void ComponentAction(ref T component);
 
     private readonly SelfReferenceAction? selfReference;

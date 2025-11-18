@@ -259,8 +259,8 @@ public class EcsCommandBufferTests
         var buffer = world.AcquireCommandBuffer();
 
         var bufferedEntity = buffer
-                .Create()
-                .Set(new ComponentFloat(17));
+            .Create()
+            .Set(new ComponentFloat(17));
 
         buffer.Execute();
         var entity = bufferedEntity.Resolve();
@@ -432,15 +432,15 @@ public class EcsCommandBufferTests
 
         // Get the archetypes we're about to destroy
         var deleting = (from archetype in world.ArchetypesList
-                        where archetype.Components.Contains(ComponentId.Get<Component0>())
-                        where archetype.Components.Contains(ComponentId.Get<Component1>())
-                        where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
-                        select archetype).ToArray();
+            where archetype.Components.Contains(ComponentId.Get<Component0>())
+            where archetype.Components.Contains(ComponentId.Get<Component1>())
+            where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
+            select archetype).ToArray();
 
         // Get all other archetypes
         var others = (from archetype in world.ArchetypesList
-                      where !deleting.Contains(archetype)
-                      select (archetype, archetype.EntityCount)).ToArray();
+            where !deleting.Contains(archetype)
+            select (archetype, archetype.EntityCount)).ToArray();
 
         // Query to destroy
         var q = new QueryBuilder().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world);
@@ -505,9 +505,9 @@ public class EcsCommandBufferTests
 
         // Create an entity with 2 components
         var eb = buffer
-                .Create()
-                .Set(new ComponentFloat(123))
-                .Set(new ComponentInt16(456));
+            .Create()
+            .Set(new ComponentFloat(123))
+            .Set(new ComponentInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
@@ -528,9 +528,9 @@ public class EcsCommandBufferTests
 
         // Create an entity with 2 components
         var bufferedEntity = commandBuffer
-                .Create()
-                .Set(new ComponentFloat(123))
-                .Set(new ComponentInt16(456));
+            .Create()
+            .Set(new ComponentFloat(123))
+            .Set(new ComponentInt16(456));
 
         commandBuffer.Execute();
         var entity = bufferedEntity.Resolve();
@@ -553,9 +553,9 @@ public class EcsCommandBufferTests
 
         // Create an entity with 2 components
         var eb = buffer
-                .Create()
-                .Set(new ComponentFloat(123))
-                .Set(new ComponentInt16(456));
+            .Create()
+            .Set(new ComponentFloat(123))
+            .Set(new ComponentInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
@@ -578,9 +578,9 @@ public class EcsCommandBufferTests
 
         // Create an entity with 2 components
         var eb = buffer
-                .Create()
-                .Set(new ComponentFloat(123))
-                .Set(new ComponentInt16(456));
+            .Create()
+            .Set(new ComponentFloat(123))
+            .Set(new ComponentInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
@@ -604,9 +604,9 @@ public class EcsCommandBufferTests
 
         // Create an entity with 2 components
         var eb = buffer
-                .Create()
-                .Set(new ComponentFloat(123))
-                .Set(new ComponentInt16(456));
+            .Create()
+            .Set(new ComponentFloat(123))
+            .Set(new ComponentInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
@@ -632,9 +632,9 @@ public class EcsCommandBufferTests
 
         // Create an entity with 2 components
         var eb = buffer
-                .Create()
-                .Set(new ComponentFloat(123))
-                .Set(new ComponentInt16(456));
+            .Create()
+            .Set(new ComponentFloat(123))
+            .Set(new ComponentInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
@@ -658,9 +658,9 @@ public class EcsCommandBufferTests
 
         // Create an entity with 2 components
         var eb = buffer
-                .Create()
-                .Set(new ComponentFloat(123))
-                .Set(new ComponentInt16(456));
+            .Create()
+            .Set(new ComponentFloat(123))
+            .Set(new ComponentInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
