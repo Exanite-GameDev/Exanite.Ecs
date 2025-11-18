@@ -80,7 +80,7 @@ public class EntityModifyBenchmark
             ModifyEntity(commandBuffer, random, entity);
         }
 
-        this.ready = commandBuffer;
+        ready = commandBuffer;
     }
 
     [Benchmark]
