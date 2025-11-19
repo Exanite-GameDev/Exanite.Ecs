@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
@@ -48,7 +47,6 @@ public sealed class EcsWorld : ITrackedDisposable
 
     internal readonly Dictionary<QueryCacheKey, QueryDescription> QueryDescriptionCache = new();
 
-    private readonly Lock commandBufferPoolLock = new();
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
     private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
 
@@ -105,26 +103,17 @@ public sealed class EcsWorld : ITrackedDisposable
 
     public Pool<EcsCommandBuffer>.Handle AcquireCommandBuffer(out EcsCommandBuffer value)
     {
-        lock (commandBufferPoolLock)
-        {
-            return commandBufferPool.Acquire(out value);
-        }
+        return commandBufferPool.Acquire(out value);
     }
 
     public EcsCommandBuffer AcquireCommandBuffer()
     {
-        lock (commandBufferPoolLock)
-        {
-            return commandBufferPool.Acquire();
-        }
+        return commandBufferPool.Acquire();
     }
 
     public void ReleaseCommandBuffer(EcsCommandBuffer value)
     {
-        lock (commandBufferPoolLock)
-        {
-            commandBufferPool.Release(value);
-        }
+        commandBufferPool.Release(value);
     }
 
     #endregion
