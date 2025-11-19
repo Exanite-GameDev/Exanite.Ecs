@@ -3,7 +3,7 @@ using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
-public readonly record struct ComponentRef<T> where T : IComponent
+public readonly record struct CRef<T> where T : IComponent
 {
     public readonly Entity Entity;
 
@@ -20,16 +20,16 @@ public readonly record struct ComponentRef<T> where T : IComponent
     /// </summary>
     public bool IsAlive => Entity.IsAlive && Entity.HasComponent<T>();
 
-    internal ComponentRef(Entity entity)
+    internal CRef(Entity entity)
     {
         Entity = entity;
     }
 
     /// <summary>
     /// Checks if the component is alive before returning a mutable reference to the component data.
-    /// It is not safe to access the <see cref="ValueRef{T}"/> if this method returns false.
+    /// It is not safe to access the <see cref="VRef{T}"/> if this method returns false.
     /// </summary>
-    public bool TryGetValue(out ValueRef<T> value)
+    public bool TryGetValue(out VRef<T> value)
     {
         if (!IsAlive)
         {
@@ -37,7 +37,7 @@ public readonly record struct ComponentRef<T> where T : IComponent
             return false;
         }
 
-        value = new ValueRef<T>(ref Value);
+        value = new VRef<T>(ref Value);
         return true;
     }
 

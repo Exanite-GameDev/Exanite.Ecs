@@ -272,7 +272,7 @@ public sealed class EcsWorld : ITrackedDisposable
         return ref location;
     }
 
-    internal bool TryGetStorageLocation(EntityId entity, out ValueRef<StorageLocation> storageLocation)
+    internal bool TryGetStorageLocation(EntityId entity, out VRef<StorageLocation> storageLocation)
     {
         storageLocation = default;
 
@@ -282,7 +282,7 @@ public sealed class EcsWorld : ITrackedDisposable
             return false;
         }
 
-        storageLocation = new ValueRef<StorageLocation>(ref location);
+        storageLocation = new VRef<StorageLocation>(ref location);
         return true;
     }
 }

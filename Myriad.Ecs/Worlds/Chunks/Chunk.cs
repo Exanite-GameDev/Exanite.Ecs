@@ -96,18 +96,18 @@ public sealed class Chunk
     /// Providing the component ID can prevent repeated component ID lookups.
     /// </remarks>>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ValueRef<T> GetRef<T>(int entityIndex) where T : IComponent
+    internal VRef<T> GetRef<T>(int entityIndex) where T : IComponent
     {
-        return new ValueRef<T>(ref Get<T>(entityIndex));
+        return new VRef<T>(ref Get<T>(entityIndex));
     }
 
     /// <remarks>
     /// Providing the component ID can prevent repeated component ID lookups.
     /// </remarks>>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ValueRef<T> GetRef<T>(int entityIndex, ComponentId id) where T : IComponent
+    internal VRef<T> GetRef<T>(int entityIndex, ComponentId id) where T : IComponent
     {
-        return new ValueRef<T>(ref Get<T>(entityIndex, id));
+        return new VRef<T>(ref Get<T>(entityIndex, id));
     }
 
     /// <remarks>

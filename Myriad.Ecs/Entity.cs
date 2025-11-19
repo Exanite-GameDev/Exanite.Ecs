@@ -98,7 +98,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ValueRef<T> GetComponentRef<T>() where T : IComponent
+    public VRef<T> GetComponentRef<T>() where T : IComponent
     {
         ref var entityInfo = ref World.GetStorageLocation(EntityId);
         return entityInfo.Chunk.GetRef<T>(entityInfo.IndexInChunk);
@@ -109,12 +109,12 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ComponentRef<T> GetStorableComponent<T>() where T : IComponent
+    public CRef<T> GetStorableComponent<T>() where T : IComponent
     {
         GuardUtility.IsTrue(IsAlive, "Entity does not exist");
         GuardUtility.IsTrue(HasComponent<T>(), $"Component does not exist on entity: {GetType().Name}");
 
-        return new ComponentRef<T>(this);
+        return new CRef<T>(this);
     }
 
     /// <summary>
