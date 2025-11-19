@@ -34,8 +34,8 @@ public class QueryBenchmark
         buffer.Execute();
 
         query = new QueryBuilder()
-            .Include<Position>()
-            .Include<Velocity>()
+            .Include<ComponentPosition>()
+            .Include<ComponentVelocity>()
             .Build(world);
         query.GetArchetypes();
 
@@ -46,8 +46,8 @@ public class QueryBenchmark
     {
         var entity = buffer.Create();
 
-        entity.Set(new Position(new Vector2(random.NextSingle(), random.NextSingle())));
-        entity.Set(new Velocity(new Vector2(random.NextSingle(), random.NextSingle())));
+        entity.Set(new ComponentPosition(new Vector2(random.NextSingle(), random.NextSingle())));
+        entity.Set(new ComponentVelocity(new Vector2(random.NextSingle(), random.NextSingle())));
 
         for (var i = 0; i < 10; i++)
         {

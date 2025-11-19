@@ -12,6 +12,6 @@ public record struct ComponentInt32(int Value) : IComponent;
 
 public record struct ComponentInt64(long Value) : IComponent;
 
-public record struct Position(Vector2 Value) : IComponent;
+public record struct ComponentPosition(Vector2 Value) : IComponent;
 
-public record struct Velocity(Vector2 Value) : IComponent;
+public record struct ComponentVelocity(Vector2 Value) : IComponent;
