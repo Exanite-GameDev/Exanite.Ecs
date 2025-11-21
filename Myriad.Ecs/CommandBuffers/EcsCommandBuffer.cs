@@ -471,31 +471,35 @@ public sealed partial class EcsCommandBuffer
             foreach (var bufferedEntityData in bufferedEntities)
             {
                 var components = bufferedEntityData.Setters;
-
-                var archetype = GetArchetype(bufferedEntityData, archetypeLookup);
-
-                var location = archetype.CreateEntity();
-
-                // Store the new ID in the resolver so it can be retrieved later
-                resolver.EntityIdsByBufferedEntityId.Add(bufferedEntityData.Id, location.Entity);
-
-                // Write the components into the entity
-                foreach (var setter in components.Values)
+                try
                 {
-                    // Write component
-                    setters.Write(setter, location);
-                }
+                    var archetype = GetArchetype(bufferedEntityData, archetypeLookup);
 
-                // Raise component added events
-                foreach (var setter in components.Values)
+                    var location = archetype.CreateEntity();
+
+                    // Store the new ID in the resolver so it can be retrieved later
+                    resolver.EntityIdsByBufferedEntityId.Add(bufferedEntityData.Id, location.Entity);
+
+                    // Write the components into the entity
+                    foreach (var setter in components.Values)
+                    {
+                        // Write component
+                        setters.Write(setter, location);
+                    }
+
+                    // Raise component added events
+                    foreach (var setter in components.Values)
+                    {
+                        var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
+                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, World, location.Entity.ToEntity(World));
+                    }
+                }
+                finally
                 {
-                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
-                    eventDispatcher.OnComponentAdded(recursiveCommandBuffer, World, location.Entity.ToEntity(World));
+                    // Recycle
+                    components.Clear();
+                    SimplePool.Release(components);
                 }
-
-                // Recycle
-                components.Clear();
-                SimplePool.Release(components);
             }
 
             bufferedEntities.Clear();
