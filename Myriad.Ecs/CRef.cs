@@ -3,6 +3,12 @@ using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
+/// <summary>
+/// A storage reference to a component.
+/// </summary>
+/// <remarks>
+/// Originally called a ComponentRef, but shortened since this is a commonly used type.
+/// </remarks>
 public readonly record struct CRef<T> where T : IComponent
 {
     public readonly Entity Entity;
