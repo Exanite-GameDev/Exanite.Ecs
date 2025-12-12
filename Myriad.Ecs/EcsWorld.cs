@@ -24,11 +24,16 @@ public sealed class EcsWorld : ITrackedDisposable
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
+    internal readonly Dictionary<QueryCacheKey, QueryDescription> QueryDescriptionCache = new();
+
+    internal readonly SegmentedList<StorageLocation> Entities = new(1024);
+
     // Keep track of dead entities so their ID can be re-used
     internal readonly List<EntityId> DeadEntities = [];
     private int nextEntityId = 1;
 
-    internal readonly SegmentedList<StorageLocation> Entities = new(1024);
+    private readonly Pool<EcsCommandBuffer> commandBufferPool;
+    private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
 
     /// <summary>
     /// Get a span of all archetypes in this <see cref="EcsWorld"/>
@@ -42,13 +47,6 @@ public sealed class EcsWorld : ITrackedDisposable
     /// Enumerating over this will allocate due to the List enumerator being boxed.
     /// </remarks>
     public IReadOnlyList<Archetype> ArchetypesList => archetypes;
-
-    internal int ArchetypesCount => archetypes.Count;
-
-    internal readonly Dictionary<QueryCacheKey, QueryDescription> QueryDescriptionCache = new();
-
-    private readonly Pool<EcsCommandBuffer> commandBufferPool;
-    private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
 
     public EventBus EventBus { get; } = new();
 

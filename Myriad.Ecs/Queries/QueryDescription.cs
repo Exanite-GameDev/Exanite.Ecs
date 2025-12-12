@@ -347,7 +347,7 @@ public sealed class QueryDescription
 
         public bool IsStale(EcsWorld world)
         {
-            return ArchetypeWatermark < world.ArchetypesCount;
+            return ArchetypeWatermark < world.Archetypes.Length;
         }
     }
 
