@@ -39,7 +39,7 @@ public sealed class EcsWorld : ITrackedDisposable
     /// Get a list of all archetypes in this <see cref="EcsWorld"/>
     /// </summary>
     /// <remarks>
-    /// Enumerating over this will slightly allocate due to the List enumerator being boxed.
+    /// Enumerating over this will allocate due to the List enumerator being boxed.
     /// </remarks>
     public IReadOnlyList<Archetype> ArchetypesList => archetypes;
 

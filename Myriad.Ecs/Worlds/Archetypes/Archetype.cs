@@ -38,7 +38,7 @@ public sealed class Archetype
     /// The chunks contained in this archetype.
     /// </summary>
     /// <remarks>
-    /// Enumerating over this will slightly allocate due to the List enumerator being boxed.
+    /// Enumerating over this will allocate due to the List enumerator being boxed.
     /// </remarks>
     public IReadOnlyList<Chunk> ChunksList => chunksList;
 
