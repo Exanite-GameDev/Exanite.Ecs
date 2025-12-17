@@ -21,7 +21,7 @@ public class QueryTests
             .Include<ComponentFloat>()
             .Build(world);
 
-        var archetypes = q.GetArchetypes();
+        var archetypes = q.Archetypes;
         Assert.Equal(0, archetypes.Length);
     }
 
@@ -36,7 +36,7 @@ public class QueryTests
             .Include<ComponentFloat>()
             .Build(w);
 
-        var a = q.GetArchetypes();
+        var a = q.Archetypes;
         Assert.Equal(1, a.Length);
     }
 
@@ -53,7 +53,7 @@ public class QueryTests
             .Build(w);
 
         // Match once, check it matches one archetype
-        var a = q.GetArchetypes();
+        var a = q.Archetypes;
         Assert.Equal(1, a.Length);
 
         // Add an archetype to the world that the query should match
@@ -61,7 +61,7 @@ public class QueryTests
         w.GetOrCreateArchetype(c1, ArchetypeHash.Create(c1));
 
         // Check it now matches 2 archetypes
-        var b = q.GetArchetypes();
+        var b = q.Archetypes;
         Assert.Equal(2, b.Length);
         foreach (var archetype in b)
         {
@@ -73,7 +73,7 @@ public class QueryTests
         w.GetOrCreateArchetype(c2, ArchetypeHash.Create(c2));
 
         // Check it now matches 2 archetypes
-        var c = q.GetArchetypes();
+        var c = q.Archetypes;
         Assert.Equal(2, c.Length);
         foreach (var archetype in c)
         {
@@ -93,7 +93,7 @@ public class QueryTests
             .Include<ComponentFloat>()
             .Build(w);
 
-        var archetypes = q.GetArchetypesList();
+        var archetypes = q.ArchetypesList;
         Assert.Equal(2, archetypes.Count);
 
         Assert.True(archetypes.All(x => x.Components.Contains(ComponentId.Get<ComponentFloat>())));
@@ -112,7 +112,7 @@ public class QueryTests
             .Exclude<ComponentInt32>()
             .Build(w);
 
-        var archetypes = q.GetArchetypes();
+        var archetypes = q.Archetypes;
         Assert.Equal(1, archetypes.Length);
 
         var archetype = archetypes[0];
@@ -134,7 +134,7 @@ public class QueryTests
             .ExactlyOne<ComponentInt32>()
             .Build(w);
 
-        var archetypes = q.GetArchetypes();
+        var archetypes = q.Archetypes;
         Assert.Equal(2, archetypes.Length);
 
         foreach (var archetype in archetypes)
@@ -157,7 +157,7 @@ public class QueryTests
             .AtLeastOne<ComponentInt32>()
             .Build(w);
 
-        var archetypes = q.GetArchetypes();
+        var archetypes = q.Archetypes;
         Assert.Equal(3, archetypes.Length);
 
         foreach (var archetype in archetypes)
@@ -181,7 +181,7 @@ public class QueryTests
             .NotAll<ComponentInt32>()
             .Build(w);
 
-        var archetypes = q.GetArchetypes();
+        var archetypes = q.Archetypes;
         Assert.Equal(3, archetypes.Length);
     }
 

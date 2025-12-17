@@ -36,7 +36,7 @@ public class ArchetypeTests
         var query = new QueryBuilder().Include<ComponentInt32>().Include<ComponentInt64>().Build(w);
         Assert.Equal(10000, query.Count());
 
-        foreach (var archetypeMatch in query.GetArchetypes())
+        foreach (var archetypeMatch in query.Archetypes)
         {
             foreach (var chunk in archetypeMatch.Chunks)
             {

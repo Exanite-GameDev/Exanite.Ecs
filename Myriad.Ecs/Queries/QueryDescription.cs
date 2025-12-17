@@ -13,7 +13,7 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// <summary>
 /// Describes a query for entities, bound to a world.
 /// </summary>
-public sealed class QueryDescription
+public sealed class QueryDescription : IArchetypeCollection
 {
     /// <summary>
     /// Cached result from the last time <see cref="GetArchetypeMatchResult"/> was called.
@@ -113,21 +113,15 @@ public sealed class QueryDescription
     /// <summary>
     /// Get all archetypes which match this query.
     /// </summary>
-    public ReadOnlySpan<Archetype> GetArchetypes()
-    {
-        return GetArchetypeMatchResult().Archetypes.AsSpan();
-    }
+    public ReadOnlySpan<Archetype> Archetypes => GetArchetypeMatchResult().Archetypes.AsSpan();
 
     /// <summary>
     /// Get all archetypes which match this query.
     /// </summary>
     /// <remarks>
-    /// Enumerating over this will allocate due to the List enumerator being boxed.
+    /// Enumerating over this will allocate due to the List enumerator getting boxed.
     /// </remarks>
-    public IReadOnlyList<Archetype> GetArchetypesList()
-    {
-        return GetArchetypeMatchResult().Archetypes;
-    }
+    public IReadOnlyList<Archetype> ArchetypesList => GetArchetypeMatchResult().Archetypes;
 
     /// <summary>
     /// Checks if an entity matches this query.
@@ -373,7 +367,7 @@ public sealed class QueryDescription
     public int Count()
     {
         var count = 0;
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in Archetypes)
         {
             count += archetype.EntityCount;
         }
@@ -386,7 +380,7 @@ public sealed class QueryDescription
     /// </summary>
     public bool Any()
     {
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in Archetypes)
         {
             if (archetype.EntityCount > 0)
             {
@@ -402,7 +396,7 @@ public sealed class QueryDescription
     /// </summary>
     public Entity FirstOrDefault()
     {
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in Archetypes)
         {
             if (archetype.EntityCount == 0)
             {
@@ -437,7 +431,7 @@ public sealed class QueryDescription
     public Entity SingleOrDefault()
     {
         Entity entity = default;
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in Archetypes)
         {
             if (archetype.EntityCount == 0)
             {
@@ -486,7 +480,7 @@ public sealed class QueryDescription
         var choice = random.Next(0, count);
 
         // Find that entity
-        foreach (var archetype in GetArchetypes())
+        foreach (var archetype in Archetypes)
         {
             // Check if it's within this archetype, if not move to the next archetype
             if (choice - archetype.EntityCount >= 0)

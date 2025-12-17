@@ -317,7 +317,7 @@ public sealed partial class EcsCommandBuffer
     {
         foreach (var query in queryDestroys)
         {
-            foreach (var archetype in query.GetArchetypes())
+            foreach (var archetype in query.Archetypes)
             {
                 DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
             }

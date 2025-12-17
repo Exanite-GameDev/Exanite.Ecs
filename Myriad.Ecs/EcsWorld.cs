@@ -16,7 +16,7 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// A world contains all entities.
 /// </summary>
-public sealed class EcsWorld : ITrackedDisposable
+public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
 {
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
@@ -44,7 +44,7 @@ public sealed class EcsWorld : ITrackedDisposable
     /// Get a list of all archetypes in this <see cref="EcsWorld"/>
     /// </summary>
     /// <remarks>
-    /// Enumerating over this will allocate due to the List enumerator being boxed.
+    /// Enumerating over this will allocate due to the List enumerator getting boxed.
     /// </remarks>
     public IReadOnlyList<Archetype> ArchetypesList => archetypes;
 
