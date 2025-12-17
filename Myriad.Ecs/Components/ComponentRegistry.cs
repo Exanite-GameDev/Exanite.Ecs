@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Exanite.Core.Runtime;
+using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Threading;
 
 namespace Exanite.Myriad.Ecs.Components;
 
@@ -22,17 +22,17 @@ internal static class ComponentRegistry
     {
         var type = typeof(T);
 
-        using (var locker = Lock.EnterReadLock())
+        using (Lock.EnterReadLock(out var state))
         {
-            if (locker.Value.TryGetComponentId(type, out var value))
+            if (state.Value.TryGetComponentId(type, out var id))
             {
-                return value;
+                return id;
             }
         }
 
-        using (var locker = Lock.EnterWriteLock())
+        using (Lock.EnterWriteLock(out var state))
         {
-            return locker.Value.GetOrAddComponentId(type);
+            return state.Value.GetOrAddComponentId(type);
         }
     }
 
@@ -41,18 +41,18 @@ internal static class ComponentRegistry
     /// </summary>
     public static ComponentId GetComponentId(Type type)
     {
-        using (var locker = Lock.EnterReadLock())
+        using (Lock.EnterReadLock(out var state))
         {
-            if (locker.Value.TryGetComponentId(type, out var value))
+            if (state.Value.TryGetComponentId(type, out var id))
             {
-                return value;
+                return id;
             }
         }
 
         EnsureIsComponentType(type);
-        using (var locker = Lock.EnterWriteLock())
+        using (Lock.EnterWriteLock(out var state))
         {
-            return locker.Value.GetOrAddComponentId(type);
+            return state.Value.GetOrAddComponentId(type);
         }
     }
 
@@ -61,14 +61,15 @@ internal static class ComponentRegistry
     /// </summary>
     public static Type GetComponentType(ComponentId id)
     {
-        using var locker = Lock.EnterReadLock();
-
-        if (!locker.Value.TryGetComponentType(id, out var type))
+        using (Lock.EnterReadLock(out var state))
         {
-            throw new InvalidOperationException("Unknown component ID");
-        }
+            if (!state.Value.TryGetComponentType(id, out var type))
+            {
+                throw new InvalidOperationException("Unknown component ID");
+            }
 
-        return type;
+            return type;
+        }
     }
 
     /// <summary>
@@ -76,14 +77,15 @@ internal static class ComponentRegistry
     /// </summary>
     internal static ComponentEventDispatcher GetComponentEventDispatcher(ComponentId id)
     {
-        using var locker = Lock.EnterReadLock();
-
-        if (!locker.Value.TryGetComponentEventDispatcher(id, out var eventDispatcher))
+        using (Lock.EnterReadLock(out var state))
         {
-            throw new InvalidOperationException("Unknown component ID");
-        }
+            if (!state.Value.TryGetComponentEventDispatcher(id, out var eventDispatcher))
+            {
+                throw new InvalidOperationException("Unknown component ID");
+            }
 
-        return eventDispatcher;
+            return eventDispatcher;
+        }
     }
 
     private static void EnsureIsComponentType(Type type)
