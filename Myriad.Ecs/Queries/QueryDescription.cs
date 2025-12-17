@@ -108,16 +108,11 @@ public sealed class QueryDescription : IArchetypeCollection
     }
 
     /// <summary>
-    /// Get all archetypes which match this query.
+    /// The archetypes matched by this query.
     /// </summary>
     public ReadOnlySpan<Archetype> Archetypes => GetArchetypeMatchResult().Archetypes.AsSpan();
 
-    /// <summary>
-    /// Get all archetypes which match this query.
-    /// </summary>
-    /// <remarks>
-    /// Enumerating over this will allocate due to the List enumerator getting boxed.
-    /// </remarks>
+    /// <inheritdoc cref="Archetypes"/>
     public IReadOnlyList<Archetype> ArchetypesList => GetArchetypeMatchResult().Archetypes;
 
     /// <summary>

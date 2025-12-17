@@ -36,16 +36,11 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
 
     /// <summary>
-    /// Get a span of all archetypes in this <see cref="EcsWorld"/>
+    /// The archetypes stored by this world.
     /// </summary>
     public ReadOnlySpan<Archetype> Archetypes => archetypes.AsSpan();
 
-    /// <summary>
-    /// Get a list of all archetypes in this <see cref="EcsWorld"/>
-    /// </summary>
-    /// <remarks>
-    /// Enumerating over this will allocate due to the List enumerator getting boxed.
-    /// </remarks>
+    /// <inheritdoc cref="Archetypes"/>
     public IReadOnlyList<Archetype> ArchetypesList => archetypes;
 
     public EventBus EventBus { get; } = new();
