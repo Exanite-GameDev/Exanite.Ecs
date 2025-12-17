@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
+using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
@@ -16,10 +16,9 @@ namespace Exanite.Myriad.Ecs.Queries;
 public sealed class QueryDescription : IArchetypeCollection
 {
     /// <summary>
-    /// Cached result from the last time <see cref="GetArchetypeMatchResult"/> was called.
+    /// Cached result.Value from the last time <see cref="GetArchetypeMatchResult"/> was called.
     /// </summary>
-    private ArchetypeMatches? result;
-    private readonly ReaderWriterLockSlim resultLock = new();
+    private readonly RwLock<ArchetypeMatches?> resultLock = new(null);
     private readonly OrderedListSet<ComponentId> temporarySet = [];
 
     private readonly ComponentBloomFilter includeBloom;
@@ -156,25 +155,19 @@ public sealed class QueryDescription : IArchetypeCollection
     private ArchetypeMatches GetArchetypeMatchResult()
     {
         // Quickly check if we already have a non-stale result
-        resultLock.EnterReadLock();
-        try
+        using (resultLock.EnterReadLock(out var result))
         {
-            if (result != null && !result.Value.IsStale(World))
+            if (result.Value != null && !result.Value.Value.IsStale(World))
             {
-                return result.Value;
+                return result.Value.Value;
             }
-        }
-        finally
-        {
-            resultLock.ExitReadLock();
         }
 
         // We don't have a valid cached result, calculate it now
-        resultLock.EnterWriteLock();
-        try
+        using (resultLock.EnterWriteLock(out var result))
         {
             // If this query has never been evaluated before do it now
-            if (result == null)
+            if (result.Value == null)
             {
                 // Check every archetype
                 var matches = new List<ArchetypeMatch>();
@@ -187,20 +180,20 @@ public sealed class QueryDescription : IArchetypeCollection
                 }
 
                 // Store result for next time
-                result = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
+                result.Value = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
-                return result.Value;
+                return result.Value.Value;
             }
 
             // If the number of archetypes has changed since last time regenerate the cache
-            if (result.Value.IsStale(World))
+            if (result.Value.Value.IsStale(World))
             {
                 // Lazily allocated set of new archetype matches
                 var newMatches = default(OrderedListSet<ArchetypeMatch>?);
 
                 // Check every new archetype
-                for (var i = result.Value.ArchetypeWatermark; i < World.Archetypes.Length; i++)
+                for (var i = result.Value.Value.ArchetypeWatermark; i < World.Archetypes.Length; i++)
                 {
                     if (!TryMatch(World.Archetypes[i], out var match))
                     {
@@ -208,7 +201,7 @@ public sealed class QueryDescription : IArchetypeCollection
                     }
 
                     // Initialize new matches now that we know we need it
-                    newMatches ??= new OrderedListSet<ArchetypeMatch>(result.Value.ArchetypesMatches);
+                    newMatches ??= new OrderedListSet<ArchetypeMatch>(result.Value.Value.ArchetypesMatches);
 
                     // Add the match
                     newMatches.Add(match);
@@ -217,20 +210,16 @@ public sealed class QueryDescription : IArchetypeCollection
                 if (newMatches == null)
                 {
                     // Copy is null, meaning nothing new was found, just use the old result with the new watermark
-                    result = new ArchetypeMatches(World.Archetypes.Length, result.Value.ArchetypesMatches);
+                    result.Value = new ArchetypeMatches(World.Archetypes.Length, result.Value.Value.ArchetypesMatches);
                 }
                 else
                 {
                     // Create a new match result
-                    result = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
+                    result.Value = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
                 }
             }
 
-            return result.Value;
-        }
-        finally
-        {
-            resultLock.ExitWriteLock();
+            return result.Value.Value;
         }
     }
 
