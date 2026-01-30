@@ -8,5 +8,5 @@ public interface IComponentSelfReference<T> where T : IComponent
     /// <remarks>
     /// This will be set before <see cref="IComponentSelfAdded"/>'s <see cref="IComponentSelfAdded.Added"/> is called.
     /// </remarks>
-    public CRef<T> Self { get; set; }
+    public EcsRef<T> Self { get; set; }
 }

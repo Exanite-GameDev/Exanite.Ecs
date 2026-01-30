@@ -16,7 +16,7 @@ public readonly partial record struct Entity
 for (var paramCount = 1; paramCount <= 16; paramCount++)
 {
     var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
-    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out ValueRef<T{t}> ref{t}"));
+    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out Ref<T{t}> ref{t}"));
     var queryConstraints = string.Join(" ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
 #>
     /// <summary>

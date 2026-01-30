@@ -6,10 +6,7 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// A storage reference to a component.
 /// </summary>
-/// <remarks>
-/// Originally called a ComponentRef, but shortened since this is a commonly used type.
-/// </remarks>
-public readonly record struct CRef<T> where T : IComponent
+public readonly record struct EcsRef<T> where T : IComponent
 {
     public readonly Entity Entity;
 
@@ -26,16 +23,16 @@ public readonly record struct CRef<T> where T : IComponent
     /// </summary>
     public bool IsAlive => Entity.IsAlive && Entity.HasComponent<T>();
 
-    internal CRef(Entity entity)
+    internal EcsRef(Entity entity)
     {
         Entity = entity;
     }
 
     /// <summary>
     /// Checks if the component is alive before returning a mutable reference to the component data.
-    /// It is not safe to access the <see cref="VRef{T}"/> if this method returns false.
+    /// It is not safe to access the <see cref="Ref{T}"/> if this method returns false.
     /// </summary>
-    public bool TryGetValue(out VRef<T> value)
+    public bool TryGetValue(out Ref<T> value)
     {
         if (!IsAlive)
         {
@@ -43,7 +40,7 @@ public readonly record struct CRef<T> where T : IComponent
             return false;
         }
 
-        value = new VRef<T>(ref Value);
+        value = new Ref<T>(ref Value);
         return true;
     }
 

@@ -265,7 +265,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         return ref location;
     }
 
-    internal bool TryGetStorageLocation(EntityId entity, out VRef<StorageLocation> storageLocation)
+    internal bool TryGetStorageLocation(EntityId entity, out Ref<StorageLocation> storageLocation)
     {
         storageLocation = default;
 
@@ -275,7 +275,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
             return false;
         }
 
-        storageLocation = new VRef<StorageLocation>(ref location);
+        storageLocation = new Ref<StorageLocation>(ref location);
         return true;
     }
 }
