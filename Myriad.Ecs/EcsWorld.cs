@@ -80,6 +80,41 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     }
 
     /// <summary>
+    /// Copies all entities and their components to the destination world.
+    /// All data in the target world will be overwritten.
+    /// <para/>
+    ///
+    /// <br/>
+    /// The <see cref="IComponentSelfCopied"/> event will be called for all components copied from the source world.
+    /// </summary>
+    public IEntityLookup CopyTo(EcsWorld dstWorld)
+    {
+        dstWorld.Clear();
+
+        using var _ = AcquireCommandBuffer(out var commandBuffer);
+        var lookup = new Dictionary<Entity, Entity>();
+        foreach (var srcArchetype in archetypes)
+        {
+            if (srcArchetype.EntityCount == 0)
+            {
+                continue;
+            }
+
+            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
+            foreach (var srcChunk in srcArchetype.Chunks)
+            {
+                dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, lookup);
+            }
+        }
+
+        // TODO: Events
+
+        commandBuffer.Execute();
+
+        return new EntityLookup(lookup);
+    }
+
+    /// <summary>
     /// Clears the world by destroying all entities.
     /// </summary>
     public void Clear()

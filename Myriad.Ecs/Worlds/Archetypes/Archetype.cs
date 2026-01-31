@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Worlds.Chunks;
@@ -87,13 +88,11 @@ public sealed class Archetype
 
     internal EntityStorageLocation CreateEntity(EcsCommandBuffer commandBuffer)
     {
-        // Allocate an entity in the world
+        // Allocate an entity id and add it to this archetype
         ref var location = ref World.AllocateEntity(out var entity);
-
-        // Add it to this archetype, find a location to put components into
         var entityLocation = AddEntity(entity, ref location);
 
-        // Raise entity added event
+        // Raise entity created event
         World.EventBus.Raise(new EntityCreatedEvent(commandBuffer, entityLocation.Entity.ToEntity(World)));
 
         return entityLocation;
@@ -127,6 +126,21 @@ public sealed class Archetype
 
         // Done! No entities left.
         EntityCount = 0;
+    }
+
+    /// <summary>
+    /// Copies the entities from the source chunk to a new chunk in this archetype.
+    /// The source chunk must have the same component set.
+    /// </summary>
+    /// <remarks>
+    /// This is designed to be called by <see cref="EcsWorld.CopyTo"/>.
+    /// </remarks>
+    internal void CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer commandBuffer, Dictionary<Entity, Entity> lookup)
+    {
+        EntityCount += srcChunk.EntityCount;
+
+        var newChunk = GetEmptyChunk();
+        newChunk.CopyFrom(srcChunk, commandBuffer, lookup);
     }
 
     /// <summary>

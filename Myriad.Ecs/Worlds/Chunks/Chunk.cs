@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs.Worlds.Chunks;
@@ -131,7 +134,38 @@ public sealed class Chunk
     /// <remarks>
     /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
     /// </remarks>
-    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation location)
+    internal void CopyFrom(Chunk srcChunk, EcsCommandBuffer commandBuffer, Dictionary<Entity, Entity> lookup)
+    {
+        for (var i = 0; i < srcChunk.componentColumns.Length; i++)
+        {
+            var srcColumn = srcChunk.componentColumns[i];
+            var dstColumn = componentColumns[i];
+            Array.Copy(srcColumn, dstColumn, srcChunk.EntityCount);
+        }
+
+        EntityCount = srcChunk.EntityCount;
+
+        var world = Archetype.World;
+        while (EntityCount < srcChunk.EntityCount)
+        {
+            // Allocate an entity id and add it to this chunk
+            ref var location = ref world.AllocateEntity(out var entityId);
+            AddEntity(entityId, ref location);
+
+            // Add the entity pair to the lookup dictionary
+            var originalEntity = srcChunk.Entities[location.IndexInChunk];
+            var newEntity = entityId.ToEntity(world);
+            lookup[originalEntity] = newEntity;
+
+            // Raise entity created event
+            world.EventBus.Raise(new EntityCreatedEvent(commandBuffer, newEntity));
+        }
+    }
+
+    /// <remarks>
+    /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
+    /// </remarks>
+    internal EntityStorageLocation AddEntity(EntityId entityId, ref StorageLocation location)
     {
         // It is safe to only assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
@@ -141,14 +175,14 @@ public sealed class Chunk
         // Use the next free slot
         var entityIndex = EntityCount++;
 
-        // Occupy this entity index
-        entityColumn[entityIndex] = entity.ToEntity(Archetype.World);
+        // Store the entity in this chunk
+        entityColumn[entityIndex] = entityId.ToEntity(Archetype.World);
 
-        // Update global entity location to refer to this location
+        // Update the storage location to refer to this chunk
         location.IndexInChunk = entityIndex;
         location.Chunk = this;
 
-        return new EntityStorageLocation(entity, entityIndex, this);
+        return new EntityStorageLocation(entityId, entityIndex, this);
     }
 
     /// <remarks>
