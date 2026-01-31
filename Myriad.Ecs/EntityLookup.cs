@@ -3,7 +3,7 @@ using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
-public class EntityLookup : IEntityCopyLookup
+public class EntityLookup : IEntityLookup
 {
     public readonly Dictionary<Entity, Entity> Lookup;
 
