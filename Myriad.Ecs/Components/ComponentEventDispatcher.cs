@@ -126,6 +126,21 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
             }
         }
 
+        if (selfReference != null)
+        {
+            for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
+            {
+                var chunk = archetype.Chunks[chunkI];
+                for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
+                {
+                    var entity = chunk.Entities[entityI];
+                    ref var component = ref entity.GetComponent<T>();
+
+                    selfReference!.Invoke(ref component, entity);
+                }
+            }
+        }
+
         for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
         {
             var chunk = archetype.Chunks[chunkI];
