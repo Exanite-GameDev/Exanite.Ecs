@@ -60,8 +60,8 @@ public sealed class Chunk
         Archetype = archetype;
 
         ComponentTypesByComponentIndex = archetype.ComponentTypesByComponentIndex;
-        ComponentIndexByComponentId = archetype.ComponentIndexByComponentId;
         ComponentIdByComponentIndex = archetype.ComponentIdByComponentIndex;
+        ComponentIndexByComponentId = archetype.ComponentIndexByComponentId;
         ComponentEventDispatcherByComponentId = archetype.ComponentEventDispatcherByComponentId;
 
         entities = new Entity[entityCapacity];
