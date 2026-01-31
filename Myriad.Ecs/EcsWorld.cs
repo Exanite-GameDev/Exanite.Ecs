@@ -92,8 +92,6 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
     }
 
-    #region Command Buffer Pool
-
     public Pool<EcsCommandBuffer>.Handle AcquireCommandBuffer(out EcsCommandBuffer value)
     {
         return commandBufferPool.Acquire(out value);
@@ -108,8 +106,6 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     {
         commandBufferPool.Release(value);
     }
-
-    #endregion
 
     internal Archetype GetArchetype(EntityId entity)
     {
@@ -134,8 +130,6 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
 
         return Entities[entityId].Version;
     }
-
-    #region Get/Create Archetype
 
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
@@ -206,8 +200,6 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     {
         return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
     }
-
-    #endregion
 
     internal EntityStorageLocation MigrateEntity(EntityId entity, Archetype dstArchetype)
     {
