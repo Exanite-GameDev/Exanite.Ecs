@@ -143,8 +143,6 @@ public sealed class Chunk
             Array.Copy(srcColumn, dstColumn, srcChunk.EntityCount);
         }
 
-        EntityCount = srcChunk.EntityCount;
-
         var world = Archetype.World;
         while (EntityCount < srcChunk.EntityCount)
         {
