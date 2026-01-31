@@ -24,7 +24,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
-    internal readonly Dictionary<QueryCacheKey, QueryDescription> QueryDescriptionCache = new();
+    internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
 
     internal readonly SegmentedList<StorageLocation> Entities = new(1024);
 
@@ -72,7 +72,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
 
         // Destroy all entities
         using var _ = AcquireCommandBuffer(out var commandBuffer);
-        var allEntitiesQuery = new QueryBuilder().Build(this);
+        var allEntitiesQuery = new QueryFilter().Build(this);
         commandBuffer.Destroy(allEntitiesQuery);
         commandBuffer.Execute();
 

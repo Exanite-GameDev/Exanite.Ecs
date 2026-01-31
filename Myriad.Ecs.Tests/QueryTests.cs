@@ -17,7 +17,7 @@ public class QueryTests
     {
         var world = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<ComponentFloat>()
             .Build(world);
 
@@ -32,7 +32,7 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<ComponentFloat>()
             .Build(w);
 
@@ -48,7 +48,7 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
 
         // Query that matches just one of the archetypes in the world
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<ComponentFloat>()
             .Build(w);
 
@@ -89,7 +89,7 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<ComponentFloat>()
             .Build(w);
 
@@ -107,7 +107,7 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<ComponentFloat>()
             .Exclude<ComponentInt32>()
             .Build(w);
@@ -129,7 +129,7 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .ExactlyOne<ComponentFloat>()
             .ExactlyOne<ComponentInt32>()
             .Build(w);
@@ -152,7 +152,7 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .AtLeastOne<ComponentFloat>()
             .AtLeastOne<ComponentInt32>()
             .Build(w);
@@ -176,7 +176,7 @@ public class QueryTests
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
         w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentInt64>()]);
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .NotAll<ComponentFloat>()
             .NotAll<ComponentInt32>()
             .Build(w);
@@ -190,7 +190,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -202,7 +202,7 @@ public class QueryTests
     {
         var world = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(world);
 
@@ -220,7 +220,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -240,7 +240,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -252,7 +252,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -270,7 +270,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -290,7 +290,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -302,7 +302,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -319,7 +319,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -337,7 +337,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -354,7 +354,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -366,7 +366,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -384,7 +384,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -402,7 +402,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -414,7 +414,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -432,7 +432,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -450,7 +450,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -464,7 +464,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<Component0>()
             .Build(w);
 
@@ -484,7 +484,7 @@ public class QueryTests
     {
         var w = new EcsWorld();
 
-        var q = new QueryBuilder()
+        var q = new QueryFilter()
             .Include<ComponentInt32>()
             .Build(w);
 

@@ -49,7 +49,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)
@@ -85,7 +85,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute();
@@ -111,7 +111,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)
@@ -147,7 +147,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Destroy entities
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         commandBuffer.Destroy(allEntitiesQuery);
 
         commandBuffer.Execute();
@@ -173,7 +173,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Remove components
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)
@@ -228,7 +228,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Set components
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)
@@ -264,7 +264,7 @@ public class EventTests
         Assert.Equal(entityAddCount, handler.ComponentAddedCount);
 
         // Set components
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)
@@ -299,7 +299,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Set components
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)
@@ -372,7 +372,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Set components
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)
@@ -410,7 +410,7 @@ public class EventTests
         commandBuffer.Execute();
 
         // Modify entity and destroy entity
-        var allEntitiesQuery = new QueryBuilder().Build(world);
+        var allEntitiesQuery = new QueryFilter().Build(world);
         foreach (var archetype in allEntitiesQuery.Archetypes)
         {
             foreach (var chunk in archetype.Chunks)

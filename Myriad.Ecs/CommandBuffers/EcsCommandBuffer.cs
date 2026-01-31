@@ -60,7 +60,7 @@ public sealed partial class EcsCommandBuffer
     private readonly Dictionary<Entity, BufferedEntityModification> entityModifications = [];
 
     private readonly List<Entity> destroys = [];
-    private readonly List<QueryDescription> queryDestroys = [];
+    private readonly List<QueryView> queryDestroys = [];
 
     /// <summary>
     /// Stores an entity's component set after structural changes.
@@ -186,7 +186,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Bulk destroy all entities which match the given query.
     /// </summary>
-    public EcsCommandBuffer Destroy(QueryDescription entities)
+    public EcsCommandBuffer Destroy(QueryView entities)
     {
         EnsureIsExternallyMutable();
         GuardUtility.IsTrue(entities.World == World, "Cannot use query description from one world with a command buffer for another world");

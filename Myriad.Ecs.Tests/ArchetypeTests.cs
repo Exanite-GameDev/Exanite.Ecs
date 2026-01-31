@@ -33,7 +33,7 @@ public class ArchetypeTests
             Assert.Equal(archetype.EntityCount, entityCount);
         }
 
-        var query = new QueryBuilder().Include<ComponentInt32>().Include<ComponentInt64>().Build(w);
+        var query = new QueryFilter().Include<ComponentInt32>().Include<ComponentInt64>().Build(w);
         Assert.Equal(10000, query.Count());
 
         foreach (var archetypeMatch in query.Archetypes)

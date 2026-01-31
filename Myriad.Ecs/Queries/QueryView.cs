@@ -11,9 +11,9 @@ using Exanite.Myriad.Ecs.Worlds.Chunks;
 namespace Exanite.Myriad.Ecs.Queries;
 
 /// <summary>
-/// Describes a query for entities, bound to a world.
+/// Contains the set of matched archetypes based on a filter described by <see cref="QueryFilter"/>.
 /// </summary>
-public sealed class QueryDescription : IArchetypeCollection
+public sealed class QueryView : IArchetypeCollection
 {
     /// <summary>
     /// Cached result.Value from the last time <see cref="GetArchetypeMatchResult"/> was called.
@@ -57,7 +57,7 @@ public sealed class QueryDescription : IArchetypeCollection
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
-    internal QueryDescription(
+    internal QueryView(
         EcsWorld world,
         ImmutableOrderedListSet<ComponentId> includeFilter,
         ImmutableOrderedListSet<ComponentId> excludeFilter,
@@ -78,33 +78,38 @@ public sealed class QueryDescription : IArchetypeCollection
     }
 
     /// <summary>
-    /// Create a query builder which describes this query.
+    /// Create a <see cref="QueryFilter"/> with the same filter as this query.
     /// </summary>
-    public QueryBuilder ToBuilder()
+    public QueryFilter ToFilter()
     {
-        var builder = new QueryBuilder();
+        var filter = new QueryFilter();
 
         foreach (var id in IncludeFilter)
         {
-            builder.Include(id);
+            filter.Include(id);
         }
 
         foreach (var id in ExcludeFilter)
         {
-            builder.Exclude(id);
+            filter.Exclude(id);
         }
 
         foreach (var id in AtLeastOneFilter)
         {
-            builder.AtLeastOne(id);
+            filter.AtLeastOne(id);
         }
 
         foreach (var id in ExactlyOneFilter)
         {
-            builder.ExactlyOne(id);
+            filter.ExactlyOne(id);
         }
 
-        return builder;
+        foreach (var id in NotAllFilter)
+        {
+            filter.NotAll(id);
+        }
+
+        return filter;
     }
 
     /// <summary>

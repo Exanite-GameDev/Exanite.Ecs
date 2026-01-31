@@ -415,7 +415,7 @@ public class EcsCommandBufferTests
 
         var cmd = world1.AcquireCommandBuffer();
 
-        var q = new QueryBuilder().Include<Component0>().Build(world2);
+        var q = new QueryFilter().Include<Component0>().Build(world2);
 
         Assert.Throws<GuardException>(() =>
         {
@@ -443,7 +443,7 @@ public class EcsCommandBufferTests
             select (archetype, archetype.EntityCount)).ToArray();
 
         // Query to destroy
-        var q = new QueryBuilder().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world);
+        var q = new QueryFilter().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world);
 
         // Get an entity we're going to destroy
         var dead = q.FirstOrDefault();
@@ -490,11 +490,11 @@ public class EcsCommandBufferTests
 
         // Check it's dead
         Assert.False(entity.IsAlive);
-        Assert.Equal(0, new QueryBuilder().Include<ComponentFloat>().Build(world).Count());
-        Assert.Equal(0, new QueryBuilder().Include<ComponentInt16>().Build(world).Count());
-        Assert.Equal(0, new QueryBuilder().Include<ComponentInt32>().Build(world).Count());
-        Assert.Equal(0, new QueryBuilder().Include<ComponentInt64>().Build(world).Count());
-        Assert.Equal(0, new QueryBuilder().Include<ComponentFloat>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<ComponentFloat>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<ComponentInt16>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<ComponentInt32>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<ComponentInt64>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<ComponentFloat>().Build(world).Count());
     }
 
     [Fact]
@@ -854,7 +854,7 @@ public class EcsCommandBufferTests
         cmd.Clear();
         cmd.Execute();
 
-        Assert.Equal(1, new QueryBuilder().Include<Component0>().Build(world).Count());
+        Assert.Equal(1, new QueryFilter().Include<Component0>().Build(world).Count());
     }
 
     [Fact]
@@ -928,7 +928,7 @@ public class EcsCommandBufferTests
         var e = eb.Resolve();
 
         // Destroy archetypes, then clear buffer
-        cmd.Destroy(new QueryBuilder().Include<Component0>().Build(world));
+        cmd.Destroy(new QueryFilter().Include<Component0>().Build(world));
         cmd.Clear();
         cmd.Execute();
 

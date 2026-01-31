@@ -65,7 +65,7 @@ public static class QueryUtilities
     public static Entity First(this IArchetypeCollection collection)
     {
         var entity = collection.FirstOrDefault();
-        GuardUtility.IsTrue(entity.IsAlive, "QueryDescription.First() found no matching entities");
+        GuardUtility.IsTrue(entity.IsAlive, "QueryView.First() found no matching entities");
         return entity;
     }
 
@@ -89,7 +89,7 @@ public static class QueryUtilities
                     continue;
                 }
 
-                GuardUtility.IsFalse(chunk.EntityCount > 1 || entity.IsAlive, "QueryDescription.SingleOrDefault() found more than one matching entity");
+                GuardUtility.IsFalse(chunk.EntityCount > 1 || entity.IsAlive, "QueryView.SingleOrDefault() found more than one matching entity");
 
                 entity = chunk.Entities[0];
             }
@@ -104,7 +104,7 @@ public static class QueryUtilities
     public static Entity Single(this IArchetypeCollection collection)
     {
         var entity = collection.SingleOrDefault();
-        GuardUtility.IsTrue(entity.IsAlive, "QueryDescription.SingleOrDefault() found no matching entities");
+        GuardUtility.IsTrue(entity.IsAlive, "QueryView.SingleOrDefault() found no matching entities");
         return entity;
     }
 
@@ -159,7 +159,7 @@ public static class QueryUtilities
     public static Entity Random(this IArchetypeCollection collection, Random random)
     {
         var entity = collection.RandomOrDefault(random);
-        GuardUtility.IsTrue(entity.IsAlive, "QueryDescription.RandomOrDefault() found no matching entities");
+        GuardUtility.IsTrue(entity.IsAlive, "QueryView.RandomOrDefault() found no matching entities");
         return entity;
     }
 }
