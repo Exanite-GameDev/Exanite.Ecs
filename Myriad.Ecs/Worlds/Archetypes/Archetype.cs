@@ -20,6 +20,11 @@ public sealed class Archetype
     public EcsWorld World { get; }
 
     /// <summary>
+    /// The total number of entities in this archetype.
+    /// </summary>
+    public int EntityCount { get; private set; }
+
+    /// <summary>
     /// The chunks contained in this archetype.
     /// </summary>
     public ReadOnlySpan<Chunk> Chunks => chunksList.AsSpan();
@@ -37,10 +42,8 @@ public sealed class Archetype
     /// </summary>
     public ImmutableOrderedListSet<ComponentId> Components { get; }
 
-    /// <summary>
-    /// The total number of entities in this archetype.
-    /// </summary>
-    public int EntityCount { get; private set; }
+    /// <inheritdoc cref="ArchetypeComponentLookup"/>
+    internal readonly ArchetypeComponentLookup Lookup;
 
     /// <summary>
     /// A bloom filter of all the components in this archetype.
@@ -51,26 +54,6 @@ public sealed class Archetype
     /// The hash of all components IDs in this archetype.
     /// </summary>
     internal ArchetypeHash Hash { get; }
-
-    /// <summary>
-    /// Map from component index to component type for chunks in this archetype.
-    /// </summary>
-    internal readonly Type[] ComponentTypesByComponentIndex;
-
-    /// <summary>
-    /// Map from component index to component ID for chunks in this archetype.
-    /// </summary>
-    internal readonly ComponentId[] ComponentIdByComponentIndex;
-
-    /// <summary>
-    /// Sparse map from component ID to component index in chunk for chunks in this archetype.
-    /// </summary>
-    internal readonly int[] ComponentIndexByComponentId;
-
-    /// <summary>
-    /// Sparse map from component ID to component event dispatcher for component types stored by this archetype.
-    /// </summary>
-    internal readonly ComponentEventDispatcher[] ComponentEventDispatcherByComponentId;
 
     /// <summary>
     /// All chunks in this archetype.
@@ -85,7 +68,7 @@ public sealed class Archetype
     /// <summary>
     /// A list of empty chunks that have been removed from this archetype.
     /// </summary>
-    private readonly Stack<Chunk> spareChunks = new(EcsConstants.ChunkHotSpares);
+    private readonly Stack<Chunk> spareChunks = new(EcsConstants.ChunkHotSpareCount);
 
     internal Archetype(EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
     {
@@ -94,43 +77,13 @@ public sealed class Archetype
         ComponentsBloomFilter = components.ToBloomFilter();
 
         // Calculate archetype hash
-        // Also track max component ID
-        var maxComponentId = int.MinValue;
         foreach (var component in components)
         {
             Hash = Hash.Toggle(component);
-            if (component.Value > maxComponentId)
-            {
-                maxComponentId = component.Value;
-            }
         }
 
-        // Initialize a map from component index to component type and component ID
-        ComponentTypesByComponentIndex = new Type[components.Count];
-        ComponentIdByComponentIndex = new ComponentId[components.Count];
-
-        // Initialize a sparse map from component ID to component index
-        ComponentIndexByComponentId = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
-        Array.Fill(ComponentIndexByComponentId, -1);
-
-        // Fill previously mentioned maps
-        var componentIndex = 0;
-        foreach (var component in components)
-        {
-            ComponentTypesByComponentIndex[componentIndex] = component.Type;
-            ComponentIdByComponentIndex[componentIndex] = component;
-
-            ComponentIndexByComponentId[component.Value] = componentIndex;
-
-            componentIndex++;
-        }
-
-        // Create a sparse map from component ID to component event dispatcher
-        ComponentEventDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentEventDispatcher[maxComponentId + 1];
-        foreach (var component in components)
-        {
-            ComponentEventDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentEventDispatcher(component);
-        }
+        // Initialize component lookup
+        Lookup = new ArchetypeComponentLookup(components);
     }
 
     internal EntityStorageLocation CreateEntity()
@@ -161,7 +114,7 @@ public sealed class Archetype
         // Move some chunks to hot spares and then destroy the rest
         foreach (var chunk in chunksList)
         {
-            if (spareChunks.Count < EcsConstants.ChunkHotSpares)
+            if (spareChunks.Count < EcsConstants.ChunkHotSpareCount)
             {
                 spareChunks.Push(chunk);
             }
@@ -188,7 +141,7 @@ public sealed class Archetype
         EntityCount++;
 
         // Trim chunks with space collection to remove items
-        chunksWithSpace.RemoveAll(static c => c.EntityCount == EcsConstants.ChunkSize);
+        chunksWithSpace.RemoveAll(static c => c.EntityCount == EcsConstants.ChunkEntityCount);
 
         // If there's one with space, use it
         if (chunksWithSpace.Count > 0)
@@ -197,7 +150,7 @@ public sealed class Archetype
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, EcsConstants.ChunkSize);
+        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, EcsConstants.ChunkEntityCount);
         chunksList.Add(newChunk);
         chunksWithSpace.Add(newChunk);
 
@@ -244,7 +197,7 @@ public sealed class Archetype
             {
                 chunksWithSpace.Remove(chunk);
                 chunksList.Remove(chunk);
-                if (spareChunks.Count < EcsConstants.ChunkHotSpares)
+                if (spareChunks.Count < EcsConstants.ChunkHotSpareCount)
                 {
                     spareChunks.Push(chunk);
                 }
@@ -253,7 +206,7 @@ public sealed class Archetype
             }
 
             // If the chunk was previously full and now isn't, add it to the set of chunks with space
-            case EcsConstants.ChunkSize - 1:
+            case EcsConstants.ChunkEntityCount - 1:
             {
                 chunksWithSpace.Add(chunk);
                 break;

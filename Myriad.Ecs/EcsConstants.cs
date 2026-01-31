@@ -10,12 +10,12 @@ internal static class EcsConstants
     /// <summary>
     /// Number of entities in a single chunk.
     /// </summary>
-    internal const int ChunkSize = 1024;
+    internal const int ChunkEntityCount = 1024;
 
     /// <summary>
     /// How many empty chunks to keep as spares.
     /// </summary>
-    internal const int ChunkHotSpares = 4;
+    internal const int ChunkHotSpareCount = 4;
 
     /// <summary>
     /// The max number of edges used by the command buffer for calculating entity archetypes.

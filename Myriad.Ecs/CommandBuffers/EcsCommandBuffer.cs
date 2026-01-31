@@ -412,7 +412,7 @@ public sealed partial class EcsCommandBuffer
                     {
                         if (!componentsAfterMove.Contains(componentId))
                         {
-                            archetypeBeforeMove.ComponentEventDispatcherByComponentId[componentId.Value].OnComponentRemoved(recursiveCommandBuffer, World, entity);
+                            archetypeBeforeMove.Lookup.ComponentEventDispatcherByComponentId[componentId.Value].OnComponentRemoved(recursiveCommandBuffer, World, entity);
                         }
                     }
 
@@ -438,7 +438,7 @@ public sealed partial class EcsCommandBuffer
                     // Raise component added/modified events
                     foreach (var setter in modification.Sets.Values)
                     {
-                        var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
+                        var eventDispatcher = location.Chunk.Lookup.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
                         if (componentsBeforeMove.Contains(setter.ComponentId))
                         {
                             eventDispatcher.OnComponentModified(recursiveCommandBuffer, World, entity);
@@ -490,7 +490,7 @@ public sealed partial class EcsCommandBuffer
                     // Raise component added events
                     foreach (var setter in components.Values)
                     {
-                        var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
+                        var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
                         eventDispatcher.OnComponentAdded(recursiveCommandBuffer, World, location.Entity.ToEntity(World));
                     }
                 }
@@ -619,7 +619,7 @@ public sealed partial class EcsCommandBuffer
         // Raise component removed events
         foreach (var componentId in entity.ComponentIds)
         {
-            var eventDispatcher = location.Chunk.ComponentEventDispatcherByComponentId[componentId.Value];
+            var eventDispatcher = location.Chunk.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
             eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, World, entity);
         }
 
@@ -652,7 +652,7 @@ public sealed partial class EcsCommandBuffer
                 // Raise component removed events
                 foreach (var componentId in entity.ComponentIds)
                 {
-                    var eventDispatcher = archetype.ComponentEventDispatcherByComponentId[componentId.Value];
+                    var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
                     eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, World, entity);
                 }
 

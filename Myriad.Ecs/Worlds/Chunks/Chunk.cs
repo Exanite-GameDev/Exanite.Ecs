@@ -15,25 +15,8 @@ public sealed class Chunk
     /// </summary>
     public Archetype Archetype { get; }
 
-    /// <summary>
-    /// Map from component index to component type.
-    /// </summary>
-    internal readonly Type[] ComponentTypesByComponentIndex;
-
-    /// <summary>
-    /// Map from component index to component ID.
-    /// </summary>
-    internal readonly ComponentId[] ComponentIdByComponentIndex;
-
-    /// <summary>
-    /// Sparse map from component ID to component index in chunk.
-    /// </summary>
-    internal readonly int[] ComponentIndexByComponentId;
-
-    /// <summary>
-    /// Sparse map from component ID to component event dispatcher for component types stored by this chunk.
-    /// </summary>
-    internal readonly ComponentEventDispatcher[] ComponentEventDispatcherByComponentId;
+    /// <inheritdoc cref="ArchetypeComponentLookup"/>
+    internal readonly ArchetypeComponentLookup Lookup;
 
     /// <remarks>
     /// Indexed using entity index.
@@ -58,17 +41,13 @@ public sealed class Chunk
     internal Chunk(Archetype archetype, int entityCapacity)
     {
         Archetype = archetype;
-
-        ComponentTypesByComponentIndex = archetype.ComponentTypesByComponentIndex;
-        ComponentIdByComponentIndex = archetype.ComponentIdByComponentIndex;
-        ComponentIndexByComponentId = archetype.ComponentIndexByComponentId;
-        ComponentEventDispatcherByComponentId = archetype.ComponentEventDispatcherByComponentId;
+        Lookup = archetype.Lookup;
 
         entities = new Entity[entityCapacity];
-        components = new Array[ComponentTypesByComponentIndex.Length];
+        components = new Array[Lookup.ComponentTypesByComponentIndex.Length];
         for (var i = 0; i < components.Length; i++)
         {
-            components[i] = ArrayFactory.Create(ComponentTypesByComponentIndex[i], entityCapacity);
+            components[i] = ArrayFactory.Create(Lookup.ComponentTypesByComponentIndex[i], entityCapacity);
         }
     }
 
@@ -89,7 +68,7 @@ public sealed class Chunk
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Array GetComponentArray(ComponentId id)
     {
-        return components[ComponentIndexByComponentId[id.Value]];
+        return components[Lookup.ComponentIndexByComponentId[id.Value]];
     }
 
     /// <remarks>
@@ -223,17 +202,17 @@ public sealed class Chunk
         // Copy across everything that exists in the destination archetype
         for (var i = 0; i < components.Length; i++)
         {
-            var id = ComponentIdByComponentIndex[i].Value;
+            var id = Lookup.ComponentIdByComponentIndex[i].Value;
 
             // Check if the component is not in the destination, in which case just don't copy it
-            if (id >= dstChunk.ComponentIndexByComponentId.Length || dstChunk.ComponentIndexByComponentId[id] == -1)
+            if (id >= dstChunk.Lookup.ComponentIndexByComponentId.Length || dstChunk.Lookup.ComponentIndexByComponentId[id] == -1)
             {
                 continue;
             }
 
             // Get the two arrays
             var srcArray = components[i];
-            var dstArray = dstChunk.components[dstChunk.ComponentIndexByComponentId[id]];
+            var dstArray = dstChunk.components[dstChunk.Lookup.ComponentIndexByComponentId[id]];
 
             // Copy!
             Array.Copy(srcArray, srcLocation.IndexInChunk, dstArray, dstLocation.IndexInChunk, 1);
