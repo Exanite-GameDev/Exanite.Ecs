@@ -10,7 +10,7 @@ internal struct StorageLocation
     public uint Version;
 
     /// <summary>
-    /// The chunk in the archetype which contains this entity.
+    /// The chunk that contains this entity.
     /// </summary>
     public Chunk Chunk;
 
