@@ -11,4 +11,9 @@ public enum EntityLookupPolicy
     /// Returns a default entity if the entity does not exist in the lookup.
     /// </summary>
     DefaultIfNotExist,
+
+    /// <summary>
+    /// Throws if the entity does not exist in the lookup.
+    /// </summary>
+    ThrowIfNotExist,
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Exanite.Core.Utilities;
 
@@ -12,12 +13,12 @@ public class EntityLookup
         Entries = entries;
     }
 
-    public EcsRef<T> GetRef<T>(EcsRef<T> reference, EntityLookupPolicy policy) where T : IComponent
+    public EcsRef<T> GetRef<T>(EcsRef<T> reference, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
     {
         return new EcsRef<T>(GetEntity(reference.Entity, policy));
     }
 
-    public Entity GetEntity(Entity entity, EntityLookupPolicy policy)
+    public Entity GetEntity(Entity entity, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
     {
         if (Entries.TryGetValue(entity, out var newEntity))
         {
@@ -28,6 +29,7 @@ public class EntityLookup
         {
             EntityLookupPolicy.PreserveIfNotExist => entity,
             EntityLookupPolicy.DefaultIfNotExist => default,
+            EntityLookupPolicy.ThrowIfNotExist => throw new InvalidOperationException("Entity does not exist in this lookup table"),
             _ => throw ExceptionUtility.NotSupportedEnumValue(policy),
         };
     }
