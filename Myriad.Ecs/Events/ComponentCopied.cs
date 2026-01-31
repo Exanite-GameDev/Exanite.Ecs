@@ -3,9 +3,9 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
-/// Raised before a component is removed.
+/// Raised after a component is copied to a new world.
 /// </summary>
-public readonly ref struct ComponentRemoved<T> where T : IComponent
+public readonly ref struct ComponentCopied<T> where T : IComponent
 {
     /// <summary>
     /// A command buffer with which further operations can be enqueued.
@@ -19,11 +19,13 @@ public readonly ref struct ComponentRemoved<T> where T : IComponent
     public EcsWorld World => Entity.World;
     public readonly Entity Entity;
     public readonly ref T Component;
+    public readonly EntityLookup Lookup;
 
-    public ComponentRemoved(EcsCommandBuffer commandBuffer, Entity entity, ref T component)
+    public ComponentCopied(EcsCommandBuffer commandBuffer, Entity entity, ref T component, EntityLookup lookup)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
         Component = ref component;
+        Lookup = lookup;
     }
 }

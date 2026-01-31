@@ -92,7 +92,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         dstWorld.Clear();
 
         using var _ = AcquireCommandBuffer(out var commandBuffer);
-        var lookup = new Dictionary<Entity, Entity>();
+        var rawLookup = new Dictionary<Entity, Entity>();
         foreach (var srcArchetype in archetypes)
         {
             if (srcArchetype.EntityCount == 0)
@@ -103,15 +103,23 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
             var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
             foreach (var srcChunk in srcArchetype.Chunks)
             {
-                dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, lookup);
+                dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, rawLookup);
             }
         }
 
-        // TODO: Events
+        var lookup = new EntityLookup(rawLookup);
+        foreach (var dstArchetype in dstWorld.Archetypes)
+        {
+            foreach (var componentId in dstArchetype.Lookup.ComponentIdByColumnIndex)
+            {
+                var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                eventDispatcher.OnComponentCopied(commandBuffer, dstArchetype, lookup);
+            }
+        }
 
         commandBuffer.Execute();
 
-        return new EntityLookup(lookup);
+        return lookup;
     }
 
     /// <summary>
