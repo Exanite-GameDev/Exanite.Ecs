@@ -32,6 +32,8 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     internal readonly List<EntityId> DeadEntities = [];
     private int nextEntityId = 1;
 
+    private readonly QueryView allEntitiesQuery;
+
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
     private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
 
@@ -47,6 +49,8 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
 
     public EcsWorld()
     {
+        allEntitiesQuery = new QueryFilter().Build(this);
+
         commandBufferPool = new Pool<EcsCommandBuffer>(
             create: () => new EcsCommandBuffer(this),
             onAcquire: commandBuffer =>
@@ -74,6 +78,16 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     {
         commandBufferPool.Release(value);
     }
+    
+    /// <summary>
+    /// Clears the world by destroying all entities.
+    /// </summary>
+    public void Clear()
+    {
+        using var _ = AcquireCommandBuffer(out var commandBuffer);
+        commandBuffer.Destroy(allEntitiesQuery);
+        commandBuffer.Execute();
+    }
 
     /// <inheritdoc/>
     public void Dispose()
@@ -86,10 +100,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         IsDisposing = true;
 
         // Destroy all entities
-        using var _ = AcquireCommandBuffer(out var commandBuffer);
-        var allEntitiesQuery = new QueryFilter().Build(this);
-        commandBuffer.Destroy(allEntitiesQuery);
-        commandBuffer.Execute();
+        Clear();
 
         // Clear all active command buffers
         foreach (var activeCommandBuffer in activeCommandBuffers)
