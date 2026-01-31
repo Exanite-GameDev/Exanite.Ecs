@@ -475,7 +475,7 @@ public sealed partial class EcsCommandBuffer
                 {
                     var archetype = GetArchetype(bufferedEntityData, archetypeLookup);
 
-                    var location = archetype.CreateEntity();
+                    var location = archetype.CreateEntity(recursiveCommandBuffer);
 
                     // Store the new ID in the resolver so it can be retrieved later
                     resolver.EntityIdsByBufferedEntityId.Add(bufferedEntityData.Id, location.Entity);

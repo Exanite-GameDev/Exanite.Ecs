@@ -85,7 +85,7 @@ public sealed class Archetype
         Lookup = new ArchetypeComponentLookup(components);
     }
 
-    internal EntityStorageLocation CreateEntity()
+    internal EntityStorageLocation CreateEntity(EcsCommandBuffer commandBuffer)
     {
         // Allocate an entity in the world
         ref var location = ref World.AllocateEntity(out var entity);
@@ -94,7 +94,7 @@ public sealed class Archetype
         var entityLocation = AddEntity(entity, ref location);
 
         // Raise entity added event
-        World.EventBus.Raise(new EntityCreatedEvent());
+        World.EventBus.Raise(new EntityCreatedEvent(commandBuffer, entityLocation.Entity.ToEntity(World)));
 
         return entityLocation;
     }
