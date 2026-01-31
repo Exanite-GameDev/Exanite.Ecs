@@ -145,7 +145,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
-    internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components, ArchetypeHash hash)
+    internal Archetype GetOrCreateArchetype<T>(T components, ArchetypeHash hash) where T : IComponentIdSet
     {
         // Get list of all archetypes with this hash
         if (!archetypesByHash.TryGetValue(hash, out var candidates))
@@ -157,14 +157,14 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         // Check if any of the candidates are the one we need
         foreach (var archetype in candidates)
         {
-            if (archetype.SetEquals(components))
+            if (components.SetEquals(archetype.Components))
             {
                 return archetype;
             }
         }
 
         // Didn't find one, create the new archetype
-        var a = new Archetype(this, ImmutableOrderedListSet<ComponentId>.Create(components));
+        var a = new Archetype(this, components.ToImmutableOrderedListSet());
 
         // Add it to the relevant lists
         archetypes.Add(a);
@@ -173,43 +173,18 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         return a;
     }
 
-    internal Archetype GetOrCreateArchetype<TValue>(Dictionary<ComponentId, TValue> components, ArchetypeHash hash)
+    /// <summary>
+    /// Find an archetype with the given set of components.
+    /// </summary>
+    internal Archetype GetOrCreateArchetype<T>(T components) where T : IComponentIdSet
     {
-        // Get list of all archetypes with this hash
-        if (!archetypesByHash.TryGetValue(hash, out var candidates))
-        {
-            candidates = [];
-            archetypesByHash.Add(hash, candidates);
-        }
-
-        // Check if any of the candidates are the one we need
-        foreach (var archetype in candidates)
-        {
-            if (archetype.SetEquals(components))
-            {
-                return archetype;
-            }
-        }
-
-        // Didn't find one, create the new archetype
-        var set = ImmutableOrderedListSet<ComponentId>.Create(components);
-        var a = new Archetype(this, set);
-
-        // Add it to the relevant lists
-        archetypes.Add(a);
-        candidates.Add(a);
-
-        return a;
+        return GetOrCreateArchetype(components, components.CreateArchetypeHash());
     }
 
+    /// <inheritdoc cref="GetOrCreateArchetype{T}(T)"/>
     internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components)
     {
-        return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
-    }
-
-    internal Archetype GetOrCreateArchetype<TValue>(Dictionary<ComponentId, TValue> components)
-    {
-        return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
+        return GetOrCreateArchetype(components.AsComponentIdSet());
     }
 
     internal EntityStorageLocation MigrateEntity(EntityId entity, Archetype dstArchetype)

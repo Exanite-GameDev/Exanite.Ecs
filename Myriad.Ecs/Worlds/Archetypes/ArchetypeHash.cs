@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Myriad.Ecs.xxHash;
 
@@ -41,28 +39,6 @@ internal readonly record struct ArchetypeHash : IComparable<ArchetypeHash>
     public override string ToString()
     {
         return $"0x{Value:X16}";
-    }
-
-    internal static ArchetypeHash Create(OrderedListSet<ComponentId> componentIds)
-    {
-        long l = 0;
-        foreach (var componentId in componentIds)
-        {
-            l = Toggle(l, componentId);
-        }
-
-        return new ArchetypeHash { Value = l };
-    }
-
-    public static ArchetypeHash Create<TValue>(Dictionary<ComponentId, TValue> componentIds)
-    {
-        long l = 0;
-        foreach (var componentId in componentIds.Keys)
-        {
-            l = Toggle(l, componentId);
-        }
-
-        return new ArchetypeHash { Value = l };
     }
 
     public int CompareTo(ArchetypeHash other)

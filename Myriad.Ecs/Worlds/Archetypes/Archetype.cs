@@ -4,7 +4,6 @@ using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Utilities;
 using Exanite.Myriad.Ecs.Worlds.Chunks;
 
 namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
@@ -218,15 +217,5 @@ public sealed class Archetype
     public override int GetHashCode()
     {
         return Hash.GetHashCode();
-    }
-
-    internal bool SetEquals(OrderedListSet<ComponentId> query)
-    {
-        return Components.SetEquals(query);
-    }
-
-    internal bool SetEquals<TValue>(Dictionary<ComponentId, TValue> query)
-    {
-        return Components.SetEquals(query);
     }
 }

@@ -5,7 +5,6 @@ using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
 using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;
@@ -58,7 +57,7 @@ public class QueryTests
 
         // Add an archetype to the world that the query should match
         var c1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentFloat>() });
-        w.GetOrCreateArchetype(c1, ArchetypeHash.Create(c1));
+        w.GetOrCreateArchetype(c1);
 
         // Check it now matches 2 archetypes
         var b = q.Archetypes;
@@ -70,7 +69,7 @@ public class QueryTests
 
         // Add an archetype to the world that the query should NOT match
         var c2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentByte>() });
-        w.GetOrCreateArchetype(c2, ArchetypeHash.Create(c2));
+        w.GetOrCreateArchetype(c2);
 
         // Check it now matches 2 archetypes
         var c = q.Archetypes;

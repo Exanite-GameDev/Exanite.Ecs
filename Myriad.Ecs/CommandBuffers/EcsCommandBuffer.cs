@@ -417,7 +417,7 @@ public sealed partial class EcsCommandBuffer
                     }
 
                     // Get the new archetype we're moving to
-                    var dstArchetype = World.GetOrCreateArchetype(componentsAfterMove, hash);
+                    var dstArchetype = World.GetOrCreateArchetype(componentsAfterMove.AsComponentIdSet(), hash);
 
                     // Migrate the entity across
                     location = World.MigrateEntity(entity.EntityId, dstArchetype);
@@ -523,7 +523,7 @@ public sealed partial class EcsCommandBuffer
         }
 
         // Get the archetype
-        var archetype = World.GetOrCreateArchetype(entityData.Setters);
+        var archetype = World.GetOrCreateArchetype(entityData.Setters.AsComponentIdSet());
 
         // If the node ID is positive, cache it
         if (entityData.ArchetypeKey >= 0)
