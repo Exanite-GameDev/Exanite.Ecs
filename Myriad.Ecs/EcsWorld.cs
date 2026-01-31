@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
@@ -81,19 +82,44 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     /// <summary>
     /// Copies all entities and their components to the destination world.
-    /// All data in the target world will be overwritten.
-    /// <para/>
-    ///
-    /// <br/>
-    /// The <see cref="IComponentSelfCopied"/> event will be called for all components copied from the source world.
+    /// Data in the target world will be overwritten.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public EntityLookup CopyTo(EcsWorld dstWorld)
     {
-        dstWorld.Clear();
+        return CopyTo(dstWorld, allEntitiesQuery);
+    }
 
+    /// <summary>
+    /// Copies all entities and their components to the destination world for the specified archetypes.
+    /// Data in the target world will be overwritten.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public EntityLookup CopyTo(EcsWorld dstWorld, IArchetypeView view)
+    {
+        dstWorld.Clear();
+        return AddTo(dstWorld, view);
+    }
+
+    /// <summary>
+    /// Copies all entities and their components to the destination world.
+    /// Data in the target world will be kept.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public EntityLookup AddTo(EcsWorld dstWorld)
+    {
+        return AddTo(dstWorld, allEntitiesQuery);
+    }
+
+    /// <summary>
+    /// Copies all entities and their components to the destination world.
+    /// Data in the target world will be kept.
+    /// </summary>
+    public EntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
+    {
         using var _ = AcquireCommandBuffer(out var commandBuffer);
         var rawLookup = new Dictionary<Entity, Entity>();
-        foreach (var srcArchetype in archetypes)
+        foreach (var srcArchetype in view.Archetypes)
         {
             if (srcArchetype.EntityCount == 0)
             {
