@@ -82,6 +82,36 @@ public class WorldCopyTests
     }
 
     [Fact]
+    public void CopyTo_UsesNewIds_ForEachCopy()
+    {
+        var srcWorld = new EcsWorld();
+        using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
+        {
+            commandBuffer.Create()
+                .Set(new Ecs0());
+
+            commandBuffer.Execute();
+        }
+
+        var srcEntity = srcWorld.Single();
+
+        var dstWorld = new EcsWorld();
+
+        srcWorld.CopyTo(dstWorld);
+        var dstEntity1 = dstWorld.Single();
+
+        srcWorld.CopyTo(dstWorld);
+        var dstEntity2 = dstWorld.Single();
+
+        Assert.NotEqual(srcEntity, dstEntity1);
+        Assert.NotEqual(srcEntity, dstEntity2);
+        Assert.NotEqual(dstEntity1, dstEntity2);
+
+        Assert.False(dstEntity1.IsAlive);
+        Assert.True(dstEntity2.IsAlive);
+    }
+
+    [Fact]
     public void CopyTo_UpdatesSelfReference()
     {
         var srcWorld = new EcsWorld();
