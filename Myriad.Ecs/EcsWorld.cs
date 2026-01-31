@@ -26,7 +26,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
 
     internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
 
-    internal readonly SegmentedList<StorageLocation> Entities = new(1024);
+    internal readonly SegmentedList<StorageLocation> Entities = new(EcsConstants.StorageLocationSegmentSize);
 
     // Keep track of dead entities so their ID can be re-used
     internal readonly List<EntityId> DeadEntities = [];

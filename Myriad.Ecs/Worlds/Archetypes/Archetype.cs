@@ -15,16 +15,6 @@ namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
 public sealed class Archetype
 {
     /// <summary>
-    /// Number of entities in a single chunk.
-    /// </summary>
-    internal const int ChunkSize = 1024;
-
-    /// <summary>
-    /// How many empty chunks to keep as spares.
-    /// </summary>
-    private const int ChunkHotSpares = 4;
-
-    /// <summary>
     /// The world which this archetype belongs to.
     /// </summary>
     public EcsWorld World { get; }
@@ -95,7 +85,7 @@ public sealed class Archetype
     /// <summary>
     /// A list of empty chunks that have been removed from this archetype.
     /// </summary>
-    private readonly Stack<Chunk> spareChunks = new(ChunkHotSpares);
+    private readonly Stack<Chunk> spareChunks = new(EcsConstants.ChunkHotSpares);
 
     internal Archetype(EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
     {
@@ -171,7 +161,7 @@ public sealed class Archetype
         // Move some chunks to hot spares and then destroy the rest
         foreach (var chunk in chunksList)
         {
-            if (spareChunks.Count < ChunkHotSpares)
+            if (spareChunks.Count < EcsConstants.ChunkHotSpares)
             {
                 spareChunks.Push(chunk);
             }
@@ -198,7 +188,7 @@ public sealed class Archetype
         EntityCount++;
 
         // Trim chunks with space collection to remove items
-        chunksWithSpace.RemoveAll(static c => c.EntityCount == ChunkSize);
+        chunksWithSpace.RemoveAll(static c => c.EntityCount == EcsConstants.ChunkSize);
 
         // If there's one with space, use it
         if (chunksWithSpace.Count > 0)
@@ -207,7 +197,7 @@ public sealed class Archetype
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, ChunkSize);
+        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, EcsConstants.ChunkSize);
         chunksList.Add(newChunk);
         chunksWithSpace.Add(newChunk);
 
@@ -254,7 +244,7 @@ public sealed class Archetype
             {
                 chunksWithSpace.Remove(chunk);
                 chunksList.Remove(chunk);
-                if (spareChunks.Count < ChunkHotSpares)
+                if (spareChunks.Count < EcsConstants.ChunkHotSpares)
                 {
                     spareChunks.Push(chunk);
                 }
@@ -263,7 +253,7 @@ public sealed class Archetype
             }
 
             // If the chunk was previously full and now isn't, add it to the set of chunks with space
-            case ChunkSize - 1:
+            case EcsConstants.ChunkSize - 1:
             {
                 chunksWithSpace.Add(chunk);
                 break;

@@ -11,8 +11,6 @@ public sealed partial class EcsCommandBuffer
     // buffered entity with the same node ID therefore has the same archetype. Except for node=-1, which
     // indicates unknown.
 
-    private const int MaxAggregationEdges = 1024;
-
     /// <summary>
     /// Map from (currentArchetypeKey, addedComponent) => newArchetypeKey.
     /// </summary>
@@ -26,7 +24,7 @@ public sealed partial class EcsCommandBuffer
         if (!archetypeEdges.TryGetValue((currentKey, addedComponent), out var newKey))
         {
             // Limit the number of edges to prevent explosive growth in some edge cases.
-            if (archetypeEdges.Count >= MaxAggregationEdges)
+            if (archetypeEdges.Count >= EcsConstants.MaxAggregationEdges)
             {
                 return -1;
             }
