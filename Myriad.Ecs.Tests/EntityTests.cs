@@ -62,12 +62,12 @@ public class EntityTests
         var b = w.AcquireCommandBuffer();
 
         var e = b.Create()
-            .Set(new ComponentInt16(7));
+            .Set(new EcsInt16(7));
 
         b.Execute();
         var entity = e.Resolve();
 
-        ref var c = ref entity.GetComponent<ComponentInt16>();
+        ref var c = ref entity.GetComponent<EcsInt16>();
         Assert.Equal(7, c.Value);
     }
 
@@ -77,13 +77,13 @@ public class EntityTests
         var w = new EcsWorld();
         var b = w.AcquireCommandBuffer();
 
-        var e = b.Create().Set(new ComponentInt16(7));
+        var e = b.Create().Set(new EcsInt16(7));
 
         b.Execute();
         var entity = e.Resolve();
 
         Assert.Equal(1, entity.ComponentIds.Count);
-        Assert.True(entity.ComponentIds.Contains(ComponentId.Get<ComponentInt16>()));
+        Assert.True(entity.ComponentIds.Contains(ComponentId.Get<EcsInt16>()));
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class EntityTests
         var w = new EcsWorld();
         var b = w.AcquireCommandBuffer();
 
-        var e = b.Create().Set(new ComponentInt16(7));
+        var e = b.Create().Set(new EcsInt16(7));
 
         b.Execute();
         var entity = e.Resolve();
@@ -112,13 +112,13 @@ public class EntityTests
         var w = new EcsWorld();
         var b = w.AcquireCommandBuffer();
 
-        var e = b.Create().Set(new ComponentInt16(7));
+        var e = b.Create().Set(new EcsInt16(7));
 
         b.Execute();
         var entity = e.Resolve();
 
         Assert.Equal(1, entity.BoxedComponents.Length);
-        Assert.Equal(new ComponentInt16(7), (ComponentInt16)entity.BoxedComponents[0]);
+        Assert.Equal(new EcsInt16(7), (EcsInt16)entity.BoxedComponents[0]);
     }
 
     [Fact]
@@ -128,20 +128,20 @@ public class EntityTests
         var b = w.AcquireCommandBuffer();
 
         var e = b.Create()
-            .Set(new ComponentInt16(7));
+            .Set(new EcsInt16(7));
 
         b.Execute();
         var entity = e.Resolve();
 
-        var c = (ComponentInt16)entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>())!;
+        var c = (EcsInt16)entity.GetBoxedComponent(ComponentId.Get<EcsInt16>())!;
         Assert.Equal(7, c.Value);
 
-        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));
+        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<EcsInt32>()));
 
         b.Destroy(entity);
         b.Execute();
 
-        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<ComponentInt16>()));
-        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<ComponentInt32>()));
+        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<EcsInt16>()));
+        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<EcsInt32>()));
     }
 }

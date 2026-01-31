@@ -105,7 +105,7 @@ public class EventTests
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
-            commandBuffer.Create().Set(new Component0());
+            commandBuffer.Create().Set(new Ecs0());
         }
 
         commandBuffer.Execute();
@@ -141,7 +141,7 @@ public class EventTests
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
-            commandBuffer.Create().Set(new Component0());
+            commandBuffer.Create().Set(new Ecs0());
         }
 
         commandBuffer.Execute();
@@ -167,7 +167,7 @@ public class EventTests
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
-            commandBuffer.Create().Set(new Component0());
+            commandBuffer.Create().Set(new Ecs0());
         }
 
         commandBuffer.Execute();
@@ -180,7 +180,7 @@ public class EventTests
             {
                 foreach (var entity in chunk.Entities)
                 {
-                    commandBuffer.Remove<Component0>(entity);
+                    commandBuffer.Remove<Ecs0>(entity);
                 }
             }
         }
@@ -202,7 +202,7 @@ public class EventTests
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
-            commandBuffer.Create().Set(new Component0());
+            commandBuffer.Create().Set(new Ecs0());
         }
 
         commandBuffer.Execute();
@@ -235,7 +235,7 @@ public class EventTests
             {
                 foreach (var entity in chunk.Entities)
                 {
-                    commandBuffer.Set(entity, new Component0());
+                    commandBuffer.Set(entity, new Ecs0());
                 }
             }
         }
@@ -257,7 +257,7 @@ public class EventTests
         var entityAddCount = 10;
         for (var i = 0; i < entityAddCount; i++)
         {
-            commandBuffer.Create().Set(new Component0());
+            commandBuffer.Create().Set(new Ecs0());
         }
 
         commandBuffer.Execute();
@@ -271,7 +271,7 @@ public class EventTests
             {
                 foreach (var entity in chunk.Entities)
                 {
-                    commandBuffer.Set(entity, new Component0());
+                    commandBuffer.Set(entity, new Ecs0());
                 }
             }
         }
@@ -306,7 +306,7 @@ public class EventTests
             {
                 foreach (var entity in chunk.Entities)
                 {
-                    commandBuffer.Set(entity, new Component0());
+                    commandBuffer.Set(entity, new Ecs0());
                 }
             }
         }
@@ -321,7 +321,7 @@ public class EventTests
             {
                 foreach (var entity in chunk.Entities)
                 {
-                    commandBuffer.Set(entity, new Component0());
+                    commandBuffer.Set(entity, new Ecs0());
                 }
             }
         }
@@ -344,8 +344,8 @@ public class EventTests
         for (var i = 0; i < entityAddCount; i++)
         {
             commandBuffer.Create()
-                .Set(new Component0())
-                .Set(new Component0());
+                .Set(new Ecs0())
+                .Set(new Ecs0());
         }
 
         commandBuffer.Execute();
@@ -380,8 +380,8 @@ public class EventTests
                 foreach (var entity in chunk.Entities)
                 {
                     commandBuffer
-                        .Set(entity, new Component0())
-                        .Set(entity, new Component0());
+                        .Set(entity, new Ecs0())
+                        .Set(entity, new Ecs0());
                 }
             }
         }
@@ -417,8 +417,8 @@ public class EventTests
             {
                 foreach (var entity in chunk.Entities)
                 {
-                    commandBuffer.Set(entity, new Component0());
-                    commandBuffer.Set(entity, new Component0());
+                    commandBuffer.Set(entity, new Ecs0());
+                    commandBuffer.Set(entity, new Ecs0());
 
                     commandBuffer.Destroy(entity);
                 }
@@ -445,7 +445,7 @@ public class EventTests
         for (var i = 0; i < entityAddCount; i++)
         {
             commandBuffer.Create()
-                .Set(new Component0());
+                .Set(new Ecs0());
         }
 
         commandBuffer.Execute();
@@ -475,7 +475,7 @@ public class EventTests
 
         var disposeCount = 0;
         var bufferedEntity = commandBuffer.Create()
-            .Set(new ComponentDisposable()
+            .Set(new EcsDisposable()
             {
                 DisposeAction = () => disposeCount++,
             });
@@ -498,13 +498,13 @@ public class EventTests
 
         var disposeCount = 0;
         var bufferedEntity = commandBuffer.Create()
-            .Set(new ComponentDisposable()
+            .Set(new EcsDisposable()
             {
                 DisposeAction = () => disposeCount++,
             });
         Assert.Equal(0, disposeCount);
 
-        bufferedEntity.Set(new ComponentDisposable()
+        bufferedEntity.Set(new EcsDisposable()
         {
             DisposeAction = () => disposeCount++,
         });
@@ -519,7 +519,7 @@ public class EventTests
 
         var disposeCount = 0;
         commandBuffer.Create()
-            .Set(new ComponentDisposable()
+            .Set(new EcsDisposable()
             {
                 DisposeAction = () => disposeCount++,
             });
@@ -537,7 +537,7 @@ public class EventTests
 
         var disposeCount = 0;
         commandBuffer.Create()
-            .Set(new ComponentDisposable()
+            .Set(new EcsDisposable()
             {
                 DisposeAction = () => disposeCount++,
             });
@@ -547,7 +547,7 @@ public class EventTests
         Assert.False(commandBuffer.HasBufferedOperations);
     }
 
-    private struct ComponentDisposable : IComponent, IDisposable
+    private struct EcsDisposable : IComponent, IDisposable
     {
         public required Action DisposeAction;
 
@@ -560,9 +560,9 @@ public class EventTests
     private class WorldEventHandler :
         IEventHandler<EntityCreatedEvent>,
         IEventHandler<EntityDestroyedEvent>,
-        IEventHandler<ComponentAdded<Component0>>,
-        IEventHandler<ComponentModified<Component0>>,
-        IEventHandler<ComponentRemoved<Component0>>
+        IEventHandler<ComponentAdded<Ecs0>>,
+        IEventHandler<ComponentModified<Ecs0>>,
+        IEventHandler<ComponentRemoved<Ecs0>>
     {
         public int EntityCreatedCount { get; private set; }
         public int EntityDestroyedCount { get; private set; }
@@ -575,9 +575,9 @@ public class EventTests
         {
             world.EventBus.Register<EntityCreatedEvent>(this);
             world.EventBus.Register<EntityDestroyedEvent>(this);
-            world.EventBus.Register<ComponentAdded<Component0>>(this);
-            world.EventBus.Register<ComponentModified<Component0>>(this);
-            world.EventBus.Register<ComponentRemoved<Component0>>(this);
+            world.EventBus.Register<ComponentAdded<Ecs0>>(this);
+            world.EventBus.Register<ComponentModified<Ecs0>>(this);
+            world.EventBus.Register<ComponentRemoved<Ecs0>>(this);
 
             return this;
         }
@@ -592,17 +592,17 @@ public class EventTests
             EntityDestroyedCount++;
         }
 
-        public void OnEvent(ComponentAdded<Component0> e)
+        public void OnEvent(ComponentAdded<Ecs0> e)
         {
             ComponentAddedCount++;
         }
 
-        public void OnEvent(ComponentModified<Component0> e)
+        public void OnEvent(ComponentModified<Ecs0> e)
         {
             ComponentModifiedCount++;
         }
 
-        public void OnEvent(ComponentRemoved<Component0> e)
+        public void OnEvent(ComponentRemoved<Ecs0> e)
         {
             ComponentRemovedCount++;
         }

@@ -46,7 +46,7 @@ public class EcsCommandBufferTests
         var buffered = new List<BufferedEntity>();
         for (var i = 0; i < 50000; i++)
         {
-            buffered.Add(commandBuffer.Create().Set(new ComponentInt32(i)));
+            buffered.Add(commandBuffer.Create().Set(new EcsInt32(i)));
         }
 
         // Execute buffer
@@ -65,7 +65,7 @@ public class EcsCommandBufferTests
             Assert.True(entity.IsAlive);
             Assert.Equal(1, world.ArchetypesList.Count);
             Assert.Equal(1, world.ArchetypesList.Single().Components.Count);
-            Assert.Equal(i, entity.GetComponent<ComponentInt32>().Value);
+            Assert.Equal(i, entity.GetComponent<EcsInt32>().Value);
         }
     }
 
@@ -88,18 +88,18 @@ public class EcsCommandBufferTests
             var buffered = new List<BufferedEntity>();
             for (var j = 0; j < 10000; j++)
             {
-                var b = buffer.Create().Set(new ComponentInt32(j));
+                var b = buffer.Create().Set(new EcsInt32(j));
                 buffered.Add(b);
 
                 for (var k = 0; k < 3; k++)
                 {
                     switch (rng.Next(0, 6))
                     {
-                        case 0: b.Set(new ComponentByte((byte)i)); break;
-                        case 1: b.Set(new ComponentInt16((short)i)); break;
-                        case 2: b.Set(new ComponentFloat(i)); break;
-                        case 3: b.Set(new ComponentInt32(i)); break;
-                        case 4: b.Set(new ComponentInt64(i)); break;
+                        case 0: b.Set(new EcsByte((byte)i)); break;
+                        case 1: b.Set(new EcsInt16((short)i)); break;
+                        case 2: b.Set(new EcsFloat(i)); break;
+                        case 3: b.Set(new EcsInt32(i)); break;
+                        case 4: b.Set(new EcsInt64(i)); break;
                     }
                 }
             }
@@ -177,25 +177,25 @@ public class EcsCommandBufferTests
                     switch (random.Next(7))
                     {
                         case 0:
-                            ChangeComponent<ComponentByte>(entity, commandBuffer, update);
+                            ChangeComponent<EcsByte>(entity, commandBuffer, update);
                             break;
                         case 1:
-                            ChangeComponent<ComponentInt16>(entity, commandBuffer, update);
+                            ChangeComponent<EcsInt16>(entity, commandBuffer, update);
                             break;
                         case 2:
-                            ChangeComponent<ComponentFloat>(entity, commandBuffer, update);
+                            ChangeComponent<EcsFloat>(entity, commandBuffer, update);
                             break;
                         case 3:
-                            ChangeComponent<ComponentInt32>(entity, commandBuffer, update);
+                            ChangeComponent<EcsInt32>(entity, commandBuffer, update);
                             break;
                         case 4:
-                            ChangeComponent<ComponentInt64>(entity, commandBuffer, update);
+                            ChangeComponent<EcsInt64>(entity, commandBuffer, update);
                             break;
                         case 5:
-                            ChangeComponent<Component0>(entity, commandBuffer, update);
+                            ChangeComponent<Ecs0>(entity, commandBuffer, update);
                             break;
                         case 6:
-                            ChangeComponent<Component1>(entity, commandBuffer, update);
+                            ChangeComponent<Ecs1>(entity, commandBuffer, update);
                             break;
                     }
                 }
@@ -248,7 +248,7 @@ public class EcsCommandBufferTests
         // Try to modify the buffered entity
         Assert.Throws<GuardException>(() =>
         {
-            bufferedEntity.Set(new ComponentFloat(8));
+            bufferedEntity.Set(new EcsFloat(8));
         });
     }
 
@@ -260,7 +260,7 @@ public class EcsCommandBufferTests
 
         var bufferedEntity = buffer
             .Create()
-            .Set(new ComponentFloat(17));
+            .Set(new EcsFloat(17));
 
         buffer.Execute();
         var entity = bufferedEntity.Resolve();
@@ -268,7 +268,7 @@ public class EcsCommandBufferTests
         Assert.True(entity.IsAlive);
         Assert.Equal(1, world.ArchetypesList.Count);
         Assert.Equal(1, world.ArchetypesList.Single().Components.Count);
-        Assert.True(world.ArchetypesList.Single().Components.Contains(ComponentId.Get<ComponentFloat>()));
+        Assert.True(world.ArchetypesList.Single().Components.Contains(ComponentId.Get<EcsFloat>()));
     }
 
     [Fact]
@@ -279,8 +279,8 @@ public class EcsCommandBufferTests
 
         var bufferedEntity = buffer.Create();
 
-        bufferedEntity.Set(new ComponentFloat(1));
-        bufferedEntity.Set(new ComponentFloat(2));
+        bufferedEntity.Set(new EcsFloat(1));
+        bufferedEntity.Set(new EcsFloat(2));
     }
 
     [Fact]
@@ -291,9 +291,9 @@ public class EcsCommandBufferTests
 
         var bufferedEntities = new[]
         {
-            buffer.Create().Set(new ComponentFloat(1)),
-            buffer.Create().Set(new ComponentFloat(2)),
-            buffer.Create().Set(new ComponentFloat(3)),
+            buffer.Create().Set(new EcsFloat(1)),
+            buffer.Create().Set(new EcsFloat(2)),
+            buffer.Create().Set(new EcsFloat(3)),
         };
 
         buffer.Execute();
@@ -317,8 +317,8 @@ public class EcsCommandBufferTests
         Assert.False(entities[1].IsAlive);
         Assert.True(entities[2].IsAlive);
 
-        Assert.Equal(1, entities[0].GetComponent<ComponentFloat>().Value);
-        Assert.Equal(3, entities[2].GetComponent<ComponentFloat>().Value);
+        Assert.Equal(1, entities[0].GetComponent<EcsFloat>().Value);
+        Assert.Equal(3, entities[2].GetComponent<EcsFloat>().Value);
     }
 
     [Fact]
@@ -327,7 +327,7 @@ public class EcsCommandBufferTests
         var world = new EcsWorld();
         var buffer = world.AcquireCommandBuffer();
 
-        var buffered = buffer.Create().Set(new ComponentFloat(1));
+        var buffered = buffer.Create().Set(new EcsFloat(1));
         buffer.Execute();
         var entity = buffered.Resolve();
         Assert.True(entity.IsAlive);
@@ -349,7 +349,7 @@ public class EcsCommandBufferTests
         var buffer = world.AcquireCommandBuffer();
 
         // Create an entity
-        var buffered = buffer.Create().Set(new ComponentFloat(1));
+        var buffered = buffer.Create().Set(new EcsFloat(1));
         buffer.Execute();
 
         var entity = buffered.Resolve();
@@ -378,9 +378,9 @@ public class EcsCommandBufferTests
 
         var buffered = new[]
         {
-            buffer.Create().Set(new ComponentFloat(1)),
-            buffer.Create().Set(new ComponentFloat(2)),
-            buffer.Create().Set(new ComponentFloat(3)),
+            buffer.Create().Set(new EcsFloat(1)),
+            buffer.Create().Set(new EcsFloat(2)),
+            buffer.Create().Set(new EcsFloat(3)),
         };
 
         buffer.Execute();
@@ -404,7 +404,7 @@ public class EcsCommandBufferTests
         Assert.False(entities[1].IsAlive);
         Assert.True(entities[2].IsAlive);
 
-        Assert.Equal(3, entities[2].GetComponent<ComponentFloat>().Value);
+        Assert.Equal(3, entities[2].GetComponent<EcsFloat>().Value);
     }
 
     [Fact]
@@ -415,7 +415,7 @@ public class EcsCommandBufferTests
 
         var cmd = world1.AcquireCommandBuffer();
 
-        var q = new QueryFilter().Include<Component0>().Build(world2);
+        var q = new QueryFilter().Include<Ecs0>().Build(world2);
 
         Assert.Throws<GuardException>(() =>
         {
@@ -432,9 +432,9 @@ public class EcsCommandBufferTests
 
         // Get the archetypes we're about to destroy
         var deleting = (from archetype in world.ArchetypesList
-            where archetype.Components.Contains(ComponentId.Get<Component0>())
-            where archetype.Components.Contains(ComponentId.Get<Component1>())
-            where !archetype.Components.Contains(ComponentId.Get<ComponentInt32>())
+            where archetype.Components.Contains(ComponentId.Get<Ecs0>())
+            where archetype.Components.Contains(ComponentId.Get<Ecs1>())
+            where !archetype.Components.Contains(ComponentId.Get<EcsInt32>())
             select archetype).ToArray();
 
         // Get all other archetypes
@@ -443,7 +443,7 @@ public class EcsCommandBufferTests
             select (archetype, archetype.EntityCount)).ToArray();
 
         // Query to destroy
-        var q = new QueryFilter().Include<Component0>().Include<Component1>().Exclude<ComponentInt32>().Build(world);
+        var q = new QueryFilter().Include<Ecs0>().Include<Ecs1>().Exclude<EcsInt32>().Build(world);
 
         // Get an entity we're going to destroy
         var dead = q.FirstOrDefault();
@@ -475,26 +475,26 @@ public class EcsCommandBufferTests
         var buffer = world.AcquireCommandBuffer();
 
         // Create entity
-        var buffered = buffer.Create().Set(new ComponentFloat(1));
+        var buffered = buffer.Create().Set(new EcsFloat(1));
         buffer.Execute();
 
         var entity = buffered.Resolve();
         Assert.True(entity.IsAlive);
 
         // Modify it _and_ destroy it
-        buffer.Set(entity, new ComponentInt64(7));
-        buffer.Remove<ComponentFloat>(entity);
+        buffer.Set(entity, new EcsInt64(7));
+        buffer.Remove<EcsFloat>(entity);
         buffer.Destroy(entity);
 
         buffer.Execute();
 
         // Check it's dead
         Assert.False(entity.IsAlive);
-        Assert.Equal(0, new QueryFilter().Include<ComponentFloat>().Build(world).Count());
-        Assert.Equal(0, new QueryFilter().Include<ComponentInt16>().Build(world).Count());
-        Assert.Equal(0, new QueryFilter().Include<ComponentInt32>().Build(world).Count());
-        Assert.Equal(0, new QueryFilter().Include<ComponentInt64>().Build(world).Count());
-        Assert.Equal(0, new QueryFilter().Include<ComponentFloat>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<EcsFloat>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<EcsInt16>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<EcsInt32>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<EcsInt64>().Build(world).Count());
+        Assert.Equal(0, new QueryFilter().Include<EcsFloat>().Build(world).Count());
     }
 
     [Fact]
@@ -506,18 +506,18 @@ public class EcsCommandBufferTests
         // Create an entity with 2 components
         var eb = buffer
             .Create()
-            .Set(new ComponentFloat(123))
-            .Set(new ComponentInt16(456));
+            .Set(new EcsFloat(123))
+            .Set(new EcsInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
 
         // Remove a component
-        buffer.Remove<ComponentInt16>(entity);
+        buffer.Remove<EcsInt16>(entity);
         buffer.Execute();
 
-        Assert.Equal(123, entity.GetComponent<ComponentFloat>().Value);
-        Assert.False(entity.HasComponent<ComponentInt16>());
+        Assert.Equal(123, entity.GetComponent<EcsFloat>().Value);
+        Assert.False(entity.HasComponent<EcsInt16>());
     }
 
     [Fact]
@@ -529,20 +529,20 @@ public class EcsCommandBufferTests
         // Create an entity with 2 components
         var bufferedEntity = commandBuffer
             .Create()
-            .Set(new ComponentFloat(123))
-            .Set(new ComponentInt16(456));
+            .Set(new EcsFloat(123))
+            .Set(new EcsInt16(456));
 
         commandBuffer.Execute();
         var entity = bufferedEntity.Resolve();
 
         // Add a third
-        commandBuffer.Set(entity, new ComponentInt32(789));
+        commandBuffer.Set(entity, new EcsInt32(789));
         commandBuffer.Execute();
 
         // Check they are all present
-        Assert.True(entity.HasComponent<ComponentFloat>());
-        Assert.True(entity.HasComponent<ComponentInt16>());
-        Assert.True(entity.HasComponent<ComponentInt32>());
+        Assert.True(entity.HasComponent<EcsFloat>());
+        Assert.True(entity.HasComponent<EcsInt16>());
+        Assert.True(entity.HasComponent<EcsInt32>());
     }
 
     [Fact]
@@ -554,20 +554,20 @@ public class EcsCommandBufferTests
         // Create an entity with 2 components
         var eb = buffer
             .Create()
-            .Set(new ComponentFloat(123))
-            .Set(new ComponentInt16(456));
+            .Set(new EcsFloat(123))
+            .Set(new EcsInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
 
         // Overwrite one
-        buffer.Set(entity, new ComponentInt16(789));
+        buffer.Set(entity, new EcsInt16(789));
         buffer.Execute();
 
         // Check the value has changed
-        Assert.True(entity.HasComponent<ComponentFloat>());
-        Assert.True(entity.HasComponent<ComponentInt16>());
-        Assert.Equal(789, entity.GetComponent<ComponentInt16>().Value);
+        Assert.True(entity.HasComponent<EcsFloat>());
+        Assert.True(entity.HasComponent<EcsInt16>());
+        Assert.Equal(789, entity.GetComponent<EcsInt16>().Value);
     }
 
     [Fact]
@@ -579,21 +579,21 @@ public class EcsCommandBufferTests
         // Create an entity with 2 components
         var eb = buffer
             .Create()
-            .Set(new ComponentFloat(123))
-            .Set(new ComponentInt16(456));
+            .Set(new EcsFloat(123))
+            .Set(new EcsInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
 
         // Overwrite one, twice
-        buffer.Set(entity, new ComponentInt16(789));
-        buffer.Set(entity, new ComponentInt16(987));
+        buffer.Set(entity, new EcsInt16(789));
+        buffer.Set(entity, new EcsInt16(987));
         buffer.Execute();
 
         // Check the value has changed to the latest value
-        Assert.True(entity.HasComponent<ComponentFloat>());
-        Assert.True(entity.HasComponent<ComponentInt16>());
-        Assert.Equal(987, entity.GetComponent<ComponentInt16>().Value);
+        Assert.True(entity.HasComponent<EcsFloat>());
+        Assert.True(entity.HasComponent<EcsInt16>());
+        Assert.Equal(987, entity.GetComponent<EcsInt16>().Value);
     }
 
     [Fact]
@@ -605,23 +605,23 @@ public class EcsCommandBufferTests
         // Create an entity with 2 components
         var eb = buffer
             .Create()
-            .Set(new ComponentFloat(123))
-            .Set(new ComponentInt16(456));
+            .Set(new EcsFloat(123))
+            .Set(new EcsInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
 
         // Overwrite one
-        buffer.Set(entity, new ComponentInt16(789));
+        buffer.Set(entity, new EcsInt16(789));
 
         // Then remove it
-        buffer.Remove<ComponentInt16>(entity);
+        buffer.Remove<EcsInt16>(entity);
 
         buffer.Execute();
 
         // Check the value is gone
-        Assert.True(entity.HasComponent<ComponentFloat>());
-        Assert.False(entity.HasComponent<ComponentInt16>());
+        Assert.True(entity.HasComponent<EcsFloat>());
+        Assert.False(entity.HasComponent<EcsInt16>());
     }
 
     [Fact]
@@ -633,21 +633,21 @@ public class EcsCommandBufferTests
         // Create an entity with 2 components
         var eb = buffer
             .Create()
-            .Set(new ComponentFloat(123))
-            .Set(new ComponentInt16(456));
+            .Set(new EcsFloat(123))
+            .Set(new EcsInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
 
         // Remove a component
-        buffer.Remove<ComponentInt32>(entity);
+        buffer.Remove<EcsInt32>(entity);
 
         buffer.Execute();
 
         // Check entity is unchanged
-        Assert.True(entity.HasComponent<ComponentFloat>());
-        Assert.True(entity.HasComponent<ComponentInt16>());
-        Assert.False(entity.HasComponent<ComponentInt32>());
+        Assert.True(entity.HasComponent<EcsFloat>());
+        Assert.True(entity.HasComponent<EcsInt16>());
+        Assert.False(entity.HasComponent<EcsInt32>());
     }
 
     [Fact]
@@ -659,27 +659,27 @@ public class EcsCommandBufferTests
         // Create an entity with 2 components
         var eb = buffer
             .Create()
-            .Set(new ComponentFloat(123))
-            .Set(new ComponentInt16(456));
+            .Set(new EcsFloat(123))
+            .Set(new EcsInt16(456));
 
         buffer.Execute();
         var entity = eb.Resolve();
 
         // Remove a component
-        buffer.Remove<ComponentInt16>(entity);
+        buffer.Remove<EcsInt16>(entity);
 
         // Then set the same component!
-        buffer.Set(entity, new ComponentInt16(789));
+        buffer.Set(entity, new EcsInt16(789));
 
         buffer.Execute();
 
         // Check entity structure is unchanged
-        Assert.True(entity.HasComponent<ComponentFloat>());
-        Assert.True(entity.HasComponent<ComponentInt16>());
-        Assert.False(entity.HasComponent<ComponentInt32>());
+        Assert.True(entity.HasComponent<EcsFloat>());
+        Assert.True(entity.HasComponent<EcsInt16>());
+        Assert.False(entity.HasComponent<EcsInt32>());
 
         // Check value is correct
-        Assert.Equal(789, entity.GetComponent<ComponentInt16>().Value);
+        Assert.Equal(789, entity.GetComponent<EcsInt16>().Value);
     }
 
     [Fact]
@@ -702,24 +702,24 @@ public class EcsCommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: eb.Set(new Component0()); break;
-                    case 1: eb.Set(new Component1()); break;
-                    case 2: eb.Set(new Component2()); break;
-                    case 3: eb.Set(new Component3()); break;
-                    case 4: eb.Set(new Component4()); break;
-                    case 5: eb.Set(new Component5()); break;
-                    case 6: eb.Set(new Component6()); break;
-                    case 7: eb.Set(new Component7()); break;
-                    case 8: eb.Set(new Component8()); break;
-                    case 9: eb.Set(new Component9()); break;
-                    case 10: eb.Set(new Component10()); break;
-                    case 11: eb.Set(new Component11()); break;
-                    case 12: eb.Set(new Component12()); break;
-                    case 13: eb.Set(new Component13()); break;
-                    case 14: eb.Set(new Component14()); break;
-                    case 15: eb.Set(new Component15()); break;
-                    case 16: eb.Set(new Component16()); break;
-                    case 17: eb.Set(new Component17()); break;
+                    case 0: eb.Set(new Ecs0()); break;
+                    case 1: eb.Set(new Ecs1()); break;
+                    case 2: eb.Set(new Ecs2()); break;
+                    case 3: eb.Set(new Ecs3()); break;
+                    case 4: eb.Set(new Ecs4()); break;
+                    case 5: eb.Set(new Ecs5()); break;
+                    case 6: eb.Set(new Ecs6()); break;
+                    case 7: eb.Set(new Ecs7()); break;
+                    case 8: eb.Set(new Ecs8()); break;
+                    case 9: eb.Set(new Ecs9()); break;
+                    case 10: eb.Set(new Ecs10()); break;
+                    case 11: eb.Set(new Ecs11()); break;
+                    case 12: eb.Set(new Ecs12()); break;
+                    case 13: eb.Set(new Ecs13()); break;
+                    case 14: eb.Set(new Ecs14()); break;
+                    case 15: eb.Set(new Ecs15()); break;
+                    case 16: eb.Set(new Ecs16()); break;
+                    case 17: eb.Set(new Ecs17()); break;
                 }
             }
         }
@@ -737,24 +737,24 @@ public class EcsCommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: Assert.True(entity.HasComponent<Component0>()); break;
-                    case 1: Assert.True(entity.HasComponent<Component1>()); break;
-                    case 2: Assert.True(entity.HasComponent<Component2>()); break;
-                    case 3: Assert.True(entity.HasComponent<Component3>()); break;
-                    case 4: Assert.True(entity.HasComponent<Component4>()); break;
-                    case 5: Assert.True(entity.HasComponent<Component5>()); break;
-                    case 6: Assert.True(entity.HasComponent<Component6>()); break;
-                    case 7: Assert.True(entity.HasComponent<Component7>()); break;
-                    case 8: Assert.True(entity.HasComponent<Component8>()); break;
-                    case 9: Assert.True(entity.HasComponent<Component9>()); break;
-                    case 10: Assert.True(entity.HasComponent<Component10>()); break;
-                    case 11: Assert.True(entity.HasComponent<Component11>()); break;
-                    case 12: Assert.True(entity.HasComponent<Component12>()); break;
-                    case 13: Assert.True(entity.HasComponent<Component13>()); break;
-                    case 14: Assert.True(entity.HasComponent<Component14>()); break;
-                    case 15: Assert.True(entity.HasComponent<Component15>()); break;
-                    case 16: Assert.True(entity.HasComponent<Component16>()); break;
-                    case 17: Assert.True(entity.HasComponent<Component17>()); break;
+                    case 0: Assert.True(entity.HasComponent<Ecs0>()); break;
+                    case 1: Assert.True(entity.HasComponent<Ecs1>()); break;
+                    case 2: Assert.True(entity.HasComponent<Ecs2>()); break;
+                    case 3: Assert.True(entity.HasComponent<Ecs3>()); break;
+                    case 4: Assert.True(entity.HasComponent<Ecs4>()); break;
+                    case 5: Assert.True(entity.HasComponent<Ecs5>()); break;
+                    case 6: Assert.True(entity.HasComponent<Ecs6>()); break;
+                    case 7: Assert.True(entity.HasComponent<Ecs7>()); break;
+                    case 8: Assert.True(entity.HasComponent<Ecs8>()); break;
+                    case 9: Assert.True(entity.HasComponent<Ecs9>()); break;
+                    case 10: Assert.True(entity.HasComponent<Ecs10>()); break;
+                    case 11: Assert.True(entity.HasComponent<Ecs11>()); break;
+                    case 12: Assert.True(entity.HasComponent<Ecs12>()); break;
+                    case 13: Assert.True(entity.HasComponent<Ecs13>()); break;
+                    case 14: Assert.True(entity.HasComponent<Ecs14>()); break;
+                    case 15: Assert.True(entity.HasComponent<Ecs15>()); break;
+                    case 16: Assert.True(entity.HasComponent<Ecs16>()); break;
+                    case 17: Assert.True(entity.HasComponent<Ecs17>()); break;
                 }
             }
         }
@@ -767,10 +767,10 @@ public class EcsCommandBufferTests
         var buffer = world.AcquireCommandBuffer();
 
         // Create some entities
-        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
-        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
-        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
-        buffer.Create().Set(new Component0()).Set(new Component1()).Set(new Component2());
+        buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Set(new Ecs2());
+        buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Set(new Ecs2());
+        buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Set(new Ecs2());
+        buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Set(new Ecs2());
         var resolver = buffer.Execute();
         var entity0 = resolver[0];
         var entity1 = resolver[1];
@@ -778,14 +778,14 @@ public class EcsCommandBufferTests
         var entity3 = resolver[3];
 
         // Add component to 0
-        buffer.Set(entity0, new Component3());
+        buffer.Set(entity0, new Ecs3());
 
         // Remove component from 1
-        buffer.Remove<Component0>(entity1);
+        buffer.Remove<Ecs0>(entity1);
 
         // Add and remove 2
-        buffer.Remove<Component0>(entity2);
-        buffer.Set(entity2, new Component4());
+        buffer.Remove<Ecs0>(entity2);
+        buffer.Set(entity2, new Ecs4());
 
         // Do nothing to 3
 
@@ -794,27 +794,27 @@ public class EcsCommandBufferTests
 
         // Check 1 has everything expected
         Assert.Equal(4, entity0.ComponentIds.Count);
-        entity0.GetComponent<Component0>();
-        entity0.GetComponent<Component1>();
-        entity0.GetComponent<Component2>();
-        entity0.GetComponent<Component3>();
+        entity0.GetComponent<Ecs0>();
+        entity0.GetComponent<Ecs1>();
+        entity0.GetComponent<Ecs2>();
+        entity0.GetComponent<Ecs3>();
 
         // Check 2 has everything expected
         Assert.Equal(2, entity1.ComponentIds.Count);
-        entity1.GetComponent<Component1>();
-        entity1.GetComponent<Component2>();
+        entity1.GetComponent<Ecs1>();
+        entity1.GetComponent<Ecs2>();
 
         // Check 3 has everything expected
         Assert.Equal(3, entity2.ComponentIds.Count);
-        entity2.GetComponent<Component1>();
-        entity2.GetComponent<Component2>();
-        entity2.GetComponent<Component4>();
+        entity2.GetComponent<Ecs1>();
+        entity2.GetComponent<Ecs2>();
+        entity2.GetComponent<Ecs4>();
 
         // Check other is unchanged
         Assert.Equal(3, entity3.ComponentIds.Count);
-        entity3.GetComponent<Component0>();
-        entity3.GetComponent<Component1>();
-        entity3.GetComponent<Component2>();
+        entity3.GetComponent<Ecs0>();
+        entity3.GetComponent<Ecs1>();
+        entity3.GetComponent<Ecs2>();
     }
 
     [Fact]
@@ -824,18 +824,18 @@ public class EcsCommandBufferTests
         var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
-        var eb = cmd.Create().Set(new Component0());
+        var eb = cmd.Create().Set(new Ecs0());
 
         cmd.Execute();
         var e = eb.Resolve();
 
         // Set value, then clear buffer
-        cmd.Set(e, new Component1());
+        cmd.Set(e, new Ecs1());
         cmd.Clear();
         cmd.Execute();
 
-        Assert.True(e.HasComponent<Component0>());
-        Assert.False(e.HasComponent<Component1>());
+        Assert.True(e.HasComponent<Ecs0>());
+        Assert.False(e.HasComponent<Ecs1>());
     }
 
     [Fact]
@@ -845,16 +845,16 @@ public class EcsCommandBufferTests
         var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
-        var eb = cmd.Create().Set(new Component0());
+        var eb = cmd.Create().Set(new Ecs0());
         cmd.Execute();
         _ = eb.Resolve();
 
         // Create another entity then clear
-        cmd.Create().Set(new Component0());
+        cmd.Create().Set(new Ecs0());
         cmd.Clear();
         cmd.Execute();
 
-        Assert.Equal(1, new QueryFilter().Include<Component0>().Build(world).Count());
+        Assert.Equal(1, new QueryFilter().Include<Ecs0>().Build(world).Count());
     }
 
     [Fact]
@@ -864,7 +864,7 @@ public class EcsCommandBufferTests
         var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
-        var eb = cmd.Create().Set(new Component0());
+        var eb = cmd.Create().Set(new Ecs0());
         cmd.Clear();
         cmd.Execute();
 
@@ -882,17 +882,17 @@ public class EcsCommandBufferTests
         var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
-        var eb = cmd.Create().Set(new Component0()).Set(new Component1());
+        var eb = cmd.Create().Set(new Ecs0()).Set(new Ecs1());
         cmd.Execute();
         var e = eb.Resolve();
 
         // Remove value, then clear buffer
-        cmd.Remove<Component1>(e);
+        cmd.Remove<Ecs1>(e);
         cmd.Clear();
         cmd.Execute();
 
-        Assert.True(e.HasComponent<Component0>());
-        Assert.True(e.HasComponent<Component1>());
+        Assert.True(e.HasComponent<Ecs0>());
+        Assert.True(e.HasComponent<Ecs1>());
     }
 
     [Fact]
@@ -902,7 +902,7 @@ public class EcsCommandBufferTests
         var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
-        var eb = cmd.Create().Set(new Component0()).Set(new Component1());
+        var eb = cmd.Create().Set(new Ecs0()).Set(new Ecs1());
         cmd.Execute();
         var e = eb.Resolve();
 
@@ -912,8 +912,8 @@ public class EcsCommandBufferTests
         cmd.Execute();
 
         Assert.True(e.IsAlive);
-        Assert.True(e.HasComponent<Component0>());
-        Assert.True(e.HasComponent<Component1>());
+        Assert.True(e.HasComponent<Ecs0>());
+        Assert.True(e.HasComponent<Ecs1>());
     }
 
     [Fact]
@@ -923,17 +923,17 @@ public class EcsCommandBufferTests
         var cmd = world.AcquireCommandBuffer();
 
         // Create an entity
-        var eb = cmd.Create().Set(new Component0()).Set(new Component1());
+        var eb = cmd.Create().Set(new Ecs0()).Set(new Ecs1());
         cmd.Execute();
         var e = eb.Resolve();
 
         // Destroy archetypes, then clear buffer
-        cmd.Destroy(new QueryFilter().Include<Component0>().Build(world));
+        cmd.Destroy(new QueryFilter().Include<Ecs0>().Build(world));
         cmd.Clear();
         cmd.Execute();
 
         Assert.True(e.IsAlive);
-        Assert.True(e.HasComponent<Component0>());
-        Assert.True(e.HasComponent<Component1>());
+        Assert.True(e.HasComponent<Ecs0>());
+        Assert.True(e.HasComponent<Ecs1>());
     }
 }

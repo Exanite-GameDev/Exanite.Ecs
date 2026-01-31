@@ -17,7 +17,7 @@ public class QueryTests
         var world = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<ComponentFloat>()
+            .Include<EcsFloat>()
             .Build(world);
 
         var archetypes = q.Archetypes;
@@ -28,11 +28,11 @@ public class QueryTests
     public void IncludeMatchOne()
     {
         var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
 
         var q = new QueryFilter()
-            .Include<ComponentFloat>()
+            .Include<EcsFloat>()
             .Build(w);
 
         var a = q.Archetypes;
@@ -43,12 +43,12 @@ public class QueryTests
     public void IncludeMatchCaching()
     {
         var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
 
         // Query that matches just one of the archetypes in the world
         var q = new QueryFilter()
-            .Include<ComponentFloat>()
+            .Include<EcsFloat>()
             .Build(w);
 
         // Match once, check it matches one archetype
@@ -56,7 +56,7 @@ public class QueryTests
         Assert.Equal(1, a.Length);
 
         // Add an archetype to the world that the query should match
-        var c1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentFloat>() });
+        var c1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsFloat>() });
         w.GetOrCreateArchetype(c1);
 
         // Check it now matches 2 archetypes
@@ -64,11 +64,11 @@ public class QueryTests
         Assert.Equal(2, b.Length);
         foreach (var archetype in b)
         {
-            Assert.True(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+            Assert.True(archetype.Components.Contains(ComponentId.Get<EcsFloat>()));
         }
 
         // Add an archetype to the world that the query should NOT match
-        var c2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentByte>() });
+        var c2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsByte>() });
         w.GetOrCreateArchetype(c2);
 
         // Check it now matches 2 archetypes
@@ -76,7 +76,7 @@ public class QueryTests
         Assert.Equal(2, c.Length);
         foreach (var archetype in c)
         {
-            Assert.True(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+            Assert.True(archetype.Components.Contains(ComponentId.Get<EcsFloat>()));
         }
     }
 
@@ -84,53 +84,53 @@ public class QueryTests
     public void IncludeMatchMultiple()
     {
         var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
 
         var q = new QueryFilter()
-            .Include<ComponentFloat>()
+            .Include<EcsFloat>()
             .Build(w);
 
         var archetypes = q.ArchetypesList;
         Assert.Equal(2, archetypes.Count);
 
-        Assert.True(archetypes.All(x => x.Components.Contains(ComponentId.Get<ComponentFloat>())));
+        Assert.True(archetypes.All(x => x.Components.Contains(ComponentId.Get<EcsFloat>())));
     }
 
     [Fact]
     public void IncludeExclude()
     {
         var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
 
         var q = new QueryFilter()
-            .Include<ComponentFloat>()
-            .Exclude<ComponentInt32>()
+            .Include<EcsFloat>()
+            .Exclude<EcsInt32>()
             .Build(w);
 
         var archetypes = q.Archetypes;
         Assert.Equal(1, archetypes.Length);
 
         var archetype = archetypes[0];
-        Assert.True(archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
-        Assert.False(archetype.Components.Contains(ComponentId.Get<ComponentInt32>()));
+        Assert.True(archetype.Components.Contains(ComponentId.Get<EcsFloat>()));
+        Assert.False(archetype.Components.Contains(ComponentId.Get<EcsInt32>()));
     }
 
     [Fact]
     public void ExactlyOne()
     {
         var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt16>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
 
         var q = new QueryFilter()
-            .ExactlyOne<ComponentFloat>()
-            .ExactlyOne<ComponentInt32>()
+            .ExactlyOne<EcsFloat>()
+            .ExactlyOne<EcsInt32>()
             .Build(w);
 
         var archetypes = q.Archetypes;
@@ -146,14 +146,14 @@ public class QueryTests
     public void AtLeastOne()
     {
         var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt16>(), ComponentId.Get<EcsInt64>()]);
 
         var q = new QueryFilter()
-            .AtLeastOne<ComponentFloat>()
-            .AtLeastOne<ComponentInt32>()
+            .AtLeastOne<EcsFloat>()
+            .AtLeastOne<EcsInt32>()
             .Build(w);
 
         var archetypes = q.Archetypes;
@@ -161,7 +161,7 @@ public class QueryTests
 
         foreach (var archetype in archetypes)
         {
-            Assert.True(archetype.Components.Contains(ComponentId.Get<ComponentInt32>()) || archetype.Components.Contains(ComponentId.Get<ComponentFloat>()));
+            Assert.True(archetype.Components.Contains(ComponentId.Get<EcsInt32>()) || archetype.Components.Contains(ComponentId.Get<EcsFloat>()));
         }
     }
 
@@ -169,15 +169,15 @@ public class QueryTests
     public void NotAll()
     {
         var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentInt16>(), ComponentId.Get<ComponentInt64>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<ComponentFloat>(), ComponentId.Get<ComponentInt32>(), ComponentId.Get<ComponentInt64>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsInt16>(), ComponentId.Get<EcsInt64>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
+        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsInt64>()]);
 
         var q = new QueryFilter()
-            .NotAll<ComponentFloat>()
-            .NotAll<ComponentInt32>()
+            .NotAll<EcsFloat>()
+            .NotAll<EcsInt32>()
             .Build(w);
 
         var archetypes = q.Archetypes;
@@ -190,7 +190,7 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         Assert.Throws<GuardException>(() => q.First());
@@ -202,11 +202,11 @@ public class QueryTests
         var world = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(world);
 
         var c = world.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Component0());
+        var eb = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e = eb.Resolve();
@@ -220,12 +220,12 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb1 = c.Create().Set(new Component0());
-        var eb2 = c.Create().Set(new Component0());
+        var eb1 = c.Create().Set(new Ecs0());
+        var eb2 = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e1 = eb1.Resolve();
@@ -240,7 +240,7 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         Assert.False(q.FirstOrDefault().IsAlive);
@@ -252,11 +252,11 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Component0());
+        var eb = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e = eb.Resolve();
@@ -270,12 +270,12 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb1 = c.Create().Set(new Component0());
-        var eb2 = c.Create().Set(new Component0());
+        var eb1 = c.Create().Set(new Ecs0());
+        var eb2 = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e1 = eb1.Resolve();
@@ -290,7 +290,7 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         Assert.False(q.SingleOrDefault().IsAlive);
@@ -302,12 +302,12 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        c.Create().Set(new Component0());
-        c.Create().Set(new Component0());
+        c.Create().Set(new Ecs0());
+        c.Create().Set(new Ecs0());
         c.Execute();
 
         Assert.Throws<GuardException>(() => q.SingleOrDefault());
@@ -319,11 +319,11 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Component0());
+        var eb = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e = eb.Resolve();
@@ -337,12 +337,12 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        c.Create().Set(new Component0());
-        c.Create().Set(new Component0());
+        c.Create().Set(new Ecs0());
+        c.Create().Set(new Ecs0());
         c.Execute();
 
         Assert.Throws<GuardException>(() => q.Single());
@@ -354,7 +354,7 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         Assert.Throws<GuardException>(() => q.Single());
@@ -366,11 +366,11 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Component0());
+        var eb = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e = eb.Resolve();
@@ -384,11 +384,11 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Component0());
+        var eb = c.Create().Set(new Ecs0());
 
         c.Execute();
         _ = eb.Resolve();
@@ -402,7 +402,7 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         Assert.False(q.Any());
@@ -414,11 +414,11 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Component0());
+        var eb = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e = eb.Resolve();
@@ -432,7 +432,7 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
@@ -450,7 +450,7 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var rng = new Random(123);
@@ -464,11 +464,11 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<Component0>()
+            .Include<Ecs0>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Component0());
+        var eb = c.Create().Set(new Ecs0());
 
         c.Execute();
         var e = eb.Resolve();
@@ -484,23 +484,23 @@ public class QueryTests
         var w = new EcsWorld();
 
         var q = new QueryFilter()
-            .Include<ComponentInt32>()
+            .Include<EcsInt32>()
             .Build(w);
 
         var c = w.AcquireCommandBuffer();
         for (var i = 0; i < 10000; i++)
         {
-            c.Create().Set(new ComponentInt32(i));
+            c.Create().Set(new EcsInt32(i));
         }
 
         for (var i = 0; i < 10000; i++)
         {
-            c.Create().Set(new ComponentInt32(i)).Set(new Component0());
+            c.Create().Set(new EcsInt32(i)).Set(new Ecs0());
         }
 
         for (var i = 0; i < 10000; i++)
         {
-            c.Create().Set(new ComponentInt32(i)).Set(new Component1());
+            c.Create().Set(new EcsInt32(i)).Set(new Ecs1());
         }
 
         var resolver = c.Execute();

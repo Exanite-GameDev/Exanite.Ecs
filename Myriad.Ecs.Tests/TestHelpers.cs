@@ -19,13 +19,13 @@ public static class TestHelpers
             {
                 switch (r.Next(0, checked((int)uniqueComponents)))
                 {
-                    case 0: eb.Set(new ComponentByte(0)); break;
-                    case 1: eb.Set(new ComponentInt16(0)); break;
-                    case 2: eb.Set(new ComponentFloat(0)); break;
-                    case 3: eb.Set(new ComponentInt32(0)); break;
-                    case 4: eb.Set(new ComponentInt64(0)); break;
-                    case 5: eb.Set(new Component0()); break;
-                    case 6: eb.Set(new Component1()); break;
+                    case 0: eb.Set(new EcsByte(0)); break;
+                    case 1: eb.Set(new EcsInt16(0)); break;
+                    case 2: eb.Set(new EcsFloat(0)); break;
+                    case 3: eb.Set(new EcsInt32(0)); break;
+                    case 4: eb.Set(new EcsInt64(0)); break;
+                    case 5: eb.Set(new Ecs0()); break;
+                    case 6: eb.Set(new Ecs1()); break;
                 }
             }
         }

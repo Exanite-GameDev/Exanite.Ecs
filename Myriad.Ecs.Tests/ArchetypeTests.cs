@@ -14,10 +14,10 @@ public class ArchetypeTests
         for (var i = 0; i < 10000; i++)
         {
             var e = cb.Create();
-            e.Set(new ComponentInt32(i)).Set(new ComponentInt64(i));
+            e.Set(new EcsInt32(i)).Set(new EcsInt64(i));
             if (i % 7 == 0)
             {
-                e.Set(new ComponentFloat(i));
+                e.Set(new EcsFloat(i));
             }
         }
         cb.Execute();
@@ -33,15 +33,15 @@ public class ArchetypeTests
             Assert.Equal(archetype.EntityCount, entityCount);
         }
 
-        var query = new QueryFilter().Include<ComponentInt32>().Include<ComponentInt64>().Build(w);
+        var query = new QueryFilter().Include<EcsInt32>().Include<EcsInt64>().Build(w);
         Assert.Equal(10000, query.Count());
 
         foreach (var archetypeMatch in query.Archetypes)
         {
             foreach (var chunk in archetypeMatch.Chunks)
             {
-                var a = chunk.GetSpan<ComponentInt32>();
-                var b = chunk.GetSpan<ComponentInt64>();
+                var a = chunk.GetSpan<EcsInt32>();
+                var b = chunk.GetSpan<EcsInt64>();
 
                 for (var i = 0; i < chunk.EntityCount; i++)
                 {

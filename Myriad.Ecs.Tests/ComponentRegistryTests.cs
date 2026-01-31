@@ -21,22 +21,22 @@ public class ComponentRegistryTests
     {
         var ids = new[]
         {
-            ComponentId.Get<ComponentInt32>(),
-            ComponentId.Get<ComponentInt64>(),
-            ComponentId.Get(typeof(ComponentInt16)),
-            ComponentId.Get(typeof(ComponentFloat)),
+            ComponentId.Get<EcsInt32>(),
+            ComponentId.Get<EcsInt64>(),
+            ComponentId.Get(typeof(EcsInt16)),
+            ComponentId.Get(typeof(EcsFloat)),
         };
 
         Assert.Equal(4, ids.Distinct().Count());
 
-        Assert.Equal(typeof(ComponentInt16), ComponentId.Get<ComponentInt16>().Type);
+        Assert.Equal(typeof(EcsInt16), ComponentId.Get<EcsInt16>().Type);
     }
 
     [Fact]
     public void DoesNotReassign()
     {
-        var id = ComponentId.Get<ComponentInt32>();
-        var id2 = ComponentId.Get<ComponentInt32>();
+        var id = ComponentId.Get<EcsInt32>();
+        var id2 = ComponentId.Get<EcsInt32>();
 
         Assert.Equal(id, id2);
     }
