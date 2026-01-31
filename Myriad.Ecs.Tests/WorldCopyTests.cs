@@ -152,8 +152,8 @@ public class WorldCopyTests
 
         public void OnCopied(EcsWorld newWorld, EntityLookup lookup)
         {
-            Self2 = lookup.GetRef(Self2);
-            Self3 = lookup.GetEntity(Self3);
+            Self2 = lookup.Get(Self2);
+            Self3 = lookup.Get(Self3);
         }
     }
 }
