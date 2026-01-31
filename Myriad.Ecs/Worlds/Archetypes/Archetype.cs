@@ -136,25 +136,36 @@ public sealed class Archetype
     /// <param name="location">Location will be mutated to point to the new location</param>
     internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation location)
     {
-        // Increase archetype entity count
         EntityCount++;
 
-        // Remove full chunks
-        chunksWithSpace.RemoveAll(static chunk => chunk.IsFull);
+        var chunk = GetChunkWithSpace();
+        return chunk.AddEntity(entity, ref location);
+    }
 
-        // If there's one with space, use it
+    /// <summary>
+    /// Returns a chunk that is not full.
+    /// </summary>
+    private Chunk GetChunkWithSpace()
+    {
+        chunksWithSpace.RemoveAll(static chunk => chunk.IsFull);
         if (chunksWithSpace.Count > 0)
         {
-            return chunksWithSpace[0].AddEntity(entity, ref location);
+            return chunksWithSpace[0];
         }
 
-        // No space in any chunks, create a new chunk
+        return GetEmptyChunk();
+    }
+
+    /// <summary>
+    /// Returns a chunk that is completely empty.
+    /// </summary>
+    private Chunk GetEmptyChunk()
+    {
         var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this);
         chunksList.Add(newChunk);
         chunksWithSpace.Add(newChunk);
 
-        // The chunk obviously has space, so this cannot fail!
-        return newChunk.AddEntity(entity, ref location);
+        return newChunk;
     }
 
     internal void RemoveEntity(StorageLocation location)
