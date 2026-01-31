@@ -3,23 +3,18 @@ using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
-public class EntityLookup : IEntityLookup
+public class EntityLookup
 {
-    public readonly Dictionary<Entity, Entity> Lookup;
+    public readonly IReadOnlyDictionary<Entity, Entity> Entries;
 
-    public EntityLookup()
+    public EntityLookup(Dictionary<Entity, Entity> entries)
     {
-        Lookup = new Dictionary<Entity, Entity>();
-    }
-
-    public EntityLookup(Dictionary<Entity, Entity> lookup)
-    {
-        Lookup = lookup;
+        Entries = entries;
     }
 
     public Entity GetEntity(Entity entity, EntityLookupPolicy policy)
     {
-        if (Lookup.TryGetValue(entity, out var newEntity))
+        if (Entries.TryGetValue(entity, out var newEntity))
         {
             return newEntity;
         }

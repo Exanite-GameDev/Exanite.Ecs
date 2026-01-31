@@ -87,7 +87,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     /// <br/>
     /// The <see cref="IComponentSelfCopied"/> event will be called for all components copied from the source world.
     /// </summary>
-    public IEntityLookup CopyTo(EcsWorld dstWorld)
+    public EntityLookup CopyTo(EcsWorld dstWorld)
     {
         dstWorld.Clear();
 
