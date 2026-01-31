@@ -10,19 +10,19 @@ namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
 internal struct ArchetypeComponentLookup
 {
     /// <summary>
-    /// Map from component index to the component type.
+    /// Map from column index to the component type.
     /// </summary>
-    internal readonly Type[] ComponentTypesByComponentIndex;
+    internal readonly Type[] ComponentTypesByColumnIndex;
 
     /// <summary>
-    /// Map from component index to the component ID.
+    /// Map from column index to the component ID.
     /// </summary>
-    internal readonly ComponentId[] ComponentIdByComponentIndex;
+    internal readonly ComponentId[] ComponentIdByColumnIndex;
 
     /// <summary>
-    /// Sparse map from component ID to component index.
+    /// Sparse map from component ID to column index.
     /// </summary>
-    internal readonly int[] ComponentIndexByComponentId;
+    internal readonly int[] ColumnIndexByComponentId;
 
     /// <summary>
     /// Sparse map from component ID to component event dispatcher.
@@ -41,24 +41,24 @@ internal struct ArchetypeComponentLookup
             }
         }
 
-        // Initialize a map from component index to component type and component ID
-        ComponentTypesByComponentIndex = new Type[components.Count];
-        ComponentIdByComponentIndex = new ComponentId[components.Count];
+        // Initialize a map from column index to component type and component ID
+        ComponentTypesByColumnIndex = new Type[components.Count];
+        ComponentIdByColumnIndex = new ComponentId[components.Count];
 
-        // Initialize a sparse map from component ID to component index
-        ComponentIndexByComponentId = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
-        Array.Fill(ComponentIndexByComponentId, -1);
+        // Initialize a sparse map from component ID to column index
+        ColumnIndexByComponentId = maxComponentId == int.MinValue ? [] : new int[maxComponentId + 1];
+        Array.Fill(ColumnIndexByComponentId, -1);
 
         // Fill previously mentioned maps
-        var componentIndex = 0;
+        var columnIndex = 0;
         foreach (var component in components)
         {
-            ComponentTypesByComponentIndex[componentIndex] = component.Type;
-            ComponentIdByComponentIndex[componentIndex] = component;
+            ComponentTypesByColumnIndex[columnIndex] = component.Type;
+            ComponentIdByColumnIndex[columnIndex] = component;
 
-            ComponentIndexByComponentId[component.Value] = componentIndex;
+            ColumnIndexByComponentId[component.Value] = columnIndex;
 
-            componentIndex++;
+            columnIndex++;
         }
 
         // Create a sparse map from component ID to component event dispatcher

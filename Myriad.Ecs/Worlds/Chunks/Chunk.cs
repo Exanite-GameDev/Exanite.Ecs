@@ -21,12 +21,12 @@ public sealed class Chunk
     /// <remarks>
     /// Indexed using entity index.
     /// </remarks>>
-    private readonly Entity[] entities;
+    private readonly Entity[] entityColumn;
 
     /// <remarks>
-    /// Indexed using component index, then entity index.
+    /// Indexed using column index, then entity index.
     /// </remarks>>
-    private readonly Array[] components;
+    private readonly Array[] componentColumns;
 
     /// <summary>
     /// Whether the chunk is full or not.
@@ -41,18 +41,18 @@ public sealed class Chunk
     /// <summary>
     /// All entities in this chunk.
     /// </summary>
-    public ReadOnlySpan<Entity> Entities => entities.AsSpan(0, EntityCount);
+    public ReadOnlySpan<Entity> Entities => entityColumn.AsSpan(0, EntityCount);
 
     internal Chunk(Archetype archetype)
     {
         Archetype = archetype;
         Lookup = archetype.Lookup;
 
-        entities = new Entity[EcsConstants.ChunkEntityCount];
-        components = new Array[Lookup.ComponentTypesByComponentIndex.Length];
-        for (var i = 0; i < components.Length; i++)
+        entityColumn = new Entity[EcsConstants.ChunkEntityCount];
+        componentColumns = new Array[Lookup.ComponentTypesByColumnIndex.Length];
+        for (var i = 0; i < componentColumns.Length; i++)
         {
-            components[i] = ArrayFactory.Create(Lookup.ComponentTypesByComponentIndex[i], EcsConstants.ChunkEntityCount);
+            componentColumns[i] = ArrayFactory.Create(Lookup.ComponentTypesByColumnIndex[i], EcsConstants.ChunkEntityCount);
         }
     }
 
@@ -71,7 +71,7 @@ public sealed class Chunk
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Array GetComponentArray(ComponentId id)
     {
-        return components[Lookup.ComponentIndexByComponentId[id.Value]];
+        return componentColumns[Lookup.ColumnIndexByComponentId[id.Value]];
     }
 
     /// <remarks>
@@ -117,13 +117,13 @@ public sealed class Chunk
     {
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
-        foreach (var component in components)
+        foreach (var componentColumn in componentColumns)
         {
-            Array.Clear(component, 0, component.Length);
+            Array.Clear(componentColumn, 0, componentColumn.Length);
         }
 
         // Not strictly necessary, clean up all the IDs so they're default instead of some invalid value.
-        Array.Clear(entities, 0, entities.Length);
+        Array.Clear(entityColumn, 0, entityColumn.Length);
 
         EntityCount = 0;
     }
@@ -136,13 +136,13 @@ public sealed class Chunk
         // It is safe to only assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
         // below so it still fails in a sensible way.
-        AssertUtility.IsTrue(EntityCount < entities.Length, "Cannot add entity to full chunk");
+        AssertUtility.IsTrue(EntityCount < entityColumn.Length, "Cannot add entity to full chunk");
 
         // Use the next free slot
         var entityIndex = EntityCount++;
 
         // Occupy this entity index
-        entities[entityIndex] = entity.ToEntity(Archetype.World);
+        entityColumn[entityIndex] = entity.ToEntity(Archetype.World);
 
         // Update global entity location to refer to this location
         location.IndexInChunk = entityIndex;
@@ -160,16 +160,16 @@ public sealed class Chunk
 
         // Clear out the components. This prevents chunks holding
         // onto references to dead managed components, and keeping them in memory.
-        foreach (var component in components)
+        foreach (var componentColumn in componentColumns)
         {
-            Array.Clear(component, entityIndex, 1);
+            Array.Clear(componentColumn, entityIndex, 1);
         }
 
         // No work to do if there are no other entities
         EntityCount -= 1;
         if (EntityCount == 0)
         {
-            entities[entityIndex] = default;
+            entityColumn[entityIndex] = default;
             return;
         }
 
@@ -177,21 +177,21 @@ public sealed class Chunk
         // entity down into this slot to keep the chunk continuous.
         if (entityIndex != EntityCount)
         {
-            var lastEntity = entities[EntityCount];
+            var lastEntity = entityColumn[EntityCount];
             var lastEntityIndex = EntityCount;
             ref var lastInfo = ref Archetype.World.GetStorageLocation(lastEntity.EntityId);
-            entities[entityIndex] = lastEntity;
-            entities[lastEntityIndex] = default;
+            entityColumn[entityIndex] = lastEntity;
+            entityColumn[lastEntityIndex] = default;
             lastInfo.IndexInChunk = entityIndex;
 
             // Copy top entity components into place
-            foreach (var component in components)
+            foreach (var componentColumn in componentColumns)
             {
-                Array.Copy(component, lastEntityIndex, component, entityIndex, 1);
+                Array.Copy(componentColumn, lastEntityIndex, componentColumn, entityIndex, 1);
 
                 // Clear out the components we just moved. This prevents chunks holding
                 // onto references to dead managed components, and keeping them in memory.
-                Array.Clear(component, lastEntityIndex, 1);
+                Array.Clear(componentColumn, lastEntityIndex, 1);
             }
         }
     }
@@ -209,19 +209,19 @@ public sealed class Chunk
         var dstChunk = dstLocation.Chunk;
 
         // Copy across everything that exists in the destination archetype
-        for (var i = 0; i < components.Length; i++)
+        for (var i = 0; i < componentColumns.Length; i++)
         {
-            var id = Lookup.ComponentIdByComponentIndex[i].Value;
+            var id = Lookup.ComponentIdByColumnIndex[i].Value;
 
             // Check if the component is not in the destination, in which case just don't copy it
-            if (id >= dstChunk.Lookup.ComponentIndexByComponentId.Length || dstChunk.Lookup.ComponentIndexByComponentId[id] == -1)
+            if (id >= dstChunk.Lookup.ColumnIndexByComponentId.Length || dstChunk.Lookup.ColumnIndexByComponentId[id] == -1)
             {
                 continue;
             }
 
             // Get the two arrays
-            var srcArray = components[i];
-            var dstArray = dstChunk.components[dstChunk.Lookup.ComponentIndexByComponentId[id]];
+            var srcArray = componentColumns[i];
+            var dstArray = dstChunk.componentColumns[dstChunk.Lookup.ColumnIndexByComponentId[id]];
 
             // Copy!
             Array.Copy(srcArray, srcLocation.IndexInChunk, dstArray, dstLocation.IndexInChunk, 1);
