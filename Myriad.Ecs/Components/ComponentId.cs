@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Exanite.Myriad.Ecs.Components;
 
@@ -38,6 +39,25 @@ public readonly record struct ComponentId : IComparable<ComponentId>
         Value = value;
     }
 
+    /// <summary>
+    /// Get the component ID for the given type.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/>.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ComponentId Get(Type type)
+    {
+        return ComponentRegistry.GetComponentId(type);
+    }
+
+    /// <summary>
+    /// Get the component ID for the given type.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ComponentId Get<T>() where T : IComponent
+    {
+        return ComponentId<T>.Id;
+    }
+
     /// <inheritdoc/>
     public int CompareTo(ComponentId other)
     {
@@ -48,23 +68,6 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     public override string ToString()
     {
         return $"{Type} ({Value})";
-    }
-
-    /// <summary>
-    /// Get the component ID for the given type.
-    /// </summary>
-    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/>.</exception>
-    public static ComponentId Get(Type type)
-    {
-        return ComponentRegistry.GetComponentId(type);
-    }
-
-    /// <summary>
-    /// Get the component ID for the given type.
-    /// </summary>
-    public static ComponentId Get<T>() where T : IComponent
-    {
-        return ComponentId<T>.Id;
     }
 
     internal static void NotifyComponentIdRegistered(ComponentId componentId)
