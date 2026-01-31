@@ -29,6 +29,11 @@ public sealed class Chunk
     private readonly Array[] components;
 
     /// <summary>
+    /// Whether the chunk is full or not.
+    /// </summary>
+    internal bool IsFull => EntityCount == EcsConstants.ChunkEntityCount;
+
+    /// <summary>
     /// Get the number of entities currently in this chunk.
     /// </summary>
     public int EntityCount { get; private set; }
@@ -38,16 +43,16 @@ public sealed class Chunk
     /// </summary>
     public ReadOnlySpan<Entity> Entities => entities.AsSpan(0, EntityCount);
 
-    internal Chunk(Archetype archetype, int entityCapacity)
+    internal Chunk(Archetype archetype)
     {
         Archetype = archetype;
         Lookup = archetype.Lookup;
 
-        entities = new Entity[entityCapacity];
+        entities = new Entity[EcsConstants.ChunkEntityCount];
         components = new Array[Lookup.ComponentTypesByComponentIndex.Length];
         for (var i = 0; i < components.Length; i++)
         {
-            components[i] = ArrayFactory.Create(Lookup.ComponentTypesByComponentIndex[i], entityCapacity);
+            components[i] = ArrayFactory.Create(Lookup.ComponentTypesByComponentIndex[i], EcsConstants.ChunkEntityCount);
         }
     }
 

@@ -140,8 +140,8 @@ public sealed class Archetype
         // Increase archetype entity count
         EntityCount++;
 
-        // Trim chunks with space collection to remove items
-        chunksWithSpace.RemoveAll(static c => c.EntityCount == EcsConstants.ChunkEntityCount);
+        // Remove full chunks
+        chunksWithSpace.RemoveAll(static chunk => chunk.IsFull);
 
         // If there's one with space, use it
         if (chunksWithSpace.Count > 0)
@@ -150,7 +150,7 @@ public sealed class Archetype
         }
 
         // No space in any chunks, create a new chunk
-        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this, EcsConstants.ChunkEntityCount);
+        var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this);
         chunksList.Add(newChunk);
         chunksWithSpace.Add(newChunk);
 
