@@ -54,7 +54,7 @@ internal readonly record struct ArchetypeHash : IComparable<ArchetypeHash>
         return new ArchetypeHash { Value = l };
     }
 
-    public static ArchetypeHash Create<TV>(Dictionary<ComponentId, TV> componentIds)
+    public static ArchetypeHash Create<TValue>(Dictionary<ComponentId, TValue> componentIds)
     {
         long l = 0;
         foreach (var componentId in componentIds.Keys)

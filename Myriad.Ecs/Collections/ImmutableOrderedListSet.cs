@@ -67,7 +67,7 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T>, IEquatable<Immutable
         return new ImmutableOrderedListSet<T>(new OrderedListSet<T>(items));
     }
 
-    public static ImmutableOrderedListSet<T> Create<TV>(Dictionary<T, TV> items)
+    public static ImmutableOrderedListSet<T> Create<TValue>(Dictionary<T, TValue> items)
     {
         if (items.Count == 0)
         {

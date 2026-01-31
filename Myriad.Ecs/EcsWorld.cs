@@ -78,7 +78,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
     {
         commandBufferPool.Release(value);
     }
-    
+
     /// <summary>
     /// Clears the world by destroying all entities.
     /// </summary>
@@ -173,7 +173,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         return a;
     }
 
-    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentId, TV> components, ArchetypeHash hash)
+    internal Archetype GetOrCreateArchetype<TValue>(Dictionary<ComponentId, TValue> components, ArchetypeHash hash)
     {
         // Get list of all archetypes with this hash
         if (!archetypesByHash.TryGetValue(hash, out var candidates))
@@ -207,7 +207,7 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
     }
 
-    internal Archetype GetOrCreateArchetype<TV>(Dictionary<ComponentId, TV> components)
+    internal Archetype GetOrCreateArchetype<TValue>(Dictionary<ComponentId, TValue> components)
     {
         return GetOrCreateArchetype(components, ArchetypeHash.Create(components));
     }

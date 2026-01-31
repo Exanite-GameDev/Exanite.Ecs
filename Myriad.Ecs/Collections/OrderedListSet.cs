@@ -343,7 +343,7 @@ public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<
         return a.SequenceEqual(b);
     }
 
-    public bool SetEquals<TV>(Dictionary<T, TV> other)
+    public bool SetEquals<TValue>(Dictionary<T, TValue> other)
     {
         // Can't be equal if counts are different
         if (other.Count != Count)

@@ -282,7 +282,7 @@ public sealed class Archetype
         return Components.SetEquals(query);
     }
 
-    internal bool SetEquals<TV>(Dictionary<ComponentId, TV> query)
+    internal bool SetEquals<TValue>(Dictionary<ComponentId, TValue> query)
     {
         return Components.SetEquals(query);
     }
