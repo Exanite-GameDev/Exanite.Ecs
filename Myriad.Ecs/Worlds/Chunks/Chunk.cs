@@ -116,7 +116,7 @@ public sealed class Chunk
 
     #region Add/remove entity
 
-    // Note that these must be called only from Archetype! The Archetype needs to do some bookeeping on create/destroy.
+    // Note that these must be called only from Archetype! The Archetype needs to do some bookkeeping on create/destroy.
 
     internal void Clear()
     {
