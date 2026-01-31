@@ -16,7 +16,7 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// A world contains all entities.
 /// </summary>
-public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
+public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 {
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }

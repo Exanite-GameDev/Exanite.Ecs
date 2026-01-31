@@ -3,7 +3,7 @@ using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs;
 
-public interface IArchetypeCollection
+public interface IArchetypeView
 {
     /// <summary>
     /// All archetypes in this collection.

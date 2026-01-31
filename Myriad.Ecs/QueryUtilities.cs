@@ -8,10 +8,10 @@ public static class QueryUtilities
     /// <summary>
     /// Count how many entities match this query.
     /// </summary>
-    public static int Count(this IArchetypeCollection collection)
+    public static int Count(this IArchetypeView view)
     {
         var count = 0;
-        foreach (var archetype in collection.Archetypes)
+        foreach (var archetype in view.Archetypes)
         {
             count += archetype.EntityCount;
         }
@@ -22,9 +22,9 @@ public static class QueryUtilities
     /// <summary>
     /// Check if this query matches any entities.
     /// </summary>
-    public static bool Any(this IArchetypeCollection collection)
+    public static bool Any(this IArchetypeView view)
     {
-        foreach (var archetype in collection.Archetypes)
+        foreach (var archetype in view.Archetypes)
         {
             if (archetype.EntityCount > 0)
             {
@@ -38,9 +38,9 @@ public static class QueryUtilities
     /// <summary>
     /// Get the first entity this query matches. Returns default if none.
     /// </summary>
-    public static Entity FirstOrDefault(this IArchetypeCollection collection)
+    public static Entity FirstOrDefault(this IArchetypeView view)
     {
-        foreach (var archetype in collection.Archetypes)
+        foreach (var archetype in view.Archetypes)
         {
             if (archetype.EntityCount == 0)
             {
@@ -62,9 +62,9 @@ public static class QueryUtilities
     /// <summary>
     /// Get the first entity this query matches. Throws if none.
     /// </summary>
-    public static Entity First(this IArchetypeCollection collection)
+    public static Entity First(this IArchetypeView view)
     {
-        var entity = collection.FirstOrDefault();
+        var entity = view.FirstOrDefault();
         GuardUtility.IsTrue(entity.IsAlive, "QueryView.First() found no matching entities");
         return entity;
     }
@@ -72,10 +72,10 @@ public static class QueryUtilities
     /// <summary>
     /// Get the single entity this query matches. Returns default if none.
     /// </summary>
-    public static Entity SingleOrDefault(this IArchetypeCollection collection)
+    public static Entity SingleOrDefault(this IArchetypeView view)
     {
         Entity entity = default;
-        foreach (var archetype in collection.Archetypes)
+        foreach (var archetype in view.Archetypes)
         {
             if (archetype.EntityCount == 0)
             {
@@ -101,9 +101,9 @@ public static class QueryUtilities
     /// <summary>
     /// Get the single entity this query matches. Throws if none.
     /// </summary>
-    public static Entity Single(this IArchetypeCollection collection)
+    public static Entity Single(this IArchetypeView view)
     {
-        var entity = collection.SingleOrDefault();
+        var entity = view.SingleOrDefault();
         GuardUtility.IsTrue(entity.IsAlive, "QueryView.SingleOrDefault() found no matching entities");
         return entity;
     }
@@ -111,10 +111,10 @@ public static class QueryUtilities
     /// <summary>
     /// Get a random entity this query matches. Returns default if none.
     /// </summary>
-    public static Entity RandomOrDefault(this IArchetypeCollection collection, Random random)
+    public static Entity RandomOrDefault(this IArchetypeView view, Random random)
     {
         // Get total entity count
-        var count = collection.Count();
+        var count = view.Count();
         if (count == 0)
         {
             return default;
@@ -124,7 +124,7 @@ public static class QueryUtilities
         var choice = random.Next(0, count);
 
         // Find that entity
-        foreach (var archetype in collection.Archetypes)
+        foreach (var archetype in view.Archetypes)
         {
             // Check if it's within this archetype, if not move to the next archetype
             if (choice - archetype.EntityCount >= 0)
@@ -156,9 +156,9 @@ public static class QueryUtilities
     /// <summary>
     /// Get a random entity this query matches. Throws if none.
     /// </summary>
-    public static Entity Random(this IArchetypeCollection collection, Random random)
+    public static Entity Random(this IArchetypeView view, Random random)
     {
-        var entity = collection.RandomOrDefault(random);
+        var entity = view.RandomOrDefault(random);
         GuardUtility.IsTrue(entity.IsAlive, "QueryView.RandomOrDefault() found no matching entities");
         return entity;
     }
