@@ -56,8 +56,6 @@ public sealed class Chunk
         }
     }
 
-    #region Get component
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> GetSpan<T>() where T : IComponent
     {
@@ -112,12 +110,9 @@ public sealed class Chunk
         return ref GetSpan<T>(id)[entityIndex];
     }
 
-    #endregion
-
-    #region Add/remove entity
-
-    // Note that these must be called only from Archetype! The Archetype needs to do some bookkeeping on create/destroy.
-
+    /// <remarks>
+    /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
+    /// </remarks>
     internal void Clear()
     {
         // Clear out the components. This prevents chunks holding
@@ -133,6 +128,9 @@ public sealed class Chunk
         EntityCount = 0;
     }
 
+    /// <remarks>
+    /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
+    /// </remarks>
     internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation location)
     {
         // It is safe to only assert here. It should never happen if Myriad is working
@@ -153,6 +151,9 @@ public sealed class Chunk
         return new EntityStorageLocation(entity, entityIndex, this);
     }
 
+    /// <remarks>
+    /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
+    /// </remarks>
     internal void RemoveEntity(StorageLocation location)
     {
         var entityIndex = location.IndexInChunk;
@@ -195,6 +196,9 @@ public sealed class Chunk
         }
     }
 
+    /// <remarks>
+    /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
+    /// </remarks>
     internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation location, Archetype to)
     {
         // Copy current location so we can use it later
@@ -228,6 +232,4 @@ public sealed class Chunk
 
         return dstLocation;
     }
-
-    #endregion
 }
