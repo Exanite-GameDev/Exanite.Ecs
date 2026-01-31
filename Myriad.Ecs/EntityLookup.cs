@@ -12,6 +12,11 @@ public class EntityLookup
         Entries = entries;
     }
 
+    public EcsRef<T> GetRef<T>(EcsRef<T> reference, EntityLookupPolicy policy) where T : IComponent
+    {
+        return new EcsRef<T>(GetEntity(reference.Entity, policy));
+    }
+
     public Entity GetEntity(Entity entity, EntityLookupPolicy policy)
     {
         if (Entries.TryGetValue(entity, out var newEntity))
