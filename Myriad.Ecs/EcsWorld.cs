@@ -60,6 +60,21 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
             });
     }
 
+    public Pool<EcsCommandBuffer>.Handle AcquireCommandBuffer(out EcsCommandBuffer value)
+    {
+        return commandBufferPool.Acquire(out value);
+    }
+
+    public EcsCommandBuffer AcquireCommandBuffer()
+    {
+        return commandBufferPool.Acquire();
+    }
+
+    public void ReleaseCommandBuffer(EcsCommandBuffer value)
+    {
+        commandBufferPool.Release(value);
+    }
+
     /// <inheritdoc/>
     public void Dispose()
     {
@@ -90,21 +105,6 @@ public sealed class EcsWorld : IArchetypeCollection, ITrackedDisposable
         IsDisposed = true;
 
         GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
-    }
-
-    public Pool<EcsCommandBuffer>.Handle AcquireCommandBuffer(out EcsCommandBuffer value)
-    {
-        return commandBufferPool.Acquire(out value);
-    }
-
-    public EcsCommandBuffer AcquireCommandBuffer()
-    {
-        return commandBufferPool.Acquire();
-    }
-
-    public void ReleaseCommandBuffer(EcsCommandBuffer value)
-    {
-        commandBufferPool.Release(value);
     }
 
     internal Archetype GetArchetype(EntityId entity)
