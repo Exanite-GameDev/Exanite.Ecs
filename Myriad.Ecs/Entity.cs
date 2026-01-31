@@ -39,7 +39,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     public readonly EcsWorld World;
 
     /// <summary>
-    /// The <see cref="Ecs.Entity"/> of an entity, may be re-used very quickly once an <see cref="Ecs.Entity"/> is destroyed.
+    /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
     public int Id => EntityId.Id;
 

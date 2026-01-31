@@ -5,13 +5,13 @@ using System.Runtime.CompilerServices;
 namespace Exanite.Myriad.Ecs;
 
 /// <summary>
-/// The ID of an <see cref="Ecs.Entity"/> (not carrying a reference to a <see cref="EcsWorld"/>)
+/// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="EcsWorld"/>)
 /// </summary>
 [DebuggerDisplay("{Id}v{Version}")]
 internal readonly record struct EntityId : IComparable<EntityId>
 {
     /// <summary>
-    /// The <see cref="Ecs.Entity"/> of an entity, may be re-used very quickly once an <see cref="Ecs.Entity"/> is destroyed.
+    /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
     public readonly int Id;
 
@@ -27,7 +27,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     }
 
     /// <summary>
-    /// Create a new <see cref="Ecs.Entity"/> struct that represents this Entity
+    /// Create a new <see cref="Entity"/> struct that represents this Entity
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Entity ToEntity(EcsWorld world)
