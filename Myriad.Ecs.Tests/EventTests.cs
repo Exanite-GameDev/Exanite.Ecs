@@ -11,6 +11,46 @@ namespace Exanite.Myriad.Ecs.Tests;
 public class EventTests
 {
     [Fact]
+    public void World_CopyTo_RaisesComponentCopiedEvent()
+    {
+        var srcWorld = new EcsWorld();
+        var srcHandler = new WorldEventHandler().RegisterAll(srcWorld);
+        srcWorld.EventBus.RegisterForwardAllTo(new EventLogger());
+
+        // Create entities
+        var entityAddCount = 10;
+        using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
+        {
+            for (var i = 0; i < entityAddCount; i++)
+            {
+                commandBuffer.Create()
+                    .Set(new Ecs0());
+            }
+
+            commandBuffer.Execute();
+        }
+
+        Assert.Equal(entityAddCount, srcHandler.EntityCreatedCount);
+        Assert.Equal(entityAddCount, srcHandler.ComponentAddedCount);
+        Assert.Equal(0, srcHandler.ComponentCopiedCount);
+
+        // Copy to new world
+        var dstWorld = new EcsWorld();
+        var dstHandler = new WorldEventHandler().RegisterAll(dstWorld);
+        dstWorld.EventBus.RegisterForwardAllTo(new EventLogger());
+
+        srcWorld.CopyTo(dstWorld);
+
+        Assert.Equal(entityAddCount, srcHandler.EntityCreatedCount);
+        Assert.Equal(entityAddCount, srcHandler.ComponentAddedCount);
+        Assert.Equal(0, srcHandler.ComponentCopiedCount);
+
+        Assert.Equal(entityAddCount, dstHandler.EntityCreatedCount);
+        Assert.Equal(0, dstHandler.ComponentAddedCount);
+        Assert.Equal(entityAddCount, dstHandler.ComponentCopiedCount);
+    }
+
+    [Fact]
     public void CreateEntity_RaisesEntityCreatedEvent()
     {
         var world = new EcsWorld();
@@ -560,6 +600,7 @@ public class EventTests
     private class WorldEventHandler :
         IEventHandler<EntityCreatedEvent>,
         IEventHandler<EntityDestroyedEvent>,
+        IEventHandler<ComponentCopied<Ecs0>>,
         IEventHandler<ComponentAdded<Ecs0>>,
         IEventHandler<ComponentModified<Ecs0>>,
         IEventHandler<ComponentRemoved<Ecs0>>
@@ -567,6 +608,7 @@ public class EventTests
         public int EntityCreatedCount { get; private set; }
         public int EntityDestroyedCount { get; private set; }
 
+        public int ComponentCopiedCount { get; private set; }
         public int ComponentAddedCount { get; private set; }
         public int ComponentModifiedCount { get; private set; }
         public int ComponentRemovedCount { get; private set; }
@@ -575,6 +617,7 @@ public class EventTests
         {
             world.EventBus.Register<EntityCreatedEvent>(this);
             world.EventBus.Register<EntityDestroyedEvent>(this);
+            world.EventBus.Register<ComponentCopied<Ecs0>>(this);
             world.EventBus.Register<ComponentAdded<Ecs0>>(this);
             world.EventBus.Register<ComponentModified<Ecs0>>(this);
             world.EventBus.Register<ComponentRemoved<Ecs0>>(this);
@@ -590,6 +633,11 @@ public class EventTests
         public void OnEvent(EntityDestroyedEvent e)
         {
             EntityDestroyedCount++;
+        }
+
+        public void OnEvent(ComponentCopied<Ecs0> e)
+        {
+            ComponentCopiedCount++;
         }
 
         public void OnEvent(ComponentAdded<Ecs0> e)
