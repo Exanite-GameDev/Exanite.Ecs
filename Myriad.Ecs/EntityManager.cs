@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
@@ -10,9 +11,9 @@ namespace Exanite.Myriad.Ecs;
 
 internal struct EntityManager
 {
+    private readonly Lock sync = new();
     private readonly SegmentedList<EntityLocation> entities = new(EcsConstants.StorageLocationSegmentSize);
 
-    // Keep track of dead entities so their ID can be re-used
     /// <summary>
     /// Tracks released IDs so that they can be reused.
     /// </summary>

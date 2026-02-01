@@ -1,55 +1,34 @@
-﻿using Exanite.Core.Utilities;
-
-namespace Exanite.Myriad.Ecs.CommandBuffers;
+﻿namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
-/// An entity that has been created in a command buffer, but not yet created. Can be used to add components.
+/// An entity that is being processed by a command buffer.
+/// Mainly used for fluent method chaining.
 /// </summary>
 public readonly record struct BufferedEntity
 {
-    private readonly uint id;
-    private readonly uint version;
+    public readonly Entity Entity;
+    public readonly EcsCommandBuffer CommandBuffer;
 
-    private readonly EcsCommandBufferResolver resolver;
-
-    /// <summary>
-    /// Get the <see cref="EcsCommandBuffer"/> which this <see cref="BufferedEntity"/> is from.
-    /// </summary>
-    public EcsCommandBuffer CommandBuffer { get; }
-
-    internal BufferedEntity(uint id, EcsCommandBufferResolver resolver)
+    internal BufferedEntity(Entity entity, EcsCommandBuffer commandBuffer)
     {
-        this.id = id;
-        this.resolver = resolver;
-
-        CommandBuffer = resolver.CommandBuffer;
-        version = resolver.Version;
+        Entity = entity;
+        CommandBuffer = commandBuffer;
     }
 
-    /// <summary>
-    /// Add or overwrite a component attached to this entity.
-    /// </summary>
-    /// <typeparam name="T">The type of component to add.</typeparam>
-    /// <param name="value">The value of the component to add.</param>
-    /// <returns>This buffered entity.</returns>
+    public static implicit operator Entity(BufferedEntity value)
+    {
+        return value.Entity;
+    }
+
+    /// <inheritdoc cref="EcsCommandBuffer.Set"/>
     public BufferedEntity Set<T>(T value) where T : IComponent
     {
-        unchecked
-        {
-            GuardUtility.IsTrue(resolver.Version == version && CommandBuffer.Version == version - 1, "Cannot modify buffered entity after command buffer has been executed");
-        }
-
-        CommandBuffer.SetBuffered(id, value);
-        return this;
+        return CommandBuffer.Set(Entity, value);
     }
 
-    /// <summary>
-    /// Resolve this <see cref="BufferedEntity"/> into the real <see cref="Entity"/> that was constructed.
-    /// </summary>
-    public Entity Resolve()
+    /// <inheritdoc cref="EcsCommandBuffer.Remove"/>
+    public BufferedEntity Remove<T>() where T : IComponent
     {
-        GuardUtility.IsTrue(resolver.Version == version && CommandBuffer.Version == version, "Buffered entity is no longer valid and cannot be resolved");
-
-        return resolver.EntityIdsByBufferedEntityId[id].ToEntity(resolver.World);
+        return CommandBuffer.Remove<T>(Entity);
     }
 }
