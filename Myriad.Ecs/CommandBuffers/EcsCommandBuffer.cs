@@ -92,10 +92,6 @@ public sealed class EcsCommandBuffer
         EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
-        // Get a set to hold the component setters
-        var setters = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
-        setters.Clear();
-
         // Acquire an ID
         // TODO: This can cause lock contention. Optimize by acquiring a batch of IDs.
         World.Entities.AcquireId(out var entityId);
