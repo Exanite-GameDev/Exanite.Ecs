@@ -237,6 +237,8 @@ public sealed class EcsCommandBuffer
 
         EnsureIsExternallyMutable();
 
+        // TODO: Clear new entities and return the IDs
+
         setters.Clear(true);
 
         foreach (var (_, data) in entityModifications)
