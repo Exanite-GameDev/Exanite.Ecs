@@ -4,7 +4,6 @@ using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
@@ -43,15 +42,29 @@ public sealed class EcsCommandBuffer
     public bool IsExecuting { get; private set; }
 
     /// <summary>
-    /// Collection of all components to be set onto entities.
+    /// New entities to be created.
+    /// </summary>
+    private readonly List<Entity> newEntities = [];
+
+    /// <summary>
+    /// Contains component values to be set onto entities.
     /// </summary>
     private readonly ComponentSetterCollection setters = new();
 
-    private readonly List<Entity> newEntities = [];
+    /// <summary>
+    /// All entity modifications to be applied.
+    /// </summary>
     private readonly Dictionary<Entity, BufferedEntityModification> entityModifications = [];
 
+    /// <summary>
+    /// Entities to be destroyed.
+    /// </summary>
     private readonly List<Entity> destroys = [];
-    private readonly List<QueryView> queryDestroys = [];
+
+    /// <summary>
+    /// Archetypes to be destroyed.
+    /// </summary>
+    private readonly List<Archetype> archetypeDestroys = [];
 
     /// <summary>
     /// Stores an entity's component set after structural changes.
@@ -177,13 +190,17 @@ public sealed class EcsCommandBuffer
     /// <summary>
     /// Bulk destroy all entities which match the given query.
     /// </summary>
-    public EcsCommandBuffer Destroy(QueryView entities)
+    public EcsCommandBuffer Destroy(IArchetypeView query)
     {
         EnsureIsExternallyMutable();
-        GuardUtility.IsTrue(entities.World == World, "Cannot use query description from one world with a command buffer for another world");
-        HasBufferedOperations = true;
 
-        queryDestroys.Add(entities);
+        foreach (var archetype in query.Archetypes)
+        {
+            GuardUtility.IsTrue(archetype.World == World, "Cannot use archetype from one world with a command buffer for another world");
+
+            archetypeDestroys.Add(archetype);
+            HasBufferedOperations = true;
+        }
 
         return this;
     }
@@ -216,6 +233,7 @@ public sealed class EcsCommandBuffer
             ApplyStructuralChanges(recursiveCommandBuffer);
 
             // Clear all temporary state
+            newEntities.Clear();
             setters.Clear(false);
             entityModifications.Clear();
 
@@ -238,7 +256,11 @@ public sealed class EcsCommandBuffer
 
         EnsureIsExternallyMutable();
 
-        // TODO: Clear new entities and return the IDs
+        foreach (var newEntity in newEntities)
+        {
+            World.Entities.ReleaseId(newEntity.EntityId);
+        }
+        newEntities.Clear();
 
         setters.Clear(true);
 
@@ -259,7 +281,7 @@ public sealed class EcsCommandBuffer
         entityModifications.Clear();
 
         destroys.Clear();
-        queryDestroys.Clear();
+        archetypeDestroys.Clear();
 
         HasBufferedOperations = false;
     }
@@ -275,14 +297,11 @@ public sealed class EcsCommandBuffer
 
     private void DestroyEntities(EcsCommandBuffer recursiveCommandBuffer)
     {
-        foreach (var query in queryDestroys)
+        foreach (var archetype in archetypeDestroys)
         {
-            foreach (var archetype in query.Archetypes)
-            {
-                DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
-            }
+            DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
         }
-        queryDestroys.Clear();
+        archetypeDestroys.Clear();
 
         foreach (var entity in destroys)
         {
