@@ -84,6 +84,7 @@ public sealed class EcsCommandBuffer
         setters.Clear();
 
         // Acquire an ID
+        // TODO: This can cause lock contention. Optimize by acquiring a batch of IDs.
         World.Entities.AcquireId(out var entityId);
         var entity = entityId.ToEntity(World);
         newEntities.Add(entity);
