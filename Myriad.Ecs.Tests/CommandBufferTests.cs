@@ -161,25 +161,25 @@ public class EcsCommandBufferTests
                     switch (random.Next(7))
                     {
                         case 0:
-                            ChangeComponent<EcsByte>(entity, commandBuffer, update);
+                            ChangeComponent<EcsByte>(entity, update);
                             break;
                         case 1:
-                            ChangeComponent<EcsInt16>(entity, commandBuffer, update);
+                            ChangeComponent<EcsInt16>(entity, update);
                             break;
                         case 2:
-                            ChangeComponent<EcsFloat>(entity, commandBuffer, update);
+                            ChangeComponent<EcsFloat>(entity, update);
                             break;
                         case 3:
-                            ChangeComponent<EcsInt32>(entity, commandBuffer, update);
+                            ChangeComponent<EcsInt32>(entity, update);
                             break;
                         case 4:
-                            ChangeComponent<EcsInt64>(entity, commandBuffer, update);
+                            ChangeComponent<EcsInt64>(entity, update);
                             break;
                         case 5:
-                            ChangeComponent<Ecs0>(entity, commandBuffer, update);
+                            ChangeComponent<Ecs0>(entity, update);
                             break;
                         case 6:
-                            ChangeComponent<Ecs1>(entity, commandBuffer, update);
+                            ChangeComponent<Ecs1>(entity, update);
                             break;
                     }
                 }
@@ -188,15 +188,17 @@ public class EcsCommandBufferTests
             commandBuffer.Execute();
         }
 
-        void ChangeComponent<T>(Entity e, EcsCommandBuffer b, bool update) where T : struct, IComponent
+        return;
+
+        void ChangeComponent<T>(Entity entity, bool update) where T : struct, IComponent
         {
-            if (e.HasComponent<T>() && !update)
+            if (entity.HasComponent<T>() && !update)
             {
-                b.Remove<T>(e);
+                commandBuffer.Remove<T>(entity);
             }
             else
             {
-                b.Set(e, default(T));
+                commandBuffer.Set(entity, default(T));
             }
         }
     }

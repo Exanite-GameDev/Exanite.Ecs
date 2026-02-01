@@ -33,6 +33,8 @@ public static class TestHelpers
             }
         }
 
+        commandBuffer.Execute();
+
         return entities;
     }
 }
