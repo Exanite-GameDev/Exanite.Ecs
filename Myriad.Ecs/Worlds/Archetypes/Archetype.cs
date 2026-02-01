@@ -88,7 +88,7 @@ public sealed class Archetype
 
     internal ref EntityLocation CreateEntity(EcsCommandBuffer commandBuffer, EntityId entityId)
     {
-        // Allocate an entity id and add it to this archetype
+        // Add the entity to this archetype
         ref var location = ref World.Entities.GetLocation(entityId);
         AddEntity(entityId, ref location);
 
