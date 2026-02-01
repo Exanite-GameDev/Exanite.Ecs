@@ -92,6 +92,14 @@ public sealed class EcsCommandBuffer
     }
 
     /// <summary>
+    /// Create a <see cref="BufferedEntity"/> using the specified entity.
+    /// </summary>
+    public BufferedEntity Use(Entity entity)
+    {
+        return new BufferedEntity(entity, this);
+    }
+
+    /// <summary>
     /// Add or overwrite a component attached to an entity.
     /// </summary>
     public BufferedEntity Set<T>(Entity entity, T value) where T : IComponent
