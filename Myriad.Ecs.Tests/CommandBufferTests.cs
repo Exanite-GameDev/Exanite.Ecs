@@ -343,8 +343,11 @@ public class EcsCommandBufferTests
         var world1 = new EcsWorld();
         var world2 = new EcsWorld();
 
-        var commandBuffer = world1.AcquireCommandBuffer();
+        // Implementation detail: The exception only gets triggered if the queries match something
+        world1.AcquireCommandBuffer().Create().Set(new Ecs0()).CommandBuffer.Execute();
+        world2.AcquireCommandBuffer().Create().Set(new Ecs0()).CommandBuffer.Execute();
 
+        var commandBuffer = world1.AcquireCommandBuffer();
         var query = new QueryFilter().Include<Ecs0>().Build(world2);
 
         Assert.Throws<GuardException>(() =>
