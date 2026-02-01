@@ -33,7 +33,7 @@ internal struct EntityManager
         return ref entities[entityIndex];
     }
 
-    /// <inheritdoc cref="GetLocation(int)"/>>
+    /// <inheritdoc cref="GetLocation(int)"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityLocation GetLocation(EntityId entityId)
     {
@@ -60,14 +60,19 @@ internal struct EntityManager
     /// <summary>
     /// Get the current version for the specified entity.
     /// </summary>
-    /// <returns>The entity ID, or zero if the entity does not exist.</returns>
+    /// <returns>The entity version, or zero if the entity does not exist.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public uint GetVersion(int entityIndex)
     {
+        if (entityIndex <= 0 || entityIndex >= entities.TotalCapacity)
+        {
+            return 0;
+        }
+
         return GetLocation(entityIndex).Version;
     }
 
-    /// <inheritdoc cref="GetVersion(int)"/>>
+    /// <inheritdoc cref="GetVersion(int)"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public uint GetVersion(EntityId entityId)
     {
@@ -75,7 +80,7 @@ internal struct EntityManager
     }
 
     /// <summary>
-    /// Gets the storage location for the specified entity.
+    /// Gets the archetype for the specified entity.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Archetype GetArchetype(int entityIndex)
@@ -83,7 +88,7 @@ internal struct EntityManager
         return GetLocation(entityIndex).Chunk.Archetype;
     }
 
-    /// <inheritdoc cref="GetArchetype(int)"/>>
+    /// <inheritdoc cref="GetArchetype(int)"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Archetype GetArchetype(EntityId entityId)
     {
@@ -119,7 +124,7 @@ internal struct EntityManager
         }
 
         // Update the version
-        ref var location = ref GetLocation(entityId);
+        ref var location = ref GetLocation(entityId.Index);
         location.Version = entityId.Version;
 
         return ref location;
