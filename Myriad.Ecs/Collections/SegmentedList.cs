@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading;
 
 namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
 /// A list which stores data in "segments", this removes the need for copying data when the list grows.
 /// </summary>
-internal class SegmentedList<TItem>
+internal class SegmentedList<T>
 {
+    private readonly Lock growLock = new();
+
     /// <summary>
     /// How many items are stored within a single segment
     /// </summary>
@@ -18,7 +20,7 @@ internal class SegmentedList<TItem>
     /// </summary>
     public int TotalCapacity { get; private set; }
 
-    private readonly List<TItem[]> segments = [];
+    private T[][] segments = [];
 
     public SegmentedList(int segmentCapacity)
     {
@@ -29,7 +31,7 @@ internal class SegmentedList<TItem>
     /// <summary>
     /// Get the item with the given index (mutable)
     /// </summary>
-    public ref TItem this[int index]
+    public ref T this[int index]
     {
         get
         {
@@ -42,7 +44,7 @@ internal class SegmentedList<TItem>
     /// Get the segment and index within the segment for the item with the given index
     /// </summary>
     /// <exception cref="IndexOutOfRangeException"/>
-    private (int, TItem[]) GetSegment(int index)
+    private (int, T[]) GetSegment(int index)
     {
         var segIndex = index / SegmentCapacity;
         var rowIndex = index - segIndex * SegmentCapacity;
@@ -55,7 +57,9 @@ internal class SegmentedList<TItem>
     /// </summary>
     public void Grow()
     {
-        segments.Add(new TItem[SegmentCapacity]);
-        TotalCapacity += SegmentCapacity;
+        using var _ = growLock.EnterScope();
+
+        T[][] newSegments = [..segments, new T[SegmentCapacity]];
+        Interlocked.Exchange(ref segments, newSegments);
     }
 }
