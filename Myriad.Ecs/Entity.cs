@@ -21,7 +21,16 @@ public readonly partial record struct Entity : IComparable<Entity>
     public bool IsAlive
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => Index != 0 && World.Entities.GetVersion(Index) == Version;
+        get
+        {
+            if (Index == 0)
+            {
+                return false;
+            }
+
+            ref var location = ref World.Entities.GetLocation(Index);
+            return location.Version == Version && location.Chunk != null!;
+        }
     }
 
     /// <summary>

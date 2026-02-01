@@ -136,8 +136,9 @@ internal struct EntityManager
     {
         ref var location = ref GetLocation(entityId);
 
-        // Increment version, this will invalidate the handle
+        // Invalidate the handle
         location.Version++;
+        location.Chunk = null;
 
         // Store this ID for re-use later
         releasedIds.Add(entityId);
