@@ -14,6 +14,50 @@ internal class ComponentSetterCollection
 {
     private readonly Dictionary<ComponentId, IComponentList> components = [];
 
+    /// <summary>
+    /// Add a new component value to the collection.
+    /// </summary>
+    public SetterId Add<T>(T value) where T : IComponent
+    {
+        var id = ComponentId.Get<T>();
+
+        if (!components.TryGetValue(id, out var list))
+        {
+            list = SimplePool<ComponentList<T>>.Acquire();
+            components.Add(id, list);
+        }
+
+        var index = ((ComponentList<T>)list).Add(value);
+        return new SetterId(id, index);
+    }
+
+    /// <summary>
+    /// Overwrite an existing component value in the collection.
+    /// </summary>
+    public void Overwrite<T>(SetterId index, T value) where T : IComponent
+    {
+        var id = ComponentId.Get<T>();
+        ((ComponentList<T>)components[id]).Overwrite(index, value);
+    }
+
+    /// <summary>
+    /// Output the stored component value to the specified entity location.
+    /// </summary>
+    public void Write(SetterId id, EntityLocation location)
+    {
+        var list = components[id.ComponentId];
+        list.Write(id.Index, location);
+    }
+
+    /// <summary>
+    /// Clear all component values stored in this collection.
+    /// </summary>
+    /// <param name="disposeComponents">
+    /// Should the components be disposed?
+    /// <para/>
+    /// Recommendation is to set this to true if the components were not "moved" elsewhere.
+    /// For example, if the components were never written using <see cref="Write"/>.
+    /// </param>
     public void Clear(bool disposeComponents)
     {
         foreach (var (_, value) in components)
@@ -24,32 +68,6 @@ internal class ComponentSetterCollection
         components.Clear();
     }
 
-    public SetterId Add<T>(T value) where T : IComponent
-    {
-        var id = ComponentId.Get<T>();
-
-        if (!components.TryGetValue(id, out var list))
-        {
-            list = SimplePool<GenericComponentList<T>>.Acquire();
-            components.Add(id, list);
-        }
-
-        var index = ((GenericComponentList<T>)list).Add(value);
-        return new SetterId(id, index);
-    }
-
-    public void Overwrite<T>(SetterId index, T value) where T : IComponent
-    {
-        var id = ComponentId.Get<T>();
-        ((GenericComponentList<T>)components[id]).Overwrite(index, value);
-    }
-
-    public void Write(SetterId id, EntityLocation location)
-    {
-        var list = components[id.ComponentId];
-        list.Write(id.Index, location);
-    }
-
     public readonly struct SetterId
     {
         /// <summary>
@@ -58,7 +76,7 @@ internal class ComponentSetterCollection
         internal readonly ComponentId ComponentId;
 
         /// <summary>
-        /// Index of the setter in the setters list.
+        /// Index of the value in the values list.
         /// </summary>
         internal readonly int Index;
 
@@ -75,7 +93,7 @@ internal class ComponentSetterCollection
         public void Recycle(bool disposeComponents);
     }
 
-    private class GenericComponentList<T> : IComponentList where T : IComponent
+    private class ComponentList<T> : IComponentList where T : IComponent
     {
         private readonly List<T> values = [];
 
