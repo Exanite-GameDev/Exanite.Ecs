@@ -345,11 +345,11 @@ public class EcsCommandBufferTests
 
         var commandBuffer = world1.AcquireCommandBuffer();
 
-        var q = new QueryFilter().Include<Ecs0>().Build(world2);
+        var query = new QueryFilter().Include<Ecs0>().Build(world2);
 
         Assert.Throws<GuardException>(() =>
         {
-            commandBuffer.Destroy(q);
+            commandBuffer.Destroy(query);
         });
     }
 
