@@ -21,12 +21,12 @@ public readonly partial record struct Entity
     {
         ref0 = new EcsRef<T0>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -49,12 +49,12 @@ public readonly partial record struct Entity
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -84,12 +84,12 @@ public readonly partial record struct Entity
         ref1 = new EcsRef<T1>(this);
         ref2 = new EcsRef<T2>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -126,12 +126,12 @@ public readonly partial record struct Entity
         ref2 = new EcsRef<T2>(this);
         ref3 = new EcsRef<T3>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -175,12 +175,12 @@ public readonly partial record struct Entity
         ref3 = new EcsRef<T3>(this);
         ref4 = new EcsRef<T4>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -231,12 +231,12 @@ public readonly partial record struct Entity
         ref4 = new EcsRef<T4>(this);
         ref5 = new EcsRef<T5>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -294,12 +294,12 @@ public readonly partial record struct Entity
         ref5 = new EcsRef<T5>(this);
         ref6 = new EcsRef<T6>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -364,12 +364,12 @@ public readonly partial record struct Entity
         ref6 = new EcsRef<T6>(this);
         ref7 = new EcsRef<T7>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -441,12 +441,12 @@ public readonly partial record struct Entity
         ref7 = new EcsRef<T7>(this);
         ref8 = new EcsRef<T8>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -525,12 +525,12 @@ public readonly partial record struct Entity
         ref8 = new EcsRef<T8>(this);
         ref9 = new EcsRef<T9>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -616,12 +616,12 @@ public readonly partial record struct Entity
         ref9 = new EcsRef<T9>(this);
         ref10 = new EcsRef<T10>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -714,12 +714,12 @@ public readonly partial record struct Entity
         ref10 = new EcsRef<T10>(this);
         ref11 = new EcsRef<T11>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -819,12 +819,12 @@ public readonly partial record struct Entity
         ref11 = new EcsRef<T11>(this);
         ref12 = new EcsRef<T12>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -931,12 +931,12 @@ public readonly partial record struct Entity
         ref12 = new EcsRef<T12>(this);
         ref13 = new EcsRef<T13>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -1050,12 +1050,12 @@ public readonly partial record struct Entity
         ref13 = new EcsRef<T13>(this);
         ref14 = new EcsRef<T14>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))
@@ -1176,12 +1176,12 @@ public readonly partial record struct Entity
         ref14 = new EcsRef<T14>(this);
         ref15 = new EcsRef<T15>(this);
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var location))
         {
             return false;
         }
 
-        var components = storageLocation.Value.Chunk.Archetype.Components;
+        var components = location.Value.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
         if (!components.Contains(componentId0))

@@ -44,7 +44,7 @@ internal class ComponentSetterCollection
         ((GenericComponentList<T>)components[id]).Overwrite(index, value);
     }
 
-    public void Write(SetterId id, EntityStorageLocation location)
+    public void Write(SetterId id, EntityLocation location)
     {
         var list = components[id.ComponentId];
         list.Write(id.Index, location);
@@ -71,7 +71,7 @@ internal class ComponentSetterCollection
 
     private interface IComponentList
     {
-        public void Write(int index, EntityStorageLocation location);
+        public void Write(int index, EntityLocation location);
         public void Recycle(bool disposeComponents);
     }
 
@@ -109,9 +109,9 @@ internal class ComponentSetterCollection
             SimplePool.Release(this);
         }
 
-        public void Write(int index, EntityStorageLocation location)
+        public void Write(int index, EntityLocation location)
         {
-            location.GetMutable<T>() = values[index];
+            location.Chunk.Get<T>(location.IndexInChunk) = values[index];
         }
     }
 }

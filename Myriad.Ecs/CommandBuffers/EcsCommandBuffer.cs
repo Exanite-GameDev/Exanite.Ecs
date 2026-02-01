@@ -360,7 +360,7 @@ public sealed partial class EcsCommandBuffer
                     continue;
                 }
 
-                var archetypeBeforeMove = World.GetArchetype(entity.EntityId);
+                var archetypeBeforeMove = World.Entities.GetArchetype(entity.EntityId);
                 var componentsBeforeMove = archetypeBeforeMove.Components;
 
                 // Initialize componentsAfterMove with componentsBeforeMove
@@ -404,7 +404,7 @@ public sealed partial class EcsCommandBuffer
                 }
 
                 // Get the location for the entity, moving it to a new archetype first if necessary
-                EntityStorageLocation location;
+                EntityLocation location;
                 if (moveRequired)
                 {
                     // Raise component removed events
@@ -424,7 +424,7 @@ public sealed partial class EcsCommandBuffer
                 }
                 else
                 {
-                    location = World.GetEntityStorageLocation(entity.EntityId);
+                    location = World.Entities.GetLocation(entity.EntityId);
                 }
 
                 if (modification.Sets != null)
@@ -475,10 +475,10 @@ public sealed partial class EcsCommandBuffer
                 {
                     var archetype = GetArchetype(bufferedEntityData, archetypeLookup);
 
-                    var location = archetype.CreateEntity(recursiveCommandBuffer);
+                    var location = archetype.CreateEntity(recursiveCommandBuffer, out var entityId);
 
                     // Store the new ID in the resolver so it can be retrieved later
-                    resolver.EntityIdsByBufferedEntityId.Add(bufferedEntityData.Id, location.Entity);
+                    resolver.EntityIdsByBufferedEntityId.Add(bufferedEntityData.Id, entityId);
 
                     // Write the components into the entity
                     foreach (var setter in components.Values)
@@ -491,7 +491,7 @@ public sealed partial class EcsCommandBuffer
                     foreach (var setter in components.Values)
                     {
                         var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
-                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, location.Entity.ToEntity(World));
+                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entityId.ToEntity(World));
                     }
                 }
                 finally
@@ -607,7 +607,7 @@ public sealed partial class EcsCommandBuffer
         }
 
         // Get the location for this entity
-        ref var location = ref World.Entities[entity.Id];
+        ref var location = ref World.Entities.GetLocation(entity.EntityId);
 
         // Check this is still a valid entity reference. Early exit if the entity
         // is already dead.
@@ -623,17 +623,14 @@ public sealed partial class EcsCommandBuffer
             eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
         }
 
-        // Raise entity removed event
+        // Raise entity destroyed event
         World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
 
         // Notify archetype this entity is dead
         location.Chunk.Archetype.RemoveEntity(location);
 
-        // Increment version, this will invalid the handle
-        location.Version++;
-
-        // Store this ID for re-use later
-        World.DeadEntities.Add(entity.EntityId);
+        // Release ID
+        World.Entities.ReleaseId(entity.EntityId);
     }
 
     private void DestroyArchetypeEntities(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
@@ -643,8 +640,7 @@ public sealed partial class EcsCommandBuffer
             return;
         }
 
-        // Mark all of the IDs as dead (as long as they haven't become phantoms)
-        World.DeadEntities.EnsureCapacity(World.DeadEntities.Count + archetype.EntityCount);
+        // Mark entities as dead and send events
         foreach (var chunk in archetype.Chunks)
         {
             foreach (var entity in chunk.Entities)
@@ -656,17 +652,11 @@ public sealed partial class EcsCommandBuffer
                     eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
                 }
 
-                // Raise entity removed event
+                // Raise entity destroyed event
                 World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
 
-                // Get the location for this entity
-                ref var location = ref World.Entities[entity.EntityId.Id];
-
-                // Increment version, this will invalidate the handle
-                location.Version++;
-
-                // Store this ID for re-use later
-                World.DeadEntities.Add(entity.EntityId);
+                // Release ID
+                World.Entities.ReleaseId(entity.EntityId);
             }
         }
 

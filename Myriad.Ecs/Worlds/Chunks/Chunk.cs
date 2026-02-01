@@ -147,7 +147,7 @@ public sealed class Chunk
         while (EntityCount < srcChunk.EntityCount)
         {
             // Allocate an entity id and add it to this chunk
-            ref var location = ref world.AllocateEntity(out var entityId);
+            ref var location = ref world.Entities.AcquireId(out var entityId);
             AddEntity(entityId, ref location);
 
             // Add the entity pair to the lookup dictionary
@@ -163,7 +163,7 @@ public sealed class Chunk
     /// <remarks>
     /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
     /// </remarks>
-    internal EntityStorageLocation AddEntity(EntityId entityId, ref StorageLocation location)
+    internal void AddEntity(EntityId entityId, ref EntityLocation location)
     {
         // It is safe to only assert here. It should never happen if Myriad is working
         // correctly. If it does somehow go wrong you'll get an index out of range exception
@@ -179,14 +179,12 @@ public sealed class Chunk
         // Update the storage location to refer to this chunk
         location.IndexInChunk = entityIndex;
         location.Chunk = this;
-
-        return new EntityStorageLocation(entityId, entityIndex, this);
     }
 
     /// <remarks>
     /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
     /// </remarks>
-    internal void RemoveEntity(StorageLocation location)
+    internal void RemoveEntity(EntityLocation location)
     {
         var entityIndex = location.IndexInChunk;
 
@@ -211,7 +209,7 @@ public sealed class Chunk
         {
             var lastEntity = entityColumn[EntityCount];
             var lastEntityIndex = EntityCount;
-            ref var lastInfo = ref Archetype.World.GetStorageLocation(lastEntity.EntityId);
+            ref var lastInfo = ref Archetype.World.Entities.GetLocation(lastEntity.EntityId);
             entityColumn[entityIndex] = lastEntity;
             entityColumn[lastEntityIndex] = default;
             lastInfo.IndexInChunk = entityIndex;
@@ -231,14 +229,14 @@ public sealed class Chunk
     /// <remarks>
     /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
     /// </remarks>
-    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation location, Archetype to)
+    internal void MigrateTo(EntityId entity, ref EntityLocation location, Archetype to)
     {
         // Copy current location so we can use it later
         var srcLocation = location;
 
         // Move the entity to the new archetype
-        var dstLocation = to.AddEntity(entity, ref location);
-        var dstChunk = dstLocation.Chunk;
+        to.AddEntity(entity, ref location);
+        var dstChunk = location.Chunk;
 
         // Copy across everything that exists in the destination archetype
         for (var i = 0; i < componentColumns.Length; i++)
@@ -256,12 +254,10 @@ public sealed class Chunk
             var dstArray = dstChunk.componentColumns[dstChunk.Lookup.ColumnIndexByComponentId[id]];
 
             // Copy!
-            Array.Copy(srcArray, srcLocation.IndexInChunk, dstArray, dstLocation.IndexInChunk, 1);
+            Array.Copy(srcArray, srcLocation.IndexInChunk, dstArray, location.IndexInChunk, 1);
         }
 
         // Remove the entity from this chunk (using the old saved location)
         RemoveEntity(srcLocation);
-
-        return dstLocation;
     }
 }

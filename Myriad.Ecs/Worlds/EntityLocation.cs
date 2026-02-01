@@ -2,7 +2,7 @@
 
 namespace Exanite.Myriad.Ecs.Worlds;
 
-internal struct StorageLocation
+internal struct EntityLocation
 {
     /// <summary>
     /// The current version of this entity.
@@ -18,9 +18,4 @@ internal struct StorageLocation
     /// The entity index in the chunk which contains this entity.
     /// </summary>
     public int IndexInChunk;
-
-    public readonly EntityStorageLocation GetEntityStorageLocation(EntityId entity)
-    {
-        return new EntityStorageLocation(entity, IndexInChunk, Chunk);
-    }
 }

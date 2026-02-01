@@ -22,17 +22,12 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
 
+    internal EntityManager Entities = new();
+
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
     internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
-
-    internal readonly SegmentedList<StorageLocation> Entities = new(EcsConstants.StorageLocationSegmentSize);
-
-    // Keep track of dead entities so their ID can be re-used
-    internal readonly List<EntityId> DeadEntities = [];
-    private int nextEntityId = 1;
-
     private readonly QueryView allEntitiesQuery;
 
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
@@ -187,30 +182,6 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
     }
 
-    internal Archetype GetArchetype(EntityId entity)
-    {
-        if (entity.Id < 0 || entity.Id >= Entities.TotalCapacity)
-        {
-            throw new ArgumentException("Invalid entity ID", nameof(entity));
-        }
-
-        return GetStorageLocation(entity).Chunk.Archetype;
-    }
-
-    /// <summary>
-    /// Get the current version for a given entity ID
-    /// </summary>
-    /// <returns>The entity ID, or zero if the entity does not exist</returns>
-    internal uint GetVersion(int entityId)
-    {
-        if (entityId <= 0 || entityId >= Entities.TotalCapacity)
-        {
-            return 0;
-        }
-
-        return Entities[entityId].Version;
-    }
-
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
@@ -256,73 +227,11 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         return GetOrCreateArchetype(components.AsComponentIdSet());
     }
 
-    internal EntityStorageLocation MigrateEntity(EntityId entity, Archetype dstArchetype)
+    internal ref EntityLocation MigrateEntity(EntityId entity, Archetype dstArchetype)
     {
-        ref var location = ref GetStorageLocation(entity);
-        return location.Chunk.Archetype.MigrateTo(entity, ref location, dstArchetype);
-    }
-
-    internal ref StorageLocation AllocateEntity(out EntityId entity)
-    {
-        if (DeadEntities.Count > 0)
-        {
-            var previousId = DeadEntities[^1];
-            DeadEntities.RemoveAt(DeadEntities.Count - 1);
-
-            var version = previousId.Version + 1;
-
-            // Ensure ID 0 is not assigned even after wrapping around 2^32 entities
-            if (version == 0)
-            {
-                version += 1;
-            }
-
-            entity = new EntityId(previousId.Id, version);
-        }
-        else
-        {
-            // Allocate a new ID. This **must not** overflow!
-            entity = new EntityId(checked(nextEntityId++), 1);
-
-            // Check if the collection of all entities needs to grow
-            if (entity.Id >= Entities.TotalCapacity)
-            {
-                Entities.Grow();
-            }
-        }
-
-        // Update the version
-        ref var location = ref Entities[entity.Id];
-        location.Version = entity.Version;
+        ref var location = ref Entities.GetLocation(entity);
+        location.Chunk.Archetype.MigrateTo(entity, ref location, dstArchetype);
 
         return ref location;
-    }
-
-    internal EntityStorageLocation GetEntityStorageLocation(EntityId entity)
-    {
-        var location = GetStorageLocation(entity);
-        return new EntityStorageLocation(entity, location.IndexInChunk, location.Chunk);
-    }
-
-    internal ref StorageLocation GetStorageLocation(EntityId entity)
-    {
-        ref var location = ref Entities[entity.Id];
-        GuardUtility.IsTrue(location.Version == entity.Version, "Entity is not alive");
-
-        return ref location;
-    }
-
-    internal bool TryGetStorageLocation(EntityId entity, out Ref<StorageLocation> storageLocation)
-    {
-        storageLocation = default;
-
-        ref var location = ref Entities[entity.Id];
-        if (location.Version != entity.Version)
-        {
-            return false;
-        }
-
-        storageLocation = new Ref<StorageLocation>(ref location);
-        return true;
     }
 }
