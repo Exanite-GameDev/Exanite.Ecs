@@ -43,7 +43,6 @@ public sealed partial class EcsCommandBuffer
 
     public bool HasBufferedOperations { get; private set; }
     public bool IsExecuting { get; private set; }
-    internal uint Version { get; private set; }
 
     /// <summary>
     /// Collection of all components to be set onto entities.
