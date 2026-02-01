@@ -99,6 +99,8 @@ internal struct EntityManager
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityLocation AcquireId(out EntityId entityId)
     {
+        using var _ = sync.EnterScope();
+
         if (releasedIds.Count > 0)
         {
             var previousId = releasedIds[^1];
@@ -134,11 +136,13 @@ internal struct EntityManager
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void ReleaseId(EntityId entityId)
     {
+        using var _ = sync.EnterScope();
+
         ref var location = ref GetLocation(entityId);
 
         // Invalidate the handle
         location.Version++;
-        location.Chunk = null;
+        location.Chunk = null!;
 
         // Store this ID for re-use later
         releasedIds.Add(entityId);
