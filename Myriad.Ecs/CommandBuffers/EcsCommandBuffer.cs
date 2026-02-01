@@ -1,6 +1,4 @@
-﻿using System;
-using System.Buffers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
@@ -34,7 +32,7 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// in smaller batches. This has similar cost to replaying commands without
 /// merging.
 /// </remarks>
-public sealed partial class EcsCommandBuffer
+public sealed class EcsCommandBuffer
 {
     /// <summary>
     /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying.
@@ -198,7 +196,7 @@ public sealed partial class EcsCommandBuffer
             using var _ = World.AcquireCommandBuffer(out var recursiveCommandBuffer);
 
             // Create buffered entities.
-            CreateBufferedEntities(recursiveCommandBuffer);
+            CreateEntities(recursiveCommandBuffer);
 
             // Destroy entities, this must occur before structural changes because it may trigger new structural changes
             // by adding a new phantom component.
@@ -211,7 +209,6 @@ public sealed partial class EcsCommandBuffer
             // Clear all temporary state
             setters.Clear(false);
             entityModifications.Clear();
-            archetypeEdges.Clear();
 
             HasBufferedOperations = false;
 
@@ -250,12 +247,19 @@ public sealed partial class EcsCommandBuffer
         }
         entityModifications.Clear();
 
-        archetypeEdges.Clear();
-
         destroys.Clear();
         queryDestroys.Clear();
 
         HasBufferedOperations = false;
+    }
+
+    private void CreateEntities(EcsCommandBuffer recursiveCommandBuffer)
+    {
+        var archetype = World.GetOrCreateArchetype(ImmutableOrderedListSet<ComponentId>.Empty.AsComponentIdSet());
+        foreach (var newEntity in newEntities)
+        {
+            archetype.CreateEntity(recursiveCommandBuffer, newEntity.EntityId);
+        }
     }
 
     private void DestroyEntities(EcsCommandBuffer recursiveCommandBuffer)
@@ -403,76 +407,6 @@ public sealed partial class EcsCommandBuffer
                 }
             }
         }
-    }
-
-    private void CreateBufferedEntities(EcsCommandBuffer recursiveCommandBuffer)
-    {
-        // Keep a map from archetype key -> archetype.
-        // This means we only need to calculate it once per archetype key.
-        var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(archetypeEdges.Count + 1);
-        Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
-        try
-        {
-            foreach (var bufferedEntity in bufferedEntities)
-            {
-                var components = bufferedEntity.Setters;
-                try
-                {
-                    var archetype = GetArchetype(bufferedEntity, archetypeLookup);
-                    var location = archetype.CreateEntity(recursiveCommandBuffer, bufferedEntity.Id);
-
-                    // Write the components into the entity
-                    foreach (var setter in components.Values)
-                    {
-                        // Write component
-                        setters.Write(setter, location);
-                    }
-
-                    // Raise component added events
-                    foreach (var setter in components.Values)
-                    {
-                        var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
-                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, bufferedEntity.Id.ToEntity(World));
-                    }
-                }
-                finally
-                {
-                    // Recycle
-                    components.Clear();
-                    SimplePool.Release(components);
-                }
-            }
-
-            bufferedEntities.Clear();
-        }
-        finally
-        {
-            ArrayPool<Archetype>.Shared.Return(archetypeLookup);
-        }
-    }
-
-    private Archetype GetArchetype(BufferedEntityData entityData, Archetype?[] archetypeLookup)
-    {
-        // Check the cache
-        if (entityData.ArchetypeKey >= 0)
-        {
-            var a = archetypeLookup[entityData.ArchetypeKey];
-            if (a != null)
-            {
-                return a;
-            }
-        }
-
-        // Get the archetype
-        var archetype = World.GetOrCreateArchetype(entityData.Setters.AsComponentIdSet());
-
-        // If the node ID is positive, cache it
-        if (entityData.ArchetypeKey >= 0)
-        {
-            archetypeLookup[entityData.ArchetypeKey] = archetype;
-        }
-
-        return archetype;
     }
 
     private BufferedEntityModification GetBufferedModification(Entity entity, bool ensureSet, bool ensureRemove)
