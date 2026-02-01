@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.Collections;
@@ -12,7 +11,6 @@ namespace Exanite.Myriad.Ecs.Collections;
 internal class SegmentedList<T>
 {
     private readonly Lock growLock = new();
-    private int totalCapacity;
 
     private T[][] segments = [];
     private readonly int shift;
@@ -26,7 +24,7 @@ internal class SegmentedList<T>
     /// <summary>
     /// Total capacity in all segments
     /// </summary>
-    public int TotalCapacity => totalCapacity;
+    public int TotalCapacity => segments.Length * SegmentCapacity;
 
     public SegmentedList(int segmentCapacity)
     {
@@ -64,6 +62,5 @@ internal class SegmentedList<T>
 
         T[][] newSegments = [..segments, new T[SegmentCapacity]];
         Interlocked.Exchange(ref segments, newSegments);
-        Interlocked.Exchange(ref totalCapacity, totalCapacity + SegmentCapacity);
     }
 }
