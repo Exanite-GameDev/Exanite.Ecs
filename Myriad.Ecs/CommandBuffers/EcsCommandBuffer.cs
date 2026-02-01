@@ -98,13 +98,13 @@ public sealed partial class EcsCommandBuffer
         HasBufferedOperations = true;
 
         // Get a set to hold all of the component setters
-        var set = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
-        set.Clear();
+        var setters = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
+        setters.Clear();
 
         // Store this entity in the collection of entities
         // Put it in aggregate node 0 (i.e. no components)
         var id = (uint)bufferedEntities.Count;
-        bufferedEntities.Add(new BufferedEntityData(id, set));
+        bufferedEntities.Add(new BufferedEntityData(id, setters));
 
         return new BufferedEntity(id, GetWriteableResolver());
     }
