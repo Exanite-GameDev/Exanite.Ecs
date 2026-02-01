@@ -44,9 +44,15 @@ public sealed class EcsCommandBuffer
     public bool IsExecuting { get; private set; }
 
     /// <summary>
+    /// A pool of local IDs.
+    /// These are bulk acquired to avoid thread contention.
+    /// </summary>
+    private readonly List<EntityId> localIdPool = new();
+
+    /// <summary>
     /// New entities to be created.
     /// </summary>
-    private readonly List<Entity> newEntities = [];
+    private readonly List<EntityId> newEntities = [];
 
     /// <summary>
     /// Contains component values to be set onto entities.
@@ -94,13 +100,21 @@ public sealed class EcsCommandBuffer
         EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
-        // Acquire an ID
-        // TODO: This can cause lock contention. Optimize by acquiring a batch of IDs.
-        World.Entities.AcquireId(out var entityId);
-        var entity = entityId.ToEntity(World);
-        newEntities.Add(entity);
+        if (localIdPool.Count == 0)
+        {
+            // Bulk acquire IDs if none available locally
+            // This is to avoid thread contention
+            World.Entities.AcquireIds(localIdPool, EcsConstants.CommandBufferLocalIdCount);
+        }
 
-        return new BufferedEntity(entity, this);
+        // Acquire an ID
+        var entityId = localIdPool[^1];
+        localIdPool.RemoveAt(localIdPool.Count - 1);
+
+        // Save it as a new entity
+        newEntities.Add(entityId);
+
+        return new BufferedEntity(entityId.ToEntity(World), this);
     }
 
     /// <summary>
@@ -261,12 +275,15 @@ public sealed class EcsCommandBuffer
 
         EnsureIsExternallyMutable();
 
+        // Release used entity IDs
+        // Do not reuse these without releasing since external callers already have access to them
         foreach (var newEntity in newEntities)
         {
-            World.Entities.ReleaseId(newEntity.EntityId);
+            World.Entities.ReleaseId(newEntity);
         }
         newEntities.Clear();
 
+        // Clear rest of internal state
         setters.Clear(true);
 
         foreach (var (_, data) in entityModifications)
@@ -291,12 +308,21 @@ public sealed class EcsCommandBuffer
         HasBufferedOperations = false;
     }
 
+    /// <summary>
+    /// Clears and releases resources used by this command buffer.
+    /// </summary>
+    internal void DisposeInternal()
+    {
+        Clear();
+        World.Entities.ReleaseIds(localIdPool);
+    }
+
     private void CreateEntities(EcsCommandBuffer recursiveCommandBuffer)
     {
         var archetype = World.GetOrCreateArchetype(ImmutableOrderedListSet<ComponentId>.Empty.AsComponentIdSet());
         foreach (var newEntity in newEntities)
         {
-            archetype.CreateEntity(recursiveCommandBuffer, newEntity.EntityId);
+            archetype.CreateEntity(recursiveCommandBuffer, newEntity);
         }
     }
 

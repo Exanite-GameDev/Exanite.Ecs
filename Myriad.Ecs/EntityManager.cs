@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -146,5 +147,28 @@ internal struct EntityManager
 
         // Store this ID for re-use later
         releasedIds.Add(entityId);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void AcquireIds(List<EntityId> entityIds, int count)
+    {
+        using var _ = sync.EnterScope();
+        for (var i = 0; i < count; i++)
+        {
+            AcquireId(out var entityId);
+            entityIds.Add(entityId);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReleaseIds(List<EntityId> entityIds)
+    {
+        using var _ = sync.EnterScope();
+        foreach (var entityId in entityIds)
+        {
+            ReleaseId(entityId);
+        }
+
+        entityIds.Clear();
     }
 }

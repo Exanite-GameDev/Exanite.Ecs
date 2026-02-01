@@ -8,6 +8,11 @@ internal static class EcsConstants
     internal const int StorageLocationSegmentSize = 1024;
 
     /// <summary>
+    /// Number of local entity IDs to keep per command buffer for the purpose of avoiding thread contention.
+    /// </summary>
+    internal const int CommandBufferLocalIdCount = 32;
+
+    /// <summary>
     /// Number of entities in a single chunk.
     /// </summary>
     internal const int ChunkEntityCount = 1024;
