@@ -15,66 +15,65 @@ public class QueryTests
     public void IncludeMatchNone()
     {
         var world = new EcsWorld();
-
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .Include<EcsFloat>()
             .Build(world);
 
-        var archetypes = q.Archetypes;
+        var archetypes = query.Archetypes;
         Assert.Equal(0, archetypes.Length);
     }
 
     [Fact]
     public void IncludeMatchOne()
     {
-        var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        var world = new EcsWorld();
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
 
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .Include<EcsFloat>()
-            .Build(w);
+            .Build(world);
 
-        var a = q.Archetypes;
-        Assert.Equal(1, a.Length);
+        var archetypes = query.Archetypes;
+        Assert.Equal(1, archetypes.Length);
     }
 
     [Fact]
     public void IncludeMatchCaching()
     {
-        var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        var world = new EcsWorld();
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
 
         // Query that matches just one of the archetypes in the world
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .Include<EcsFloat>()
-            .Build(w);
+            .Build(world);
 
         // Match once, check it matches one archetype
-        var a = q.Archetypes;
-        Assert.Equal(1, a.Length);
+        var archetypes1 = query.Archetypes;
+        Assert.Equal(1, archetypes1.Length);
 
         // Add an archetype to the world that the query should match
-        var c1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsFloat>() });
-        w.GetOrCreateArchetype(c1);
+        var components1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsFloat>() });
+        world.GetOrCreateArchetype(components1);
 
         // Check it now matches 2 archetypes
-        var b = q.Archetypes;
-        Assert.Equal(2, b.Length);
-        foreach (var archetype in b)
+        var archetypes2 = query.Archetypes;
+        Assert.Equal(2, archetypes2.Length);
+        foreach (var archetype in archetypes2)
         {
             Assert.True(archetype.Components.Contains(ComponentId.Get<EcsFloat>()));
         }
 
         // Add an archetype to the world that the query should NOT match
-        var c2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsByte>() });
-        w.GetOrCreateArchetype(c2);
+        var components2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsByte>() });
+        world.GetOrCreateArchetype(components2);
 
         // Check it now matches 2 archetypes
-        var c = q.Archetypes;
-        Assert.Equal(2, c.Length);
-        foreach (var archetype in c)
+        var archetypes3 = query.Archetypes;
+        Assert.Equal(2, archetypes3.Length);
+        foreach (var archetype in archetypes3)
         {
             Assert.True(archetype.Components.Contains(ComponentId.Get<EcsFloat>()));
         }
@@ -83,16 +82,16 @@ public class QueryTests
     [Fact]
     public void IncludeMatchMultiple()
     {
-        var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
+        var world = new EcsWorld();
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
 
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .Include<EcsFloat>()
-            .Build(w);
+            .Build(world);
 
-        var archetypes = q.ArchetypesList;
+        var archetypes = query.ArchetypesList;
         Assert.Equal(2, archetypes.Count);
 
         Assert.True(archetypes.All(x => x.Components.Contains(ComponentId.Get<EcsFloat>())));
@@ -101,17 +100,17 @@ public class QueryTests
     [Fact]
     public void IncludeExclude()
     {
-        var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
+        var world = new EcsWorld();
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
 
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .Include<EcsFloat>()
             .Exclude<EcsInt32>()
-            .Build(w);
+            .Build(world);
 
-        var archetypes = q.Archetypes;
+        var archetypes = query.Archetypes;
         Assert.Equal(1, archetypes.Length);
 
         var archetype = archetypes[0];
@@ -122,18 +121,18 @@ public class QueryTests
     [Fact]
     public void ExactlyOne()
     {
-        var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt16>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
+        var world = new EcsWorld();
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt16>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
 
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .ExactlyOne<EcsFloat>()
             .ExactlyOne<EcsInt32>()
-            .Build(w);
+            .Build(world);
 
-        var archetypes = q.Archetypes;
+        var archetypes = query.Archetypes;
         Assert.Equal(2, archetypes.Length);
 
         foreach (var archetype in archetypes)
@@ -145,18 +144,18 @@ public class QueryTests
     [Fact]
     public void AtLeastOne()
     {
-        var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt16>(), ComponentId.Get<EcsInt64>()]);
+        var world = new EcsWorld();
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt16>(), ComponentId.Get<EcsInt64>()]);
 
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .AtLeastOne<EcsFloat>()
             .AtLeastOne<EcsInt32>()
-            .Build(w);
+            .Build(world);
 
-        var archetypes = q.Archetypes;
+        var archetypes = query.Archetypes;
         Assert.Equal(3, archetypes.Length);
 
         foreach (var archetype in archetypes)
@@ -168,353 +167,306 @@ public class QueryTests
     [Fact]
     public void NotAll()
     {
-        var w = new EcsWorld();
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsInt16>(), ComponentId.Get<EcsInt64>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
-        w.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsInt64>()]);
+        var world = new EcsWorld();
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt16>(), ComponentId.Get<EcsInt64>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>()]);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsFloat>(), ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsInt64>()]);
 
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .NotAll<EcsFloat>()
             .NotAll<EcsInt32>()
-            .Build(w);
+            .Build(world);
 
-        var archetypes = q.Archetypes;
+        var archetypes = query.Archetypes;
         Assert.Equal(3, archetypes.Length);
     }
 
     [Fact]
     public void First_ThrowsNoMatch()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        Assert.Throws<GuardException>(() => q.First());
+        Assert.Throws<GuardException>(() => query.First());
     }
 
     [Fact]
     public void First_MatchSingle()
     {
         var world = new EcsWorld();
-
-        var q = new QueryFilter()
+        var query = new QueryFilter()
             .Include<Ecs0>()
             .Build(world);
 
-        var c = world.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity = commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e = eb.Resolve();
-
-        Assert.Equal(e, q.First());
+        Assert.Equal(entity, query.First());
     }
 
     [Fact]
     public void First_MatchMultiple()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb1 = c.Create().Set(new Ecs0());
-        var eb2 = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity1 = commandBuffer.Create().Set(new Ecs0()).Entity;
+        var entity2 = commandBuffer.Create().Set(new Ecs0()).Entity;
 
-        c.Execute();
-        var e1 = eb1.Resolve();
-        var e2 = eb2.Resolve();
+        commandBuffer.Execute();
 
-        Assert.True(new[] { e1, e2 }.Contains(q.First()));
+        Assert.True(new[] { entity1, entity2 }.Contains(query.First()));
     }
 
     [Fact]
     public void FirstOrDefault_NullNoMatch()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        Assert.False(q.FirstOrDefault().IsAlive);
+        Assert.False(query.FirstOrDefault().IsAlive);
     }
 
     [Fact]
     public void FirstOrDefault_MatchSingle()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity = commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e = eb.Resolve();
-
-        Assert.Equal(e, q.FirstOrDefault());
+        Assert.Equal(entity, query.FirstOrDefault());
     }
 
     [Fact]
     public void FirstOrDefault_MatchMultiple()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb1 = c.Create().Set(new Ecs0());
-        var eb2 = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity1 = commandBuffer.Create().Set(new Ecs0()).Entity;
+        var entity2 = commandBuffer.Create().Set(new Ecs0()).Entity;
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e1 = eb1.Resolve();
-        var e2 = eb2.Resolve();
-
-        Assert.True(new[] { e1, e2 }.Contains(q.FirstOrDefault()));
+        Assert.True(new[] { entity1, entity2 }.Contains(query.FirstOrDefault()));
     }
 
     [Fact]
     public void SingleOrDefault_NullNoMatch()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        Assert.False(q.SingleOrDefault().IsAlive);
+        Assert.False(query.SingleOrDefault().IsAlive);
     }
 
     [Fact]
     public void SingleOrDefault_ThrowsMultipleMatch()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        c.Create().Set(new Ecs0());
-        c.Create().Set(new Ecs0());
-        c.Execute();
+        var commandBuffer = world.AcquireCommandBuffer();
+        commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Execute();
 
-        Assert.Throws<GuardException>(() => q.SingleOrDefault());
+        Assert.Throws<GuardException>(() => query.SingleOrDefault());
     }
 
     [Fact]
     public void SingleOrDefault_MatchSingle()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity = commandBuffer.Create().Set(new Ecs0()).Entity;
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e = eb.Resolve();
-
-        Assert.Equal(e, q.SingleOrDefault());
+        Assert.Equal(entity, query.SingleOrDefault());
     }
 
     [Fact]
     public void Single_ThrowsMultipleMatch()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        c.Create().Set(new Ecs0());
-        c.Create().Set(new Ecs0());
-        c.Execute();
+        var commandBuffer = world.AcquireCommandBuffer();
+        commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Execute();
 
-        Assert.Throws<GuardException>(() => q.Single());
+        Assert.Throws<GuardException>(() => query.Single());
     }
 
     [Fact]
     public void Single_ThrowsNoMatch()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        Assert.Throws<GuardException>(() => q.Single());
+        Assert.Throws<GuardException>(() => query.Single());
     }
 
     [Fact]
     public void Single_MatchSingle()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity = commandBuffer.Create().Set(new Ecs0()).Entity;
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e = eb.Resolve();
-
-        Assert.Equal(e, q.Single());
+        Assert.Equal(entity, query.Single());
     }
 
     [Fact]
     public void Any_True()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Execute();
 
-        c.Execute();
-        _ = eb.Resolve();
-
-        Assert.True(q.Any());
+        Assert.True(query.Any());
     }
 
     [Fact]
     public void Any_False()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        Assert.False(q.Any());
+        Assert.False(query.Any());
     }
 
     [Fact]
     public void Contains_True()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity = commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e = eb.Resolve();
-
-        Assert.True(q.IsMatch(e));
+        Assert.True(query.IsMatch(entity));
     }
 
     [Fact]
     public void Contains_False()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb = c.Create();
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity = commandBuffer.Create();
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e = eb.Resolve();
-
-        Assert.False(q.IsMatch(e));
+        Assert.False(query.IsMatch(entity));
     }
 
     [Fact]
     public void Random_NullNoMatch()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var rng = new Random(123);
-
-        Assert.False(q.RandomOrDefault(rng).IsAlive);
+        var random = new Random(123);
+        Assert.False(query.RandomOrDefault(random).IsAlive);
     }
 
     [Fact]
     public void Random_MatchSingle()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<Ecs0>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
-        var eb = c.Create().Set(new Ecs0());
+        var commandBuffer = world.AcquireCommandBuffer();
+        var entity = commandBuffer.Create().Set(new Ecs0());
+        commandBuffer.Execute();
 
-        c.Execute();
-        var e = eb.Resolve();
-
-        var r = new Random(123);
-
-        Assert.Equal(e, q.RandomOrDefault(r));
+        var random = new Random(123);
+        Assert.Equal(entity, query.RandomOrDefault(random));
     }
 
     [Fact]
     public void Random_MatchRandom()
     {
-        var w = new EcsWorld();
-
-        var q = new QueryFilter()
+        var world = new EcsWorld();
+        var query = new QueryFilter()
             .Include<EcsInt32>()
-            .Build(w);
+            .Build(world);
 
-        var c = w.AcquireCommandBuffer();
+        var entities = new HashSet<Entity>();
+        var commandBuffer = world.AcquireCommandBuffer();
         for (var i = 0; i < 10000; i++)
         {
-            c.Create().Set(new EcsInt32(i));
-        }
-
-        for (var i = 0; i < 10000; i++)
-        {
-            c.Create().Set(new EcsInt32(i)).Set(new Ecs0());
+            entities.Add(commandBuffer.Create().Set(new EcsInt32(i)));
         }
 
         for (var i = 0; i < 10000; i++)
         {
-            c.Create().Set(new EcsInt32(i)).Set(new Ecs1());
+            entities.Add(commandBuffer.Create().Set(new EcsInt32(i)).Set(new Ecs0()));
         }
 
-        var resolver = c.Execute();
-        var entities = new List<Entity>();
-        for (var i = 0; i < resolver.Count; i++)
+        for (var i = 0; i < 10000; i++)
         {
-            entities.Add(resolver[i]);
+            entities.Add(commandBuffer.Create().Set(new EcsInt32(i)).Set(new Ecs1()));
         }
 
-        var r = new Random(123);
+        commandBuffer.Execute();
 
+        var random = new Random(123);
         for (var i = 0; i < 1000; i++)
         {
-            Assert.True(entities.Contains(q.RandomOrDefault(r)));
+            Assert.True(entities.Contains(query.RandomOrDefault(random)));
         }
     }
 }
