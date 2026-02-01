@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
@@ -115,6 +117,7 @@ public sealed class EcsCommandBuffer
     public BufferedEntity Set<T>(Entity entity, T value) where T : IComponent
     {
         EnsureIsExternallyMutable();
+        EnsureIsFromCurrentWorld(entity);
         HasBufferedOperations = true;
 
         var modification = GetBufferedModification(entity, true, false);
@@ -143,6 +146,7 @@ public sealed class EcsCommandBuffer
     public BufferedEntity Remove<T>(Entity entity) where T : IComponent
     {
         EnsureIsExternallyMutable();
+        EnsureIsFromCurrentWorld(entity);
         HasBufferedOperations = true;
 
         var modification = GetBufferedModification(entity, false, true);
@@ -163,6 +167,7 @@ public sealed class EcsCommandBuffer
     public EcsCommandBuffer Destroy(Entity entity)
     {
         EnsureIsExternallyMutable();
+        EnsureIsFromCurrentWorld(entity);
         HasBufferedOperations = true;
 
         destroys.Add(entity);
@@ -173,9 +178,13 @@ public sealed class EcsCommandBuffer
     /// <summary>
     /// Bulk destroy entities.
     /// </summary>
-    public EcsCommandBuffer Destroy(List<Entity> entities)
+    public EcsCommandBuffer Destroy(ReadOnlySpan<Entity> entities)
     {
         EnsureIsExternallyMutable();
+        foreach (var entity in entities)
+        {
+            EnsureIsFromCurrentWorld(entity);
+        }
         HasBufferedOperations = true;
 
         destroys.AddRange(entities);
@@ -192,11 +201,11 @@ public sealed class EcsCommandBuffer
 
         foreach (var archetype in query.Archetypes)
         {
-            GuardUtility.IsTrue(archetype.World == World, "Cannot use archetype from one world with a command buffer for another world");
-
-            archetypeDestroys.Add(archetype);
-            HasBufferedOperations = true;
+            EnsureIsFromCurrentWorld(archetype);
         }
+
+        archetypeDestroys.AddRange(query.Archetypes);
+        HasBufferedOperations = true;
 
         return this;
     }
@@ -537,10 +546,23 @@ public sealed class EcsCommandBuffer
     /// <summary>
     /// Used to check if it is safe for external calls to modify the command buffer.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void EnsureIsExternallyMutable()
     {
         GuardUtility.IsFalse(World.IsDisposed, "World has been disposed");
         GuardUtility.IsFalse(IsExecuting, "Command buffer is currently executing");
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void EnsureIsFromCurrentWorld(Entity entity)
+    {
+        GuardUtility.IsTrue(entity.World == World, "Entity must belong to the same world as the command buffer");
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void EnsureIsFromCurrentWorld(Archetype archetype)
+    {
+        GuardUtility.IsTrue(archetype.World == World, "Archetype must belong to the same world as the command buffer");
     }
 
     private record struct BufferedEntityModification(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
