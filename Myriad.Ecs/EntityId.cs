@@ -10,14 +10,10 @@ namespace Exanite.Myriad.Ecs;
 [DebuggerDisplay("{Index}v{Version}")]
 internal readonly record struct EntityId : IComparable<EntityId>
 {
-    /// <summary>
-    /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
-    /// </summary>
+    /// <inheritdoc cref="Entity.Index"/>
     public readonly int Index;
 
-    /// <summary>
-    /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
-    /// </summary>
+    /// <inheritdoc cref="Entity.Version"/>
     public readonly uint Version;
 
     internal EntityId(int index, uint version)
@@ -27,7 +23,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     }
 
     /// <summary>
-    /// Create a new <see cref="Entity"/> struct that represents this Entity
+    /// Create a new <see cref="Entity"/> struct based on this <see cref="EntityId"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Entity ToEntity(EcsWorld world)

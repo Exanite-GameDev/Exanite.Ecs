@@ -16,7 +16,7 @@ namespace Exanite.Myriad.Ecs;
 public readonly partial record struct Entity : IComparable<Entity>
 {
     /// <summary>
-    /// Check if this Entity still exists.
+    /// Check if this entity still exists.
     /// </summary>
     public bool IsAlive
     {
@@ -25,7 +25,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
-    /// Check if this Entity is default initialized.
+    /// Check if this entity is default initialized.
     /// </summary>
     internal bool IsDefault
     {
@@ -39,17 +39,19 @@ public readonly partial record struct Entity : IComparable<Entity>
     public readonly EcsWorld World;
 
     /// <summary>
-    /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
+    /// The index of this entity.
+    /// May be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
     public int Index => EntityId.Index;
 
     /// <summary>
-    /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
+    /// The version of this entity.
+    /// May be re-used, but only after the full 32 bit counter has been overflowed for this specific index.
     /// </summary>
     public uint Version => EntityId.Version;
 
     /// <summary>
-    /// The raw ID of this <see cref="Entity"/>
+    /// The raw ID of this <see cref="Entity"/>.
     /// </summary>
     internal readonly EntityId EntityId;
 
@@ -65,6 +67,12 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Avoid using this for anything other than debugging!
     /// </summary>
     public object[] BoxedComponents => ComponentIds.Select(GetBoxedComponent).ToArray()!;
+
+    internal Entity(EntityId id, EcsWorld world)
+    {
+        EntityId = id;
+        World = world;
+    }
 
     /// <summary>
     /// Check if this entity has a component.
@@ -128,12 +136,6 @@ public readonly partial record struct Entity : IComparable<Entity>
 
         ref var location = ref World.Entities.GetLocation(EntityId);
         return location.Chunk.GetComponentArray(id).GetValue(location.IndexInChunk);
-    }
-
-    internal Entity(EntityId id, EcsWorld world)
-    {
-        EntityId = id;
-        World = world;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
