@@ -130,7 +130,7 @@ public sealed class QueryView : IArchetypeView
         }
 
         var matchResult = GetArchetypeMatchResult();
-        return matchResult.ArchetypeSet.Contains(entity.World.GetArchetype(entity.EntityId));
+        return matchResult.ArchetypeSet.Contains(entity.World.Entities.GetArchetype(entity.EntityId));
     }
 
     /// <summary>

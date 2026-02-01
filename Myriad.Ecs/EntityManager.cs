@@ -1,0 +1,144 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Exanite.Core.Runtime;
+using Exanite.Core.Utilities;
+using Exanite.Myriad.Ecs.Collections;
+using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Myriad.Ecs.Worlds.Archetypes;
+
+namespace Exanite.Myriad.Ecs;
+
+internal struct EntityManager
+{
+    private readonly SegmentedList<EntityLocation> entities = new(EcsConstants.StorageLocationSegmentSize);
+
+    // Keep track of dead entities so their ID can be re-used
+    /// <summary>
+    /// Tracks released IDs so that they can be reused.
+    /// </summary>
+    /// <remarks>
+    /// The ID version should be incremented when re-acquired.
+    /// </remarks>
+    private readonly List<EntityId> releasedIds = [];
+    private int nextIndex = 1;
+
+    public EntityManager() {}
+
+    /// <summary>
+    /// Gets the location for the specified entity.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref EntityLocation GetLocation(int entityIndex)
+    {
+        return ref entities[entityIndex];
+    }
+
+    /// <inheritdoc cref="GetLocation(int)"/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref EntityLocation GetLocation(EntityId entityId)
+    {
+        ref var location = ref entities[entityId.Index];
+        GuardUtility.IsTrue(location.Version == entityId.Version, "Entity is not alive");
+        return ref location;
+    }
+
+    /// <summary>
+    /// Tries to get the location for the specified entity.
+    /// </summary>
+    internal bool TryGetLocation(EntityId entity, out Ref<EntityLocation> location)
+    {
+        location = new Ref<EntityLocation>(ref entities[entity.Index]);
+        if (location.Value.Version != entity.Version)
+        {
+            location = default;
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Get the current version for the specified entity.
+    /// </summary>
+    /// <returns>The entity version, or zero if the entity does not exist.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public uint GetVersion(int entityIndex)
+    {
+        if (entityIndex <= 0 || entityIndex >= entities.TotalCapacity)
+        {
+            return 0;
+        }
+
+        return GetLocation(entityIndex).Version;
+    }
+
+    /// <inheritdoc cref="GetVersion(int)"/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public uint GetVersion(EntityId entityId)
+    {
+        return GetLocation(entityId).Version;
+    }
+
+    /// <summary>
+    /// Gets the archetype for the specified entity.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Archetype GetArchetype(int entityIndex)
+    {
+        return GetLocation(entityIndex).Chunk.Archetype;
+    }
+
+    /// <inheritdoc cref="GetArchetype(int)"/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Archetype GetArchetype(EntityId entityId)
+    {
+        return GetLocation(entityId).Chunk.Archetype;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref EntityLocation AcquireId(out EntityId entityId)
+    {
+        if (releasedIds.Count > 0)
+        {
+            var previousId = releasedIds[^1];
+            releasedIds.RemoveAt(releasedIds.Count - 1);
+
+            var version = previousId.Version + 1;
+            if (version == 0)
+            {
+                // Ensure ID is never 0, even if it overflows and wraps around
+                version += 1;
+            }
+
+            entityId = new EntityId(previousId.Index, version);
+        }
+        else
+        {
+            // Allocate a new ID. This must not overflow!
+            entityId = new EntityId(checked(nextIndex++), 1);
+            if (entityId.Index >= entities.TotalCapacity)
+            {
+                // Check if the collection of all entities needs to grow
+                entities.Grow();
+            }
+        }
+
+        // Update the version
+        ref var location = ref GetLocation(entityId.Index);
+        location.Version = entityId.Version;
+
+        return ref location;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReleaseId(EntityId entityId)
+    {
+        ref var location = ref GetLocation(entityId);
+
+        // Increment version, this will invalidate the handle
+        location.Version++;
+
+        // Store this ID for re-use later
+        releasedIds.Add(entityId);
+    }
+}

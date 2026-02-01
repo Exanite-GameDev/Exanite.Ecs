@@ -86,16 +86,16 @@ public sealed class Archetype
         Lookup = new ArchetypeComponentLookup(components);
     }
 
-    internal EntityStorageLocation CreateEntity(EcsCommandBuffer commandBuffer)
+    internal ref EntityLocation CreateEntity(EcsCommandBuffer commandBuffer, out EntityId entityId)
     {
         // Allocate an entity id and add it to this archetype
-        ref var location = ref World.AllocateEntity(out var entity);
-        var entityLocation = AddEntity(entity, ref location);
+        ref var location = ref World.Entities.AcquireId(out entityId);
+        AddEntity(entityId, ref location);
 
         // Raise entity created event
-        World.EventBus.Raise(new EntityCreatedEvent(commandBuffer, entityLocation.Entity.ToEntity(World)));
+        World.EventBus.Raise(new EntityCreatedEvent(commandBuffer, entityId.ToEntity(World)));
 
-        return entityLocation;
+        return ref location;
     }
 
     /// <summary>
@@ -148,12 +148,12 @@ public sealed class Archetype
     /// </summary>
     /// <param name="entity">Entity to add to a chunk</param>
     /// <param name="location">Location will be mutated to point to the new location</param>
-    internal EntityStorageLocation AddEntity(EntityId entity, ref StorageLocation location)
+    internal void AddEntity(EntityId entity, ref EntityLocation location)
     {
         EntityCount++;
 
         var chunk = GetChunkWithSpace();
-        return chunk.AddEntity(entity, ref location);
+        chunk.AddEntity(entity, ref location);
     }
 
     /// <summary>
@@ -182,7 +182,7 @@ public sealed class Archetype
         return newChunk;
     }
 
-    internal void RemoveEntity(StorageLocation location)
+    internal void RemoveEntity(EntityLocation location)
     {
         // Remove the entity from the chunk, component data is lost after this point
         location.Chunk.RemoveEntity(location);
@@ -191,22 +191,20 @@ public sealed class Archetype
         OnChunkEntityRemoved(location.Chunk);
     }
 
-    internal EntityStorageLocation MigrateTo(EntityId entity, ref StorageLocation location, Archetype dstArchetype)
+    internal void MigrateTo(EntityId entity, ref EntityLocation location, Archetype dstArchetype)
     {
         // Early exit if we're migrating to where we already are!
         if (dstArchetype == this)
         {
-            return location.GetEntityStorageLocation(entity);
+            return;
         }
 
         // Do the actual copying
         var srcChunk = location.Chunk;
-        var newEntityLocation = srcChunk.MigrateTo(entity, ref location, dstArchetype);
+        srcChunk.MigrateTo(entity, ref location, dstArchetype);
 
         // Execute handler for when an entity is removed from a chunk
         OnChunkEntityRemoved(srcChunk);
-
-        return newEntityLocation;
     }
 
     private void OnChunkEntityRemoved(Chunk chunk)

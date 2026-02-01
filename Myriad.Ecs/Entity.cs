@@ -16,21 +16,21 @@ namespace Exanite.Myriad.Ecs;
 public readonly partial record struct Entity : IComparable<Entity>
 {
     /// <summary>
-    /// Check if this Entity still exists.
+    /// Check if this entity still exists.
     /// </summary>
     public bool IsAlive
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => Id != 0 && World.GetVersion(Id) == Version;
+        get => Index != 0 && World.Entities.GetVersion(Index) == Version;
     }
 
     /// <summary>
-    /// Check if this Entity is default initialized.
+    /// Check if this entity is default initialized.
     /// </summary>
     internal bool IsDefault
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => Id == 0;
+        get => Index == 0;
     }
 
     /// <summary>
@@ -39,31 +39,26 @@ public readonly partial record struct Entity : IComparable<Entity>
     public readonly EcsWorld World;
 
     /// <summary>
-    /// The <see cref="Entity"/> of an entity, may be re-used very quickly once an <see cref="Entity"/> is destroyed.
+    /// The index of this entity.
+    /// May be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
-    public int Id => EntityId.Id;
+    public int Index => EntityId.Index;
 
     /// <summary>
-    /// The version number of this ID, may also be re-used but only after the full 32 bit counter has been overflowed for this specific ID.
+    /// The version of this entity.
+    /// May be re-used, but only after the full 32 bit counter has been overflowed for this specific index.
     /// </summary>
     public uint Version => EntityId.Version;
 
     /// <summary>
-    /// The raw ID of this <see cref="Entity"/>
+    /// The raw ID of this <see cref="Entity"/>.
     /// </summary>
     internal readonly EntityId EntityId;
 
     /// <summary>
     /// Get the set of components which this entity currently has.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ComponentIds
-    {
-        get
-        {
-            var location = World.GetStorageLocation(EntityId);
-            return location.Chunk.Archetype.Components;
-        }
-    }
+    public ImmutableOrderedListSet<ComponentId> ComponentIds => World.Entities.GetArchetype(EntityId).Components;
 
     /// <summary>
     /// Get a boxed array of all components.
@@ -72,6 +67,12 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Avoid using this for anything other than debugging!
     /// </summary>
     public object[] BoxedComponents => ComponentIds.Select(GetBoxedComponent).ToArray()!;
+
+    internal Entity(EntityId id, EcsWorld world)
+    {
+        EntityId = id;
+        World = world;
+    }
 
     /// <summary>
     /// Check if this entity has a component.
@@ -89,8 +90,8 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref T GetComponent<T>() where T : IComponent
     {
-        ref var entityInfo = ref World.GetStorageLocation(EntityId);
-        return ref entityInfo.Chunk.Get<T>(entityInfo.IndexInChunk);
+        ref var location = ref World.Entities.GetLocation(EntityId);
+        return ref location.Chunk.Get<T>(location.IndexInChunk);
     }
 
     /// <summary>
@@ -100,8 +101,8 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Ref<T> GetComponentRef<T>() where T : IComponent
     {
-        ref var entityInfo = ref World.GetStorageLocation(EntityId);
-        return entityInfo.Chunk.GetRef<T>(entityInfo.IndexInChunk);
+        ref var location = ref World.Entities.GetLocation(EntityId);
+        return location.Chunk.GetRef<T>(location.IndexInChunk);
     }
 
     /// <summary>
@@ -133,14 +134,8 @@ public readonly partial record struct Entity : IComparable<Entity>
             return null;
         }
 
-        ref var entityInfo = ref World.GetStorageLocation(EntityId);
-        return entityInfo.Chunk.GetComponentArray(id).GetValue(entityInfo.IndexInChunk);
-    }
-
-    internal Entity(EntityId id, EcsWorld world)
-    {
-        EntityId = id;
-        World = world;
+        ref var location = ref World.Entities.GetLocation(EntityId);
+        return location.Chunk.GetComponentArray(id).GetValue(location.IndexInChunk);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

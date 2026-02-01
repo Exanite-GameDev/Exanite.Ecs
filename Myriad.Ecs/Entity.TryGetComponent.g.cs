@@ -18,12 +18,12 @@ public readonly partial record struct Entity
     {
         ref0 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -46,12 +46,12 @@ public readonly partial record struct Entity
         ref0 = default;
         ref1 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -82,12 +82,12 @@ public readonly partial record struct Entity
         ref1 = default;
         ref2 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -126,12 +126,12 @@ public readonly partial record struct Entity
         ref2 = default;
         ref3 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -178,12 +178,12 @@ public readonly partial record struct Entity
         ref3 = default;
         ref4 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -238,12 +238,12 @@ public readonly partial record struct Entity
         ref4 = default;
         ref5 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -306,12 +306,12 @@ public readonly partial record struct Entity
         ref5 = default;
         ref6 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -382,12 +382,12 @@ public readonly partial record struct Entity
         ref6 = default;
         ref7 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -466,12 +466,12 @@ public readonly partial record struct Entity
         ref7 = default;
         ref8 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -558,12 +558,12 @@ public readonly partial record struct Entity
         ref8 = default;
         ref9 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -658,12 +658,12 @@ public readonly partial record struct Entity
         ref9 = default;
         ref10 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -766,12 +766,12 @@ public readonly partial record struct Entity
         ref10 = default;
         ref11 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -882,12 +882,12 @@ public readonly partial record struct Entity
         ref11 = default;
         ref12 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -1006,12 +1006,12 @@ public readonly partial record struct Entity
         ref12 = default;
         ref13 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -1138,12 +1138,12 @@ public readonly partial record struct Entity
         ref13 = default;
         ref14 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
@@ -1278,12 +1278,12 @@ public readonly partial record struct Entity
         ref14 = default;
         ref15 = default;
 
-        if (IsDefault || !World.TryGetStorageLocation(EntityId, out var storageLocation))
+        if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
             return false;
         }
 
-        var location = storageLocation.Value;
+        ref var location = ref locationRef.Value;
         var components = location.Chunk.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
