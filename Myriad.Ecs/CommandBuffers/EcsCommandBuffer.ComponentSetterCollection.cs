@@ -8,19 +8,19 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 public partial class EcsCommandBuffer
 {
-    public readonly struct SetterId
+    internal readonly struct SetterId
     {
         /// <summary>
         /// Component ID of the component being overwritten.
         /// </summary>
-        internal readonly ComponentId ComponentId;
+        public readonly ComponentId ComponentId;
 
         /// <summary>
         /// Index of the value in the values list.
         /// </summary>
-        internal readonly int Index;
+        public readonly int Index;
 
-        internal SetterId(ComponentId componentId, int index)
+        public SetterId(ComponentId componentId, int index)
         {
             ComponentId = componentId;
             Index = index;
@@ -73,17 +73,11 @@ public partial class EcsCommandBuffer
         /// <summary>
         /// Clear all component values stored in this collection.
         /// </summary>
-        /// <param name="disposeComponents">
-        /// Should the components be disposed?
-        /// <para/>
-        /// Recommendation is to set this to true if the components were not "moved" elsewhere.
-        /// For example, if the components were never written using <see cref="Write"/>.
-        /// </param>
-        public void Clear(bool disposeComponents)
+        public void Clear(bool hasExecuted)
         {
             foreach (var (_, value) in components)
             {
-                value.Recycle(disposeComponents);
+                value.Recycle(hasExecuted);
             }
 
             components.Clear();
@@ -92,7 +86,7 @@ public partial class EcsCommandBuffer
         private interface IComponentList
         {
             public void Write(int index, EntityLocation location);
-            public void Recycle(bool disposeComponents);
+            public void Recycle(bool hasExecuted);
         }
 
         private class ComponentList<T> : IComponentList where T : IComponent
@@ -115,9 +109,14 @@ public partial class EcsCommandBuffer
                 values[index.Index] = value;
             }
 
-            public void Recycle(bool disposeComponents)
+            public void Write(int index, EntityLocation location)
             {
-                if (disposeComponents && values.Count > 0 && values[0] is IDisposable)
+                location.Chunk.Get<T>(location.IndexInChunk) = values[index];
+            }
+
+            public void Recycle(bool hasExecuted)
+            {
+                if (!hasExecuted && values.Count > 0 && values[0] is IDisposable)
                 {
                     foreach (var component in values)
                     {
@@ -127,11 +126,6 @@ public partial class EcsCommandBuffer
 
                 values.Clear();
                 SimplePool.Release(this);
-            }
-
-            public void Write(int index, EntityLocation location)
-            {
-                location.Chunk.Get<T>(location.IndexInChunk) = values[index];
             }
         }
     }

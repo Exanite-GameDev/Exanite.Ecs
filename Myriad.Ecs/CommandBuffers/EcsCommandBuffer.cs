@@ -254,7 +254,7 @@ public sealed partial class EcsCommandBuffer
 
             // Clear all temporary state
             newEntities.Clear();
-            setters.Clear(false);
+            setters.Clear(true);
             entityModifications.Clear();
 
             HasBufferedOperations = false;
@@ -288,7 +288,7 @@ public sealed partial class EcsCommandBuffer
         World.Entities.ReleaseUnusedIds(localIdPool);
 
         // Clear rest of internal state
-        setters.Clear(true);
+        setters.Clear(false);
 
         foreach (var (_, data) in entityModifications)
         {
