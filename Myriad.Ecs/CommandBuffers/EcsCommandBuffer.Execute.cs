@@ -12,7 +12,7 @@ public partial class EcsCommandBuffer
         // Same with creates followed by destroys
         // I probably do, since prefabs can have repeated sets and removes.
 
-        foreach (var command in State.Commands)
+        foreach (var command in state.Commands)
         {
             switch (command.Type)
             {
@@ -48,7 +48,7 @@ public partial class EcsCommandBuffer
         World.Entities.ReleaseUnusedIds(localIdPool);
 
         // Clear commands
-        State.Clear(World, false);
+        state.Clear(World, false);
 
         recursiveCommandBuffer.Execute();
     }

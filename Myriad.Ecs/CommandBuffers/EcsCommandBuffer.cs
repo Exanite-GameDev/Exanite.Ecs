@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
@@ -21,14 +15,14 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// <br/>
 /// Example 1: Setting the same component twice is the same as setting it once, with the last taking priority.
 /// <br/>
-/// Example 2: Destroying an entity after making modifications to it is the same as making no modifications to it before destroying it.
+/// Example 2: Destroying an entity after making modifications to it is the same as simply destroying it.
 /// </summary>
 /// <remarks>
 /// The command buffer batches commands to avoid expensive operations
 /// where adding/removing multiple components causes the entity to be
 /// copied between multiple archetypes.
 /// <para/>
-/// Fully ordered events without dropping of intermediate were considered,
+/// Fully ordered events without dropping of intermediate events was considered,
 /// but the performance cost is likely too high.
 /// <para/>
 /// If fully ordered events are required, it's possible to submit commands
@@ -42,13 +36,13 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsWorld World { get; }
 
-    public bool HasBufferedOperations => State.Commands.Count != 0;
+    public bool HasBufferedOperations => state.Commands.Count != 0;
     public bool IsExecuting { get; private set; }
 
     /// <summary>
     /// Contains information about commands enqueued in the command buffer.
     /// </summary>
-    private readonly CommandState State = new();
+    private readonly CommandState state = new();
 
     /// <summary>
     /// A pool of local IDs.
@@ -92,8 +86,8 @@ public sealed partial class EcsCommandBuffer
         localIdPool.RemoveAt(localIdPool.Count - 1);
 
         // Store the command
-        State.Commands.Add(new Command(CommandType.CreateEntity, State.CreateEntityCommands.Count));
-        State.CreateEntityCommands.Add(new CreateEntityCommand(entityId));
+        state.Commands.Add(new Command(CommandType.CreateEntity, state.CreateEntityCommands.Count));
+        state.CreateEntityCommands.Add(new CreateEntityCommand(entityId));
 
         return new BufferedEntity(entityId.ToEntity(World), this);
     }
@@ -107,11 +101,11 @@ public sealed partial class EcsCommandBuffer
         EnsureIsFromCurrentWorld(entity);
 
         // Create the setter
-        var setterId = State.Setters.Create(value);
+        var setterId = state.Setters.Create(value);
 
         // Store the command
-        State.Commands.Add(new Command(CommandType.SetComponent, State.SetComponentCommands.Count));
-        State.SetComponentCommands.Add(new SetComponentCommand(entity.EntityId, setterId));
+        state.Commands.Add(new Command(CommandType.SetComponent, state.SetComponentCommands.Count));
+        state.SetComponentCommands.Add(new SetComponentCommand(entity.EntityId, setterId));
 
         return new BufferedEntity(entity, this);
     }
@@ -125,8 +119,8 @@ public sealed partial class EcsCommandBuffer
         EnsureIsFromCurrentWorld(entity);
 
         // Store the command
-        State.Commands.Add(new Command(CommandType.RemoveComponent, State.RemoveComponentCommands.Count));
-        State.RemoveComponentCommands.Add(new RemoveComponentCommand(entity.EntityId, ComponentId.Get<T>()));
+        state.Commands.Add(new Command(CommandType.RemoveComponent, state.RemoveComponentCommands.Count));
+        state.RemoveComponentCommands.Add(new RemoveComponentCommand(entity.EntityId, ComponentId.Get<T>()));
 
         return new BufferedEntity(entity, this);
     }
@@ -140,8 +134,8 @@ public sealed partial class EcsCommandBuffer
         EnsureIsFromCurrentWorld(entity);
 
         // Store the command
-        State.Commands.Add(new Command(CommandType.DestroyEntity, State.DestroyEntityCommands.Count));
-        State.DestroyEntityCommands.Add(new DestroyEntityCommand(entity.EntityId));
+        state.Commands.Add(new Command(CommandType.DestroyEntity, state.DestroyEntityCommands.Count));
+        state.DestroyEntityCommands.Add(new DestroyEntityCommand(entity.EntityId));
 
         return this;
     }
@@ -160,8 +154,8 @@ public sealed partial class EcsCommandBuffer
         // Store the commands
         foreach (var entity in entities)
         {
-            State.Commands.Add(new Command(CommandType.DestroyEntity, State.DestroyEntityCommands.Count));
-            State.DestroyEntityCommands.Add(new DestroyEntityCommand(entity.EntityId));
+            state.Commands.Add(new Command(CommandType.DestroyEntity, state.DestroyEntityCommands.Count));
+            state.DestroyEntityCommands.Add(new DestroyEntityCommand(entity.EntityId));
         }
 
         return this;
@@ -182,8 +176,8 @@ public sealed partial class EcsCommandBuffer
         }
 
         // Store the command
-        State.Commands.Add(new Command(CommandType.DestroyArchetypeView, State.DestroyArchetypeViewCommands.Count));
-        State.DestroyArchetypeViewCommands.Add(new DestroyArchetypeViewCommand(view));
+        state.Commands.Add(new Command(CommandType.DestroyArchetypeView, state.DestroyArchetypeViewCommands.Count));
+        state.DestroyArchetypeViewCommands.Add(new DestroyArchetypeViewCommand(view));
 
         return this;
     }
@@ -196,8 +190,8 @@ public sealed partial class EcsCommandBuffer
         EnsureIsExternallyMutable();
 
         // Store the command
-        State.Commands.Add(new Command(CommandType.DeferredAction, State.DeferredActionCommands.Count));
-        State.DeferredActionCommands.Add(new DeferredActionCommand(action));
+        state.Commands.Add(new Command(CommandType.DeferredAction, state.DeferredActionCommands.Count));
+        state.DeferredActionCommands.Add(new DeferredActionCommand(action));
 
         return this;
     }
@@ -217,7 +211,7 @@ public sealed partial class EcsCommandBuffer
         World.Entities.ReleaseUnusedIds(localIdPool);
 
         // Clear commands
-        State.Clear(World, false);
+        state.Clear(World, false);
     }
 
     /// <summary>
