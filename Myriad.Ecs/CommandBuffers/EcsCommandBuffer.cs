@@ -279,6 +279,7 @@ public sealed class EcsCommandBuffer
         EnsureIsExternallyMutable();
 
         // Release used entity IDs
+        // Do not reuse these without releasing since external callers already have access to them
         foreach (var newEntity in newEntities)
         {
             World.Entities.ReleaseId(newEntity);
