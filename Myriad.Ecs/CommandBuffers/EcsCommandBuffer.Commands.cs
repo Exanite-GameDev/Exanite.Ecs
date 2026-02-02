@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Exanite.Core.Pooling;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds;
@@ -56,12 +55,11 @@ public partial class EcsCommandBuffer
         DeferredAction,
     }
 
-    private struct Command
+    private readonly struct Command
     {
-        public required CommandType Type;
-        public required int Index;
+        public readonly CommandType Type;
+        public readonly int Index;
 
-        [SetsRequiredMembers]
         public Command(CommandType type, int index)
         {
             Type = type;
@@ -69,45 +67,41 @@ public partial class EcsCommandBuffer
         }
     }
 
-    private struct CreateEntityCommand
+    private readonly struct CreateEntityCommand
     {
-        public required EntityId EntityId;
+        public readonly EntityId EntityId;
 
-        [SetsRequiredMembers]
         public CreateEntityCommand(EntityId entityId)
         {
             EntityId = entityId;
         }
     }
 
-    private struct DestroyEntityCommand
+    private readonly struct DestroyEntityCommand
     {
-        public required EntityId EntityId;
+        public readonly EntityId EntityId;
 
-        [SetsRequiredMembers]
         public DestroyEntityCommand(EntityId entityId)
         {
             EntityId = entityId;
         }
     }
 
-    private struct DestroyArchetypeViewCommand
+    private readonly struct DestroyArchetypeViewCommand
     {
-        public required IArchetypeView View;
+        public readonly IArchetypeView View;
 
-        [SetsRequiredMembers]
         public DestroyArchetypeViewCommand(IArchetypeView view)
         {
             View = view;
         }
     }
 
-    private struct SetComponentCommand
+    private readonly struct SetComponentCommand
     {
-        public required EntityId EntityId;
-        public required SetterId SetterId;
+        public readonly EntityId EntityId;
+        public readonly SetterId SetterId;
 
-        [SetsRequiredMembers]
         public SetComponentCommand(EntityId entityId, SetterId setterId)
         {
             EntityId = entityId;
@@ -115,12 +109,11 @@ public partial class EcsCommandBuffer
         }
     }
 
-    private struct RemoveComponentCommand
+    private readonly struct RemoveComponentCommand
     {
-        public required EntityId EntityId;
-        public required ComponentId ComponentId;
+        public readonly EntityId EntityId;
+        public readonly ComponentId ComponentId;
 
-        [SetsRequiredMembers]
         public RemoveComponentCommand(EntityId entityId, ComponentId componentId)
         {
             EntityId = entityId;
@@ -128,11 +121,10 @@ public partial class EcsCommandBuffer
         }
     }
 
-    private struct DeferredActionCommand
+    private readonly struct DeferredActionCommand
     {
-        public required Action Action;
+        public readonly Action Action;
 
-        [SetsRequiredMembers]
         public DeferredActionCommand(Action action)
         {
             Action = action;
