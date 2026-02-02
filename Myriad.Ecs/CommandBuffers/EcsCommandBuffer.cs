@@ -15,7 +15,7 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// <br/>
 /// Example 1: Setting the same component twice is the same as setting it once, with the last taking priority.
 /// <br/>
-/// Example 2: Destroying an entity after making modifications to it is the same as simply destroying it.
+/// Example 2: Destroying an entity and making modifications to it is the same as simply destroying it.
 /// </summary>
 /// <remarks>
 /// The command buffer batches commands to avoid expensive operations
