@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 

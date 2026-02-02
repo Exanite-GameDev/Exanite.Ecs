@@ -10,7 +10,6 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs;
 

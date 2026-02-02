@@ -5,9 +5,8 @@ using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Worlds.Chunks;
 
-namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
+namespace Exanite.Myriad.Ecs.Worlds;
 
 /// <summary>
 /// An archetype contains all entities which share exactly the same set of components.

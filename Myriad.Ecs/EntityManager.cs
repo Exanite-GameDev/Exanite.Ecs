@@ -6,7 +6,6 @@ using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Worlds;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs;
 

@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.Components;
 
