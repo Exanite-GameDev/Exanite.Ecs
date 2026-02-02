@@ -97,6 +97,9 @@ internal struct EntityManager
         return GetLocation(entityId).Chunk.Archetype;
     }
 
+    /// <summary>
+    /// Acquires a new <see cref="EntityId"/>.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityLocation AcquireId(out EntityId entityId)
     {
@@ -134,6 +137,10 @@ internal struct EntityManager
         return ref location;
     }
 
+    /// <summary>
+    /// Releases a used <see cref="EntityId"/>.
+    /// This will increment the version.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void ReleaseId(EntityId entityId)
     {
@@ -149,6 +156,24 @@ internal struct EntityManager
         releasedIds.Add(entityId);
     }
 
+    /// <summary>
+    /// Releases a used <see cref="EntityId"/>.
+    /// This will not increment the version.
+    /// Make sure the location corresponding to the ID has never been modified.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReleaseUnusedId(EntityId entityId)
+    {
+        using var _ = sync.EnterScope();
+
+        // Store this ID for re-use later
+        releasedIds.Add(entityId);
+    }
+
+    /// <summary>
+    /// Bulk acquires IDs.
+    /// See <see cref="AcquireId"/>.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void AcquireIds(List<EntityId> entityIds, int count)
     {
@@ -160,6 +185,10 @@ internal struct EntityManager
         }
     }
 
+    /// <summary>
+    /// Bulk releases used IDs.
+    /// See <see cref="ReleaseId"/>.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void ReleaseIds(List<EntityId> entityIds)
     {
@@ -168,7 +197,21 @@ internal struct EntityManager
         {
             ReleaseId(entityId);
         }
+        entityIds.Clear();
+    }
 
+    /// <summary>
+    /// Bulk releases unused IDs.
+    /// See <see cref="ReleaseUnusedId"/>.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReleaseUnusedIds(List<EntityId> entityIds)
+    {
+        using var _ = sync.EnterScope();
+        foreach (var entityId in entityIds)
+        {
+            ReleaseUnusedId(entityId);
+        }
         entityIds.Clear();
     }
 }

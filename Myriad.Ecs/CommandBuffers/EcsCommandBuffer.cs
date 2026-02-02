@@ -251,6 +251,9 @@ public sealed class EcsCommandBuffer
             // This also includes setting components
             ApplyStructuralChanges(recursiveCommandBuffer);
 
+            // Release unused local IDs
+            World.Entities.ReleaseUnusedIds(localIdPool);
+
             // Clear all temporary state
             newEntities.Clear();
             setters.Clear(false);
@@ -276,12 +279,14 @@ public sealed class EcsCommandBuffer
         EnsureIsExternallyMutable();
 
         // Release used entity IDs
-        // Do not reuse these without releasing since external callers already have access to them
         foreach (var newEntity in newEntities)
         {
             World.Entities.ReleaseId(newEntity);
         }
         newEntities.Clear();
+
+        // Release unused local IDs
+        World.Entities.ReleaseUnusedIds(localIdPool);
 
         // Clear rest of internal state
         setters.Clear(true);
@@ -306,15 +311,6 @@ public sealed class EcsCommandBuffer
         archetypeDestroys.Clear();
 
         HasBufferedOperations = false;
-    }
-
-    /// <summary>
-    /// Clears and releases resources used by this command buffer.
-    /// </summary>
-    internal void DisposeInternal()
-    {
-        Clear();
-        World.Entities.ReleaseIds(localIdPool);
     }
 
     private void CreateEntities(EcsCommandBuffer recursiveCommandBuffer)
