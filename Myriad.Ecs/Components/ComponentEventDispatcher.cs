@@ -149,7 +149,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
                 var entity = chunk.Entities[entityI];
                 ref var component = ref entity.GetComponent<T>();
 
-                entity.World.EventBus.Raise(new ComponentCopied<T>(recursiveCommandBuffer, entity, ref component, lookup));
+                entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
             }
         }
     }
@@ -168,7 +168,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
             selfAdded!.Invoke(ref component);
         }
 
-        entity.World.EventBus.Raise(new ComponentAdded<T>(recursiveCommandBuffer, entity, ref component));
+        entity.World.EventBus.Raise(new ComponentAddedEvent<T>(recursiveCommandBuffer, entity, ref component));
     }
 
     public override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
@@ -180,7 +180,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
             selfSet!.Invoke(ref component);
         }
 
-        entity.World.EventBus.Raise(new ComponentModified<T>(recursiveCommandBuffer, entity, ref component));
+        entity.World.EventBus.Raise(new ComponentModifiedEvent<T>(recursiveCommandBuffer, entity, ref component));
     }
 
     public override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)

@@ -600,9 +600,9 @@ public class EventTests
     private class WorldEventHandler :
         IEventHandler<EntityCreatedEvent>,
         IEventHandler<EntityDestroyedEvent>,
-        IEventHandler<ComponentCopied<Ecs0>>,
-        IEventHandler<ComponentAdded<Ecs0>>,
-        IEventHandler<ComponentModified<Ecs0>>,
+        IEventHandler<ComponentCopiedEvent<Ecs0>>,
+        IEventHandler<ComponentAddedEvent<Ecs0>>,
+        IEventHandler<ComponentModifiedEvent<Ecs0>>,
         IEventHandler<ComponentRemoved<Ecs0>>
     {
         public int EntityCreatedCount { get; private set; }
@@ -617,9 +617,9 @@ public class EventTests
         {
             world.EventBus.Register<EntityCreatedEvent>(this);
             world.EventBus.Register<EntityDestroyedEvent>(this);
-            world.EventBus.Register<ComponentCopied<Ecs0>>(this);
-            world.EventBus.Register<ComponentAdded<Ecs0>>(this);
-            world.EventBus.Register<ComponentModified<Ecs0>>(this);
+            world.EventBus.Register<ComponentCopiedEvent<Ecs0>>(this);
+            world.EventBus.Register<ComponentAddedEvent<Ecs0>>(this);
+            world.EventBus.Register<ComponentModifiedEvent<Ecs0>>(this);
             world.EventBus.Register<ComponentRemoved<Ecs0>>(this);
 
             return this;
@@ -635,17 +635,17 @@ public class EventTests
             EntityDestroyedCount++;
         }
 
-        public void OnEvent(ComponentCopied<Ecs0> e)
+        public void OnEvent(ComponentCopiedEvent<Ecs0> e)
         {
             ComponentCopiedCount++;
         }
 
-        public void OnEvent(ComponentAdded<Ecs0> e)
+        public void OnEvent(ComponentAddedEvent<Ecs0> e)
         {
             ComponentAddedCount++;
         }
 
-        public void OnEvent(ComponentModified<Ecs0> e)
+        public void OnEvent(ComponentModifiedEvent<Ecs0> e)
         {
             ComponentModifiedCount++;
         }

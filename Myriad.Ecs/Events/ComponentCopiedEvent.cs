@@ -5,7 +5,7 @@ namespace Exanite.Myriad.Ecs.Events;
 /// <summary>
 /// Raised after a component is copied to a new world.
 /// </summary>
-public readonly ref struct ComponentCopied<T> where T : IComponent
+public readonly ref struct ComponentCopiedEvent<T> where T : IComponent
 {
     /// <summary>
     /// A command buffer with which further operations can be enqueued.
@@ -21,7 +21,7 @@ public readonly ref struct ComponentCopied<T> where T : IComponent
     public readonly ref T Component;
     public readonly EntityLookup Lookup;
 
-    public ComponentCopied(EcsCommandBuffer commandBuffer, Entity entity, ref T component, EntityLookup lookup)
+    public ComponentCopiedEvent(EcsCommandBuffer commandBuffer, Entity entity, ref T component, EntityLookup lookup)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;
