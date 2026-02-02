@@ -170,10 +170,6 @@ public sealed partial class EcsCommandBuffer
     public EcsCommandBuffer Destroy(IArchetypeView view)
     {
         EnsureIsExternallyMutable();
-        foreach (var archetype in view.Archetypes)
-        {
-            EnsureIsFromCurrentWorld(archetype);
-        }
 
         // Store the command
         state.Commands.Add(new Command(CommandType.DestroyArchetypeView, state.DestroyArchetypeViewCommands.Count));
