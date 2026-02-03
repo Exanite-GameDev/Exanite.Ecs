@@ -290,7 +290,7 @@ public partial class EcsCommandBuffer
                 }
             }
 
-            // Apply structural changes
+            // Case 1: Entity created
             var entity = entityId.ToEntity(World);
             if (entityState.IsCreated)
             {
@@ -319,8 +319,12 @@ public partial class EcsCommandBuffer
 
                 // Raise entity created event
                 World.EventBus.Raise(new EntityCreatedEvent(recursiveCommandBuffer, entity));
+
+                continue;
             }
-            else if (setChanged)
+
+            // Case 2: Entity moved
+            if (setChanged)
             {
                 var srcArchetype = location.Chunk.Archetype;
                 var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
@@ -341,13 +345,7 @@ public partial class EcsCommandBuffer
                 }
 
                 // Write component values
-                if (entityState.Sets != null)
-                {
-                    foreach (var setter in entityState.Sets.Values)
-                    {
-                        state.Setters.Write(setter, location);
-                    }
-                }
+                WriteComponentValues(entityState, location);
 
                 // Raise component added/modified events
                 if (entityState.Sets != null)
@@ -363,6 +361,25 @@ public partial class EcsCommandBuffer
                         {
                             eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
                         }
+                    }
+                }
+
+                continue;
+            }
+
+            // Case 3: Entity unmoved
+            {
+                // Write component values
+                WriteComponentValues(entityState, location);
+
+                // Raise component modified events
+                if (entityState.Sets != null)
+                {
+                    var dstArchetype = location.Chunk.Archetype;
+                    foreach (var componentId in entityState.Sets.Keys)
+                    {
+                        var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                        eventDispatcher.OnComponentModified(recursiveCommandBuffer, entity);
                     }
                 }
             }
@@ -476,5 +493,16 @@ public partial class EcsCommandBuffer
         //         }
         //     }
         // }
+    }
+
+    private void WriteComponentValues(EntityState entityState, EntityLocation location)
+    {
+        if (entityState.Sets != null)
+        {
+            foreach (var setter in entityState.Sets.Values)
+            {
+                state.Setters.Write(setter, location);
+            }
+        }
     }
 }
