@@ -120,9 +120,11 @@ public partial class EcsCommandBuffer
         /// <summary>
         /// Replace an existing component value.
         /// </summary>
-        public void Replace<T>(T value, SetterId existing) where T : IComponent
+        public SetterId Replace<T>(T value, SetterId existing) where T : IComponent
         {
-            ((ComponentList<T>)components[existing.ComponentId]).Replace(value, existing.Index);;
+            ((ComponentList<T>)components[existing.ComponentId]).Replace(value, existing.Index);
+
+            return existing;
         }
 
         /// <summary>
