@@ -21,18 +21,18 @@ public class EntityLookup : IEntityLookup
         Entries.Add(from, to);
     }
 
-    public EcsRef<T> Get<T>(EcsRef<T> reference, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
+    public EcsRef<T> Get<T>(EcsRef<T> from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
     {
-        return new EcsRef<T>(Get(reference.Entity, policy));
+        return new EcsRef<T>(Get(from.Entity, policy));
     }
 
-    public Entity Get(Entity entity, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
+    public Entity Get(Entity from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
     {
-        if (Entries.TryGetValue(entity, out var newEntity))
+        if (Entries.TryGetValue(from, out var to))
         {
-            return newEntity;
+            return to;
         }
 
-        return EntityLookupUtility.HandleLookupPolicy(entity, policy);
+        return EntityLookupUtility.HandleLookupPolicy(from, policy);
     }
 }

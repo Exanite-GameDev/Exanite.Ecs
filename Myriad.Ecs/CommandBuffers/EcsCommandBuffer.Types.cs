@@ -16,7 +16,7 @@ public partial class EcsCommandBuffer
         public readonly Dictionary<EntityId, EntityState> EntityStates = [];
         public readonly List<Action> Actions = [];
 
-        public readonly PrefabEntityToNewEntityLookup Lookup = new();
+        public readonly PrefabEntityTargetLookup Lookup = new();
         public readonly ComponentSetterCollection Setters = new();
 
         public CommandState() {}
@@ -33,17 +33,17 @@ public partial class EcsCommandBuffer
         }
     }
 
-    private class PrefabEntityToNewEntityLookup : IEntityLookup
+    private class PrefabEntityTargetLookup : IEntityLookup
     {
         private readonly Dictionary<LookupKey, Entity> primaries = [];
         private readonly Dictionary<Entity, Entity> secondaries = [];
 
         private EntityId currentEntity;
 
-        public void Add(Entity prefab, Entity newEntity)
+        public void Add(Entity prefab, Entity target)
         {
-            primaries.Add(new LookupKey(prefab, newEntity.EntityId), newEntity);
-            secondaries.Add(prefab, newEntity);
+            primaries.Add(new LookupKey(prefab, target.EntityId), target);
+            secondaries.Add(prefab, target);
         }
 
         public void SetCurrentEntity(EntityId entity)
@@ -51,24 +51,24 @@ public partial class EcsCommandBuffer
             currentEntity = entity;
         }
 
-        public EcsRef<T> Get<T>(EcsRef<T> reference, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
+        public EcsRef<T> Get<T>(EcsRef<T> from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
         {
-            return new EcsRef<T>(Get(reference.Entity, policy));
+            return new EcsRef<T>(Get(from.Entity, policy));
         }
 
-        public Entity Get(Entity entity, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
+        public Entity Get(Entity from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
         {
-            if (primaries.TryGetValue(new LookupKey(entity, currentEntity), out var newEntity))
+            if (primaries.TryGetValue(new LookupKey(from, currentEntity), out var result))
             {
-                return newEntity;
+                return result;
             }
 
-            if (secondaries.TryGetValue(entity, out newEntity))
+            if (secondaries.TryGetValue(from, out result))
             {
-                return newEntity;
+                return result;
             }
 
-            return EntityLookupUtility.HandleLookupPolicy(entity, policy);
+            return EntityLookupUtility.HandleLookupPolicy(from, policy);
         }
 
         public void Clear()
