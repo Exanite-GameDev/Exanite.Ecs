@@ -133,12 +133,19 @@ public partial class EcsCommandBuffer
                 }
             }
 
-            // Apply changes and raise events
+            // Execute
             {
                 DestroyEntities(recursiveCommandBuffer, archetypesToDestroy, entitiesToDestroy);
+
                 CreateAndApplyStructuralChanges(recursiveCommandBuffer, entityStates);
+
+                foreach (var action in actions)
+                {
+                    action.Invoke();
+                }
             }
 
+            // TODO: Add try-finally for cleanup
             // Release unused local IDs
             World.Entities.ReleaseUnusedIds(localIdPool);
 
@@ -325,21 +332,19 @@ public partial class EcsCommandBuffer
             {
                 var srcArchetype = location.Chunk.Archetype;
                 var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
-                if (srcArchetype != dstArchetype)
-                {
-                    // Raise component removed events
-                    if (entityState.Removes != null)
-                    {
-                        foreach (var componentId in entityState.Removes)
-                        {
-                            var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
-                        }
-                    }
 
-                    // Migrate the entity
-                    srcArchetype.MigrateEntity(entityId, dstArchetype, ref location);
+                // Raise component removed events
+                if (entityState.Removes != null)
+                {
+                    foreach (var componentId in entityState.Removes)
+                    {
+                        var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                        eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                    }
                 }
+
+                // Migrate the entity
+                srcArchetype.MigrateEntity(entityId, dstArchetype, ref location);
 
                 // Write component values
                 WriteComponentValues(entityState, location);
