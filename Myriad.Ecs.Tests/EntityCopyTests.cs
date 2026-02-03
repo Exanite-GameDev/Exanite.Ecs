@@ -122,7 +122,7 @@ public class EntityCopyTests
 
         dstCommandBuffer.Execute();
 
-        foreach (var entity in new QueryFilter().Build(dstWorld).EnumerateEntitiesSlow())
+        foreach (var entity in new QueryFilter().Build(dstWorld).EnumerateEntities())
         {
             Assert.True(entity.HasComponent<EcsTransform>());
 

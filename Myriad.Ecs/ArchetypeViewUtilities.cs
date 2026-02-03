@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using Exanite.Core.Utilities;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs;
 
@@ -10,21 +10,88 @@ public static class ArchetypeViewUtilities
     /// Iterate through every entity.
     /// </summary>
     /// <remarks>
-    /// This is very slow! Use only for debugging.
+    /// This is slow! Use only for debugging.
     /// </remarks>
-    public static IEnumerable<Entity> EnumerateEntitiesSlow(this IArchetypeView view)
+    public static ViewEntityEnumerable EnumerateEntities(this IArchetypeView view)
     {
-        for (var a = 0; a < view.Archetypes.Length; a++)
+        return new ViewEntityEnumerable(view);
+    }
+
+    public readonly struct ViewEntityEnumerable
+    {
+        private readonly IArchetypeView view;
+
+        public ViewEntityEnumerable(IArchetypeView view)
         {
-            var archetype = view.Archetypes[a];
-            for (var c = 0; c < archetype.Chunks.Length; c++)
+            this.view = view;
+        }
+
+        public Enumerator GetEnumerator()
+        {
+            return new Enumerator(view);
+        }
+
+        public struct Enumerator
+        {
+            private readonly IArchetypeView view;
+
+            private Archetype? archetype;
+            private int archetypeIndex = 0;
+
+            private Chunk? chunk;
+            private int chunkIndex = 0;
+
+            public Entity Current { get; private set; }
+            private int entityIndex = -1;
+
+            public Enumerator(IArchetypeView view)
             {
-                var chunk = archetype.Chunks[c];
-                for (var e = 0; e < chunk.Entities.Length; e++)
+                this.view = view;
+
+                if (view.Archetypes.Length > 0)
                 {
-                    var entity = chunk.Entities[e];
-                    yield return entity;
+                    archetype = view.Archetypes[0];
+                    if (archetype.Chunks.Length > 0)
+                    {
+                        chunk = archetype.Chunks[0];
+                    }
                 }
+            }
+
+            public bool MoveNext()
+            {
+                if (archetype == null || chunk == null)
+                {
+                    // This means the constructor found no matches
+                    return false;
+                }
+
+                entityIndex++;
+                while (entityIndex >= chunk.Entities.Length)
+                {
+                    // Move to next chunk if needed
+                    entityIndex = 0;
+                    chunkIndex++;
+                    while (chunkIndex >= archetype.Chunks.Length)
+                    {
+                        // Move to next archetype if needed
+                        chunkIndex = 0;
+                        archetypeIndex++;
+
+                        if (archetypeIndex >= view.Archetypes.Length)
+                        {
+                            // Enumeration complete
+                            return false;
+                        }
+
+                        archetype = view.Archetypes[archetypeIndex];
+                    }
+
+                    chunk = archetype.Chunks[chunkIndex];
+                }
+
+                Current = chunk.Entities[entityIndex];
+                return true;
             }
         }
     }
@@ -73,7 +140,7 @@ public static class ArchetypeViewUtilities
 
             foreach (var chunk in archetype.Chunks)
             {
-                if (chunk.EntityCount > 0)
+                if (chunk.Entities.Length > 0)
                 {
                     return chunk.Entities[0];
                 }
@@ -108,12 +175,12 @@ public static class ArchetypeViewUtilities
 
             foreach (var chunk in archetype.Chunks)
             {
-                if (chunk.EntityCount == 0)
+                if (chunk.Entities.Length == 0)
                 {
                     continue;
                 }
 
-                GuardUtility.IsFalse(chunk.EntityCount > 1 || entity.IsAlive, "QueryView.SingleOrDefault() found more than one matching entity");
+                GuardUtility.IsFalse(chunk.Entities.Length > 1 || entity.IsAlive, "QueryView.SingleOrDefault() found more than one matching entity");
 
                 entity = chunk.Entities[0];
             }
@@ -161,9 +228,9 @@ public static class ArchetypeViewUtilities
                 foreach (var chunk in archetype.Chunks)
                 {
                     // Check if it's within this chunk, if not move to next chunk
-                    if (choice - chunk.EntityCount >= 0)
+                    if (choice - chunk.Entities.Length >= 0)
                     {
-                        choice -= chunk.EntityCount;
+                        choice -= chunk.Entities.Length;
                     }
                     else
                     {
