@@ -95,18 +95,6 @@ public sealed partial class EcsCommandBuffer
         return new BufferedEntity(entityId.ToEntity(World), this);
     }
 
-    /// <inheritdoc cref="CopyFromInternal"/>
-    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
-    {
-        return CopyFromInternal(entity, prefab, entity);
-    }
-
-    /// <inheritdoc cref="CopyFromInternal"/>
-    public BufferedEntity CopyFrom(Entity entity, Entity prefab, Entity entityKey)
-    {
-        return CopyFromInternal(entity, prefab, entityKey);
-    }
-
     /// <summary>
     /// Copies all components from the target prefab onto the specified entity.
     /// </summary>
@@ -116,8 +104,7 @@ public sealed partial class EcsCommandBuffer
     /// </remarks>
     /// <param name="entity">The target entity.</param>
     /// <param name="prefab">The prefab to copy components from.</param>
-    /// <param name="entityKey">The entity to group lookups with. Use this if spawning entities in a group or hierarchy.</param>
-    private BufferedEntity CopyFromInternal(Entity entity, Entity prefab, Entity entityKey)
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
     {
         EnsureIsExternallyMutable();
 
@@ -134,7 +121,7 @@ public sealed partial class EcsCommandBuffer
         }
 
         // Store the prefab for lookup purposes
-        state.Lookup.Add(entity, prefab, entityKey);
+        state.Lookup.Add(prefab, entity);
 
         return new BufferedEntity(entity, this);
     }
@@ -297,7 +284,7 @@ public sealed partial class EcsCommandBuffer
         World.Entities.ReleaseUnusedIds(localIdPool);
 
         // Clear commands
-        state.Clear(World);
+        state.Clear();
 
         HasBufferedOperations = false;
     }

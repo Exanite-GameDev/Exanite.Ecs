@@ -16,12 +16,12 @@ public partial class EcsCommandBuffer
         public readonly Dictionary<EntityId, EntityState> EntityStates = [];
         public readonly List<Action> Actions = [];
 
-        public readonly KeyedEntityLookup Lookup = new();
+        public readonly PrefabEntityToNewEntityLookup Lookup = new();
         public readonly ComponentSetterCollection Setters = new();
 
         public CommandState() {}
 
-        public void Clear(EcsWorld world)
+        public void Clear()
         {
             EntitiesToDestroy.Clear();
             ArchetypesToDestroy.Clear();
@@ -33,27 +33,22 @@ public partial class EcsCommandBuffer
         }
     }
 
-    private record struct LookupKey(Entity Prefab, Entity EntityKey);
-
-    private class KeyedEntityLookup : IEntityLookup
+    private class PrefabEntityToNewEntityLookup : IEntityLookup
     {
-        private readonly Dictionary<PrimaryLookupKey, Entity> primaries = [];
-        private readonly Dictionary<SecondaryLookupKey, Entity> secondaries = [];
+        private readonly Dictionary<LookupKey, Entity> primaries = [];
+        private readonly Dictionary<Entity, Entity> secondaries = [];
 
-        private LookupKey lookupKey;
+        private EntityId currentEntity;
 
-        public LookupKey Add(Entity entity, Entity prefab, Entity entityKey)
+        public void Add(Entity prefab, Entity newEntity)
         {
-            var lookupKey = new LookupKey(prefab, entityKey);
-            primaries.Add(new PrimaryLookupKey(entity, prefab, entityKey), entity);
-            secondaries.Add(new SecondaryLookupKey(entity, entityKey), entity);
-
-            return lookupKey;
+            primaries.Add(new LookupKey(prefab, newEntity.EntityId), newEntity);
+            secondaries.Add(prefab, newEntity);
         }
 
-        public void UseKey(LookupKey lookupKey)
+        public void SetCurrentEntity(EntityId entity)
         {
-            lookupKey = lookupKey;
+            currentEntity = entity;
         }
 
         public EcsRef<T> Get<T>(EcsRef<T> reference, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
@@ -63,12 +58,12 @@ public partial class EcsCommandBuffer
 
         public Entity Get(Entity entity, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
         {
-            if (primaries.TryGetValue(new PrimaryLookupKey(entity, lookupKey.Prefab, lookupKey.EntityKey), out var newEntity))
+            if (primaries.TryGetValue(new LookupKey(entity, currentEntity), out var newEntity))
             {
                 return newEntity;
             }
 
-            if (secondaries.TryGetValue(new SecondaryLookupKey(entity, lookupKey.EntityKey), out newEntity))
+            if (secondaries.TryGetValue(entity, out newEntity))
             {
                 return newEntity;
             }
@@ -79,10 +74,10 @@ public partial class EcsCommandBuffer
         public void Clear()
         {
             primaries.Clear();
+            secondaries.Clear();
         }
 
-        private record struct PrimaryLookupKey(Entity From, Entity Prefab, Entity EntityKey);
-        private record struct SecondaryLookupKey(Entity From, Entity EntityKey);
+        private record struct LookupKey(Entity Prefab, EntityId CurrentEntity);
     }
 
     private struct EntityState

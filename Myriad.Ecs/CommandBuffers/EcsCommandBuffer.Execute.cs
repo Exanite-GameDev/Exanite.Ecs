@@ -32,7 +32,7 @@ public partial class EcsCommandBuffer
             World.Entities.ReleaseUnusedIds(localIdPool);
 
             // Clear commands
-            state.Clear(World);
+            state.Clear();
 
             // Release entity state collections
             foreach (var entityState in state.EntityStates.Values)
@@ -198,6 +198,7 @@ public partial class EcsCommandBuffer
                         var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
                         if (setterId.IsPrefab)
                         {
+                            state.Lookup.SetCurrentEntity(entityId);
                             eventDispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
                         }
                         else
