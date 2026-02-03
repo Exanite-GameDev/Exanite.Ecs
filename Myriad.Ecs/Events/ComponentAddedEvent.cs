@@ -3,7 +3,7 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
-/// Raised after a component is either added or set.
+/// Raised after a component is added.
 /// </summary>
 public readonly ref struct ComponentAddedEvent<T> where T : IComponent
 {
