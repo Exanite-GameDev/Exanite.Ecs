@@ -1,6 +1,6 @@
 namespace Exanite.Myriad.Ecs.Components;
 
-public interface IComponentSelfCopied
+public interface IComponentCopied
 {
     /// <summary>
     /// Called when the component is copied to a new world.

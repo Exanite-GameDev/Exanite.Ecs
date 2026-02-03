@@ -137,7 +137,7 @@ public class WorldCopyTests
         using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
         {
             commandBuffer.Create()
-                .Set(new EcsSelfCopied());
+                .Set(new EcsCopied());
 
             commandBuffer.Execute();
         }
@@ -145,14 +145,14 @@ public class WorldCopyTests
         var dstWorld = new EcsWorld();
         srcWorld.CopyTo(dstWorld);
 
-        Assert.Equal(srcWorld, GetSingle<EcsSelfCopied>(srcWorld).Self.Entity.World);
-        Assert.Equal(dstWorld, GetSingle<EcsSelfCopied>(dstWorld).Self.Entity.World);
+        Assert.Equal(srcWorld, GetSingle<EcsCopied>(srcWorld).Self.Entity.World);
+        Assert.Equal(dstWorld, GetSingle<EcsCopied>(dstWorld).Self.Entity.World);
 
-        Assert.Equal(srcWorld, GetSingle<EcsSelfCopied>(srcWorld).Self2.Entity.World);
-        Assert.Equal(dstWorld, GetSingle<EcsSelfCopied>(dstWorld).Self2.Entity.World);
+        Assert.Equal(srcWorld, GetSingle<EcsCopied>(srcWorld).Self2.Entity.World);
+        Assert.Equal(dstWorld, GetSingle<EcsCopied>(dstWorld).Self2.Entity.World);
 
-        Assert.Equal(srcWorld, GetSingle<EcsSelfCopied>(srcWorld).Self3.World);
-        Assert.Equal(dstWorld, GetSingle<EcsSelfCopied>(dstWorld).Self3.World);
+        Assert.Equal(srcWorld, GetSingle<EcsCopied>(srcWorld).Self3.World);
+        Assert.Equal(dstWorld, GetSingle<EcsCopied>(dstWorld).Self3.World);
     }
 
     private T GetSingle<T>(EcsWorld world) where T : IComponent
@@ -165,13 +165,13 @@ public class WorldCopyTests
         public EcsRef<EcsSelfReference> Self { get; set; }
     }
 
-    private struct EcsSelfCopied : IComponent, IComponentSelfReference<EcsSelfCopied>, IComponentSelfAdded, IComponentSelfCopied
+    private struct EcsCopied : IComponent, IComponentSelfReference<EcsCopied>, IComponentAdded, IComponentCopied
     {
-        public EcsRef<EcsSelfCopied> Self { get; set; }
+        public EcsRef<EcsCopied> Self { get; set; }
 
         // Self automatically gets updated
         // These allow for testing OnCopied's functionality separately
-        public EcsRef<EcsSelfCopied> Self2 { get; set; }
+        public EcsRef<EcsCopied> Self2 { get; set; }
         public Entity Self3 { get; set; }
 
         public void OnAdded()

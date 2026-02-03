@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Events;
@@ -13,27 +12,27 @@ internal abstract class ComponentEventDispatcher
     public abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
     public abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
 
-    internal static void SelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
+    internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
     {
         component.Self = entity.GetStorableComponent<T>();
     }
 
-    internal static void SelfCopied<T>(ref T component, EcsWorld newWorld, EntityLookup lookup) where T : IComponent, IComponentSelfCopied
+    internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, EntityLookup lookup) where T : IComponent, IComponentCopied
     {
         component.OnCopied(newWorld, lookup);
     }
 
-    internal static void SelfAdded<T>(ref T component) where T : IComponent, IComponentSelfAdded
+    internal static void ComponentAdded<T>(ref T component) where T : IComponent, IComponentAdded
     {
         component.OnAdded();
     }
 
-    internal static void SelfSet<T>(ref T component) where T : IComponent, IComponentSelfSet
+    internal static void ComponentSet<T>(ref T component) where T : IComponent, IComponentSet
     {
         component.OnSet();
     }
 
-    internal static void SelfRemoved<T>(ref T component) where T : IComponent, IComponentSelfRemoved
+    internal static void ComponentRemoved<T>(ref T component) where T : IComponent, IComponentRemoved
     {
         component.OnRemoved();
     }
@@ -41,51 +40,51 @@ internal abstract class ComponentEventDispatcher
 
 internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : IComponent
 {
-    private delegate void SelfReferenceAction(ref T component, Entity entity);
+    private delegate void ComponentSelfReferenceAction(ref T component, Entity entity);
 
-    private delegate void SelfCopiedAction(ref T component, EcsWorld newWorld, EntityLookup lookup);
+    private delegate void ComponentCopiedAction(ref T component, EcsWorld newWorld, EntityLookup lookup);
 
     private delegate void ComponentAction(ref T component);
 
-    private readonly SelfReferenceAction? selfReference;
-    private readonly SelfCopiedAction? selfCopied;
-    private readonly ComponentAction? selfAdded;
-    private readonly ComponentAction? selfSet;
-    private readonly ComponentAction? selfRemoved;
+    private readonly ComponentSelfReferenceAction? componentSelfReference;
+    private readonly ComponentCopiedAction? componentCopied;
+    private readonly ComponentAction? componentAdded;
+    private readonly ComponentAction? componentSet;
+    private readonly ComponentAction? componentRemoved;
 
     public ComponentEventDispatcher()
     {
         if (typeof(T).IsAssignableTo(typeof(IComponentSelfReference<T>)))
         {
-            selfReference = (SelfReferenceAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfReference), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentSelfReference = (ComponentSelfReferenceAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentSelfReference), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(SelfReferenceAction), null);
+                .CreateDelegate(typeof(ComponentSelfReferenceAction), null);
         }
 
-        if (typeof(T).IsAssignableTo(typeof(IComponentSelfCopied)))
+        if (typeof(T).IsAssignableTo(typeof(IComponentCopied)))
         {
-            selfCopied = (SelfCopiedAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfCopied), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentCopied = (ComponentCopiedAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentCopied), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(SelfCopiedAction), null);
+                .CreateDelegate(typeof(ComponentCopiedAction), null);
         }
 
-        if (typeof(T).IsAssignableTo(typeof(IComponentSelfAdded)))
+        if (typeof(T).IsAssignableTo(typeof(IComponentAdded)))
         {
-            selfAdded = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfAdded), BindingFlags.NonPublic | BindingFlags.Static)!
-                .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(ComponentAction), null);
-        }
-
-        if (typeof(T).IsAssignableTo(typeof(IComponentSelfSet)))
-        {
-            selfSet = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfSet), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentAdded = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentAdded), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
 
-        if (typeof(T).IsAssignableTo(typeof(IComponentSelfRemoved)))
+        if (typeof(T).IsAssignableTo(typeof(IComponentSet)))
         {
-            selfRemoved = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentSet = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentSet), BindingFlags.NonPublic | BindingFlags.Static)!
+                .MakeGenericMethod(typeof(T))
+                .CreateDelegate(typeof(ComponentAction), null);
+        }
+
+        if (typeof(T).IsAssignableTo(typeof(IComponentRemoved)))
+        {
+            componentRemoved = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
@@ -98,7 +97,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
             return;
         }
 
-        if (selfCopied != null)
+        if (componentCopied != null)
         {
             for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
             {
@@ -108,12 +107,12 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
                     var entity = chunk.Entities[entityI];
                     ref var component = ref entity.GetComponent<T>();
 
-                    selfCopied!.Invoke(ref component, entity.World, lookup);
+                    componentCopied!.Invoke(ref component, entity.World, lookup);
                 }
             }
         }
 
-        if (selfReference != null)
+        if (componentSelfReference != null)
         {
             for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
             {
@@ -123,7 +122,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
                     var entity = chunk.Entities[entityI];
                     ref var component = ref entity.GetComponent<T>();
 
-                    selfReference!.Invoke(ref component, entity);
+                    componentSelfReference!.Invoke(ref component, entity);
                 }
             }
         }
@@ -147,12 +146,12 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
         if (component is IComponentSelfReference<T>)
         {
-            selfReference!.Invoke(ref component, entity);
+            componentSelfReference!.Invoke(ref component, entity);
         }
 
-        if (component is IComponentSelfAdded)
+        if (component is IComponentAdded)
         {
-            selfAdded!.Invoke(ref component);
+            componentAdded!.Invoke(ref component);
         }
 
         entity.World.EventBus.Raise(new ComponentAddedEvent<T>(recursiveCommandBuffer, entity, ref component));
@@ -162,9 +161,9 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
     {
         ref var component = ref entity.GetComponent<T>();
 
-        if (component is IComponentSelfSet)
+        if (component is IComponentSet)
         {
-            selfSet!.Invoke(ref component);
+            componentSet!.Invoke(ref component);
         }
 
         entity.World.EventBus.Raise(new ComponentModifiedEvent<T>(recursiveCommandBuffer, entity, ref component));
@@ -175,9 +174,9 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
         ref var component = ref entity.GetComponent<T>();
         entity.World.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
 
-        if (component is IComponentSelfRemoved)
+        if (component is IComponentRemoved)
         {
-            selfRemoved!.Invoke(ref component);
+            componentRemoved!.Invoke(ref component);
         }
     }
 }
