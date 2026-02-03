@@ -118,6 +118,10 @@ public sealed partial class EcsCommandBuffer
             entityState.Removes?.Remove(componentId);
         }
 
+        // Store the prefab for lookup purposes
+        // TODO: this doesn't work. prefabs to new entity relations are many to many. ahhhhhhhhh
+        state.RawLookup[prefab] = entity;
+
         return new BufferedEntity(entity, this);
     }
 

@@ -8,6 +8,7 @@ namespace Exanite.Myriad.Ecs.Components;
 internal abstract class ComponentEventDispatcher
 {
     public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EntityLookup lookup);
+    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, EntityLookup lookup);
     public abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
     public abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
     public abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
@@ -138,6 +139,23 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
                 entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
             }
         }
+    }
+
+    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, EntityLookup lookup)
+    {
+        ref var component = ref entity.GetComponent<T>();
+
+        if (component is IComponentSelfReference<T>)
+        {
+            componentSelfReference!.Invoke(ref component, entity);
+        }
+
+        if (component is IComponentCopied)
+        {
+            componentCopied!.Invoke(ref component, entity.World, lookup);
+        }
+
+        entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
     }
 
     public override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity)

@@ -190,13 +190,20 @@ public partial class EcsCommandBuffer
                     }
                 }
 
-                // Raise component added events
+                // Raise component added/copied events
                 if (entityState.Sets != null)
                 {
-                    foreach (var componentId in entityState.Sets.Keys)
+                    foreach (var (componentId, setterId) in entityState.Sets)
                     {
                         var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                        if (setterId.IsPrefab)
+                        {
+                            eventDispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
+                        }
+                        else
+                        {
+                            eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                        }
                     }
                 }
 

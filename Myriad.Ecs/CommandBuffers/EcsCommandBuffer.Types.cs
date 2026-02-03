@@ -16,9 +16,15 @@ public partial class EcsCommandBuffer
         public readonly Dictionary<EntityId, EntityState> EntityStates = [];
         public readonly List<Action> Actions = [];
 
+        public readonly EntityLookup Lookup;
+        public readonly Dictionary<Entity, Entity> RawLookup = [];
+
         public readonly ComponentSetterCollection Setters = new();
 
-        public CommandState() {}
+        public CommandState()
+        {
+            Lookup = new EntityLookup(RawLookup);
+        }
 
         public void Clear(EcsWorld world)
         {
