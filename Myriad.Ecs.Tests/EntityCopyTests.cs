@@ -133,6 +133,38 @@ public class EntityCopyTests
     }
 
     [Fact]
+    public void CopyFrom_AndRemovePrefabComponent()
+    {
+        var srcWorld = new EcsWorld();
+        using var _ = srcWorld.AcquireCommandBuffer(out var srcCommandBuffer);
+
+        var prefab = srcCommandBuffer.Create()
+            .Set(new Ecs0())
+            .Set(new Ecs1())
+            .Set(new Ecs2())
+            .Set(new Ecs3())
+            .Entity;
+
+        srcCommandBuffer.Execute();
+
+        var dstWorld = new EcsWorld();
+        using var __ = dstWorld.AcquireCommandBuffer(out var dstCommandBuffer);
+
+        var newEntity = dstCommandBuffer.Create()
+            .CopyFrom(prefab)
+            .Remove<Ecs3>()
+            .Entity;
+
+        dstCommandBuffer.Execute();
+
+        // Check structure
+        Assert.True(newEntity.HasComponent<Ecs0>());
+        Assert.True(newEntity.HasComponent<Ecs1>());
+        Assert.True(newEntity.HasComponent<Ecs2>());
+        Assert.False(newEntity.HasComponent<Ecs3>());
+    }
+
+    [Fact]
     public void CopyFrom_UpdatesOtherReferences()
     {
         var srcWorld = new EcsWorld();
