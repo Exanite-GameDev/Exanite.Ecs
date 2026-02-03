@@ -225,8 +225,12 @@ public partial class EcsCommandBuffer
                 {
                     foreach (var componentId in entityState.Removes)
                     {
-                        var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                        eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                        if (srcArchetype.Components.Contains(componentId))
+                        {
+                            var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                        }
+
                     }
                 }
 
