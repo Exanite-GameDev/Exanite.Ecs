@@ -270,6 +270,56 @@ public class EntityCopyTests
         Assert.Equal(dstChild2, dstRoot.GetComponent<EcsTransform>().Children[1].Entity);
     }
 
+    [Fact]
+    public void CopyFrom_CreateManyHierarchies()
+    {
+        var srcWorld = new EcsWorld();
+        using var _ = srcWorld.AcquireCommandBuffer(out var srcCommandBuffer);
+
+        var srcChild1 = srcCommandBuffer.Create().Set(new EcsTransform()).Entity;
+        var srcChild2 = srcCommandBuffer.Create().Set(new EcsTransform()).Entity;
+        var srcRoot = srcCommandBuffer.Create().Set(new EcsTransform()
+        {
+            Children = [srcChild1.GetStorableComponentUnchecked<EcsTransform>(), srcChild2.GetStorableComponentUnchecked<EcsTransform>()],
+        });
+
+        srcCommandBuffer.Execute();
+
+        var dstWorld = new EcsWorld();
+        using var __ = dstWorld.AcquireCommandBuffer(out var dstCommandBuffer);
+
+        for (var i = 0; i < 20; i++)
+        {
+            dstCommandBuffer.Create().CopyFrom(srcRoot).Set(new EcsInt32(i));
+            dstCommandBuffer.Create().CopyFrom(srcChild1).Set(new EcsInt32(i));
+            dstCommandBuffer.Create().CopyFrom(srcChild2).Set(new EcsInt32(i));
+        }
+
+        dstCommandBuffer.Execute();
+
+        foreach (var entity in new QueryFilter().Build(dstWorld).EnumerateEntities())
+        {
+            Assert.True(entity.HasComponent<EcsTransform>());
+
+            ref var transform = ref entity.GetComponent<EcsTransform>();
+            Assert.Equal(entity, transform.Self.Entity);
+
+            if (transform.Children.Count == 2)
+            {
+                var groupIndex = entity.GetComponent<EcsInt32>().Value;
+
+                Assert.Equal(groupIndex, transform.Children[0].Entity.GetComponent<EcsInt32>().Value);
+                Assert.Equal(groupIndex, transform.Children[1].Entity.GetComponent<EcsInt32>().Value);
+
+                Assert.Equal(dstWorld, transform.Children[0].Entity.World);
+                Assert.Equal(dstWorld, transform.Children[1].Entity.World);
+
+                Assert.NotEqual(transform.Children[0], transform.Children[1]);
+                Assert.NotEqual(transform.Children[0].Entity, transform.Children[1].Entity);
+            }
+        }
+    }
+
     private T GetSingle<T>(EcsWorld world) where T : IComponent
     {
         return new QueryFilter().Include<T>().Build(world).First().GetComponent<T>();
