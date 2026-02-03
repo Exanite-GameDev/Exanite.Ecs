@@ -95,6 +95,18 @@ public sealed partial class EcsCommandBuffer
         return new BufferedEntity(entityId.ToEntity(World), this);
     }
 
+    /// <inheritdoc cref="CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
+    {
+        return CopyFromInternal(entity, prefab, entity);
+    }
+
+    /// <inheritdoc cref="CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab, Entity entityKey)
+    {
+        return CopyFromInternal(entity, prefab, entityKey);
+    }
+
     /// <summary>
     /// Copies all components from the target prefab onto the specified entity.
     /// </summary>
@@ -102,7 +114,10 @@ public sealed partial class EcsCommandBuffer
     /// The component types to copy are read at the time of recording; however, the component values are read at time of execution.
     /// It is assumed that the prefab entity is not modified between now and when the command buffer is executed.
     /// </remarks>
-    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
+    /// <param name="entity">The target entity.</param>
+    /// <param name="prefab">The prefab to copy components from.</param>
+    /// <param name="entityKey">The entity to group lookups with. Use this if spawning entities in a group or hierarchy.</param>
+    private BufferedEntity CopyFromInternal(Entity entity, Entity prefab, Entity entityKey)
     {
         EnsureIsExternallyMutable();
 
@@ -119,8 +134,7 @@ public sealed partial class EcsCommandBuffer
         }
 
         // Store the prefab for lookup purposes
-        // TODO: this doesn't work. prefabs to new entity relations are many to many. ahhhhhhhhh
-        state.RawLookup[prefab] = entity;
+        state.Lookup.Add(entity, prefab, entityKey);
 
         return new BufferedEntity(entity, this);
     }

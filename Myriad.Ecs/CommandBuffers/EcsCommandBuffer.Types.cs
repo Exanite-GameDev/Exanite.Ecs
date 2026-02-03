@@ -16,15 +16,10 @@ public partial class EcsCommandBuffer
         public readonly Dictionary<EntityId, EntityState> EntityStates = [];
         public readonly List<Action> Actions = [];
 
-        public readonly EntityLookup Lookup;
-        public readonly Dictionary<Entity, Entity> RawLookup = [];
-
+        public readonly KeyedEntityLookup Lookup = new();
         public readonly ComponentSetterCollection Setters = new();
 
-        public CommandState()
-        {
-            Lookup = new EntityLookup(RawLookup);
-        }
+        public CommandState() {}
 
         public void Clear(EcsWorld world)
         {
@@ -33,8 +28,61 @@ public partial class EcsCommandBuffer
             EntityStates.Clear();
             Actions.Clear();
 
+            Lookup.Clear();
             Setters.Clear();
         }
+    }
+
+    private record struct LookupKey(Entity Prefab, Entity EntityKey);
+
+    private class KeyedEntityLookup : IEntityLookup
+    {
+        private readonly Dictionary<PrimaryLookupKey, Entity> primaries = [];
+        private readonly Dictionary<SecondaryLookupKey, Entity> secondaries = [];
+
+        private LookupKey lookupKey;
+
+        public LookupKey Add(Entity entity, Entity prefab, Entity entityKey)
+        {
+            var lookupKey = new LookupKey(prefab, entityKey);
+            primaries.Add(new PrimaryLookupKey(entity, prefab, entityKey), entity);
+            secondaries.Add(new SecondaryLookupKey(entity, entityKey), entity);
+
+            return lookupKey;
+        }
+
+        public void UseKey(LookupKey lookupKey)
+        {
+            lookupKey = lookupKey;
+        }
+
+        public EcsRef<T> Get<T>(EcsRef<T> reference, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
+        {
+            return new EcsRef<T>(Get(reference.Entity, policy));
+        }
+
+        public Entity Get(Entity entity, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
+        {
+            if (primaries.TryGetValue(new PrimaryLookupKey(entity, lookupKey.Prefab, lookupKey.EntityKey), out var newEntity))
+            {
+                return newEntity;
+            }
+
+            if (secondaries.TryGetValue(new SecondaryLookupKey(entity, lookupKey.EntityKey), out newEntity))
+            {
+                return newEntity;
+            }
+
+            return EntityLookupUtility.HandleLookupPolicy(entity, policy);
+        }
+
+        public void Clear()
+        {
+            primaries.Clear();
+        }
+
+        private record struct PrimaryLookupKey(Entity From, Entity Prefab, Entity EntityKey);
+        private record struct SecondaryLookupKey(Entity From, Entity EntityKey);
     }
 
     private struct EntityState

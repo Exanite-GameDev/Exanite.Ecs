@@ -7,8 +7,8 @@ namespace Exanite.Myriad.Ecs.Components;
 
 internal abstract class ComponentEventDispatcher
 {
-    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EntityLookup lookup);
-    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, EntityLookup lookup);
+    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
+    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
     public abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
     public abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
     public abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
@@ -18,7 +18,7 @@ internal abstract class ComponentEventDispatcher
         component.Self = entity.GetStorableComponent<T>();
     }
 
-    internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, EntityLookup lookup) where T : IComponent, IComponentCopied
+    internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, IEntityLookup lookup) where T : IComponent, IComponentCopied
     {
         component.OnCopied(newWorld, lookup);
     }
@@ -43,7 +43,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 {
     private delegate void ComponentSelfReferenceAction(ref T component, Entity entity);
 
-    private delegate void ComponentCopiedAction(ref T component, EcsWorld newWorld, EntityLookup lookup);
+    private delegate void ComponentCopiedAction(ref T component, EcsWorld newWorld, IEntityLookup lookup);
 
     private delegate void ComponentAction(ref T component);
 
@@ -91,7 +91,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
         }
     }
 
-    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EntityLookup lookup)
+    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
     {
         if (archetype.EntityCount == 0)
         {
@@ -141,7 +141,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
         }
     }
 
-    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, EntityLookup lookup)
+    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup)
     {
         ref var component = ref entity.GetComponent<T>();
 

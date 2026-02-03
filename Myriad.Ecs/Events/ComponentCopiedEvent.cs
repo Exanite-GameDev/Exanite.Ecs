@@ -19,9 +19,9 @@ public readonly ref struct ComponentCopiedEvent<T> where T : IComponent
     public EcsWorld World => Entity.World;
     public readonly Entity Entity;
     public readonly ref T Component;
-    public readonly EntityLookup Lookup;
+    public readonly IEntityLookup Lookup;
 
-    public ComponentCopiedEvent(EcsCommandBuffer commandBuffer, Entity entity, ref T component, EntityLookup lookup)
+    public ComponentCopiedEvent(EcsCommandBuffer commandBuffer, Entity entity, ref T component, IEntityLookup lookup)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;

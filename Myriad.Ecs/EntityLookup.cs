@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
@@ -35,12 +33,6 @@ public class EntityLookup : IEntityLookup
             return newEntity;
         }
 
-        return policy switch
-        {
-            EntityLookupPolicy.PreserveIfNotExist => entity,
-            EntityLookupPolicy.DefaultIfNotExist => default,
-            EntityLookupPolicy.ThrowIfNotExist => throw new InvalidOperationException("Entity does not exist in this lookup table"),
-            _ => throw ExceptionUtility.NotSupportedEnumValue(policy),
-        };
+        return EntityLookupUtility.HandleLookupPolicy(entity, policy);
     }
 }
