@@ -128,6 +128,19 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
+    /// Get a reference to a component of the given type.
+    /// No exception will be thrown if the entity does not have this component.
+    /// </summary>
+    /// <remarks>
+    /// This is useful for
+    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public EcsRef<T> GetStorableComponentUnchecked<T>() where T : IComponent
+    {
+        return new EcsRef<T>(this);
+    }
+
+    /// <summary>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
