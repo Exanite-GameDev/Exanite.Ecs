@@ -537,17 +537,43 @@ public class EcsCommandBufferTests
         var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
-        var entity = buffer.Create().Set(new EcsFloat(123)).Set(new EcsInt16(456)).Entity;
+        var entity = buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Entity;
         buffer.Execute();
 
-        // Remove a component
-        buffer.Remove<EcsInt32>(entity);
+        // Remove an invalid component
+        buffer.Remove<Ecs2>(entity);
         buffer.Execute();
 
         // Check entity is unchanged
-        Assert.True(entity.HasComponent<EcsFloat>());
-        Assert.True(entity.HasComponent<EcsInt16>());
-        Assert.False(entity.HasComponent<EcsInt32>());
+        Assert.True(entity.HasComponent<Ecs0>());
+        Assert.True(entity.HasComponent<Ecs1>());
+        Assert.False(entity.HasComponent<Ecs2>());
+    }
+
+    /// <summary>
+    /// This catches a regression that <see cref="RemoveInvalidComponent"/> does not catch.
+    /// </summary>
+    [Fact]
+    public void RemoveInvalidComponent_WithStructuralChange()
+    {
+        var world = new EcsWorld();
+        var buffer = world.AcquireCommandBuffer();
+
+        // Create an entity with 2 components
+        var entity = buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Entity;
+        buffer.Execute();
+
+        // Remove a component
+        buffer.Remove<Ecs1>(entity);
+
+        // Remove an invalid component
+        buffer.Remove<Ecs2>(entity);
+        buffer.Execute();
+
+        // Check entity is modified as expected
+        Assert.True(entity.HasComponent<Ecs0>());
+        Assert.False(entity.HasComponent<Ecs1>());
+        Assert.False(entity.HasComponent<Ecs2>());
     }
 
     [Fact]
