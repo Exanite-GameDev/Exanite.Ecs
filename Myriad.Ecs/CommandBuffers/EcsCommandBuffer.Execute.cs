@@ -89,14 +89,10 @@ public partial class EcsCommandBuffer
 
                         break;
                     }
-                    case CommandType.DestroyArchetypeView:
+                    case CommandType.DestroyArchetype:
                     {
-                        var typedCommand = state.DestroyArchetypeViewCommands[command.Index];
-                        foreach (var archetype in typedCommand.View.Archetypes)
-                        {
-                            EnsureIsFromCurrentWorld(archetype);
-                            archetypesToDestroy.Add(archetype);
-                        }
+                        var typedCommand = state.DestroyArchetypeCommands[command.Index];
+                        archetypesToDestroy.Add(typedCommand.Archetype);
 
                         break;
                     }
@@ -108,6 +104,9 @@ public partial class EcsCommandBuffer
                         var sets = entityState.GetOrAcquireSets();
                         sets[typedCommand.SetterId.ComponentId] = typedCommand.SetterId;
 
+                        // Prevent the remove, if it exists
+                        entityState.Removes?.Remove(typedCommand.SetterId.ComponentId);
+
                         break;
                     }
                     case CommandType.RemoveComponent:
@@ -117,6 +116,9 @@ public partial class EcsCommandBuffer
 
                         var removes = entityState.GetOrAcquireRemoves();
                         removes.Add(typedCommand.ComponentId);
+
+                        // Prevent the set, if it exists
+                        entityState.Sets?.Remove(typedCommand.ComponentId);
 
                         break;
                     }
@@ -281,7 +283,6 @@ public partial class EcsCommandBuffer
                     {
                         if (componentIdSet.Remove(componentId))
                         {
-                            entityState.Sets?.Remove(componentId);
                             archetypeHash = archetypeHash.Toggle(componentId);
                             setChanged = true;
                         }

@@ -14,7 +14,7 @@ public partial class EcsCommandBuffer
 
         public readonly List<CreateEntityCommand> CreateEntityCommands = [];
         public readonly List<DestroyEntityCommand> DestroyEntityCommands = [];
-        public readonly List<DestroyArchetypeViewCommand> DestroyArchetypeViewCommands = [];
+        public readonly List<DestroyArchetypeCommand> DestroyArchetypeCommands = [];
         public readonly List<SetComponentCommand> SetComponentCommands = [];
         public readonly List<RemoveComponentCommand> RemoveComponentCommands = [];
         public readonly List<DeferredActionCommand> DeferredActionCommands = [];
@@ -29,7 +29,7 @@ public partial class EcsCommandBuffer
 
             CreateEntityCommands.Clear();
             DestroyEntityCommands.Clear();
-            DestroyArchetypeViewCommands.Clear();
+            DestroyArchetypeCommands.Clear();
             SetComponentCommands.Clear();
             RemoveComponentCommands.Clear();
             DeferredActionCommands.Clear();
@@ -42,7 +42,7 @@ public partial class EcsCommandBuffer
     {
         CreateEntity,
         DestroyEntity,
-        DestroyArchetypeView,
+        DestroyArchetype,
         SetComponent,
         RemoveComponent,
         DeferredAction,
@@ -80,13 +80,13 @@ public partial class EcsCommandBuffer
         }
     }
 
-    private readonly struct DestroyArchetypeViewCommand
+    private readonly struct DestroyArchetypeCommand
     {
-        public readonly IArchetypeView View;
+        public readonly Archetype Archetype;
 
-        public DestroyArchetypeViewCommand(IArchetypeView view)
+        public DestroyArchetypeCommand(Archetype archetype)
         {
-            View = view;
+            Archetype = archetype;
         }
     }
 
