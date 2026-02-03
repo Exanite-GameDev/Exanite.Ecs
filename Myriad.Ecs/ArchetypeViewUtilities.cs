@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Worlds;
 
@@ -175,7 +177,7 @@ public static class ArchetypeViewUtilities
         return new ViewEntityEnumerable(view);
     }
 
-    public readonly struct ViewEntityEnumerable
+    public readonly struct ViewEntityEnumerable : IEnumerable<Entity>
     {
         private readonly IArchetypeView view;
 
@@ -189,7 +191,17 @@ public static class ArchetypeViewUtilities
             return new Enumerator(view);
         }
 
-        public struct Enumerator
+        IEnumerator<Entity> IEnumerable<Entity>.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public struct Enumerator : IEnumerator<Entity>
         {
             private readonly IArchetypeView view;
 
@@ -201,6 +213,8 @@ public static class ArchetypeViewUtilities
 
             public Entity Current { get; private set; }
             private int entityIndex = -1;
+
+            object IEnumerator.Current => Current;
 
             public Enumerator(IArchetypeView view)
             {
@@ -251,6 +265,9 @@ public static class ArchetypeViewUtilities
                 Current = chunk.Entities[entityIndex];
                 return true;
             }
+
+            public void Reset() => throw new NotSupportedException();
+            public void Dispose() {}
         }
     }
 }
