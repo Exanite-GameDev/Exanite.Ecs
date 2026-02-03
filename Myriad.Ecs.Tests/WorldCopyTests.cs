@@ -180,7 +180,7 @@ public class WorldCopyTests
             Self3 = Self.Entity;
         }
 
-        public void OnCopied(EcsWorld newWorld, EntityLookup lookup)
+        public void OnCopied(EcsWorld newWorld, IEntityLookup lookup)
         {
             Self2 = lookup.Get(Self2);
             Self3 = lookup.Get(Self3);

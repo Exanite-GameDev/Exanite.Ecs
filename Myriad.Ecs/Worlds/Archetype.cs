@@ -121,7 +121,7 @@ public sealed class Archetype
     /// <remarks>
     /// This is designed to be called by <see cref="EcsWorld.AddTo(EcsWorld, IArchetypeView)"/>.
     /// </remarks>
-    internal void CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, Dictionary<Entity, Entity> lookup)
+    internal void CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, EntityLookup lookup)
     {
         EntityCount += srcChunk.EntityCount;
 
