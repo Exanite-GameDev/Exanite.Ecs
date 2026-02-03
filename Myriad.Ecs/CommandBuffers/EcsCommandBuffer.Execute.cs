@@ -48,7 +48,7 @@ public partial class EcsCommandBuffer
         World.Entities.ReleaseUnusedIds(localIdPool);
 
         // Clear commands
-        state.Clear(World, false);
+        state.Clear(World);
 
         recursiveCommandBuffer.Execute();
     }

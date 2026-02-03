@@ -23,7 +23,7 @@ public partial class EcsCommandBuffer
 
         public CommandState() {}
 
-        public void Clear(EcsWorld world, bool hasExecuted)
+        public void Clear(EcsWorld world)
         {
             // Release used entity IDs
             // Do not reuse these without releasing since external callers already have access to them
@@ -41,7 +41,7 @@ public partial class EcsCommandBuffer
             RemoveComponentCommands.Clear();
             DeferredActionCommands.Clear();
 
-            Setters.Clear(hasExecuted);
+            Setters.Clear();
         }
     }
 
@@ -187,11 +187,11 @@ public partial class EcsCommandBuffer
         /// <summary>
         /// Clear all component values stored in this collection.
         /// </summary>
-        public void Clear(bool hasExecuted)
+        public void Clear()
         {
             foreach (var (_, value) in components)
             {
-                value.Recycle(hasExecuted);
+                value.Recycle();
             }
 
             components.Clear();
@@ -200,7 +200,7 @@ public partial class EcsCommandBuffer
         private interface IComponentList
         {
             public void Write(int index, EntityLocation location);
-            public void Recycle(bool hasExecuted);
+            public void Recycle();
         }
 
         private class ComponentList<T> : IComponentList where T : IComponent
@@ -213,16 +213,8 @@ public partial class EcsCommandBuffer
                 return values.Count - 1;
             }
 
-            public void Recycle(bool hasExecuted)
+            public void Recycle()
             {
-                if (!hasExecuted && values.Count > 0 && values[0] is IDisposable)
-                {
-                    foreach (var component in values)
-                    {
-                        ((IDisposable)component).Dispose();
-                    }
-                }
-
                 values.Clear();
                 SimplePool.Release(this);
             }

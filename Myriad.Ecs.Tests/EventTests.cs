@@ -509,92 +509,13 @@ public class EventTests
     }
 
     [Fact]
-    public void ComponentDisposable_IsDisposed_WhenDestroyed()
-    {
-        var world = new EcsWorld();
-        var commandBuffer = world.AcquireCommandBuffer();
-
-        var disposeCount = 0;
-        var entity = commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            })
-            .Entity;
-
-        commandBuffer.Execute();
-        Assert.Equal(0, disposeCount);
-
-        commandBuffer.Destroy(entity);
-        commandBuffer.Execute();
-        Assert.Equal(1, disposeCount);
-    }
-
-    [Fact]
-    public void ComponentDisposable_IsDisposed_WhenOverwritten_InCommandBuffer()
-    {
-        var world = new EcsWorld();
-        var commandBuffer = world.AcquireCommandBuffer();
-
-        var disposeCount = 0;
-        var bufferedEntity = commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            });
-        Assert.Equal(0, disposeCount);
-
-        bufferedEntity.Set(new EcsDisposable()
-        {
-            DisposeAction = () => disposeCount++,
-        });
-        Assert.Equal(1, disposeCount);
-    }
-
-    [Fact]
-    public void ComponentDisposable_IsDisposed_WhenCommandBuffer_IsCleared()
-    {
-        var world = new EcsWorld();
-        var commandBuffer = world.AcquireCommandBuffer();
-
-        var disposeCount = 0;
-        commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            });
-        Assert.Equal(0, disposeCount);
-
-        commandBuffer.Clear();
-        Assert.Equal(1, disposeCount);
-    }
-
-    [Fact]
     public void DisposingWorld_ClearsCommandBuffer()
     {
         var world = new EcsWorld();
         var commandBuffer = world.AcquireCommandBuffer();
 
-        var disposeCount = 0;
-        commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            });
-        Assert.Equal(0, disposeCount);
-
         world.Dispose();
         Assert.False(commandBuffer.HasBufferedOperations);
-    }
-
-    private struct EcsDisposable : IComponent, IDisposable
-    {
-        public required Action DisposeAction;
-
-        public void Dispose()
-        {
-            DisposeAction.Invoke();
-        }
     }
 
     private class WorldEventHandler :

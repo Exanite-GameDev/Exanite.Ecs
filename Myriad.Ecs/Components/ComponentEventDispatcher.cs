@@ -37,11 +37,6 @@ internal abstract class ComponentEventDispatcher
     {
         component.OnRemoved();
     }
-
-    internal static void Dispose<T>(ref T component) where T : IComponent, IDisposable
-    {
-        component.Dispose();
-    }
 }
 
 internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : IComponent
@@ -57,7 +52,6 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
     private readonly ComponentAction? selfAdded;
     private readonly ComponentAction? selfSet;
     private readonly ComponentAction? selfRemoved;
-    private readonly ComponentAction? dispose;
 
     public ComponentEventDispatcher()
     {
@@ -92,13 +86,6 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
         if (typeof(T).IsAssignableTo(typeof(IComponentSelfRemoved)))
         {
             selfRemoved = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(SelfRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
-                .MakeGenericMethod(typeof(T))
-                .CreateDelegate(typeof(ComponentAction), null);
-        }
-
-        if (typeof(T).IsAssignableTo(typeof(IDisposable)))
-        {
-            dispose = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(Dispose), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
@@ -191,11 +178,6 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
         if (component is IComponentSelfRemoved)
         {
             selfRemoved!.Invoke(ref component);
-        }
-
-        if (component is IDisposable)
-        {
-            dispose!.Invoke(ref component);
         }
     }
 }
