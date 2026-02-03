@@ -103,16 +103,22 @@ public sealed partial class EcsCommandBuffer
         EnsureIsExternallyMutable();
         EnsureIsFromCurrentWorld(entity);
 
-        // Create the setter
-        var setterId = state.Setters.Create(value);
-
         // Store the command
+        var componentId = ComponentId.Get<T>();
         ref var entityState = ref GetEntityState(entity.EntityId);
+
         var sets = entityState.GetOrAcquireSets();
-        sets[setterId.ComponentId] = setterId;
+        if (sets.TryGetValue(componentId, out var existingSetterId))
+        {
+            state.Setters.Replace(value, existingSetterId);
+        }
+        else
+        {
+            sets[componentId] = state.Setters.Create(value);
+        }
 
         // Prevent the remove, if it exists
-        entityState.Removes?.Remove(setterId.ComponentId);
+        entityState.Removes?.Remove(componentId);
 
         HasBufferedOperations = true;
 

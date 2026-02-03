@@ -113,8 +113,16 @@ public partial class EcsCommandBuffer
                 components.Add(id, list);
             }
 
-            var index = ((ComponentList<T>)list).Add(value);
+            var index = ((ComponentList<T>)list).Create(value);
             return new SetterId(id, index);
+        }
+
+        /// <summary>
+        /// Replace an existing component value.
+        /// </summary>
+        public void Replace<T>(T value, SetterId existing) where T : IComponent
+        {
+            ((ComponentList<T>)components[existing.ComponentId]).Replace(value, existing.Index);;
         }
 
         /// <summary>
@@ -149,10 +157,15 @@ public partial class EcsCommandBuffer
         {
             private readonly List<T> values = [];
 
-            public int Add(T value)
+            public int Create(T value)
             {
                 values.Add(value);
                 return values.Count - 1;
+            }
+
+            public void Replace(T value, int index)
+            {
+                values[index] = value;
             }
 
             public void Recycle()
