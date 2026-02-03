@@ -42,8 +42,8 @@ public partial class EcsCommandBuffer
 
         public void Add(Entity prefab, Entity target)
         {
-            primaries.Add(new LookupKey(prefab, target.EntityId), target);
-            secondaries.Add(prefab, target);
+            primaries.TryAdd(new LookupKey(prefab, target.EntityId), target);
+            secondaries.TryAdd(prefab, target);
         }
 
         public void SetCurrentEntity(EntityId entity)
