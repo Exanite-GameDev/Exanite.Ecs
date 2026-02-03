@@ -1,10 +1,34 @@
 using System;
+using System.Collections.Generic;
 using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs;
 
-public static class QueryUtilities
+public static class ArchetypeViewUtilities
 {
+    /// <summary>
+    /// Iterate through every entity.
+    /// </summary>
+    /// <remarks>
+    /// This is very slow! Use only for debugging.
+    /// </remarks>
+    public static IEnumerable<Entity> EnumerateEntitiesSlow(this IArchetypeView view)
+    {
+        for (var a = 0; a < view.Archetypes.Length; a++)
+        {
+            var archetype = view.Archetypes[a];
+            for (var c = 0; c < archetype.Chunks.Length; c++)
+            {
+                var chunk = archetype.Chunks[c];
+                for (var e = 0; e < chunk.Entities.Length; e++)
+                {
+                    var entity = chunk.Entities[e];
+                    yield return entity;
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Count how many entities match this query.
     /// </summary>
