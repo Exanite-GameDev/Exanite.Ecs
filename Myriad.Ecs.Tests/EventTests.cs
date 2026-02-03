@@ -230,7 +230,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Once_OnBufferedEntity_RaisesComponentAddedEvent()
+    public void SetComponent_Once_OnNewEntity_RaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -250,7 +250,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Once_OnWorldEntity_RaisesComponentAddedEvent()
+    public void SetComponent_Once_OnExistingEntity_RaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -285,7 +285,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Twice_InDifferentCommandBuffers_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Twice_InDifferentCommandBuffers_OnNewEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -321,7 +321,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Twice_InDifferentCommandBuffers_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Twice_InDifferentCommandBuffers_OnExistingEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
