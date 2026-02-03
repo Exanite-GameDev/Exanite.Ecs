@@ -291,10 +291,34 @@ public partial class EcsCommandBuffer
             }
 
             // Apply structural changes
+            var entity = entityId.ToEntity(World);
             if (entityState.IsCreated)
             {
-                var archetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
-                archetype.AddEntity(entityId, ref location);
+                // Create the entity
+                var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
+                dstArchetype.AddEntity(entityId, ref location);
+
+                // Write component values
+                if (entityState.Sets != null)
+                {
+                    foreach (var setter in entityState.Sets.Values)
+                    {
+                        state.Setters.Write(setter, location);
+                    }
+                }
+
+                // Raise component added events
+                if (entityState.Sets != null)
+                {
+                    foreach (var componentId in entityState.Sets.Keys)
+                    {
+                        var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                    }
+                }
+
+                // Raise entity created event
+                World.EventBus.Raise(new EntityCreatedEvent(recursiveCommandBuffer, entity));
             }
             else if (setChanged)
             {
@@ -302,17 +326,44 @@ public partial class EcsCommandBuffer
                 var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
                 if (srcArchetype != dstArchetype)
                 {
+                    // Raise component removed events
+                    if (entityState.Removes != null)
+                    {
+                        foreach (var componentId in entityState.Removes)
+                        {
+                            var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                        }
+                    }
+
                     // Migrate the entity
                     srcArchetype.MigrateEntity(entityId, dstArchetype, ref location);
                 }
-            }
 
-            // Write component values
-            if (entityState.Sets != null)
-            {
-                foreach (var setter in entityState.Sets.Values)
+                // Write component values
+                if (entityState.Sets != null)
                 {
-                    state.Setters.Write(setter, location);
+                    foreach (var setter in entityState.Sets.Values)
+                    {
+                        state.Setters.Write(setter, location);
+                    }
+                }
+
+                // Raise component added/modified events
+                if (entityState.Sets != null)
+                {
+                    foreach (var componentId in entityState.Sets.Keys)
+                    {
+                        var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                        if (srcArchetype.Components.Contains(componentId))
+                        {
+                            eventDispatcher.OnComponentModified(recursiveCommandBuffer, entity);
+                        }
+                        else
+                        {
+                            eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                        }
+                    }
                 }
             }
         }
