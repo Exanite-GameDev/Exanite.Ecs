@@ -1,4 +1,3 @@
-using System;
 using Exanite.Core.Events;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;

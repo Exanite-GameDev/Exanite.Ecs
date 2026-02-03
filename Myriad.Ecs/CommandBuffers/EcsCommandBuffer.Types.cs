@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Exanite.Core.Pooling;
+using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds;
 
@@ -10,14 +11,10 @@ public partial class EcsCommandBuffer
 {
     private readonly struct CommandState
     {
-        public readonly List<Command> Commands = [];
-
-        public readonly List<CreateEntityCommand> CreateEntityCommands = [];
-        public readonly List<DestroyEntityCommand> DestroyEntityCommands = [];
-        public readonly List<DestroyArchetypeCommand> DestroyArchetypeCommands = [];
-        public readonly List<SetComponentCommand> SetComponentCommands = [];
-        public readonly List<RemoveComponentCommand> RemoveComponentCommands = [];
-        public readonly List<DeferredActionCommand> DeferredActionCommands = [];
+        public readonly List<EntityId> EntitiesToDestroy = [];
+        public readonly List<Archetype> ArchetypesToDestroy = [];
+        public readonly Dictionary<EntityId, EntityState> EntityStates = [];
+        public readonly List<Action> Actions = [];
 
         public readonly ComponentSetterCollection Setters = new();
 
@@ -25,102 +22,54 @@ public partial class EcsCommandBuffer
 
         public void Clear(EcsWorld world)
         {
-            Commands.Clear();
-
-            CreateEntityCommands.Clear();
-            DestroyEntityCommands.Clear();
-            DestroyArchetypeCommands.Clear();
-            SetComponentCommands.Clear();
-            RemoveComponentCommands.Clear();
-            DeferredActionCommands.Clear();
+            EntitiesToDestroy.Clear();
+            ArchetypesToDestroy.Clear();
+            EntityStates.Clear();
+            Actions.Clear();
 
             Setters.Clear();
         }
     }
 
-    private enum CommandType
+    private struct EntityState
     {
-        CreateEntity,
-        DestroyEntity,
-        DestroyArchetype,
-        SetComponent,
-        RemoveComponent,
-        DeferredAction,
-    }
+        public bool NeedsCreation;
+        public Dictionary<ComponentId, SetterId>? Sets;
+        public OrderedListSet<ComponentId>? Removes;
 
-    private readonly struct Command
-    {
-        public readonly CommandType Type;
-        public readonly int Index;
-
-        public Command(CommandType type, int index)
+        public Dictionary<ComponentId, SetterId> GetOrAcquireSets()
         {
-            Type = type;
-            Index = index;
+            if (Sets == null)
+            {
+                Sets = SimplePool<Dictionary<ComponentId, SetterId>>.Acquire();
+                Sets.Clear();
+            }
+
+            return Sets;
         }
-    }
 
-    private readonly struct CreateEntityCommand
-    {
-        public readonly EntityId EntityId;
-
-        public CreateEntityCommand(EntityId entityId)
+        public OrderedListSet<ComponentId> GetOrAcquireRemoves()
         {
-            EntityId = entityId;
+            if (Removes == null)
+            {
+                Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
+                Removes.Clear();
+            }
+
+            return Removes;
         }
-    }
 
-    private readonly struct DestroyEntityCommand
-    {
-        public readonly EntityId EntityId;
-
-        public DestroyEntityCommand(EntityId entityId)
+        public void Release()
         {
-            EntityId = entityId;
-        }
-    }
+            if (Sets != null)
+            {
+                SimplePool<Dictionary<ComponentId, SetterId>>.Release(Sets);
+            }
 
-    private readonly struct DestroyArchetypeCommand
-    {
-        public readonly Archetype Archetype;
-
-        public DestroyArchetypeCommand(Archetype archetype)
-        {
-            Archetype = archetype;
-        }
-    }
-
-    private readonly struct SetComponentCommand
-    {
-        public readonly EntityId EntityId;
-        public readonly SetterId SetterId;
-
-        public SetComponentCommand(EntityId entityId, SetterId setterId)
-        {
-            EntityId = entityId;
-            SetterId = setterId;
-        }
-    }
-
-    private readonly struct RemoveComponentCommand
-    {
-        public readonly EntityId EntityId;
-        public readonly ComponentId ComponentId;
-
-        public RemoveComponentCommand(EntityId entityId, ComponentId componentId)
-        {
-            EntityId = entityId;
-            ComponentId = componentId;
-        }
-    }
-
-    private readonly struct DeferredActionCommand
-    {
-        public readonly Action Action;
-
-        public DeferredActionCommand(Action action)
-        {
-            Action = action;
+            if (Removes != null)
+            {
+                SimplePool<OrderedListSet<ComponentId>>.Release(Removes);
+            }
         }
     }
 

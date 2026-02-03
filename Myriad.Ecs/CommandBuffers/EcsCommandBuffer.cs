@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds;
@@ -36,7 +37,7 @@ public sealed partial class EcsCommandBuffer
     /// </summary>
     public EcsWorld World { get; }
 
-    public bool HasBufferedOperations => state.Commands.Count != 0;
+    public bool HasBufferedOperations { get; private set; }
     public bool IsExecuting { get; private set; }
 
     /// <summary>
@@ -86,8 +87,10 @@ public sealed partial class EcsCommandBuffer
         localIdPool.RemoveAt(localIdPool.Count - 1);
 
         // Store the command
-        state.Commands.Add(new Command(CommandType.CreateEntity, state.CreateEntityCommands.Count));
-        state.CreateEntityCommands.Add(new CreateEntityCommand(entityId));
+        ref var entityState = ref GetEntityState(entityId);
+        entityState.NeedsCreation = true;
+
+        HasBufferedOperations = true;
 
         return new BufferedEntity(entityId.ToEntity(World), this);
     }
@@ -104,8 +107,14 @@ public sealed partial class EcsCommandBuffer
         var setterId = state.Setters.Create(value);
 
         // Store the command
-        state.Commands.Add(new Command(CommandType.SetComponent, state.SetComponentCommands.Count));
-        state.SetComponentCommands.Add(new SetComponentCommand(entity.EntityId, setterId));
+        ref var entityState = ref GetEntityState(entity.EntityId);
+        var sets = entityState.GetOrAcquireSets();
+        sets[setterId.ComponentId] = setterId;
+
+        // Prevent the remove, if it exists
+        entityState.Removes?.Remove(setterId.ComponentId);
+
+        HasBufferedOperations = true;
 
         return new BufferedEntity(entity, this);
     }
@@ -119,8 +128,15 @@ public sealed partial class EcsCommandBuffer
         EnsureIsFromCurrentWorld(entity);
 
         // Store the command
-        state.Commands.Add(new Command(CommandType.RemoveComponent, state.RemoveComponentCommands.Count));
-        state.RemoveComponentCommands.Add(new RemoveComponentCommand(entity.EntityId, ComponentId.Get<T>()));
+        var componentId = ComponentId.Get<T>();
+        ref var entityState = ref GetEntityState(entity.EntityId);
+        var removes = entityState.GetOrAcquireRemoves();
+        removes.Add(componentId);
+
+        // Prevent the set, if it exists
+        entityState.Sets?.Remove(componentId);
+
+        HasBufferedOperations = true;
 
         return new BufferedEntity(entity, this);
     }
@@ -134,8 +150,11 @@ public sealed partial class EcsCommandBuffer
         EnsureIsFromCurrentWorld(entity);
 
         // Store the command
-        state.Commands.Add(new Command(CommandType.DestroyEntity, state.DestroyEntityCommands.Count));
-        state.DestroyEntityCommands.Add(new DestroyEntityCommand(entity.EntityId));
+        ref var entityState = ref GetEntityState(entity.EntityId);
+        entityState.NeedsCreation = false;
+        state.EntitiesToDestroy.Add(entity.EntityId);
+
+        HasBufferedOperations = true;
 
         return this;
     }
@@ -154,9 +173,12 @@ public sealed partial class EcsCommandBuffer
         // Store the commands
         foreach (var entity in entities)
         {
-            state.Commands.Add(new Command(CommandType.DestroyEntity, state.DestroyEntityCommands.Count));
-            state.DestroyEntityCommands.Add(new DestroyEntityCommand(entity.EntityId));
+            ref var entityState = ref GetEntityState(entity.EntityId);
+            entityState.NeedsCreation = false;
+            state.EntitiesToDestroy.Add(entity.EntityId);
         }
+
+        HasBufferedOperations = true;
 
         return this;
     }
@@ -170,17 +192,21 @@ public sealed partial class EcsCommandBuffer
     public EcsCommandBuffer Destroy(IArchetypeView view)
     {
         EnsureIsExternallyMutable();
-        foreach (var archetype in view.Archetypes)
+
+        // Capture the archetypes span first
+        var archetypes = view.Archetypes;
+        foreach (var archetype in archetypes)
         {
             EnsureIsFromCurrentWorld(archetype);
         }
 
         // Store the commands
-        foreach (var archetype in view.Archetypes)
+        foreach (var archetype in archetypes)
         {
-            state.Commands.Add(new Command(CommandType.DestroyArchetype, state.DestroyArchetypeCommands.Count));
-            state.DestroyArchetypeCommands.Add(new DestroyArchetypeCommand(archetype));
+            state.ArchetypesToDestroy.Add(archetype);
         }
+
+        HasBufferedOperations = true;
 
         return this;
     }
@@ -193,8 +219,9 @@ public sealed partial class EcsCommandBuffer
         EnsureIsExternallyMutable();
 
         // Store the command
-        state.Commands.Add(new Command(CommandType.DeferredAction, state.DeferredActionCommands.Count));
-        state.DeferredActionCommands.Add(new DeferredActionCommand(action));
+        state.Actions.Add(action);
+
+        HasBufferedOperations = true;
 
         return this;
     }
@@ -212,9 +239,12 @@ public sealed partial class EcsCommandBuffer
 
         // Release used entity IDs
         // Do not reuse these without releasing since external callers already have access to them
-        foreach (var command in state.CreateEntityCommands)
+        foreach (var (entityId, entityState) in state.EntityStates)
         {
-            World.Entities.ReleaseId(command.EntityId);
+            if (entityState.NeedsCreation)
+            {
+                World.Entities.ReleaseId(entityId);
+            }
         }
 
         // Release unused local IDs
@@ -222,6 +252,8 @@ public sealed partial class EcsCommandBuffer
 
         // Clear commands
         state.Clear(World);
+
+        HasBufferedOperations = false;
     }
 
     /// <summary>
@@ -266,5 +298,11 @@ public sealed partial class EcsCommandBuffer
     private void EnsureIsFromCurrentWorld(Archetype archetype)
     {
         GuardUtility.IsTrue(archetype.World == World, "Archetype must belong to the same world as the command buffer");
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private ref EntityState GetEntityState(EntityId entityId)
+    {
+        return ref CollectionsMarshal.GetValueRefOrAddDefault(state.EntityStates, entityId, out var _);
     }
 }

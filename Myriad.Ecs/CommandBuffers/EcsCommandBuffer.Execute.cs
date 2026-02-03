@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Exanite.Core.Pooling;
-using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
@@ -17,135 +13,21 @@ public partial class EcsCommandBuffer
     /// </remarks>
     private readonly OrderedListSet<ComponentId> tempComponentSet = [];
 
-    private struct EntityState
-    {
-        public bool IsCreated;
-        public Dictionary<ComponentId, SetterId>? Sets;
-        public OrderedListSet<ComponentId>? Removes;
-
-        public Dictionary<ComponentId, SetterId> GetOrAcquireSets()
-        {
-            if (Sets == null)
-            {
-                Sets = SimplePool<Dictionary<ComponentId, SetterId>>.Acquire();
-                Sets.Clear();
-            }
-
-            return Sets;
-        }
-
-        public OrderedListSet<ComponentId> GetOrAcquireRemoves()
-        {
-            if (Removes == null)
-            {
-                Removes = SimplePool<OrderedListSet<ComponentId>>.Acquire();
-                Removes.Clear();
-            }
-
-            return Removes;
-        }
-
-        public void Release()
-        {
-            if (Sets != null)
-            {
-                SimplePool<Dictionary<ComponentId, SetterId>>.Release(Sets);
-            }
-
-            if (Removes != null)
-            {
-                SimplePool<OrderedListSet<ComponentId>>.Release(Removes);
-            }
-        }
-    }
-
     private void ExecuteInternal()
     {
         using var _ = World.AcquireCommandBuffer(out var recursiveCommandBuffer);
-        using (ListPool<EntityId>.Acquire(out var entitiesToDestroy))
-        using (ListPool<Archetype>.Acquire(out var archetypesToDestroy))
-        using (DictionaryPool<EntityId, EntityState>.Acquire(out var entityStates))
-        using (ListPool<Action>.Acquire(out var actions))
+        try
         {
-            // Preprocess
-            foreach (var command in state.Commands)
+            DestroyEntities(recursiveCommandBuffer, state.ArchetypesToDestroy, state.EntitiesToDestroy);
+            CreateAndApplyStructuralChanges(recursiveCommandBuffer, state.EntityStates);
+
+            foreach (var action in state.Actions)
             {
-                switch (command.Type)
-                {
-                    case CommandType.CreateEntity:
-                    {
-                        var typedCommand = state.CreateEntityCommands[command.Index];
-                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
-                        entityState.IsCreated = true;
-
-                        break;
-                    }
-                    case CommandType.DestroyEntity:
-                    {
-                        var typedCommand = state.DestroyEntityCommands[command.Index];
-                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
-                        entityState.IsCreated = false;
-                        entitiesToDestroy.Add(typedCommand.EntityId);
-
-                        break;
-                    }
-                    case CommandType.DestroyArchetype:
-                    {
-                        var typedCommand = state.DestroyArchetypeCommands[command.Index];
-                        archetypesToDestroy.Add(typedCommand.Archetype);
-
-                        break;
-                    }
-                    case CommandType.SetComponent:
-                    {
-                        var typedCommand = state.SetComponentCommands[command.Index];
-                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
-
-                        var sets = entityState.GetOrAcquireSets();
-                        sets[typedCommand.SetterId.ComponentId] = typedCommand.SetterId;
-
-                        // Prevent the remove, if it exists
-                        entityState.Removes?.Remove(typedCommand.SetterId.ComponentId);
-
-                        break;
-                    }
-                    case CommandType.RemoveComponent:
-                    {
-                        var typedCommand = state.RemoveComponentCommands[command.Index];
-                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
-
-                        var removes = entityState.GetOrAcquireRemoves();
-                        removes.Add(typedCommand.ComponentId);
-
-                        // Prevent the set, if it exists
-                        entityState.Sets?.Remove(typedCommand.ComponentId);
-
-                        break;
-                    }
-                    case CommandType.DeferredAction:
-                    {
-                        var typedCommand = state.DeferredActionCommands[command.Index];
-                        actions.Add(typedCommand.Action);
-
-                        break;
-                    }
-                    default: throw ExceptionUtility.NotSupportedEnumValue(command.Type);
-                }
+                action.Invoke();
             }
-
-            // Execute
-            {
-                DestroyEntities(recursiveCommandBuffer, archetypesToDestroy, entitiesToDestroy);
-
-                CreateAndApplyStructuralChanges(recursiveCommandBuffer, entityStates);
-
-                foreach (var action in actions)
-                {
-                    action.Invoke();
-                }
-            }
-
-            // TODO: Add try-finally for cleanup
+        }
+        finally
+        {
             // Release unused local IDs
             World.Entities.ReleaseUnusedIds(localIdPool);
 
@@ -153,15 +35,12 @@ public partial class EcsCommandBuffer
             state.Clear(World);
 
             // Release entity state collections
-            foreach (var entityState in entityStates.Values)
+            foreach (var entityState in state.EntityStates.Values)
             {
                 entityState.Release();
             }
 
-            ref EntityState GetEntityState(EntityId entityId)
-            {
-                return ref CollectionsMarshal.GetValueRefOrAddDefault(entityStates, entityId, out var _);
-            }
+            HasBufferedOperations = false;
         }
 
         // Run any newly enqueued commands
@@ -255,7 +134,7 @@ public partial class EcsCommandBuffer
             var componentIdSet = tempComponentSet;
             componentIdSet.Clear();
 
-            if (!entityState.IsCreated)
+            if (!entityState.NeedsCreation)
             {
                 // Add existing components to set
                 var archetype = location.Chunk.Archetype;
@@ -296,7 +175,7 @@ public partial class EcsCommandBuffer
 
             // Case 1: Entity created
             var entity = entityId.ToEntity(World);
-            if (entityState.IsCreated)
+            if (entityState.NeedsCreation)
             {
                 // Create the entity
                 var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
