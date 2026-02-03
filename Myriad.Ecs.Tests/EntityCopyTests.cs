@@ -5,45 +5,10 @@ using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-public class WorldCopyTests
+public class EntityCopyTests
 {
     [Fact]
-    public void CopyTo_MaintainsEntityCount()
-    {
-        var srcWorld = new EcsWorld();
-        using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
-        {
-            commandBuffer.Create()
-                .Set(new Ecs0());
-
-            commandBuffer.Create()
-                .Set(new Ecs1());
-
-            commandBuffer.Create()
-                .Set(new Ecs2());
-
-            commandBuffer.Create()
-                .Set(new Ecs0())
-                .Set(new Ecs1())
-                .Set(new Ecs2());
-
-            commandBuffer.Execute();
-        }
-
-        var dstWorld = new EcsWorld();
-        srcWorld.CopyTo(dstWorld);
-
-        // Non-empty archetype count should be equal
-        Assert.Equal(
-            srcWorld.ArchetypesList.Count(a => a.EntityCount != 0),
-            dstWorld.ArchetypesList.Count(a => a.EntityCount != 0));
-
-        // Entity count should be equal
-        Assert.Equal(srcWorld.Count(), dstWorld.Count());
-    }
-
-    [Fact]
-    public void CopyTo_CopiesComponentData()
+    public void CopyFrom_CopiesComponentData()
     {
         var floatValue = 1f;
         var byteValue = (byte)2;
@@ -53,27 +18,21 @@ public class WorldCopyTests
         using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
         {
             commandBuffer.Create()
-                .Set(new EcsFloat(floatValue));
-
-            commandBuffer.Create()
-                .Set(new EcsByte(byteValue));
-
-            commandBuffer.Create()
+                .Set(new EcsFloat(floatValue))
+                .Set(new EcsByte(byteValue))
                 .Set(new EcsInt32(int32Value));
 
             commandBuffer.Execute();
         }
 
         var dstWorld = new EcsWorld();
-        srcWorld.CopyTo(dstWorld);
+        using (dstWorld.AcquireCommandBuffer(out var commandBuffer))
+        {
+            commandBuffer.Create()
+                .CopyFrom(srcWorld.Single());
 
-        // Non-empty archetype count should be equal
-        Assert.Equal(
-            srcWorld.ArchetypesList.Count(a => a.EntityCount != 0),
-            dstWorld.ArchetypesList.Count(a => a.EntityCount != 0));
-
-        // Entity count should be equal
-        Assert.Equal(srcWorld.Count(), dstWorld.Count());
+            commandBuffer.Execute();
+        }
 
         // Check component values
         Assert.Equal(floatValue, GetSingle<EcsFloat>(dstWorld).Value);
@@ -82,37 +41,7 @@ public class WorldCopyTests
     }
 
     [Fact]
-    public void CopyTo_UsesNewIds_ForEachCopy()
-    {
-        var srcWorld = new EcsWorld();
-        using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
-        {
-            commandBuffer.Create()
-                .Set(new Ecs0());
-
-            commandBuffer.Execute();
-        }
-
-        var srcEntity = srcWorld.Single();
-
-        var dstWorld = new EcsWorld();
-
-        srcWorld.CopyTo(dstWorld);
-        var dstEntity1 = dstWorld.Single();
-
-        srcWorld.CopyTo(dstWorld);
-        var dstEntity2 = dstWorld.Single();
-
-        Assert.NotEqual(srcEntity, dstEntity1);
-        Assert.NotEqual(srcEntity, dstEntity2);
-        Assert.NotEqual(dstEntity1, dstEntity2);
-
-        Assert.False(dstEntity1.IsAlive);
-        Assert.True(dstEntity2.IsAlive);
-    }
-
-    [Fact]
-    public void CopyTo_UpdatesSelfReference()
+    public void CopyFrom_UpdatesSelfReference()
     {
         var srcWorld = new EcsWorld();
         using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
@@ -124,14 +53,20 @@ public class WorldCopyTests
         }
 
         var dstWorld = new EcsWorld();
-        srcWorld.CopyTo(dstWorld);
+        using (dstWorld.AcquireCommandBuffer(out var commandBuffer))
+        {
+            commandBuffer.Create()
+                .CopyFrom(srcWorld.Single());
+
+            commandBuffer.Execute();
+        }
 
         Assert.Equal(srcWorld, GetSingle<EcsSelfReference>(srcWorld).Self.Entity.World);
         Assert.Equal(dstWorld, GetSingle<EcsSelfReference>(dstWorld).Self.Entity.World);
     }
 
     [Fact]
-    public void CopyTo_UpdatesOtherReferences()
+    public void CopyFrom_UpdatesOtherReferences()
     {
         var srcWorld = new EcsWorld();
         using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
@@ -143,7 +78,13 @@ public class WorldCopyTests
         }
 
         var dstWorld = new EcsWorld();
-        srcWorld.CopyTo(dstWorld);
+        using (dstWorld.AcquireCommandBuffer(out var commandBuffer))
+        {
+            commandBuffer.Create()
+                .CopyFrom(srcWorld.Single());
+
+            commandBuffer.Execute();
+        }
 
         Assert.Equal(srcWorld, GetSingle<EcsCopied>(srcWorld).Self.Entity.World);
         Assert.Equal(dstWorld, GetSingle<EcsCopied>(dstWorld).Self.Entity.World);
