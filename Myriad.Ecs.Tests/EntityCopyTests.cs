@@ -1,4 +1,5 @@
-using System.Linq;
+using System.Collections.Generic;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Xunit;
@@ -96,6 +97,49 @@ public class EntityCopyTests
         Assert.Equal(dstWorld, GetSingle<EcsCopied>(dstWorld).Self3.World);
     }
 
+    [Fact]
+    public void CopyFrom_CreateHierarchy()
+    {
+        var srcWorld = new EcsWorld();
+        using var _ = srcWorld.AcquireCommandBuffer(out var srcCommandBuffer);
+
+        var srcChild1 = srcCommandBuffer.Create().Set(new EcsTransform()).Entity;
+        var srcChild2 = srcCommandBuffer.Create().Set(new EcsTransform()).Entity;
+        var srcRoot = srcCommandBuffer.Create().Set(new EcsTransform()
+        {
+            Children = [srcChild1.GetStorableComponentUnchecked<EcsTransform>(), srcChild2.GetStorableComponentUnchecked<EcsTransform>()],
+        });
+
+        srcCommandBuffer.Execute();
+
+        var dstWorld = new EcsWorld();
+        using var __ = dstWorld.AcquireCommandBuffer(out var dstCommandBuffer);
+
+        // Order shouldn't matter
+        var dstChild2 = dstCommandBuffer.Create().CopyFrom(srcChild2);
+        var dstRoot = dstCommandBuffer.Create().CopyFrom(srcRoot).Entity;
+        var dstChild1 = dstCommandBuffer.Create().CopyFrom(srcChild1);
+
+        dstCommandBuffer.Execute();
+
+        foreach (var entity in new QueryFilter().Build(dstWorld).EnumerateEntitiesSlow())
+        {
+            Assert.True(entity.HasComponent<EcsTransform>());
+
+            ref var transform = ref entity.GetComponent<EcsTransform>();
+            Assert.Equal(dstWorld, transform.Self.Entity.World);
+
+            foreach (var child in transform.Children)
+            {
+                Assert.Equal(dstWorld, child.Entity.World);
+            }
+        }
+
+        Assert.Equal(2, dstRoot.GetComponent<EcsTransform>().Children.Count);
+        Assert.Equal(dstChild1, dstRoot.GetComponent<EcsTransform>().Children[0].Entity);
+        Assert.Equal(dstChild2, dstRoot.GetComponent<EcsTransform>().Children[1].Entity);
+    }
+
     private T GetSingle<T>(EcsWorld world) where T : IComponent
     {
         return new QueryFilter().Include<T>().Build(world).First().GetComponent<T>();
@@ -125,6 +169,23 @@ public class EntityCopyTests
         {
             Self2 = lookup.Get(Self2);
             Self3 = lookup.Get(Self3);
+        }
+    }
+
+    private struct EcsTransform : IComponent, IComponentSelfReference<EcsTransform>, IComponentCopied
+    {
+        public EcsRef<EcsTransform> Self { get; set; }
+
+        public List<EcsRef<EcsTransform>> Children = new();
+
+        public EcsTransform() {}
+
+        public void OnCopied(EcsWorld newWorld, IEntityLookup lookup)
+        {
+            foreach (ref var child in Children.AsSpan())
+            {
+                child = lookup.Get(child);
+            }
         }
     }
 }
