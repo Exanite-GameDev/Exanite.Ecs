@@ -94,6 +94,45 @@ public class EntityCopyTests
     }
 
     [Fact]
+    public void CopyFrom_ManyPrefab_To_OneEntity()
+    {
+        var srcWorld = new EcsWorld();
+        using var _ = srcWorld.AcquireCommandBuffer(out var srcCommandBuffer);
+
+        var prefab1 = srcCommandBuffer.Create().Set(new Ecs1()).Set(new EcsSelfReference()).Set(new EcsByte(1)).Entity;
+        var prefab2 = srcCommandBuffer.Create().Set(new Ecs2()).Set(new EcsSelfReference()).Set(new EcsByte(2)).Entity;
+        var prefab3 = srcCommandBuffer.Create().Set(new Ecs3()).Set(new EcsSelfReference()).Set(new EcsByte(3)).Entity;
+        srcCommandBuffer.Execute();
+
+        var dstWorld = new EcsWorld();
+        using var __ = dstWorld.AcquireCommandBuffer(out var dstCommandBuffer);
+
+        var newEntity = dstCommandBuffer.Create()
+            .CopyFrom(prefab1)
+            .CopyFrom(prefab2)
+            .CopyFrom(prefab3)
+            .Entity;
+
+        dstCommandBuffer.Execute();
+
+        // Check structure
+        Assert.True(newEntity.HasComponent<Ecs1>());
+        Assert.True(newEntity.HasComponent<Ecs2>());
+        Assert.True(newEntity.HasComponent<Ecs3>());
+        Assert.True(newEntity.HasComponent<EcsSelfReference>());
+        Assert.True(newEntity.HasComponent<EcsByte>());
+
+        // Check references
+        Assert.Equal(prefab1, prefab1.GetComponent<EcsSelfReference>().Self.Entity);
+        Assert.Equal(prefab2, prefab2.GetComponent<EcsSelfReference>().Self.Entity);
+        Assert.Equal(prefab3, prefab3.GetComponent<EcsSelfReference>().Self.Entity);
+        Assert.Equal(newEntity, newEntity.GetComponent<EcsSelfReference>().Self.Entity);
+
+        // Last set should take precedence
+        Assert.Equal(3, newEntity.GetComponent<EcsByte>().Value);
+    }
+
+    [Fact]
     public void CopyFrom_UpdatesOtherReferences()
     {
         var srcWorld = new EcsWorld();
