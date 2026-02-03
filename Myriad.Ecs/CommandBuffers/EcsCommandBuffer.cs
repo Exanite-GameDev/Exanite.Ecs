@@ -96,6 +96,32 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
+    /// Copies all components from the target prefab onto the specified entity.
+    /// </summary>
+    /// <remarks>
+    /// The component types to copy are read at the time of recording; however, the component values are read at time of execution.
+    /// It is assumed that the prefab entity is not modified between now and when the command buffer is executed.
+    /// </remarks>
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
+    {
+        EnsureIsExternallyMutable();
+
+        // Store the commands
+        ref var entityState = ref GetEntityState(entity.EntityId);
+        var sets = entityState.GetOrAcquireSets();
+        foreach (var componentId in prefab.ComponentIds)
+        {
+            ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out _);
+            state.Setters.CreateFromPrefab(prefab, componentId, ref setterId);
+
+            // Prevent the remove, if it exists
+            entityState.Removes?.Remove(componentId);
+        }
+
+        return new BufferedEntity(entity, this);
+    }
+
+    /// <summary>
     /// Add or overwrite a component attached to an entity.
     /// </summary>
     public BufferedEntity Set<T>(Entity entity, T value) where T : IComponent
@@ -109,7 +135,7 @@ public sealed partial class EcsCommandBuffer
         ref var entityState = ref GetEntityState(entity.EntityId);
 
         var sets = entityState.GetOrAcquireSets();
-        ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out var exists);
+        ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out _);
         state.Setters.CreateFromValue(value, ref setterId);
 
         // Prevent the remove, if it exists
@@ -188,7 +214,8 @@ public sealed partial class EcsCommandBuffer
     /// Bulk destroy all entities in archetypes stored by the view.
     /// </summary>
     /// <remarks>
-    /// Note that the view is evaluated at time of execution.
+    /// The archetypes to destroy are read at the time of recording.
+    /// It is assumed that no new archetypes are added between now and when the command buffer is executed.
     /// </remarks>
     public EcsCommandBuffer Destroy(IArchetypeView view)
     {
