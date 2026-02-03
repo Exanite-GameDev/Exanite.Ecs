@@ -27,7 +27,7 @@ public class ArchetypeTests
             var entityCount = 0;
             foreach (var chunk in archetype.Chunks)
             {
-                entityCount += chunk.EntityCount;
+                entityCount += chunk.Entities.Length;
             }
 
             Assert.Equal(archetype.EntityCount, entityCount);
@@ -43,7 +43,7 @@ public class ArchetypeTests
                 var a = chunk.GetSpan<EcsInt32>();
                 var b = chunk.GetSpan<EcsInt64>();
 
-                for (var i = 0; i < chunk.EntityCount; i++)
+                for (var i = 0; i < chunk.Entities.Length; i++)
                 {
                     Assert.Equal(a[i].Value, (int)b[i].Value);
                 }

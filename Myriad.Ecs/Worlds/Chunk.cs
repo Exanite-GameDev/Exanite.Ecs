@@ -38,7 +38,7 @@ public sealed class Chunk
     /// <summary>
     /// Get the number of entities currently in this chunk.
     /// </summary>
-    public int EntityCount { get; private set; }
+    private int EntityCount { get; set; }
 
     /// <summary>
     /// All entities in this chunk.
