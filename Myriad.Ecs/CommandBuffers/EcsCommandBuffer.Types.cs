@@ -75,20 +75,49 @@ public partial class EcsCommandBuffer
 
     private readonly struct SetterId
     {
+        private readonly int index;
+
         /// <summary>
         /// Component ID of the component being overwritten.
         /// </summary>
-        internal readonly ComponentId ComponentId;
+        public readonly ComponentId ComponentId;
 
         /// <summary>
-        /// Index of the value in the values list.
+        /// If <see cref="IsPrefab"/> is false,
+        /// then this is the index of the value in the corresponding components list.
         /// </summary>
-        internal readonly int Index;
+        public int ValueIndex => index;
 
-        internal SetterId(ComponentId componentId, int index)
+        /// <summary>
+        /// If <see cref="IsPrefab"/> is true,
+        /// then this is the index of the source entity in the prefabs list.
+        /// </summary>
+        public int PrefabIndex => ~index;
+
+        /// <summary>
+        /// Whether this setter is valid or not.
+        /// </summary>
+        public bool IsValid => ComponentId.Value != 0;
+
+        /// <summary>
+        /// Whether the setter reads from a prefab or not.
+        /// </summary>
+        public bool IsPrefab => index < 0;
+
+        private SetterId(ComponentId componentId, int index)
         {
             ComponentId = componentId;
-            Index = index;
+            this.index = index;
+        }
+
+        public static SetterId FromValueIndex(ComponentId componentId, int index)
+        {
+            return new SetterId(componentId, index);
+        }
+
+        public static SetterId FromPrefabIndex(ComponentId componentId, int index)
+        {
+            return new SetterId(componentId, ~index);
         }
     }
 
@@ -99,41 +128,67 @@ public partial class EcsCommandBuffer
     private class ComponentSetterCollection
     {
         private readonly Dictionary<ComponentId, IComponentList> components = [];
+        private readonly List<Entity> prefabs = [];
+        private readonly Dictionary<Entity, int> prefabLookup = [];
 
         /// <summary>
-        /// Add a new component value to the collection.
+        /// Creates a setter using a component value.
         /// </summary>
-        public SetterId Create<T>(T value) where T : IComponent
+        public void CreateFromValue<T>(T value, ref SetterId setterId) where T : IComponent
         {
-            var id = ComponentId.Get<T>();
-
-            if (!components.TryGetValue(id, out var list))
+            if (setterId.IsValid && !setterId.IsPrefab)
             {
-                list = SimplePool<ComponentList<T>>.Acquire();
-                components.Add(id, list);
+                ((ComponentList<T>)components[setterId.ComponentId]).Replace(value, setterId.ValueIndex);
+
+                return;
+            }
+
+            var componentId = ComponentId.Get<T>();
+            if (!components.TryGetValue(componentId, out var list))
+            {
+                components[componentId] = list = SimplePool<ComponentList<T>>.Acquire();
             }
 
             var index = ((ComponentList<T>)list).Create(value);
-            return new SetterId(id, index);
+            setterId = SetterId.FromValueIndex(componentId, index);
         }
 
         /// <summary>
-        /// Replace an existing component value.
+        /// Creates a setter using a component stored by a prefab entity.
         /// </summary>
-        public SetterId Replace<T>(T value, SetterId existing) where T : IComponent
+        public void CreateFromPrefab(Entity prefab, ComponentId componentId, ref SetterId setterId)
         {
-            ((ComponentList<T>)components[existing.ComponentId]).Replace(value, existing.Index);
+            var prefabIndex = prefabLookup.GetValueOrDefault(prefab, -1);
+            if (prefabIndex == -1)
+            {
+                prefabIndex = prefabs.Count;
+                prefabs.Add(prefab);
+                prefabLookup[prefab] = prefabIndex;
+            }
 
-            return existing;
+            setterId = SetterId.FromPrefabIndex(componentId, prefabIndex);
         }
 
         /// <summary>
         /// Output the stored component value to the specified entity location.
         /// </summary>
-        public void Write(SetterId id, EntityLocation location)
+        public void Write(SetterId setterId, EntityLocation dstLocation)
         {
-            var list = components[id.ComponentId];
-            list.Write(id.Index, location);
+            if (setterId.IsPrefab)
+            {
+                var srcEntity = prefabs[setterId.PrefabIndex];
+                ref var srcLocation = ref srcEntity.World.Entities.GetLocation(srcEntity.EntityId);
+
+                var srcComponents = srcLocation.Chunk.GetComponentArray(setterId.ComponentId);
+                var dstComponents = dstLocation.Chunk.GetComponentArray(setterId.ComponentId);
+
+                Array.Copy(srcComponents, srcLocation.IndexInChunk, dstComponents, dstLocation.IndexInChunk, 1);
+            }
+            else
+            {
+                var list = components[setterId.ComponentId];
+                list.Write(setterId.ValueIndex, dstLocation);
+            }
         }
 
         /// <summary>

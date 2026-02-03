@@ -110,7 +110,7 @@ public sealed partial class EcsCommandBuffer
 
         var sets = entityState.GetOrAcquireSets();
         ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out var exists);
-        setterId = exists ? state.Setters.Replace(value, setterId) : state.Setters.Create(value);
+        state.Setters.CreateFromValue(value, ref setterId);
 
         // Prevent the remove, if it exists
         entityState.Removes?.Remove(componentId);
