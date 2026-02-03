@@ -7,96 +7,6 @@ namespace Exanite.Myriad.Ecs;
 public static class ArchetypeViewUtilities
 {
     /// <summary>
-    /// Iterate through every entity.
-    /// </summary>
-    /// <remarks>
-    /// This is slow! Use only for debugging.
-    /// </remarks>
-    public static ViewEntityEnumerable EnumerateEntities(this IArchetypeView view)
-    {
-        return new ViewEntityEnumerable(view);
-    }
-
-    public readonly struct ViewEntityEnumerable
-    {
-        private readonly IArchetypeView view;
-
-        public ViewEntityEnumerable(IArchetypeView view)
-        {
-            this.view = view;
-        }
-
-        public Enumerator GetEnumerator()
-        {
-            return new Enumerator(view);
-        }
-
-        public struct Enumerator
-        {
-            private readonly IArchetypeView view;
-
-            private Archetype? archetype;
-            private int archetypeIndex = 0;
-
-            private Chunk? chunk;
-            private int chunkIndex = 0;
-
-            public Entity Current { get; private set; }
-            private int entityIndex = -1;
-
-            public Enumerator(IArchetypeView view)
-            {
-                this.view = view;
-
-                if (view.Archetypes.Length > 0)
-                {
-                    archetype = view.Archetypes[0];
-                    if (archetype.Chunks.Length > 0)
-                    {
-                        chunk = archetype.Chunks[0];
-                    }
-                }
-            }
-
-            public bool MoveNext()
-            {
-                if (archetype == null || chunk == null)
-                {
-                    // This means the constructor found no matches
-                    return false;
-                }
-
-                entityIndex++;
-                while (entityIndex >= chunk.Entities.Length)
-                {
-                    // Move to next chunk if needed
-                    entityIndex = 0;
-                    chunkIndex++;
-                    while (chunkIndex >= archetype.Chunks.Length)
-                    {
-                        // Move to next archetype if needed
-                        chunkIndex = 0;
-                        archetypeIndex++;
-
-                        if (archetypeIndex >= view.Archetypes.Length)
-                        {
-                            // Enumeration complete
-                            return false;
-                        }
-
-                        archetype = view.Archetypes[archetypeIndex];
-                    }
-
-                    chunk = archetype.Chunks[chunkIndex];
-                }
-
-                Current = chunk.Entities[entityIndex];
-                return true;
-            }
-        }
-    }
-
-    /// <summary>
     /// Count how many entities match this query.
     /// </summary>
     public static int Count(this IArchetypeView view)
@@ -252,5 +162,95 @@ public static class ArchetypeViewUtilities
         var entity = view.RandomOrDefault(random);
         GuardUtility.IsTrue(entity.IsAlive, "QueryView.RandomOrDefault() found no matching entities");
         return entity;
+    }
+
+    /// <summary>
+    /// Iterate through every entity.
+    /// </summary>
+    /// <remarks>
+    /// This is slow! Use only for debugging.
+    /// </remarks>
+    public static ViewEntityEnumerable EnumerateEntities(this IArchetypeView view)
+    {
+        return new ViewEntityEnumerable(view);
+    }
+
+    public readonly struct ViewEntityEnumerable
+    {
+        private readonly IArchetypeView view;
+
+        public ViewEntityEnumerable(IArchetypeView view)
+        {
+            this.view = view;
+        }
+
+        public Enumerator GetEnumerator()
+        {
+            return new Enumerator(view);
+        }
+
+        public struct Enumerator
+        {
+            private readonly IArchetypeView view;
+
+            private Archetype? archetype;
+            private int archetypeIndex = 0;
+
+            private Chunk? chunk;
+            private int chunkIndex = 0;
+
+            public Entity Current { get; private set; }
+            private int entityIndex = -1;
+
+            public Enumerator(IArchetypeView view)
+            {
+                this.view = view;
+
+                if (view.Archetypes.Length > 0)
+                {
+                    archetype = view.Archetypes[0];
+                    if (archetype.Chunks.Length > 0)
+                    {
+                        chunk = archetype.Chunks[0];
+                    }
+                }
+            }
+
+            public bool MoveNext()
+            {
+                if (archetype == null || chunk == null)
+                {
+                    // This means the constructor found no matches
+                    return false;
+                }
+
+                entityIndex++;
+                while (entityIndex >= chunk.Entities.Length)
+                {
+                    // Move to next chunk if needed
+                    entityIndex = 0;
+                    chunkIndex++;
+                    while (chunkIndex >= archetype.Chunks.Length)
+                    {
+                        // Move to next archetype if needed
+                        chunkIndex = 0;
+                        archetypeIndex++;
+
+                        if (archetypeIndex >= view.Archetypes.Length)
+                        {
+                            // Enumeration complete
+                            return false;
+                        }
+
+                        archetype = view.Archetypes[archetypeIndex];
+                    }
+
+                    chunk = archetype.Chunks[chunkIndex];
+                }
+
+                Current = chunk.Entities[entityIndex];
+                return true;
+            }
+        }
     }
 }
