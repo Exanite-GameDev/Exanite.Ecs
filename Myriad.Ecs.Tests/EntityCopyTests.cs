@@ -67,6 +67,33 @@ public class EntityCopyTests
     }
 
     [Fact]
+    public void CopyFrom_OnePrefab_To_ManyEntities()
+    {
+        var srcWorld = new EcsWorld();
+        using var _ = srcWorld.AcquireCommandBuffer(out var srcCommandBuffer);
+
+        var prefab = srcCommandBuffer.Create().Set(new EcsSelfReference()).Entity;
+        srcCommandBuffer.Execute();
+
+        var dstWorld = new EcsWorld();
+        using var __ = dstWorld.AcquireCommandBuffer(out var dstCommandBuffer);
+
+        var newEntity1 = dstCommandBuffer.Create().CopyFrom(prefab).Entity;
+        var newEntity2 = dstCommandBuffer.Create().CopyFrom(prefab).Entity;
+        var newEntity3 = dstCommandBuffer.Create().CopyFrom(prefab).Entity;
+        dstCommandBuffer.Execute();
+
+        Assert.Equal(srcWorld, GetSingle<EcsSelfReference>(srcWorld).Self.Entity.World);
+        Assert.Equal(newEntity1, newEntity1.GetComponent<EcsSelfReference>().Self.Entity);
+        Assert.Equal(newEntity2, newEntity2.GetComponent<EcsSelfReference>().Self.Entity);
+        Assert.Equal(newEntity3, newEntity3.GetComponent<EcsSelfReference>().Self.Entity);
+
+        Assert.NotEqual(newEntity1, newEntity2);
+        Assert.NotEqual(newEntity2, newEntity3);
+        Assert.NotEqual(newEntity3, newEntity1);
+    }
+
+    [Fact]
     public void CopyFrom_UpdatesOtherReferences()
     {
         var srcWorld = new EcsWorld();
