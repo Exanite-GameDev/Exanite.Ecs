@@ -5,16 +5,21 @@ using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 public partial class EcsCommandBuffer
 {
+    /// <remarks>
+    /// Stores temporary data. Clear before use.
+    /// </remarks>
+    private readonly OrderedListSet<ComponentId> tempComponentSet = [];
+
     private struct EntityState
     {
         public bool IsCreated;
-        public bool IsDestroyed;
         public Dictionary<ComponentId, SetterId>? Sets;
         public OrderedListSet<ComponentId>? Removes;
 
@@ -57,95 +62,367 @@ public partial class EcsCommandBuffer
     private void ExecuteInternal()
     {
         using var _ = World.AcquireCommandBuffer(out var recursiveCommandBuffer);
-
-        // TODO: Decide if I want to coalesce sets followed by removes
-        // Same with creates followed by destroys
-        // I probably do, since prefabs can have repeated sets and removes.
-
-        // TODO: Add pooling
-        var archetypesToDestroy = new List<Archetype>();
-        var entityStates = new Dictionary<EntityId, EntityState>();
-        var actions = new List<Action>();
-
-        // Preprocess
-        foreach (var command in state.Commands)
+        using (ListPool<EntityId>.Acquire(out var entitiesToDestroy))
+        using (ListPool<Archetype>.Acquire(out var archetypesToDestroy))
+        using (DictionaryPool<EntityId, EntityState>.Acquire(out var entityStates))
+        using (ListPool<Action>.Acquire(out var actions))
         {
-            switch (command.Type)
+            // Preprocess
+            foreach (var command in state.Commands)
             {
-                case CommandType.CreateEntity:
+                switch (command.Type)
                 {
-                    var typedCommand = state.CreateEntityCommands[command.Index];
-                    ref var entityState = ref GetEntityState(typedCommand.EntityId);
-                    entityState.IsCreated = true;
-
-                    break;
-                }
-                case CommandType.DestroyEntity:
-                {
-                    var typedCommand = state.DestroyEntityCommands[command.Index];
-                    ref var entityState = ref GetEntityState(typedCommand.EntityId);
-                    entityState.IsDestroyed = true;
-
-                    break;
-                }
-                case CommandType.DestroyArchetypeView:
-                {
-                    var typedCommand = state.DestroyArchetypeViewCommands[command.Index];
-                    foreach (var archetype in typedCommand.View.Archetypes)
+                    case CommandType.CreateEntity:
                     {
-                        EnsureIsFromCurrentWorld(archetype);
-                        archetypesToDestroy.Add(archetype);
+                        var typedCommand = state.CreateEntityCommands[command.Index];
+                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
+                        entityState.IsCreated = true;
+
+                        break;
                     }
+                    case CommandType.DestroyEntity:
+                    {
+                        var typedCommand = state.DestroyEntityCommands[command.Index];
+                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
+                        entityState.IsCreated = false;
+                        entitiesToDestroy.Add(typedCommand.EntityId);
 
-                    break;
+                        break;
+                    }
+                    case CommandType.DestroyArchetypeView:
+                    {
+                        var typedCommand = state.DestroyArchetypeViewCommands[command.Index];
+                        foreach (var archetype in typedCommand.View.Archetypes)
+                        {
+                            EnsureIsFromCurrentWorld(archetype);
+                            archetypesToDestroy.Add(archetype);
+                        }
+
+                        break;
+                    }
+                    case CommandType.SetComponent:
+                    {
+                        var typedCommand = state.SetComponentCommands[command.Index];
+                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
+
+                        var sets = entityState.GetOrAcquireSets();
+                        sets[typedCommand.SetterId.ComponentId] = typedCommand.SetterId;
+
+                        break;
+                    }
+                    case CommandType.RemoveComponent:
+                    {
+                        var typedCommand = state.RemoveComponentCommands[command.Index];
+                        ref var entityState = ref GetEntityState(typedCommand.EntityId);
+
+                        var removes = entityState.GetOrAcquireRemoves();
+                        removes.Add(typedCommand.ComponentId);
+
+                        break;
+                    }
+                    case CommandType.DeferredAction:
+                    {
+                        var typedCommand = state.DeferredActionCommands[command.Index];
+                        actions.Add(typedCommand.Action);
+
+                        break;
+                    }
+                    default: throw ExceptionUtility.NotSupportedEnumValue(command.Type);
                 }
-                case CommandType.SetComponent:
-                {
-                    var typedCommand = state.SetComponentCommands[command.Index];
-                    ref var entityState = ref GetEntityState(typedCommand.EntityId);
+            }
 
-                    var sets = entityState.GetOrAcquireSets();
-                    sets[typedCommand.SetterId.ComponentId] = typedCommand.SetterId;
+            // Apply changes
+            {
+                DestroyEntities(recursiveCommandBuffer, archetypesToDestroy, entitiesToDestroy);
+                CreateAndApplyStructuralChanges(recursiveCommandBuffer, entityStates);
+            }
 
-                    break;
-                }
-                case CommandType.RemoveComponent:
-                {
-                    var typedCommand = state.RemoveComponentCommands[command.Index];
-                    ref var entityState = ref GetEntityState(typedCommand.EntityId);
+            // Raise events
+            // TODO
 
-                    var removes = entityState.GetOrAcquireRemoves();
-                    removes.Add(typedCommand.ComponentId);
+            // Release unused local IDs
+            World.Entities.ReleaseUnusedIds(localIdPool);
 
-                    break;
-                }
-                case CommandType.DeferredAction:
-                {
-                    var typedCommand = state.DeferredActionCommands[command.Index];
-                    actions.Add(typedCommand.Action);
+            // Clear commands
+            state.Clear(World);
 
-                    break;
-                }
-                default: throw ExceptionUtility.NotSupportedEnumValue(command.Type);
+            // Release entity state collections
+            foreach (var entityState in entityStates.Values)
+            {
+                entityState.Release();
+            }
+
+            ref EntityState GetEntityState(EntityId entityId)
+            {
+                return ref CollectionsMarshal.GetValueRefOrAddDefault(entityStates, entityId, out var _);
             }
         }
 
-        // Apply changes
-        // TODO
-
-        // Release unused local IDs
-        World.Entities.ReleaseUnusedIds(localIdPool);
-
-        // Clear commands
-        state.Clear(World);
-
+        // Run any newly enqueued commands
         recursiveCommandBuffer.Execute();
+    }
 
-        return;
-
-        ref EntityState GetEntityState(EntityId entityId)
+    private void DestroyEntities(EcsCommandBuffer recursiveCommandBuffer, List<Archetype> archetypes, List<EntityId> entities)
+    {
+        foreach (var archetype in archetypes)
         {
-            return ref CollectionsMarshal.GetValueRefOrAddDefault(entityStates, entityId, out var exists);
+            DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
         }
+
+        foreach (var entity in entities)
+        {
+            DestroyEntity(recursiveCommandBuffer, entity);
+        }
+    }
+
+    private void DestroyArchetypeEntities(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
+    {
+        if (archetype.EntityCount == 0)
+        {
+            return;
+        }
+
+        // Mark entities as dead and send events
+        foreach (var chunk in archetype.Chunks)
+        {
+            foreach (var entity in chunk.Entities)
+            {
+                // Raise component removed events
+                foreach (var componentId in entity.ComponentIds)
+                {
+                    var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                    eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                }
+
+                // Raise entity destroyed event
+                World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
+
+                // Release ID
+                World.Entities.ReleaseId(entity.EntityId);
+            }
+        }
+
+        // Clear the archetype
+        archetype.Clear();
+    }
+
+    private void DestroyEntity(EcsCommandBuffer recursiveCommandBuffer, EntityId entityId)
+    {
+        ref var location = ref World.Entities.GetLocation(entityId.Index);
+        if (location.Version != entityId.Version)
+        {
+            // Ignore destroyed entities
+            return;
+        }
+
+        // Raise component removed events
+        var entity = entityId.ToEntity(World);
+        var archetype = location.Chunk.Archetype;
+        foreach (var componentId in archetype.Components)
+        {
+            var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+        }
+
+        // Raise entity destroyed event
+        World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
+
+        // Notify archetype this entity is dead
+        location.Chunk.Archetype.RemoveEntity(location);
+
+        // Release ID
+        World.Entities.ReleaseId(entityId);
+    }
+
+    private void CreateAndApplyStructuralChanges(EcsCommandBuffer recursiveCommandBuffer, Dictionary<EntityId, EntityState> entityStates)
+    {
+        foreach (var (entityId, entityState) in entityStates)
+        {
+            ref var location = ref World.Entities.GetLocation(entityId.Index);
+            if (location.Version != entityId.Version)
+            {
+                // Ignore destroyed entities
+                continue;
+            }
+
+            var archetypeHash = new ArchetypeHash();
+            var componentIdSet = tempComponentSet;
+            componentIdSet.Clear();
+
+            if (!entityState.IsCreated)
+            {
+                // Add existing components to set
+                var archetype = location.Chunk.Archetype;
+
+                archetypeHash = archetype.Hash;
+                componentIdSet.UnionWith(archetype.Components);
+            }
+
+            // Consider component changes
+            var setChanged = false;
+            {
+                // Component sets
+                if (entityState.Sets != null)
+                {
+                    foreach (var componentId in entityState.Sets.Keys)
+                    {
+                        if (componentIdSet.Add(componentId))
+                        {
+                            archetypeHash = archetypeHash.Toggle(componentId);
+                            setChanged = true;
+                        }
+                    }
+                }
+
+                // Component removes
+                if (entityState.Removes != null)
+                {
+                    foreach (var componentId in entityState.Removes)
+                    {
+                        if (componentIdSet.Remove(componentId))
+                        {
+                            entityState.Sets?.Remove(componentId);
+                            archetypeHash = archetypeHash.Toggle(componentId);
+                            setChanged = true;
+                        }
+                    }
+                }
+            }
+
+            // Apply structural changes
+            if (entityState.IsCreated)
+            {
+                var archetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
+                archetype.AddEntity(entityId, ref location);
+            }
+            else if (setChanged)
+            {
+                var srcArchetype = location.Chunk.Archetype;
+                var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
+                if (srcArchetype != dstArchetype)
+                {
+                    // Migrate the entity
+                    srcArchetype.MigrateEntity(entityId, dstArchetype, ref location);
+                }
+            }
+
+            // Write component values
+            if (entityState.Sets != null)
+            {
+                foreach (var setter in entityState.Sets.Values)
+                {
+                    state.Setters.Write(setter, location);
+                }
+            }
+        }
+
+        // if (entityModifications.Count > 0)
+        // {
+        //     // Calculate the new archetype for the entity
+        //     foreach (var (entity, modification) in entityModifications)
+        //     {
+        //         if (!entity.IsAlive)
+        //         {
+        //             continue;
+        //         }
+        //
+        //         var archetypeBeforeMove = World.Entities.GetArchetype(entity.EntityId);
+        //         var componentsBeforeMove = archetypeBeforeMove.Components;
+        //
+        //         // Initialize componentsAfterMove with componentsBeforeMove
+        //         var componentsAfterMove = tempComponentsAfterMove;
+        //         componentsAfterMove.Clear();
+        //         componentsAfterMove.UnionWith(componentsBeforeMove);
+        //
+        //         // Check if a move is required
+        //         var moveRequired = false;
+        //         var hash = archetypeBeforeMove.Hash;
+        //         {
+        //             // Component adds/sets
+        //             if (modification.Sets != null)
+        //             {
+        //                 foreach (var id in modification.Sets.Keys)
+        //                 {
+        //                     if (componentsAfterMove.Add(id))
+        //                     {
+        //                         hash = hash.Toggle(id);
+        //                         moveRequired = true;
+        //                     }
+        //                 }
+        //             }
+        //
+        //             // Component removes
+        //             if (modification.Removes != null)
+        //             {
+        //                 foreach (var remove in modification.Removes)
+        //                 {
+        //                     if (componentsAfterMove.Remove(remove))
+        //                     {
+        //                         hash = hash.Toggle(remove);
+        //                         moveRequired = true;
+        //                     }
+        //                 }
+        //
+        //                 // Recycle remove set
+        //                 modification.Removes.Clear();
+        //                 SimplePool.Release(modification.Removes);
+        //             }
+        //         }
+        //
+        //         // Get the location for the entity, moving it to a new archetype first if necessary
+        //         EntityLocation location;
+        //         if (moveRequired)
+        //         {
+        //             // Raise component removed events
+        //             foreach (var componentId in componentsBeforeMove)
+        //             {
+        //                 if (!componentsAfterMove.Contains(componentId))
+        //                 {
+        //                     archetypeBeforeMove.Lookup.ComponentEventDispatcherByComponentId[componentId.Value].OnComponentRemoved(recursiveCommandBuffer, entity);
+        //                 }
+        //             }
+        //
+        //             // Get the new archetype we're moving to
+        //             var dstArchetype = World.GetOrCreateArchetype(componentsAfterMove.AsComponentIdSet(), hash);
+        //
+        //             // Migrate the entity across
+        //             location = World.MigrateEntity(entity.EntityId, dstArchetype);
+        //         }
+        //         else
+        //         {
+        //             location = World.Entities.GetLocation(entity.EntityId);
+        //         }
+        //
+        //         if (modification.Sets != null)
+        //         {
+        //             // Run all setters
+        //             foreach (var setter in modification.Sets.Values)
+        //             {
+        //                 setters.Write(setter, location);
+        //             }
+        //
+        //             // Raise component added/modified events
+        //             foreach (var setter in modification.Sets.Values)
+        //             {
+        //                 var eventDispatcher = location.Chunk.Lookup.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
+        //                 if (componentsBeforeMove.Contains(setter.ComponentId))
+        //                 {
+        //                     eventDispatcher.OnComponentModified(recursiveCommandBuffer, entity);
+        //                 }
+        //                 else
+        //                 {
+        //                     eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+        //                 }
+        //             }
+        //         }
+        //
+        //         // Recycle setters
+        //         if (modification.Sets != null)
+        //         {
+        //             modification.Sets.Clear();
+        //             SimplePool.Release(modification.Sets);
+        //         }
+        //     }
+        // }
     }
 }

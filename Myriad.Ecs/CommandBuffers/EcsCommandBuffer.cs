@@ -203,6 +203,13 @@ public sealed partial class EcsCommandBuffer
             return;
         }
 
+        // Release used entity IDs
+        // Do not reuse these without releasing since external callers already have access to them
+        foreach (var command in state.CreateEntityCommands)
+        {
+            World.Entities.ReleaseId(command.EntityId);
+        }
+
         // Release unused local IDs
         World.Entities.ReleaseUnusedIds(localIdPool);
 

@@ -25,13 +25,6 @@ public partial class EcsCommandBuffer
 
         public void Clear(EcsWorld world)
         {
-            // Release used entity IDs
-            // Do not reuse these without releasing since external callers already have access to them
-            foreach (var command in CreateEntityCommands)
-            {
-                world.Entities.ReleaseId(command.EntityId);
-            }
-
             Commands.Clear();
 
             CreateEntityCommands.Clear();

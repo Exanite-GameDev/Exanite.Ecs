@@ -225,12 +225,4 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     {
         return GetOrCreateArchetype(components.AsComponentIdSet());
     }
-
-    internal ref EntityLocation MigrateEntity(EntityId entity, Archetype dstArchetype)
-    {
-        ref var location = ref Entities.GetLocation(entity);
-        location.Chunk.Archetype.MigrateTo(entity, ref location, dstArchetype);
-
-        return ref location;
-    }
 }

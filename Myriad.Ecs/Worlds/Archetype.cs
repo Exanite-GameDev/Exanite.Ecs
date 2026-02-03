@@ -85,18 +85,6 @@ public sealed class Archetype
         Lookup = new ArchetypeComponentLookup(components);
     }
 
-    internal ref EntityLocation CreateEntity(EcsCommandBuffer commandBuffer, EntityId entityId)
-    {
-        // Add the entity to this archetype
-        ref var location = ref World.Entities.GetLocation(entityId);
-        AddEntity(entityId, ref location);
-
-        // Raise entity created event
-        World.EventBus.Raise(new EntityCreatedEvent(commandBuffer, entityId.ToEntity(World)));
-
-        return ref location;
-    }
-
     /// <summary>
     /// Destroy every Entity in this archetype
     /// </summary>
@@ -190,13 +178,9 @@ public sealed class Archetype
         OnChunkEntityRemoved(location.Chunk);
     }
 
-    internal void MigrateTo(EntityId entity, ref EntityLocation location, Archetype dstArchetype)
+    internal void MigrateEntity(EntityId entity, Archetype dstArchetype, ref EntityLocation location)
     {
-        // Early exit if we're migrating to where we already are!
-        if (dstArchetype == this)
-        {
-            return;
-        }
+        GuardUtility.IsFalse(dstArchetype == this, "Destination archetype is the same as the source archetype");
 
         // Do the actual copying
         var srcChunk = location.Chunk;
