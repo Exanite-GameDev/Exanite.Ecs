@@ -100,12 +100,10 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
         if (componentCopied != null)
         {
-            for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
+            foreach (var chunk in archetype.Chunks)
             {
-                var chunk = archetype.Chunks[chunkI];
-                for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
+                foreach (var entity in chunk.Entities)
                 {
-                    var entity = chunk.Entities[entityI];
                     ref var component = ref entity.Get<T>();
 
                     componentCopied!.Invoke(ref component, entity.World, lookup);
@@ -115,25 +113,22 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
         if (componentSelfReference != null)
         {
-            for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
+            foreach (var chunk in archetype.Chunks)
             {
-                var chunk = archetype.Chunks[chunkI];
-                for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
-                {
-                    var entity = chunk.Entities[entityI];
-                    ref var component = ref entity.Get<T>();
+                var components = chunk.GetSpan<T>();
+                var entities = chunk.Entities;
 
-                    componentSelfReference!.Invoke(ref component, entity);
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    componentSelfReference!.Invoke(ref components[i], entities[i]);
                 }
             }
         }
 
-        for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
+        foreach (var chunk in archetype.Chunks)
         {
-            var chunk = archetype.Chunks[chunkI];
-            for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
+            foreach (var entity in chunk.Entities)
             {
-                var entity = chunk.Entities[entityI];
                 ref var component = ref entity.Get<T>();
 
                 entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
