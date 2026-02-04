@@ -44,14 +44,11 @@ internal struct ArchetypeComponentLookup
         Array.Fill(ColumnIndexByComponentId, -1);
 
         // Fill previously mentioned maps
-        var columnIndex = 0;
-        foreach (var component in components)
+        for (var i = 0; i < components.Count; i++)
         {
-            ComponentIdByColumnIndex[columnIndex] = component;
-
-            ColumnIndexByComponentId[component.Value] = columnIndex;
-
-            columnIndex++;
+            var component = components[i];
+            ComponentIdByColumnIndex[i] = component;
+            ColumnIndexByComponentId[component.Value] = i;
         }
 
         // Create a sparse map from component ID to component dispatcher
