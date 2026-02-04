@@ -5,7 +5,7 @@ Exanite.Myriad.Ecs is a high performance Entity-Component-System (ECS) for C#.
 This is a fork of Myriad.ECS, which can be found here: https://github.com/martindevans/Myriad.ECS \
 This repository has been heavily modified for use in Exanite.Engine (engine is currently private).
 
-Also note, this ECS is not yet battle-tested. Many changes were made to the ECS recently (as of January 2026), and while I consider this ECS feature complete, there can still be many smaller issues that are yet to be discovered and fixed.
+Also note, this ECS is not yet battle-tested. Many changes were made to the ECS recently (as of January 2026), and while I consider this ECS feature complete, there can still be many smaller issues that are yet to be discovered and fixed. Also, no benchmarks yet. Performance is not my current focus.
 
 ## Design goals
 
