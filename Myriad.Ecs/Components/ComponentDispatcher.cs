@@ -46,22 +46,22 @@ internal abstract class ComponentDispatcher
 
     public interface IComponentFactory<out TReturn>
     {
-        public TReturn Create<TComponent>() where TComponent : IComponent;
+        public TReturn Create<T>() where T : IComponent;
     }
 
     public interface IComponentFactory<in TInput, out TReturn>
     {
-        public TReturn Create<TComponent>(TInput input) where TComponent : IComponent;
+        public TReturn Create<T>(TInput input) where T : IComponent;
     }
 
     public interface IComponentAction
     {
-        public void Invoke<TComponent>() where TComponent : IComponent;
+        public void Invoke<T>() where T : IComponent;
     }
 
     public interface IComponentAction<in TInput>
     {
-        public void Invoke<TComponent>(TInput input) where TComponent : IComponent;
+        public void Invoke<T>(TInput input) where T : IComponent;
     }
 }
 

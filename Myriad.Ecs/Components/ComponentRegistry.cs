@@ -120,9 +120,6 @@ internal static class ComponentRegistry
                 typesByComponentId[componentId] = type;
                 componentIdByType[type] = componentId;
 
-                // Initialize the array factory for this type
-                ArrayFactory.Initialize(type);
-
                 // Initialize the component dispatcher for this type
                 var dispatcherType = typeof(ComponentDispatcher<>).MakeGenericType(type);
                 var untypedDispatcher = Activator.CreateInstance(dispatcherType);
