@@ -34,6 +34,24 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
+    /// Check if this entity is pending creation.
+    /// </summary>
+    public bool IsPending
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get
+        {
+            if (Index == 0)
+            {
+                return false;
+            }
+
+            ref var location = ref World.Entities.GetLocation(Index);
+            return location.Version == Version && location.Chunk == null!;
+        }
+    }
+
+    /// <summary>
     /// Check if this entity is default initialized.
     /// </summary>
     internal bool IsDefault
@@ -164,15 +182,17 @@ public readonly partial record struct Entity : IComparable<Entity>
     public override string ToString()
     {
         var result = EntityId.ToString();
-        var location = World.Entities.GetLocation(EntityId.Index);
-
-        if (EntityId.Version != location.Version)
+        if (!IsDefault)
         {
-            result += " (Destroyed)";
-        }
-        else if (location.Chunk == null!)
-        {
-            result += " (Pending)";
+            var location = World.Entities.GetLocation(EntityId.Index);
+            if (EntityId.Version != location.Version)
+            {
+                result += " (Destroyed)";
+            }
+            else if (location.Chunk == null!)
+            {
+                result += " (Pending)";
+            }
         }
 
         return result;
