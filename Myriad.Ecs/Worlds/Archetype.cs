@@ -4,10 +4,8 @@ using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Worlds.Chunks;
 
-namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
+namespace Exanite.Myriad.Ecs.Worlds;
 
 /// <summary>
 /// An archetype contains all entities which share exactly the same set of components.
@@ -84,18 +82,6 @@ public sealed class Archetype
 
         // Initialize component lookup
         Lookup = new ArchetypeComponentLookup(components);
-    }
-
-    internal ref EntityLocation CreateEntity(EcsCommandBuffer commandBuffer, EntityId entityId)
-    {
-        // Add the entity to this archetype
-        ref var location = ref World.Entities.GetLocation(entityId);
-        AddEntity(entityId, ref location);
-
-        // Raise entity created event
-        World.EventBus.Raise(new EntityCreatedEvent(commandBuffer, entityId.ToEntity(World)));
-
-        return ref location;
     }
 
     /// <summary>
@@ -191,13 +177,9 @@ public sealed class Archetype
         OnChunkEntityRemoved(location.Chunk);
     }
 
-    internal void MigrateTo(EntityId entity, ref EntityLocation location, Archetype dstArchetype)
+    internal void MigrateEntity(EntityId entity, Archetype dstArchetype, ref EntityLocation location)
     {
-        // Early exit if we're migrating to where we already are!
-        if (dstArchetype == this)
-        {
-            return;
-        }
+        GuardUtility.IsFalse(dstArchetype == this, "Destination archetype is the same as the source archetype");
 
         // Do the actual copying
         var srcChunk = location.Chunk;

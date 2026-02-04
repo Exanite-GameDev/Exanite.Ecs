@@ -1,6 +1,4 @@
-﻿using Exanite.Myriad.Ecs.Worlds.Chunks;
-
-namespace Exanite.Myriad.Ecs.Worlds;
+﻿namespace Exanite.Myriad.Ecs.Worlds;
 
 internal struct EntityLocation
 {

@@ -1,5 +1,5 @@
 using System;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Worlds;
 using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;

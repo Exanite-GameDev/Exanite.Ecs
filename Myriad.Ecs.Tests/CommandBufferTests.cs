@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Exanite.Core.Runtime;
-using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Xunit;

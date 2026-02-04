@@ -2,7 +2,7 @@ using System;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
-namespace Exanite.Myriad.Ecs.Worlds.Archetypes;
+namespace Exanite.Myriad.Ecs.Worlds;
 
 /// <summary>
 /// Stores component type mapping information for an archetype and its chunks.

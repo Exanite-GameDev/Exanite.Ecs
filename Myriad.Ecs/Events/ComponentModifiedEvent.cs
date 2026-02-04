@@ -3,9 +3,17 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
-/// Raised after a component is either added or set.
+/// Raised after an existing component is explicitly set.
+/// <br/>
+/// Warning: Modifications without setting through the command buffer will NOT raise this event.
 /// </summary>
-public readonly ref struct ComponentAdded<T> where T : IComponent
+/// <remarks>
+/// This event does not provide the old value because the event cannot guarantee that
+/// the component has not been modified since the previous <see cref="ComponentModifiedEvent{T}"/> event.
+/// <para/>
+/// Code that relies on the previous component value should store it manually.
+/// </remarks>
+public readonly ref struct ComponentModifiedEvent<T> where T : IComponent
 {
     /// <summary>
     /// A command buffer with which further operations can be enqueued.
@@ -20,7 +28,7 @@ public readonly ref struct ComponentAdded<T> where T : IComponent
     public readonly Entity Entity;
     public readonly ref T Component;
 
-    public ComponentAdded(EcsCommandBuffer commandBuffer, Entity entity, ref T component)
+    public ComponentModifiedEvent(EcsCommandBuffer commandBuffer, Entity entity, ref T component)
     {
         CommandBuffer = commandBuffer;
         Entity = entity;

@@ -4,8 +4,7 @@ using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
-using Exanite.Myriad.Ecs.Worlds.Chunks;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.Queries;
 

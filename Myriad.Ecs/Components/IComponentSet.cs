@@ -1,6 +1,6 @@
 namespace Exanite.Myriad.Ecs.Components;
 
-public interface IComponentSelfSet
+public interface IComponentSet
 {
     /// <summary>
     /// Called when the component is set on an entity.

@@ -1,4 +1,3 @@
-using System;
 using Exanite.Core.Events;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
@@ -230,7 +229,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Once_OnBufferedEntity_RaisesComponentAddedEvent()
+    public void SetComponent_Once_OnNewEntity_RaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -250,7 +249,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Once_OnWorldEntity_RaisesComponentAddedEvent()
+    public void SetComponent_Once_OnExistingEntity_RaisesComponentAddedEvent()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -285,7 +284,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Twice_InDifferentCommandBuffers_OnBufferedEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Twice_InDifferentCommandBuffers_OnNewEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -321,7 +320,7 @@ public class EventTests
     }
 
     [Fact]
-    public void SetComponent_Twice_InDifferentCommandBuffers_OnWorldEntity_RaisesComponentAddedAndComponentModifiedEvents()
+    public void SetComponent_Twice_InDifferentCommandBuffers_OnExistingEntity_RaisesComponentAddedAndComponentModifiedEvents()
     {
         var world = new EcsWorld();
         var handler = new WorldEventHandler().RegisterAll(world);
@@ -509,100 +508,21 @@ public class EventTests
     }
 
     [Fact]
-    public void ComponentDisposable_IsDisposed_WhenDestroyed()
-    {
-        var world = new EcsWorld();
-        var commandBuffer = world.AcquireCommandBuffer();
-
-        var disposeCount = 0;
-        var entity = commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            })
-            .Entity;
-
-        commandBuffer.Execute();
-        Assert.Equal(0, disposeCount);
-
-        commandBuffer.Destroy(entity);
-        commandBuffer.Execute();
-        Assert.Equal(1, disposeCount);
-    }
-
-    [Fact]
-    public void ComponentDisposable_IsDisposed_WhenOverwritten_InCommandBuffer()
-    {
-        var world = new EcsWorld();
-        var commandBuffer = world.AcquireCommandBuffer();
-
-        var disposeCount = 0;
-        var bufferedEntity = commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            });
-        Assert.Equal(0, disposeCount);
-
-        bufferedEntity.Set(new EcsDisposable()
-        {
-            DisposeAction = () => disposeCount++,
-        });
-        Assert.Equal(1, disposeCount);
-    }
-
-    [Fact]
-    public void ComponentDisposable_IsDisposed_WhenCommandBuffer_IsCleared()
-    {
-        var world = new EcsWorld();
-        var commandBuffer = world.AcquireCommandBuffer();
-
-        var disposeCount = 0;
-        commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            });
-        Assert.Equal(0, disposeCount);
-
-        commandBuffer.Clear();
-        Assert.Equal(1, disposeCount);
-    }
-
-    [Fact]
     public void DisposingWorld_ClearsCommandBuffer()
     {
         var world = new EcsWorld();
         var commandBuffer = world.AcquireCommandBuffer();
 
-        var disposeCount = 0;
-        commandBuffer.Create()
-            .Set(new EcsDisposable()
-            {
-                DisposeAction = () => disposeCount++,
-            });
-        Assert.Equal(0, disposeCount);
-
         world.Dispose();
         Assert.False(commandBuffer.HasBufferedOperations);
-    }
-
-    private struct EcsDisposable : IComponent, IDisposable
-    {
-        public required Action DisposeAction;
-
-        public void Dispose()
-        {
-            DisposeAction.Invoke();
-        }
     }
 
     private class WorldEventHandler :
         IEventHandler<EntityCreatedEvent>,
         IEventHandler<EntityDestroyedEvent>,
-        IEventHandler<ComponentCopied<Ecs0>>,
-        IEventHandler<ComponentAdded<Ecs0>>,
-        IEventHandler<ComponentModified<Ecs0>>,
+        IEventHandler<ComponentCopiedEvent<Ecs0>>,
+        IEventHandler<ComponentAddedEvent<Ecs0>>,
+        IEventHandler<ComponentModifiedEvent<Ecs0>>,
         IEventHandler<ComponentRemoved<Ecs0>>
     {
         public int EntityCreatedCount { get; private set; }
@@ -617,9 +537,9 @@ public class EventTests
         {
             world.EventBus.Register<EntityCreatedEvent>(this);
             world.EventBus.Register<EntityDestroyedEvent>(this);
-            world.EventBus.Register<ComponentCopied<Ecs0>>(this);
-            world.EventBus.Register<ComponentAdded<Ecs0>>(this);
-            world.EventBus.Register<ComponentModified<Ecs0>>(this);
+            world.EventBus.Register<ComponentCopiedEvent<Ecs0>>(this);
+            world.EventBus.Register<ComponentAddedEvent<Ecs0>>(this);
+            world.EventBus.Register<ComponentModifiedEvent<Ecs0>>(this);
             world.EventBus.Register<ComponentRemoved<Ecs0>>(this);
 
             return this;
@@ -635,17 +555,17 @@ public class EventTests
             EntityDestroyedCount++;
         }
 
-        public void OnEvent(ComponentCopied<Ecs0> e)
+        public void OnEvent(ComponentCopiedEvent<Ecs0> e)
         {
             ComponentCopiedCount++;
         }
 
-        public void OnEvent(ComponentAdded<Ecs0> e)
+        public void OnEvent(ComponentAddedEvent<Ecs0> e)
         {
             ComponentAddedCount++;
         }
 
-        public void OnEvent(ComponentModified<Ecs0> e)
+        public void OnEvent(ComponentModifiedEvent<Ecs0> e)
         {
             ComponentModifiedCount++;
         }

@@ -75,7 +75,7 @@ public class ImmutableOrderedListSet<T> : IReadOnlyList<T>, IEquatable<Immutable
         }
 
         var set = new OrderedListSet<T>();
-        set.AddRange(items.Keys);
+        set.UnionWith(items);
         return new ImmutableOrderedListSet<T>(set);
     }
 

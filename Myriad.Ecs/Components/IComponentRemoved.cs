@@ -1,6 +1,6 @@
 namespace Exanite.Myriad.Ecs.Components;
 
-public interface IComponentSelfRemoved
+public interface IComponentRemoved
 {
     /// <summary>
     /// Called when the component is removed from an entity.

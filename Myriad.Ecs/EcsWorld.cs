@@ -10,7 +10,6 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
 namespace Exanite.Myriad.Ecs;
 
@@ -225,13 +224,5 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components)
     {
         return GetOrCreateArchetype(components.AsComponentIdSet());
-    }
-
-    internal ref EntityLocation MigrateEntity(EntityId entity, Archetype dstArchetype)
-    {
-        ref var location = ref Entities.GetLocation(entity);
-        location.Chunk.Archetype.MigrateTo(entity, ref location, dstArchetype);
-
-        return ref location;
     }
 }

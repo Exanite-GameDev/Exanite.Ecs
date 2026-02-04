@@ -3,7 +3,8 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
-/// Raised after an entity is created and added to the world.
+/// Raised after an entity is added to the world.
+/// Specifically, after its initial set of components are added.
 /// </summary>
 public readonly ref struct EntityCreatedEvent
 {

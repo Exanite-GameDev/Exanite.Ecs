@@ -1,6 +1,6 @@
 namespace Exanite.Myriad.Ecs.Components;
 
-public interface IComponentSelfAdded
+public interface IComponentAdded
 {
     /// <summary>
     /// Called when the component is added to an entity.

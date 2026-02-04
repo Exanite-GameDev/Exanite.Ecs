@@ -7,9 +7,8 @@ using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
-namespace Exanite.Myriad.Ecs.Worlds.Chunks;
+namespace Exanite.Myriad.Ecs.Worlds;
 
 public sealed class Chunk
 {

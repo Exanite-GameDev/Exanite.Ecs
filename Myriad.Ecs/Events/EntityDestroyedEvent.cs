@@ -3,7 +3,8 @@ using Exanite.Myriad.Ecs.CommandBuffers;
 namespace Exanite.Myriad.Ecs.Events;
 
 /// <summary>
-/// Raised before an entity is destroyed and removed from the world.
+/// Raised before an entity is removed from the world.
+/// Specifically, before its components are removed.
 /// </summary>
 public readonly ref struct EntityDestroyedEvent
 {

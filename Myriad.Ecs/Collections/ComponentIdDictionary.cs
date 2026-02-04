@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Worlds.Archetypes;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.Collections;
 
