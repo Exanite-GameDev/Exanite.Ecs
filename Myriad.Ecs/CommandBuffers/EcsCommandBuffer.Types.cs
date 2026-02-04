@@ -64,7 +64,7 @@ public partial class EcsCommandBuffer
 
         public void Invoke<T>(Input input) where T : IComponent
         {
-            commandBuffer.Set<T>(input.Entity, (T)input.Value);
+            commandBuffer.Set(input.Entity, (T)input.Value);
         }
 
         public readonly record struct Input(Entity Entity, object Value);
