@@ -261,7 +261,7 @@ public sealed class Chunk
         RemoveEntity(srcLocation);
     }
 
-    private struct ArrayFactory : ComponentDispatcher.IComponentFactory<int, Array>
+    private readonly struct ArrayFactory : ComponentDispatcher.IComponentFactory<int, Array>
     {
         public Array Create<T>(int capacity) where T : IComponent
         {
