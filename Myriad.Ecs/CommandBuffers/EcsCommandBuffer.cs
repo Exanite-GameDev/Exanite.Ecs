@@ -22,7 +22,7 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// where adding/removing multiple components causes the entity to be
 /// copied between multiple archetypes.
 /// <para/>
-/// Fully ordered events without dropping of intermediate events was considered,
+/// Fully ordered events without dropping intermediate events was considered,
 /// but the performance cost is likely too high.
 /// <para/>
 /// If fully ordered events are required, it's possible to submit commands
