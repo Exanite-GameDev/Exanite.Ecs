@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Exanite.Myriad.Ecs.Components;
@@ -9,7 +8,6 @@ namespace Exanite.Myriad.Ecs.Components;
 /// <summary>
 /// Unique numeric ID for a type which implements IComponent.
 /// </summary>
-[DebuggerDisplay("{Type} ({Value})")]
 public readonly record struct ComponentId : IComparable<ComponentId>
 {
     private static readonly ConcurrentBag<ComponentId> registeredComponentIds = new();

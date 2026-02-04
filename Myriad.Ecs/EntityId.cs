@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Exanite.Myriad.Ecs;
@@ -7,7 +6,6 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="EcsWorld"/>)
 /// </summary>
-[DebuggerDisplay("{Index}v{Version}")]
 internal readonly record struct EntityId : IComparable<EntityId>
 {
     /// <inheritdoc cref="Entity.Index"/>

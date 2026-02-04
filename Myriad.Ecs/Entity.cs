@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
@@ -12,7 +11,6 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// An <see cref="Entity"/> is an ID in the <see cref="World"/> which has a set of components associated with it.
 /// </summary>
-[DebuggerDisplay("{EntityId}")]
 public readonly partial record struct Entity : IComparable<Entity>
 {
     /// <summary>
