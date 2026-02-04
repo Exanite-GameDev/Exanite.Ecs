@@ -120,6 +120,7 @@ public partial class EcsCommandBuffer
         public void Clear()
         {
             perEntity.Clear();
+            perGroup.Clear();
             global.Clear();
         }
     }
