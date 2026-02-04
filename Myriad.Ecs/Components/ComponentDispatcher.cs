@@ -7,11 +7,11 @@ namespace Exanite.Myriad.Ecs.Components;
 
 internal abstract class ComponentDispatcher
 {
-    public abstract TReturn Create<TReturn>(IComponentFactory<TReturn> factory);
-    public abstract TReturn Create<TInput, TReturn>(IComponentFactory<TInput, TReturn> factory, TInput input);
+    public abstract TReturn Create<TFactory, TReturn>(TFactory factory) where TFactory : IComponentFactory<TReturn>;
+    public abstract TReturn Create<TFactory, TInput, TReturn>(TFactory factory, TInput input) where TFactory : IComponentFactory<TInput, TReturn>;
 
-    public abstract void Invoke(IComponentAction action);
-    public abstract void Invoke<TInput>(IComponentAction<TInput> action, TInput input);
+    public abstract void Invoke<TAction>(TAction action) where TAction : IComponentAction;
+    public abstract void Invoke<TAction, TInput>(TAction action, TInput input) where TAction : IComponentAction<TInput>;
 
     public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
     public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
@@ -117,11 +117,12 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
-    public override TReturn Create<TReturn>(IComponentFactory<TReturn> factory) => factory.Create<T>();
-    public override TReturn Create<TInput, TReturn>(IComponentFactory<TInput, TReturn> factory, TInput input) => factory.Create<T>(input);
+    public override TReturn Create<TFactory, TReturn>(TFactory factory) => factory.Create<T>();
+    public override TReturn Create<TFactory, TInput, TReturn>(TFactory factory, TInput input) => factory.Create<T>(input);
 
-    public override void Invoke(IComponentAction action) => action.Invoke<T>();
-    public override void Invoke<TInput>(IComponentAction<TInput> action, TInput input) => action.Invoke<T>(input);
+    public override void Invoke<TAction>(TAction action) => action.Invoke<T>();
+    public override void Invoke<TAction, TInput>(TAction action, TInput input) => action.Invoke<T>(input);
+
     public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
     {
         if (archetype.EntityCount == 0)
