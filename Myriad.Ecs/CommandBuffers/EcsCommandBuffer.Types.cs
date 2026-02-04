@@ -82,19 +82,19 @@ public partial class EcsCommandBuffer
 
         public Entity Get(Entity from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
         {
-            if (perEntity.TryGetValue((from, currentEntity, groupKey), out var result))
+            if (perEntity.TryGetValue((from, currentEntity, groupKey), out var to))
             {
-                return result;
+                return to;
             }
 
-            if (perGroup.TryGetValue((from, groupKey), out result))
+            if (perGroup.TryGetValue((from, groupKey), out to))
             {
-                return result;
+                return to;
             }
 
-            if (global.TryGetValue(from, out result))
+            if (global.TryGetValue(from, out to))
             {
-                return result;
+                return to;
             }
 
             return EntityLookupUtility.HandleLookupPolicy(from, policy);
