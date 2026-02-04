@@ -15,7 +15,7 @@ internal abstract class ComponentEventDispatcher
 
     internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
     {
-        component.Self = entity.GetStorableComponent<T>();
+        component.Self = entity.GetEcsRef<T>();
     }
 
     internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, IEntityLookup lookup) where T : IComponent, IComponentCopied
@@ -106,7 +106,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
                 for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
                 {
                     var entity = chunk.Entities[entityI];
-                    ref var component = ref entity.GetComponent<T>();
+                    ref var component = ref entity.Get<T>();
 
                     componentCopied!.Invoke(ref component, entity.World, lookup);
                 }
@@ -121,7 +121,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
                 for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
                 {
                     var entity = chunk.Entities[entityI];
-                    ref var component = ref entity.GetComponent<T>();
+                    ref var component = ref entity.Get<T>();
 
                     componentSelfReference!.Invoke(ref component, entity);
                 }
@@ -134,7 +134,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
             for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
             {
                 var entity = chunk.Entities[entityI];
-                ref var component = ref entity.GetComponent<T>();
+                ref var component = ref entity.Get<T>();
 
                 entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
             }
@@ -143,7 +143,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
     public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup)
     {
-        ref var component = ref entity.GetComponent<T>();
+        ref var component = ref entity.Get<T>();
 
         if (component is IComponentSelfReference<T>)
         {
@@ -160,7 +160,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
     public override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
-        ref var component = ref entity.GetComponent<T>();
+        ref var component = ref entity.Get<T>();
 
         if (component is IComponentSelfReference<T>)
         {
@@ -177,7 +177,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
     public override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
-        ref var component = ref entity.GetComponent<T>();
+        ref var component = ref entity.Get<T>();
 
         if (component is IComponentSet)
         {
@@ -189,7 +189,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
     public override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
-        ref var component = ref entity.GetComponent<T>();
+        ref var component = ref entity.Get<T>();
         entity.World.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
 
         if (component is IComponentRemoved)

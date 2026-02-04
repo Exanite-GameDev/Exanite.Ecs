@@ -157,7 +157,7 @@ public class WorldCopyTests
 
     private T GetSingle<T>(EcsWorld world) where T : IComponent
     {
-        return new QueryFilter().Include<T>().Build(world).First().GetComponent<T>();
+        return new QueryFilter().Include<T>().Build(world).First().Get<T>();
     }
 
     private struct EcsSelfReference : IComponent, IComponentSelfReference<EcsSelfReference>

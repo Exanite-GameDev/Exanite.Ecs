@@ -84,9 +84,9 @@ public class EntityCopyTests
         dstCommandBuffer.Execute();
 
         Assert.Equal(srcWorld, GetSingle<EcsSelfReference>(srcWorld).Self.Entity.World);
-        Assert.Equal(newEntity1, newEntity1.GetComponent<EcsSelfReference>().Self.Entity);
-        Assert.Equal(newEntity2, newEntity2.GetComponent<EcsSelfReference>().Self.Entity);
-        Assert.Equal(newEntity3, newEntity3.GetComponent<EcsSelfReference>().Self.Entity);
+        Assert.Equal(newEntity1, newEntity1.Get<EcsSelfReference>().Self.Entity);
+        Assert.Equal(newEntity2, newEntity2.Get<EcsSelfReference>().Self.Entity);
+        Assert.Equal(newEntity3, newEntity3.Get<EcsSelfReference>().Self.Entity);
 
         Assert.NotEqual(newEntity1, newEntity2);
         Assert.NotEqual(newEntity2, newEntity3);
@@ -116,20 +116,20 @@ public class EntityCopyTests
         dstCommandBuffer.Execute();
 
         // Check structure
-        Assert.True(newEntity.HasComponent<Ecs1>());
-        Assert.True(newEntity.HasComponent<Ecs2>());
-        Assert.True(newEntity.HasComponent<Ecs3>());
-        Assert.True(newEntity.HasComponent<EcsSelfReference>());
-        Assert.True(newEntity.HasComponent<EcsByte>());
+        Assert.True(newEntity.Has<Ecs1>());
+        Assert.True(newEntity.Has<Ecs2>());
+        Assert.True(newEntity.Has<Ecs3>());
+        Assert.True(newEntity.Has<EcsSelfReference>());
+        Assert.True(newEntity.Has<EcsByte>());
 
         // Check references
-        Assert.Equal(prefab1, prefab1.GetComponent<EcsSelfReference>().Self.Entity);
-        Assert.Equal(prefab2, prefab2.GetComponent<EcsSelfReference>().Self.Entity);
-        Assert.Equal(prefab3, prefab3.GetComponent<EcsSelfReference>().Self.Entity);
-        Assert.Equal(newEntity, newEntity.GetComponent<EcsSelfReference>().Self.Entity);
+        Assert.Equal(prefab1, prefab1.Get<EcsSelfReference>().Self.Entity);
+        Assert.Equal(prefab2, prefab2.Get<EcsSelfReference>().Self.Entity);
+        Assert.Equal(prefab3, prefab3.Get<EcsSelfReference>().Self.Entity);
+        Assert.Equal(newEntity, newEntity.Get<EcsSelfReference>().Self.Entity);
 
         // Last set should take precedence
-        Assert.Equal(3, newEntity.GetComponent<EcsByte>().Value);
+        Assert.Equal(3, newEntity.Get<EcsByte>().Value);
     }
 
     [Fact]
@@ -158,10 +158,10 @@ public class EntityCopyTests
         dstCommandBuffer.Execute();
 
         // Check structure
-        Assert.True(newEntity.HasComponent<Ecs0>());
-        Assert.True(newEntity.HasComponent<Ecs1>());
-        Assert.True(newEntity.HasComponent<Ecs2>());
-        Assert.False(newEntity.HasComponent<Ecs3>());
+        Assert.True(newEntity.Has<Ecs0>());
+        Assert.True(newEntity.Has<Ecs1>());
+        Assert.True(newEntity.Has<Ecs2>());
+        Assert.False(newEntity.Has<Ecs3>());
     }
 
     [Fact]
@@ -188,12 +188,12 @@ public class EntityCopyTests
         dstCommandBuffer.Execute();
 
         // Check structure
-        Assert.True(newEntity.HasComponent<EcsInt16>());
-        Assert.True(newEntity.HasComponent<EcsInt32>());
+        Assert.True(newEntity.Has<EcsInt16>());
+        Assert.True(newEntity.Has<EcsInt32>());
 
         // Check values
-        Assert.Equal(16, newEntity.GetComponent<EcsInt16>().Value);
-        Assert.Equal(123, newEntity.GetComponent<EcsInt32>().Value);
+        Assert.Equal(16, newEntity.Get<EcsInt16>().Value);
+        Assert.Equal(123, newEntity.Get<EcsInt32>().Value);
     }
 
     [Fact]
@@ -237,7 +237,7 @@ public class EntityCopyTests
         var srcChild2 = srcCommandBuffer.Create().Set(new EcsTransform()).Entity;
         var srcRoot = srcCommandBuffer.Create().Set(new EcsTransform()
         {
-            Children = [srcChild1.GetStorableComponentUnchecked<EcsTransform>(), srcChild2.GetStorableComponentUnchecked<EcsTransform>()],
+            Children = [srcChild1.GetEcsRefUnchecked<EcsTransform>(), srcChild2.GetEcsRefUnchecked<EcsTransform>()],
         });
 
         srcCommandBuffer.Execute();
@@ -254,9 +254,9 @@ public class EntityCopyTests
 
         foreach (var entity in new QueryFilter().Build(dstWorld).EnumerateEntities())
         {
-            Assert.True(entity.HasComponent<EcsTransform>());
+            Assert.True(entity.Has<EcsTransform>());
 
-            ref var transform = ref entity.GetComponent<EcsTransform>();
+            ref var transform = ref entity.Get<EcsTransform>();
             Assert.Equal(dstWorld, transform.Self.Entity.World);
 
             foreach (var child in transform.Children)
@@ -265,9 +265,9 @@ public class EntityCopyTests
             }
         }
 
-        Assert.Equal(2, dstRoot.GetComponent<EcsTransform>().Children.Count);
-        Assert.Equal(dstChild1, dstRoot.GetComponent<EcsTransform>().Children[0].Entity);
-        Assert.Equal(dstChild2, dstRoot.GetComponent<EcsTransform>().Children[1].Entity);
+        Assert.Equal(2, dstRoot.Get<EcsTransform>().Children.Count);
+        Assert.Equal(dstChild1, dstRoot.Get<EcsTransform>().Children[0].Entity);
+        Assert.Equal(dstChild2, dstRoot.Get<EcsTransform>().Children[1].Entity);
     }
 
     [Fact]
@@ -280,7 +280,7 @@ public class EntityCopyTests
         var srcChild2 = srcCommandBuffer.Create().Set(new EcsTransform()).Entity;
         var srcRoot = srcCommandBuffer.Create().Set(new EcsTransform()
         {
-            Children = [srcChild1.GetStorableComponentUnchecked<EcsTransform>(), srcChild2.GetStorableComponentUnchecked<EcsTransform>()],
+            Children = [srcChild1.GetEcsRefUnchecked<EcsTransform>(), srcChild2.GetEcsRefUnchecked<EcsTransform>()],
         });
 
         srcCommandBuffer.Execute();
@@ -299,17 +299,17 @@ public class EntityCopyTests
 
         foreach (var entity in new QueryFilter().Build(dstWorld).EnumerateEntities())
         {
-            Assert.True(entity.HasComponent<EcsTransform>());
+            Assert.True(entity.Has<EcsTransform>());
 
-            ref var transform = ref entity.GetComponent<EcsTransform>();
+            ref var transform = ref entity.Get<EcsTransform>();
             Assert.Equal(entity, transform.Self.Entity);
 
             if (transform.Children.Count == 2)
             {
-                var groupIndex = entity.GetComponent<EcsInt32>().Value;
+                var groupIndex = entity.Get<EcsInt32>().Value;
 
-                Assert.Equal(groupIndex, transform.Children[0].Entity.GetComponent<EcsInt32>().Value);
-                Assert.Equal(groupIndex, transform.Children[1].Entity.GetComponent<EcsInt32>().Value);
+                Assert.Equal(groupIndex, transform.Children[0].Entity.Get<EcsInt32>().Value);
+                Assert.Equal(groupIndex, transform.Children[1].Entity.Get<EcsInt32>().Value);
 
                 Assert.Equal(dstWorld, transform.Children[0].Entity.World);
                 Assert.Equal(dstWorld, transform.Children[1].Entity.World);
@@ -322,7 +322,7 @@ public class EntityCopyTests
 
     private T GetSingle<T>(EcsWorld world) where T : IComponent
     {
-        return new QueryFilter().Include<T>().Build(world).First().GetComponent<T>();
+        return new QueryFilter().Include<T>().Build(world).First().Get<T>();
     }
 
     private struct EcsSelfReference : IComponent, IComponentSelfReference<EcsSelfReference>

@@ -91,7 +91,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// This is very slow and the returned data is a copy of the original data.
     /// Avoid using this for anything other than debugging!
     /// </summary>
-    public object[] BoxedComponents => ComponentIds.Select(GetBoxedComponent).ToArray()!;
+    public object[] BoxedComponents => ComponentIds.Select(GetBoxed).ToArray()!;
 
     internal Entity(EntityId id, EcsWorld world)
     {
@@ -103,7 +103,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Check if this entity has a component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool HasComponent<T>() where T : IComponent
+    public bool Has<T>() where T : IComponent
     {
         return ComponentIds.Contains(ComponentId.Get<T>());
     }
@@ -113,7 +113,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ref T GetComponent<T>() where T : IComponent
+    public ref T Get<T>() where T : IComponent
     {
         ref var location = ref World.Entities.GetLocation(EntityId);
         return ref location.Chunk.Get<T>(location.IndexInChunk);
@@ -124,7 +124,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Ref<T> GetComponentRef<T>() where T : IComponent
+    public Ref<T> GetRef<T>() where T : IComponent
     {
         ref var location = ref World.Entities.GetLocation(EntityId);
         return location.Chunk.GetRef<T>(location.IndexInChunk);
@@ -135,10 +135,10 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public EcsRef<T> GetStorableComponent<T>() where T : IComponent
+    public EcsRef<T> GetEcsRef<T>() where T : IComponent
     {
         GuardUtility.IsTrue(IsAlive, "Entity does not exist");
-        GuardUtility.IsTrue(HasComponent<T>(), $"Component does not exist on entity: {GetType().Name}");
+        GuardUtility.IsTrue(Has<T>(), $"Component does not exist on entity: {GetType().Name}");
 
         return new EcsRef<T>(this);
     }
@@ -152,7 +152,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Accessing the component will still validate the reference.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public EcsRef<T> GetStorableComponentUnchecked<T>() where T : IComponent
+    public EcsRef<T> GetEcsRefUnchecked<T>() where T : IComponent
     {
         return new EcsRef<T>(this);
     }
@@ -161,7 +161,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public object? GetBoxedComponent(ComponentId id)
+    public object? GetBoxed(ComponentId id)
     {
         if (!IsAlive)
         {

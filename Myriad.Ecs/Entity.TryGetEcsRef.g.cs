@@ -17,7 +17,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0>(out EcsRef<T0> ref0) where T0 : IComponent
+    public bool TryGetEcsRef<T0>(out EcsRef<T0> ref0) where T0 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
 
@@ -44,7 +44,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1>(out EcsRef<T0> ref0, out EcsRef<T1> ref1) where T0 : IComponent where T1 : IComponent
+    public bool TryGetEcsRef<T0, T1>(out EcsRef<T0> ref0, out EcsRef<T1> ref1) where T0 : IComponent where T1 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -78,7 +78,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2) where T0 : IComponent where T1 : IComponent where T2 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2) where T0 : IComponent where T1 : IComponent where T2 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -119,7 +119,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -167,7 +167,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -222,7 +222,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -284,7 +284,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -353,7 +353,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -429,7 +429,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -512,7 +512,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -602,7 +602,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -699,7 +699,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -803,7 +803,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -914,7 +914,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12, out EcsRef<T13> ref13) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12, out EcsRef<T13> ref13) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -1032,7 +1032,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12, out EcsRef<T13> ref13, out EcsRef<T14> ref14) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12, out EcsRef<T13> ref13, out EcsRef<T14> ref14) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -1157,7 +1157,7 @@ public readonly partial record struct Entity
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetStorableComponent<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12, out EcsRef<T13> ref13, out EcsRef<T14> ref14, out EcsRef<T15> ref15) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent where T15 : IComponent
+    public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(out EcsRef<T0> ref0, out EcsRef<T1> ref1, out EcsRef<T2> ref2, out EcsRef<T3> ref3, out EcsRef<T4> ref4, out EcsRef<T5> ref5, out EcsRef<T6> ref6, out EcsRef<T7> ref7, out EcsRef<T8> ref8, out EcsRef<T9> ref9, out EcsRef<T10> ref10, out EcsRef<T11> ref11, out EcsRef<T12> ref12, out EcsRef<T13> ref13, out EcsRef<T14> ref14, out EcsRef<T15> ref15) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent where T15 : IComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
