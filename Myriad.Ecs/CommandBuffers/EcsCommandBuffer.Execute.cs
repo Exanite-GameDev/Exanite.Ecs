@@ -34,13 +34,7 @@ public partial class EcsCommandBuffer
             nextLocalIdPoolIndex = localIdPool.Length;
 
             // Clear commands
-            state.Clear();
-
-            // Release entity state collections
-            foreach (var entityState in state.EntityStates.Values)
-            {
-                entityState.Release();
-            }
+            state.Clear(World, true);
 
             HasBufferedOperations = false;
         }

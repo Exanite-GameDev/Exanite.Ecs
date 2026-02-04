@@ -276,22 +276,12 @@ public sealed partial class EcsCommandBuffer
             return;
         }
 
-        // Release used entity IDs
-        // Do not reuse these without releasing since external callers already have access to them
-        foreach (var (entityId, entityState) in state.EntityStates)
-        {
-            if (entityState.NeedsCreation)
-            {
-                World.Entities.ReleaseId(entityId);
-            }
-        }
-
         // Release unused local IDs
         World.Entities.ReleaseUnusedIds(localIdPool.AsSpan()[nextLocalIdPoolIndex..]);
         nextLocalIdPoolIndex = localIdPool.Length;
 
         // Clear commands
-        state.Clear();
+        state.Clear(World, false);
 
         HasBufferedOperations = false;
     }

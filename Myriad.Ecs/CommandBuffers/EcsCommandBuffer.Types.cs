@@ -21,8 +21,27 @@ public partial class EcsCommandBuffer
 
         public CommandState() {}
 
-        public void Clear()
+        public void Clear(EcsWorld world, bool hasExecuted)
         {
+            if (!hasExecuted)
+            {
+                // Release used entity IDs
+                // Do not reuse these without releasing since external callers already have access to them
+                foreach (var (entityId, entityState) in EntityStates)
+                {
+                    if (entityState.NeedsCreation)
+                    {
+                        world.Entities.ReleaseId(entityId);
+                    }
+                }
+            }
+
+            // Release pooled entity state collections
+            foreach (var entityState in EntityStates.Values)
+            {
+                entityState.Release();
+            }
+
             EntitiesToDestroy.Clear();
             ArchetypesToDestroy.Clear();
             EntityStates.Clear();
