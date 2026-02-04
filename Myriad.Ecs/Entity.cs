@@ -148,7 +148,8 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// No exception will be thrown if the entity does not have this component.
     /// </summary>
     /// <remarks>
-    /// This is useful for
+    /// This is useful when the entity has pending command buffer changes.
+    /// Accessing the component will still validate the reference.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public EcsRef<T> GetStorableComponentUnchecked<T>() where T : IComponent
