@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
@@ -29,16 +30,11 @@ public partial class EcsCommandBuffer
         finally
         {
             // Release unused local IDs
-            World.Entities.ReleaseUnusedIds(localIdPool);
+            World.Entities.ReleaseUnusedIds(localIdPool.AsSpan()[nextLocalIdPoolIndex..]);
+            nextLocalIdPoolIndex = localIdPool.Length;
 
             // Clear commands
-            state.Clear(World);
-
-            // Release entity state collections
-            foreach (var entityState in state.EntityStates.Values)
-            {
-                entityState.Release();
-            }
+            state.Clear(World, true);
 
             HasBufferedOperations = false;
         }
@@ -190,13 +186,21 @@ public partial class EcsCommandBuffer
                     }
                 }
 
-                // Raise component added events
+                // Raise component added/copied events
                 if (entityState.Sets != null)
                 {
-                    foreach (var componentId in entityState.Sets.Keys)
+                    foreach (var (componentId, setterId) in entityState.Sets)
                     {
                         var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                        if (setterId.IsPrefab)
+                        {
+                            state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
+                            eventDispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
+                        }
+                        else
+                        {
+                            eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                        }
                     }
                 }
 
@@ -217,8 +221,12 @@ public partial class EcsCommandBuffer
                 {
                     foreach (var componentId in entityState.Removes)
                     {
-                        var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                        eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                        if (srcArchetype.Components.Contains(componentId))
+                        {
+                            var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                        }
+
                     }
                 }
 

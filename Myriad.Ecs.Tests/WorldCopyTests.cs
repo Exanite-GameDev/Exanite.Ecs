@@ -43,7 +43,7 @@ public class WorldCopyTests
     }
 
     [Fact]
-    public void CopyTo_MaintainsComponentData()
+    public void CopyTo_CopiesComponentData()
     {
         var floatValue = 1f;
         var byteValue = (byte)2;
@@ -157,7 +157,7 @@ public class WorldCopyTests
 
     private T GetSingle<T>(EcsWorld world) where T : IComponent
     {
-        return new QueryFilter().Include<T>().Build(world).First().GetComponent<T>();
+        return new QueryFilter().Include<T>().Build(world).First().Get<T>();
     }
 
     private struct EcsSelfReference : IComponent, IComponentSelfReference<EcsSelfReference>
@@ -180,7 +180,7 @@ public class WorldCopyTests
             Self3 = Self.Entity;
         }
 
-        public void OnCopied(EcsWorld newWorld, EntityLookup lookup)
+        public void OnCopied(EcsWorld newWorld, IEntityLookup lookup)
         {
             Self2 = lookup.Get(Self2);
             Self3 = lookup.Get(Self3);

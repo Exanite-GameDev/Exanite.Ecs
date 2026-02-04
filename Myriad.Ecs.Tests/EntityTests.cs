@@ -64,7 +64,7 @@ public class EntityTests
 
         commandBuffer.Execute();
 
-        ref var c = ref entity.GetComponent<EcsInt16>();
+        ref var c = ref entity.Get<EcsInt16>();
         Assert.Equal(7, c.Value);
     }
 
@@ -133,15 +133,15 @@ public class EntityTests
 
         commandBuffer.Execute();
 
-        var component = (EcsInt16)entity.GetBoxedComponent(ComponentId.Get<EcsInt16>())!;
+        var component = (EcsInt16)entity.GetBoxed(ComponentId.Get<EcsInt16>())!;
         Assert.Equal(7, component.Value);
 
-        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<EcsInt32>()));
+        Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt32>()));
 
         commandBuffer.Destroy(entity);
         commandBuffer.Execute();
 
-        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<EcsInt16>()));
-        Assert.Null(entity.GetBoxedComponent(ComponentId.Get<EcsInt32>()));
+        Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt16>()));
+        Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt32>()));
     }
 }

@@ -16,12 +16,12 @@ public readonly record struct EcsRef<T> where T : IComponent
     /// Will throw an exception if the Entity is not alive or if the component does not exist.
     /// If <see cref="IsAlive"/> is <see langword="true"/>, then accessing this property is safe.
     /// </summary>
-    public ref T Value => ref Entity.GetComponent<T>();
+    public ref T Value => ref Entity.Get<T>();
 
     /// <summary>
     /// Is the component alive? If <see langword="false"/>, accessing <see cref="Value"/> will throw an exception.
     /// </summary>
-    public bool IsAlive => Entity.IsAlive && Entity.HasComponent<T>();
+    public bool IsAlive => Entity.IsAlive && Entity.Has<T>();
 
     internal EcsRef(Entity entity)
     {

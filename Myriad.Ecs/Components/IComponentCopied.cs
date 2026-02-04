@@ -8,5 +8,5 @@ public interface IComponentCopied
     /// <remarks>
     /// This is copied for the copy of the component in the destination world, but not the source world.
     /// </remarks>
-    public void OnCopied(EcsWorld newWorld, EntityLookup lookup);
+    public void OnCopied(EcsWorld newWorld, IEntityLookup lookup);
 }

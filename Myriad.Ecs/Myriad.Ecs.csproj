@@ -14,25 +14,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Entity.TryGetComponent.g.tt">
+    <None Update="Entity.TryGet.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Entity.TryGetComponent.g.cs</LastGenOutput>
+      <LastGenOutput>Entity.TryGet.g.cs</LastGenOutput>
     </None>
-    <None Update="Entity.TryGetStorableComponent.g.tt">
+    <None Update="Entity.TryGetEcsRef.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Entity.TryGetStorableComponent.g.cs</LastGenOutput>
+      <LastGenOutput>Entity.TryGetEcsRef.g.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Entity.TryGetComponent.g.cs">
+    <Compile Update="Entity.TryGet.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Entity.TryGetComponent.g.tt</DependentUpon>
+      <DependentUpon>Entity.TryGet.g.tt</DependentUpon>
     </Compile>
-    <Compile Update="Entity.TryGetStorableComponent.g.cs">
+    <Compile Update="Entity.TryGetEcsRef.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Entity.TryGetStorableComponent.g.tt</DependentUpon>
+      <DependentUpon>Entity.TryGetEcsRef.g.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

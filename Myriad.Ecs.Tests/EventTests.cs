@@ -50,6 +50,60 @@ public class EventTests
     }
 
     [Fact]
+    public void Entity_CopyFrom_RaisesComponentCopiedEvent()
+    {
+        var srcWorld = new EcsWorld();
+        var srcHandler = new WorldEventHandler().RegisterAll(srcWorld);
+        srcWorld.EventBus.RegisterForwardAllTo(new EventLogger());
+
+        // Create entities
+        var entityAddCount = 10;
+        using (srcWorld.AcquireCommandBuffer(out var commandBuffer))
+        {
+            for (var i = 0; i < entityAddCount; i++)
+            {
+                commandBuffer.Create()
+                    .Set(new Ecs0());
+            }
+
+            commandBuffer.Execute();
+        }
+
+        Assert.Equal(entityAddCount, srcHandler.EntityCreatedCount);
+        Assert.Equal(entityAddCount, srcHandler.ComponentAddedCount);
+        Assert.Equal(0, srcHandler.ComponentCopiedCount);
+
+        // Copy to new world
+        var dstWorld = new EcsWorld();
+        var dstHandler = new WorldEventHandler().RegisterAll(dstWorld);
+        dstWorld.EventBus.RegisterForwardAllTo(new EventLogger());
+
+        using (dstWorld.AcquireCommandBuffer(out var commandBuffer))
+        {
+            foreach (var archetype in srcWorld.Archetypes)
+            {
+                foreach (var chunk in archetype.Chunks)
+                {
+                    foreach (var entity in chunk.Entities)
+                    {
+                        commandBuffer.Create().CopyFrom(entity);
+                    }
+                }
+            }
+
+            commandBuffer.Execute();
+        }
+
+        Assert.Equal(entityAddCount, srcHandler.EntityCreatedCount);
+        Assert.Equal(entityAddCount, srcHandler.ComponentAddedCount);
+        Assert.Equal(0, srcHandler.ComponentCopiedCount);
+
+        Assert.Equal(entityAddCount, dstHandler.EntityCreatedCount);
+        Assert.Equal(0, dstHandler.ComponentAddedCount);
+        Assert.Equal(entityAddCount, dstHandler.ComponentCopiedCount);
+    }
+
+    [Fact]
     public void CreateEntity_RaisesEntityCreatedEvent()
     {
         var world = new EcsWorld();

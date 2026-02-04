@@ -54,7 +54,7 @@ public class EcsCommandBufferTests
             Assert.True(entity.IsAlive);
             Assert.Equal(1, world.ArchetypesList.Count);
             Assert.Equal(1, world.ArchetypesList.Single().Components.Count);
-            Assert.Equal(i, entity.GetComponent<EcsInt32>().Value);
+            Assert.Equal(i, entity.Get<EcsInt32>().Value);
         }
     }
 
@@ -191,7 +191,7 @@ public class EcsCommandBufferTests
 
         void ChangeComponent<T>(Entity entity, bool update) where T : struct, IComponent
         {
-            if (entity.HasComponent<T>() && !update)
+            if (entity.Has<T>() && !update)
             {
                 commandBuffer.Remove<T>(entity);
             }
@@ -256,8 +256,8 @@ public class EcsCommandBufferTests
         Assert.False(entities[1].IsAlive);
         Assert.True(entities[2].IsAlive);
 
-        Assert.Equal(1, entities[0].GetComponent<EcsFloat>().Value);
-        Assert.Equal(3, entities[2].GetComponent<EcsFloat>().Value);
+        Assert.Equal(1, entities[0].Get<EcsFloat>().Value);
+        Assert.Equal(3, entities[2].Get<EcsFloat>().Value);
     }
 
     [Fact]
@@ -335,7 +335,7 @@ public class EcsCommandBufferTests
         Assert.False(entities[1].IsAlive);
         Assert.True(entities[2].IsAlive);
 
-        Assert.Equal(3, entities[2].GetComponent<EcsFloat>().Value);
+        Assert.Equal(3, entities[2].Get<EcsFloat>().Value);
     }
 
     [Fact]
@@ -443,8 +443,8 @@ public class EcsCommandBufferTests
         buffer.Remove<EcsInt16>(entity);
         buffer.Execute();
 
-        Assert.Equal(123, entity.GetComponent<EcsFloat>().Value);
-        Assert.False(entity.HasComponent<EcsInt16>());
+        Assert.Equal(123, entity.Get<EcsFloat>().Value);
+        Assert.False(entity.Has<EcsInt16>());
     }
 
     [Fact]
@@ -462,9 +462,9 @@ public class EcsCommandBufferTests
         commandBuffer.Execute();
 
         // Check they are all present
-        Assert.True(entity.HasComponent<EcsFloat>());
-        Assert.True(entity.HasComponent<EcsInt16>());
-        Assert.True(entity.HasComponent<EcsInt32>());
+        Assert.True(entity.Has<EcsFloat>());
+        Assert.True(entity.Has<EcsInt16>());
+        Assert.True(entity.Has<EcsInt32>());
     }
 
     [Fact]
@@ -482,9 +482,9 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check the value has changed
-        Assert.True(entity.HasComponent<EcsFloat>());
-        Assert.True(entity.HasComponent<EcsInt16>());
-        Assert.Equal(789, entity.GetComponent<EcsInt16>().Value);
+        Assert.True(entity.Has<EcsFloat>());
+        Assert.True(entity.Has<EcsInt16>());
+        Assert.Equal(789, entity.Get<EcsInt16>().Value);
     }
 
     [Fact]
@@ -503,9 +503,9 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check the value has changed to the latest value
-        Assert.True(entity.HasComponent<EcsFloat>());
-        Assert.True(entity.HasComponent<EcsInt16>());
-        Assert.Equal(987, entity.GetComponent<EcsInt16>().Value);
+        Assert.True(entity.Has<EcsFloat>());
+        Assert.True(entity.Has<EcsInt16>());
+        Assert.Equal(987, entity.Get<EcsInt16>().Value);
     }
 
     [Fact]
@@ -526,8 +526,8 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check the value is gone
-        Assert.True(entity.HasComponent<EcsFloat>());
-        Assert.False(entity.HasComponent<EcsInt16>());
+        Assert.True(entity.Has<EcsFloat>());
+        Assert.False(entity.Has<EcsInt16>());
     }
 
     [Fact]
@@ -537,17 +537,43 @@ public class EcsCommandBufferTests
         var buffer = world.AcquireCommandBuffer();
 
         // Create an entity with 2 components
-        var entity = buffer.Create().Set(new EcsFloat(123)).Set(new EcsInt16(456)).Entity;
+        var entity = buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Entity;
         buffer.Execute();
 
-        // Remove a component
-        buffer.Remove<EcsInt32>(entity);
+        // Remove an invalid component
+        buffer.Remove<Ecs2>(entity);
         buffer.Execute();
 
         // Check entity is unchanged
-        Assert.True(entity.HasComponent<EcsFloat>());
-        Assert.True(entity.HasComponent<EcsInt16>());
-        Assert.False(entity.HasComponent<EcsInt32>());
+        Assert.True(entity.Has<Ecs0>());
+        Assert.True(entity.Has<Ecs1>());
+        Assert.False(entity.Has<Ecs2>());
+    }
+
+    /// <summary>
+    /// This catches a regression that <see cref="RemoveInvalidComponent"/> does not catch.
+    /// </summary>
+    [Fact]
+    public void RemoveInvalidComponent_WithStructuralChange()
+    {
+        var world = new EcsWorld();
+        var buffer = world.AcquireCommandBuffer();
+
+        // Create an entity with 2 components
+        var entity = buffer.Create().Set(new Ecs0()).Set(new Ecs1()).Entity;
+        buffer.Execute();
+
+        // Remove a component
+        buffer.Remove<Ecs1>(entity);
+
+        // Remove an invalid component
+        buffer.Remove<Ecs2>(entity);
+        buffer.Execute();
+
+        // Check entity is modified as expected
+        Assert.True(entity.Has<Ecs0>());
+        Assert.False(entity.Has<Ecs1>());
+        Assert.False(entity.Has<Ecs2>());
     }
 
     [Fact]
@@ -568,12 +594,12 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check entity structure is unchanged
-        Assert.True(entity.HasComponent<EcsFloat>());
-        Assert.True(entity.HasComponent<EcsInt16>());
-        Assert.False(entity.HasComponent<EcsInt32>());
+        Assert.True(entity.Has<EcsFloat>());
+        Assert.True(entity.Has<EcsInt16>());
+        Assert.False(entity.Has<EcsInt32>());
 
         // Check value is correct
-        Assert.Equal(789, entity.GetComponent<EcsInt16>().Value);
+        Assert.Equal(789, entity.Get<EcsInt16>().Value);
     }
 
     [Fact]
@@ -630,24 +656,24 @@ public class EcsCommandBufferTests
             {
                 switch (rng.Next(18))
                 {
-                    case 0: Assert.True(entity.HasComponent<Ecs0>()); break;
-                    case 1: Assert.True(entity.HasComponent<Ecs1>()); break;
-                    case 2: Assert.True(entity.HasComponent<Ecs2>()); break;
-                    case 3: Assert.True(entity.HasComponent<Ecs3>()); break;
-                    case 4: Assert.True(entity.HasComponent<Ecs4>()); break;
-                    case 5: Assert.True(entity.HasComponent<Ecs5>()); break;
-                    case 6: Assert.True(entity.HasComponent<Ecs6>()); break;
-                    case 7: Assert.True(entity.HasComponent<Ecs7>()); break;
-                    case 8: Assert.True(entity.HasComponent<Ecs8>()); break;
-                    case 9: Assert.True(entity.HasComponent<Ecs9>()); break;
-                    case 10: Assert.True(entity.HasComponent<Ecs10>()); break;
-                    case 11: Assert.True(entity.HasComponent<Ecs11>()); break;
-                    case 12: Assert.True(entity.HasComponent<Ecs12>()); break;
-                    case 13: Assert.True(entity.HasComponent<Ecs13>()); break;
-                    case 14: Assert.True(entity.HasComponent<Ecs14>()); break;
-                    case 15: Assert.True(entity.HasComponent<Ecs15>()); break;
-                    case 16: Assert.True(entity.HasComponent<Ecs16>()); break;
-                    case 17: Assert.True(entity.HasComponent<Ecs17>()); break;
+                    case 0: Assert.True(entity.Has<Ecs0>()); break;
+                    case 1: Assert.True(entity.Has<Ecs1>()); break;
+                    case 2: Assert.True(entity.Has<Ecs2>()); break;
+                    case 3: Assert.True(entity.Has<Ecs3>()); break;
+                    case 4: Assert.True(entity.Has<Ecs4>()); break;
+                    case 5: Assert.True(entity.Has<Ecs5>()); break;
+                    case 6: Assert.True(entity.Has<Ecs6>()); break;
+                    case 7: Assert.True(entity.Has<Ecs7>()); break;
+                    case 8: Assert.True(entity.Has<Ecs8>()); break;
+                    case 9: Assert.True(entity.Has<Ecs9>()); break;
+                    case 10: Assert.True(entity.Has<Ecs10>()); break;
+                    case 11: Assert.True(entity.Has<Ecs11>()); break;
+                    case 12: Assert.True(entity.Has<Ecs12>()); break;
+                    case 13: Assert.True(entity.Has<Ecs13>()); break;
+                    case 14: Assert.True(entity.Has<Ecs14>()); break;
+                    case 15: Assert.True(entity.Has<Ecs15>()); break;
+                    case 16: Assert.True(entity.Has<Ecs16>()); break;
+                    case 17: Assert.True(entity.Has<Ecs17>()); break;
                 }
             }
         }
@@ -683,27 +709,27 @@ public class EcsCommandBufferTests
 
         // Check 1 has everything expected
         Assert.Equal(4, entity0.ComponentIds.Count);
-        entity0.GetComponent<Ecs0>();
-        entity0.GetComponent<Ecs1>();
-        entity0.GetComponent<Ecs2>();
-        entity0.GetComponent<Ecs3>();
+        entity0.Get<Ecs0>();
+        entity0.Get<Ecs1>();
+        entity0.Get<Ecs2>();
+        entity0.Get<Ecs3>();
 
         // Check 2 has everything expected
         Assert.Equal(2, entity1.ComponentIds.Count);
-        entity1.GetComponent<Ecs1>();
-        entity1.GetComponent<Ecs2>();
+        entity1.Get<Ecs1>();
+        entity1.Get<Ecs2>();
 
         // Check 3 has everything expected
         Assert.Equal(3, entity2.ComponentIds.Count);
-        entity2.GetComponent<Ecs1>();
-        entity2.GetComponent<Ecs2>();
-        entity2.GetComponent<Ecs4>();
+        entity2.Get<Ecs1>();
+        entity2.Get<Ecs2>();
+        entity2.Get<Ecs4>();
 
         // Check other is unchanged
         Assert.Equal(3, entity3.ComponentIds.Count);
-        entity3.GetComponent<Ecs0>();
-        entity3.GetComponent<Ecs1>();
-        entity3.GetComponent<Ecs2>();
+        entity3.Get<Ecs0>();
+        entity3.Get<Ecs1>();
+        entity3.Get<Ecs2>();
     }
 
     [Fact]
@@ -721,8 +747,8 @@ public class EcsCommandBufferTests
         commandBuffer.Clear();
         commandBuffer.Execute();
 
-        Assert.True(entity.HasComponent<Ecs0>());
-        Assert.False(entity.HasComponent<Ecs1>());
+        Assert.True(entity.Has<Ecs0>());
+        Assert.False(entity.Has<Ecs1>());
     }
 
     [Fact]
@@ -758,8 +784,8 @@ public class EcsCommandBufferTests
         commandBuffer.Clear();
         commandBuffer.Execute();
 
-        Assert.True(entity.HasComponent<Ecs0>());
-        Assert.True(entity.HasComponent<Ecs1>());
+        Assert.True(entity.Has<Ecs0>());
+        Assert.True(entity.Has<Ecs1>());
     }
 
     [Fact]
@@ -778,8 +804,8 @@ public class EcsCommandBufferTests
         commandBuffer.Execute();
 
         Assert.True(entity.IsAlive);
-        Assert.True(entity.HasComponent<Ecs0>());
-        Assert.True(entity.HasComponent<Ecs1>());
+        Assert.True(entity.Has<Ecs0>());
+        Assert.True(entity.Has<Ecs1>());
     }
 
     [Fact]
@@ -798,7 +824,7 @@ public class EcsCommandBufferTests
         commandBuffer.Execute();
 
         Assert.True(entity.IsAlive);
-        Assert.True(entity.HasComponent<Ecs0>());
-        Assert.True(entity.HasComponent<Ecs1>());
+        Assert.True(entity.Has<Ecs0>());
+        Assert.True(entity.Has<Ecs1>());
     }
 }

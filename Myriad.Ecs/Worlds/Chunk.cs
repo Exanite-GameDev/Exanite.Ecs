@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
@@ -38,7 +37,7 @@ public sealed class Chunk
     /// <summary>
     /// Get the number of entities currently in this chunk.
     /// </summary>
-    public int EntityCount { get; private set; }
+    private int EntityCount { get; set; }
 
     /// <summary>
     /// All entities in this chunk.
@@ -133,7 +132,7 @@ public sealed class Chunk
     /// <remarks>
     /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
     /// </remarks>
-    internal void CopyFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, Dictionary<Entity, Entity> lookup)
+    internal void CopyFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, EntityLookup lookup)
     {
         for (var i = 0; i < srcChunk.componentColumns.Length; i++)
         {
@@ -152,7 +151,7 @@ public sealed class Chunk
             // Add the entity pair to the lookup dictionary
             var originalEntity = srcChunk.Entities[location.IndexInChunk];
             var newEntity = entityId.ToEntity(world);
-            lookup[originalEntity] = newEntity;
+            lookup.Add(originalEntity, newEntity);
 
             // Raise entity created event
             world.EventBus.Raise(new EntityCreatedEvent(recursiveCommandBuffer, newEntity));

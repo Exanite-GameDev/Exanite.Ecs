@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
@@ -18,8 +19,22 @@ namespace Exanite.Myriad.Ecs;
 /// </summary>
 public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 {
+    private static Lock IdLock = new();
+    private static int NextWorldId = 1;
+
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
+
+    /// <summary>
+    /// The unique identifier for this world.
+    /// </summary>
+    /// <remarks>
+    /// If too many worlds have been created,
+    /// this can overflow and lead to id collisions,
+    /// but this is mainly for debugging and
+    /// you have to create a lot of worlds to overflow.
+    /// </remarks>
+    public readonly int WorldId;
 
     internal EntityManager Entities = new();
 
@@ -44,6 +59,11 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     public EcsWorld()
     {
+        using (IdLock.EnterScope())
+        {
+            WorldId = NextWorldId++;
+        }
+
         allEntitiesQuery = new QueryFilter().Build(this);
 
         commandBufferPool = new Pool<EcsCommandBuffer>(
@@ -79,7 +99,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// Data in the target world will be overwritten.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public EntityLookup CopyTo(EcsWorld dstWorld)
+    public IEntityLookup CopyTo(EcsWorld dstWorld)
     {
         return CopyTo(dstWorld, allEntitiesQuery);
     }
@@ -89,7 +109,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// Data in the target world will be overwritten.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public EntityLookup CopyTo(EcsWorld dstWorld, IArchetypeView view)
+    public IEntityLookup CopyTo(EcsWorld dstWorld, IArchetypeView view)
     {
         dstWorld.Clear();
         return AddTo(dstWorld, view);
@@ -100,7 +120,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// Data in the target world will be kept.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public EntityLookup AddTo(EcsWorld dstWorld)
+    public IEntityLookup AddTo(EcsWorld dstWorld)
     {
         return AddTo(dstWorld, allEntitiesQuery);
     }
@@ -109,10 +129,10 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// Copies all entities and their components to the destination world.
     /// Data in the target world will be kept.
     /// </summary>
-    public EntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
+    public IEntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
     {
         using var _ = AcquireCommandBuffer(out var commandBuffer);
-        var rawLookup = new Dictionary<Entity, Entity>();
+        var lookup = new EntityLookup();
         foreach (var srcArchetype in view.Archetypes)
         {
             if (srcArchetype.EntityCount == 0)
@@ -123,11 +143,10 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
             foreach (var srcChunk in srcArchetype.Chunks)
             {
-                dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, rawLookup);
+                dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, lookup);
             }
         }
 
-        var lookup = new EntityLookup(rawLookup);
         foreach (var dstArchetype in dstWorld.Archetypes)
         {
             foreach (var componentId in dstArchetype.Lookup.ComponentIdByColumnIndex)

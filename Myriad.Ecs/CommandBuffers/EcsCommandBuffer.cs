@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Exanite.Core.Utilities;
@@ -49,7 +48,13 @@ public sealed partial class EcsCommandBuffer
     /// A pool of local IDs.
     /// These are bulk acquired to avoid thread contention.
     /// </summary>
-    private readonly List<EntityId> localIdPool = new();
+    private readonly EntityId[] localIdPool = new EntityId[EcsConstants.CommandBufferLocalIdCount];
+
+    /// <summary>
+    /// The index of the next ID to read from the local ID pool.
+    /// If this is greater than or equal to the count, this means that the pool is exhausted and should be refilled.
+    /// </summary>
+    private int nextLocalIdPoolIndex = EcsConstants.CommandBufferLocalIdCount;
 
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>.
@@ -75,16 +80,16 @@ public sealed partial class EcsCommandBuffer
     {
         EnsureIsExternallyMutable();
 
-        if (localIdPool.Count == 0)
+        if (nextLocalIdPoolIndex >= localIdPool.Length)
         {
             // Bulk acquire IDs if none available locally
             // This is to avoid thread contention
-            World.Entities.AcquireIds(localIdPool, EcsConstants.CommandBufferLocalIdCount);
+            World.Entities.AcquireIds(localIdPool);
+            nextLocalIdPoolIndex = 0;
         }
 
         // Acquire an ID
-        var entityId = localIdPool[^1];
-        localIdPool.RemoveAt(localIdPool.Count - 1);
+        var entityId = localIdPool[nextLocalIdPoolIndex++];
 
         // Store the command
         ref var entityState = ref GetEntityState(entityId);
@@ -93,6 +98,54 @@ public sealed partial class EcsCommandBuffer
         HasBufferedOperations = true;
 
         return new BufferedEntity(entityId.ToEntity(World), this);
+    }
+
+    /// <inheritdoc cref="CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
+    {
+        return CopyFromInternal(entity, prefab, entity);
+    }
+
+    /// <inheritdoc cref="CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab, Entity groupKey)
+    {
+        return CopyFromInternal(entity, prefab, groupKey);
+    }
+
+    /// <summary>
+    /// Copies all components from the target prefab onto the specified entity.
+    /// </summary>
+    /// <remarks>
+    /// The component types to copy are read at the time of recording; however, the component values are read at time of execution.
+    /// It is assumed that the prefab entity is not modified between now and when the command buffer is executed.
+    /// </remarks>
+    /// <param name="entity">The target entity.</param>
+    /// <param name="prefab">The prefab to copy components from.</param>
+    /// <param name="groupKey">
+    /// The entity used to group entity lookups.
+    /// Set this to the root entity of the hierarchy (or any consistent entity)
+    /// when spawning multiple hierarchies of entities that share prefabs.
+    /// </param>
+    private BufferedEntity CopyFromInternal(Entity entity, Entity prefab, Entity groupKey)
+    {
+        EnsureIsExternallyMutable();
+
+        // Store the commands
+        ref var entityState = ref GetEntityState(entity.EntityId);
+        var sets = entityState.GetOrAcquireSets();
+        foreach (var componentId in prefab.ComponentIds)
+        {
+            ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out _);
+            state.Setters.CreateFromPrefab(prefab, componentId, groupKey, ref setterId);
+
+            // Prevent the remove, if it exists
+            entityState.Removes?.Remove(componentId);
+        }
+
+        // Store the prefab for lookup purposes
+        state.Lookup.Add(prefab, entity, groupKey);
+
+        return new BufferedEntity(entity, this);
     }
 
     /// <summary>
@@ -109,8 +162,8 @@ public sealed partial class EcsCommandBuffer
         ref var entityState = ref GetEntityState(entity.EntityId);
 
         var sets = entityState.GetOrAcquireSets();
-        ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out var exists);
-        setterId = exists ? state.Setters.Replace(value, setterId) : state.Setters.Create(value);
+        ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out _);
+        state.Setters.CreateFromValue(value, ref setterId);
 
         // Prevent the remove, if it exists
         entityState.Removes?.Remove(componentId);
@@ -188,7 +241,8 @@ public sealed partial class EcsCommandBuffer
     /// Bulk destroy all entities in archetypes stored by the view.
     /// </summary>
     /// <remarks>
-    /// Note that the view is evaluated at time of execution.
+    /// The archetypes to destroy are read at the time of recording.
+    /// It is assumed that no new archetypes are added between now and when the command buffer is executed.
     /// </remarks>
     public EcsCommandBuffer Destroy(IArchetypeView view)
     {
@@ -238,21 +292,12 @@ public sealed partial class EcsCommandBuffer
             return;
         }
 
-        // Release used entity IDs
-        // Do not reuse these without releasing since external callers already have access to them
-        foreach (var (entityId, entityState) in state.EntityStates)
-        {
-            if (entityState.NeedsCreation)
-            {
-                World.Entities.ReleaseId(entityId);
-            }
-        }
-
         // Release unused local IDs
-        World.Entities.ReleaseUnusedIds(localIdPool);
+        World.Entities.ReleaseUnusedIds(localIdPool.AsSpan()[nextLocalIdPoolIndex..]);
+        nextLocalIdPoolIndex = localIdPool.Length;
 
         // Clear commands
-        state.Clear(World);
+        state.Clear(World, false);
 
         HasBufferedOperations = false;
     }

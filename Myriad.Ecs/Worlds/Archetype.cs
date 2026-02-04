@@ -121,9 +121,9 @@ public sealed class Archetype
     /// <remarks>
     /// This is designed to be called by <see cref="EcsWorld.AddTo(EcsWorld, IArchetypeView)"/>.
     /// </remarks>
-    internal void CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, Dictionary<Entity, Entity> lookup)
+    internal void CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, EntityLookup lookup)
     {
-        EntityCount += srcChunk.EntityCount;
+        EntityCount += srcChunk.Entities.Length;
 
         var newChunk = GetEmptyChunk();
         newChunk.CopyFrom(srcChunk, recursiveCommandBuffer, lookup);
@@ -194,7 +194,7 @@ public sealed class Archetype
         // Decrease archetype entity count
         EntityCount--;
 
-        switch (chunk.EntityCount)
+        switch (chunk.Entities.Length)
         {
             // If the chunk is empty remove it from this archetype entirely
             case 0:

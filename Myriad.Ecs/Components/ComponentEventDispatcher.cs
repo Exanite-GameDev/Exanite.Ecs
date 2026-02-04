@@ -7,17 +7,18 @@ namespace Exanite.Myriad.Ecs.Components;
 
 internal abstract class ComponentEventDispatcher
 {
-    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EntityLookup lookup);
+    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
+    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
     public abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
     public abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
     public abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
 
     internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
     {
-        component.Self = entity.GetStorableComponent<T>();
+        component.Self = entity.GetEcsRef<T>();
     }
 
-    internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, EntityLookup lookup) where T : IComponent, IComponentCopied
+    internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, IEntityLookup lookup) where T : IComponent, IComponentCopied
     {
         component.OnCopied(newWorld, lookup);
     }
@@ -42,7 +43,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 {
     private delegate void ComponentSelfReferenceAction(ref T component, Entity entity);
 
-    private delegate void ComponentCopiedAction(ref T component, EcsWorld newWorld, EntityLookup lookup);
+    private delegate void ComponentCopiedAction(ref T component, EcsWorld newWorld, IEntityLookup lookup);
 
     private delegate void ComponentAction(ref T component);
 
@@ -90,59 +91,71 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
         }
     }
 
-    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EntityLookup lookup)
+    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
     {
         if (archetype.EntityCount == 0)
         {
             return;
         }
 
+        if (componentSelfReference != null)
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                var components = chunk.GetSpan<T>();
+                var entities = chunk.Entities;
+
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    componentSelfReference!.Invoke(ref components[i], entities[i]);
+                }
+            }
+        }
+
         if (componentCopied != null)
         {
-            for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
+            foreach (var chunk in archetype.Chunks)
             {
-                var chunk = archetype.Chunks[chunkI];
-                for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
+                foreach (var entity in chunk.Entities)
                 {
-                    var entity = chunk.Entities[entityI];
-                    ref var component = ref entity.GetComponent<T>();
+                    ref var component = ref entity.Get<T>();
 
                     componentCopied!.Invoke(ref component, entity.World, lookup);
                 }
             }
         }
 
-        if (componentSelfReference != null)
+        foreach (var chunk in archetype.Chunks)
         {
-            for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
+            foreach (var entity in chunk.Entities)
             {
-                var chunk = archetype.Chunks[chunkI];
-                for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
-                {
-                    var entity = chunk.Entities[entityI];
-                    ref var component = ref entity.GetComponent<T>();
-
-                    componentSelfReference!.Invoke(ref component, entity);
-                }
-            }
-        }
-
-        for (var chunkI = archetype.Chunks.Length - 1; chunkI >= 0; chunkI--)
-        {
-            var chunk = archetype.Chunks[chunkI];
-            for (var entityI = chunk.Entities.Length - 1; entityI >= 0; entityI--)
-            {
-                var entity = chunk.Entities[entityI];
-                ref var component = ref entity.GetComponent<T>();
+                ref var component = ref entity.Get<T>();
 
                 entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
             }
         }
     }
 
+    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup)
+    {
+        ref var component = ref entity.Get<T>();
+
+        if (component is IComponentSelfReference<T>)
+        {
+            componentSelfReference!.Invoke(ref component, entity);
+        }
+
+        if (component is IComponentCopied)
+        {
+            componentCopied!.Invoke(ref component, entity.World, lookup);
+        }
+
+        entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
+    }
+
     public override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
-        ref var component = ref entity.GetComponent<T>();
+        ref var component = ref entity.Get<T>();
 
         if (component is IComponentSelfReference<T>)
         {
@@ -159,7 +172,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
     public override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
-        ref var component = ref entity.GetComponent<T>();
+        ref var component = ref entity.Get<T>();
 
         if (component is IComponentSet)
         {
@@ -171,7 +184,7 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
 
     public override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
-        ref var component = ref entity.GetComponent<T>();
+        ref var component = ref entity.Get<T>();
         entity.World.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
 
         if (component is IComponentRemoved)

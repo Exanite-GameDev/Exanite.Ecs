@@ -31,4 +31,16 @@ public readonly ref struct BufferedEntity
     {
         return CommandBuffer.Remove<T>(Entity);
     }
+
+    /// <inheritdoc cref="EcsCommandBuffer.CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity prefab)
+    {
+        return CommandBuffer.CopyFrom(Entity, prefab);
+    }
+
+    /// <inheritdoc cref="EcsCommandBuffer.CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity prefab, Entity groupKey)
+    {
+        return CommandBuffer.CopyFrom(Entity, prefab, groupKey);
+    }
 }
