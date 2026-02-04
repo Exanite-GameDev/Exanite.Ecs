@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
@@ -18,8 +19,22 @@ namespace Exanite.Myriad.Ecs;
 /// </summary>
 public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 {
+    private static Lock IdLock = new();
+    private static int NextWorldId = 1;
+
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
+
+    /// <summary>
+    /// The unique identifier for this world.
+    /// </summary>
+    /// <remarks>
+    /// If too many worlds have been created,
+    /// this can overflow and lead to id collisions,
+    /// but this is mainly for debugging and
+    /// you have to create a lot of worlds to overflow.
+    /// </remarks>
+    public readonly int WorldId;
 
     internal EntityManager Entities = new();
 
@@ -44,6 +59,11 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     public EcsWorld()
     {
+        using (IdLock.EnterScope())
+        {
+            WorldId = NextWorldId++;
+        }
+
         allEntitiesQuery = new QueryFilter().Build(this);
 
         commandBufferPool = new Pool<EcsCommandBuffer>(
