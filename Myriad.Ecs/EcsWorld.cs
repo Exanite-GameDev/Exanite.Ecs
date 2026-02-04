@@ -151,8 +151,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         {
             foreach (var componentId in dstArchetype.Lookup.ComponentIdByColumnIndex)
             {
-                var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                eventDispatcher.OnComponentCopied(commandBuffer, dstArchetype, lookup);
+                var dispatcher = dstArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                dispatcher.OnComponentCopied(commandBuffer, dstArchetype, lookup);
             }
         }
 

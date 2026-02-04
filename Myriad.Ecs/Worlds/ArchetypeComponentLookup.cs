@@ -25,9 +25,9 @@ internal struct ArchetypeComponentLookup
     internal readonly int[] ColumnIndexByComponentId;
 
     /// <summary>
-    /// Sparse map from component ID to component event dispatcher.
+    /// Sparse map from component ID to component dispatcher.
     /// </summary>
-    internal readonly ComponentEventDispatcher[] ComponentEventDispatcherByComponentId;
+    internal readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
 
     public ArchetypeComponentLookup(ImmutableOrderedListSet<ComponentId> components)
     {
@@ -61,11 +61,11 @@ internal struct ArchetypeComponentLookup
             columnIndex++;
         }
 
-        // Create a sparse map from component ID to component event dispatcher
-        ComponentEventDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentEventDispatcher[maxComponentId + 1];
+        // Create a sparse map from component ID to component dispatcher
+        ComponentDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentDispatcher[maxComponentId + 1];
         foreach (var component in components)
         {
-            ComponentEventDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentEventDispatcher(component);
+            ComponentDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentDispatcher(component);
         }
     }
 }

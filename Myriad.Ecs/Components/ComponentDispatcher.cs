@@ -5,7 +5,7 @@ using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.Components;
 
-internal abstract class ComponentEventDispatcher
+internal abstract class ComponentDispatcher
 {
     public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
     public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
@@ -39,7 +39,7 @@ internal abstract class ComponentEventDispatcher
     }
 }
 
-internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : IComponent
+internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 {
     private delegate void ComponentSelfReferenceAction(ref T component, Entity entity);
 
@@ -53,39 +53,39 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
     private readonly ComponentAction? componentSet;
     private readonly ComponentAction? componentRemoved;
 
-    public ComponentEventDispatcher()
+    public ComponentDispatcher()
     {
         if (typeof(T).IsAssignableTo(typeof(IComponentSelfReference<T>)))
         {
-            componentSelfReference = (ComponentSelfReferenceAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentSelfReference), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentSelfReference = (ComponentSelfReferenceAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentSelfReference), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentSelfReferenceAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentCopied)))
         {
-            componentCopied = (ComponentCopiedAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentCopied), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentCopied = (ComponentCopiedAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentCopied), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentCopiedAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentAdded)))
         {
-            componentAdded = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentAdded), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentAdded = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentAdded), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentSet)))
         {
-            componentSet = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentSet), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentSet = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentSet), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentRemoved)))
         {
-            componentRemoved = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentRemoved = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }

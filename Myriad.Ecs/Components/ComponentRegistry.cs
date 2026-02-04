@@ -75,16 +75,16 @@ internal static class ComponentRegistry
     /// <summary>
     /// Get the type for a given component ID.
     /// </summary>
-    internal static ComponentEventDispatcher GetComponentEventDispatcher(ComponentId id)
+    internal static ComponentDispatcher GetComponentDispatcher(ComponentId id)
     {
         using (Lock.EnterReadLock(out var state))
         {
-            if (!state.Value.TryGetComponentEventDispatcher(id, out var eventDispatcher))
+            if (!state.Value.TryGetComponentDispatcher(id, out var dispatcher))
             {
                 throw new InvalidOperationException("Unknown component ID");
             }
 
-            return eventDispatcher;
+            return dispatcher;
         }
     }
 
@@ -99,7 +99,7 @@ internal static class ComponentRegistry
     private class State
     {
         private readonly Dictionary<ComponentId, Type> typesByComponentId = [];
-        private readonly Dictionary<ComponentId, ComponentEventDispatcher> eventDispatchersByComponentId = [];
+        private readonly Dictionary<ComponentId, ComponentDispatcher> dispatchersByComponentId = [];
 
         private readonly Dictionary<Type, ComponentId> componentIdByType = [];
 
@@ -123,15 +123,15 @@ internal static class ComponentRegistry
                 // Initialize the array factory for this type
                 ArrayFactory.Initialize(type);
 
-                // Initialize the event dispatcher for this type
-                var eventDispatcherType = typeof(ComponentEventDispatcher<>).MakeGenericType(type);
-                var untypedEventDispatcher = Activator.CreateInstance(eventDispatcherType);
-                if (untypedEventDispatcher is not ComponentEventDispatcher eventDispatcher)
+                // Initialize the component dispatcher for this type
+                var dispatcherType = typeof(ComponentDispatcher<>).MakeGenericType(type);
+                var untypedDispatcher = Activator.CreateInstance(dispatcherType);
+                if (untypedDispatcher is not ComponentDispatcher dispatcher)
                 {
-                    throw new GuardException($"Failed to create event dispatcher for type: {type}");
+                    throw new GuardException($"Failed to create component dispatcher for type: {type}");
                 }
 
-                eventDispatchersByComponentId[componentId] = eventDispatcher;
+                dispatchersByComponentId[componentId] = dispatcher;
 
                 // Raise component id registered event
                 ComponentId.NotifyComponentIdRegistered(componentId);
@@ -150,9 +150,9 @@ internal static class ComponentRegistry
             return typesByComponentId.TryGetValue(id, out type);
         }
 
-        public bool TryGetComponentEventDispatcher(ComponentId id, [MaybeNullWhen(false)] out ComponentEventDispatcher eventDispatcher)
+        public bool TryGetComponentDispatcher(ComponentId id, [MaybeNullWhen(false)] out ComponentDispatcher dispatcher)
         {
-            return eventDispatchersByComponentId.TryGetValue(id, out eventDispatcher);
+            return dispatchersByComponentId.TryGetValue(id, out dispatcher);
         }
     }
 }
