@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
@@ -29,7 +30,8 @@ public partial class EcsCommandBuffer
         finally
         {
             // Release unused local IDs
-            World.Entities.ReleaseUnusedIds(localIdPool);
+            World.Entities.ReleaseUnusedIds(localIdPool.AsSpan()[nextLocalIdPoolIndex..]);
+            nextLocalIdPoolIndex = localIdPool.Length;
 
             // Clear commands
             state.Clear();

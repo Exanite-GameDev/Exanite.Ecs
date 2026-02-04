@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -172,14 +173,17 @@ internal struct EntityManager
     /// Bulk acquires IDs.
     /// See <see cref="AcquireId"/>.
     /// </summary>
+    /// <remarks>
+    /// IDs are acquired in forward order.
+    /// The ID at index 0 should be used first.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void AcquireIds(List<EntityId> entityIds, int count)
+    public void AcquireIds(Span<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < entityIds.Length; i++)
         {
-            AcquireId(out var entityId);
-            entityIds.Add(entityId);
+            AcquireId(out entityIds[i]);
         }
     }
 
@@ -187,29 +191,37 @@ internal struct EntityManager
     /// Bulk releases used IDs.
     /// See <see cref="ReleaseId"/>.
     /// </summary>
+    /// <remarks>
+    /// IDs are released in reverse order.
+    /// The ID at index 0 will be released last.
+    /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseIds(List<EntityId> entityIds)
+    public void ReleaseIds(Span<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
-        foreach (var entityId in entityIds)
+        for (var i = entityIds.Length - 1; i >= 0; i--)
         {
-            ReleaseId(entityId);
+            ReleaseId(entityIds[i]);
         }
-        entityIds.Clear();
     }
 
     /// <summary>
     /// Bulk releases unused IDs.
     /// See <see cref="ReleaseUnusedId"/>.
     /// </summary>
+    /// <remarks>
+    /// IDs are released in reverse order.
+    /// The ID at index 0 will be released last.
+    /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseUnusedIds(List<EntityId> entityIds)
+    public void ReleaseUnusedIds(Span<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
-        foreach (var entityId in entityIds)
+        for (var i = entityIds.Length - 1; i >= 0; i--)
         {
-            ReleaseUnusedId(entityId);
+            ReleaseUnusedId(entityIds[i]);
         }
-        entityIds.Clear();
     }
 }

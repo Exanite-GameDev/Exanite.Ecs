@@ -49,7 +49,13 @@ public sealed partial class EcsCommandBuffer
     /// A pool of local IDs.
     /// These are bulk acquired to avoid thread contention.
     /// </summary>
-    private readonly List<EntityId> localIdPool = new();
+    private readonly EntityId[] localIdPool = new EntityId[EcsConstants.CommandBufferLocalIdCount];
+
+    /// <summary>
+    /// The index of the next ID to read from the local ID pool.
+    /// If this is greater than or equal to the count, this means that the pool is exhausted and should be refilled.
+    /// </summary>
+    private int nextLocalIdPoolIndex = EcsConstants.CommandBufferLocalIdCount;
 
     /// <summary>
     /// Create a new <see cref="EcsCommandBuffer"/> for the given <see cref="World"/>.
@@ -75,16 +81,16 @@ public sealed partial class EcsCommandBuffer
     {
         EnsureIsExternallyMutable();
 
-        if (localIdPool.Count == 0)
+        if (nextLocalIdPoolIndex >= localIdPool.Length)
         {
             // Bulk acquire IDs if none available locally
             // This is to avoid thread contention
-            World.Entities.AcquireIds(localIdPool, EcsConstants.CommandBufferLocalIdCount);
+            World.Entities.AcquireIds(localIdPool);
+            nextLocalIdPoolIndex = 0;
         }
 
         // Acquire an ID
-        var entityId = localIdPool[^1];
-        localIdPool.RemoveAt(localIdPool.Count - 1);
+        var entityId = localIdPool[nextLocalIdPoolIndex++];
 
         // Store the command
         ref var entityState = ref GetEntityState(entityId);
@@ -281,7 +287,8 @@ public sealed partial class EcsCommandBuffer
         }
 
         // Release unused local IDs
-        World.Entities.ReleaseUnusedIds(localIdPool);
+        World.Entities.ReleaseUnusedIds(localIdPool.AsSpan()[nextLocalIdPoolIndex..]);
+        nextLocalIdPoolIndex = localIdPool.Length;
 
         // Clear commands
         state.Clear();
