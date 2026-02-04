@@ -163,7 +163,19 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString()
     {
-        return $"{EntityId}{(IsAlive ? "" : " (Dead)")}";
+        var result = EntityId.ToString();
+        var location = World.Entities.GetLocation(EntityId.Index);
+
+        if (EntityId.Version != location.Version)
+        {
+            result += " (Destroyed)";
+        }
+        else if (location.Chunk == null!)
+        {
+            result += " (Pending)";
+        }
+
+        return result;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
