@@ -194,7 +194,7 @@ public partial class EcsCommandBuffer
                         var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
                         if (setterId.IsPrefab)
                         {
-                            state.Lookup.SetCurrentEntity(entityId);
+                            state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
                             eventDispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
                         }
                         else

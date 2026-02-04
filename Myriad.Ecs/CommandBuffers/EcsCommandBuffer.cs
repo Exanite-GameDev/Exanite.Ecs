@@ -100,6 +100,18 @@ public sealed partial class EcsCommandBuffer
         return new BufferedEntity(entityId.ToEntity(World), this);
     }
 
+    /// <inheritdoc cref="CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
+    {
+        return CopyFromInternal(entity, prefab, entity);
+    }
+
+    /// <inheritdoc cref="CopyFromInternal"/>
+    public BufferedEntity CopyFrom(Entity entity, Entity prefab, Entity groupKey)
+    {
+        return CopyFromInternal(entity, prefab, groupKey);
+    }
+
     /// <summary>
     /// Copies all components from the target prefab onto the specified entity.
     /// </summary>
@@ -109,7 +121,12 @@ public sealed partial class EcsCommandBuffer
     /// </remarks>
     /// <param name="entity">The target entity.</param>
     /// <param name="prefab">The prefab to copy components from.</param>
-    public BufferedEntity CopyFrom(Entity entity, Entity prefab)
+    /// <param name="groupKey">
+    /// The entity used to group entity lookups.
+    /// Set this to the root entity of the hierarchy (or any consistent entity)
+    /// when spawning multiple hierarchies of entities that share prefabs.
+    /// </param>
+    private BufferedEntity CopyFromInternal(Entity entity, Entity prefab, Entity groupKey)
     {
         EnsureIsExternallyMutable();
 
@@ -119,14 +136,14 @@ public sealed partial class EcsCommandBuffer
         foreach (var componentId in prefab.ComponentIds)
         {
             ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out _);
-            state.Setters.CreateFromPrefab(prefab, componentId, ref setterId);
+            state.Setters.CreateFromPrefab(prefab, componentId, groupKey, ref setterId);
 
             // Prevent the remove, if it exists
             entityState.Removes?.Remove(componentId);
         }
 
         // Store the prefab for lookup purposes
-        state.Lookup.Add(prefab, entity);
+        state.Lookup.Add(prefab, entity, groupKey);
 
         return new BufferedEntity(entity, this);
     }

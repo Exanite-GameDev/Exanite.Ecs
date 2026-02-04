@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Exanite.Core.Pooling;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Worlds;
@@ -54,20 +55,24 @@ public partial class EcsCommandBuffer
 
     private class PrefabEntityTargetLookup : IEntityLookup
     {
-        private readonly Dictionary<LookupKey, Entity> primaries = [];
-        private readonly Dictionary<Entity, Entity> secondaries = [];
+        private readonly Dictionary<(Entity Prefab, EntityId CurrentEntity, Entity GroupKey), Entity> perEntity = [];
+        private readonly Dictionary<(Entity Prefab, Entity GroupKey), Entity> perGroup = [];
+        private readonly Dictionary<Entity, Entity> global = [];
 
         private EntityId currentEntity;
+        private Entity groupKey;
 
-        public void Add(Entity prefab, Entity target)
+        public void Add(Entity prefab, Entity target, Entity groupKey)
         {
-            primaries.TryAdd(new LookupKey(prefab, target.EntityId), target);
-            secondaries.TryAdd(prefab, target);
+            perEntity.TryAdd((prefab, target.EntityId, groupKey), target);
+            perGroup.TryAdd((prefab, groupKey), target);
+            global.TryAdd(prefab, target);
         }
 
-        public void SetCurrentEntity(EntityId entity)
+        public void SetContext(EntityId currentEntity, Entity groupKey)
         {
-            currentEntity = entity;
+            this.currentEntity = currentEntity;
+            this.groupKey = groupKey;
         }
 
         public EcsRef<T> Get<T>(EcsRef<T> from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
@@ -77,12 +82,17 @@ public partial class EcsCommandBuffer
 
         public Entity Get(Entity from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist)
         {
-            if (primaries.TryGetValue(new LookupKey(from, currentEntity), out var result))
+            if (perEntity.TryGetValue((from, currentEntity, groupKey), out var result))
             {
                 return result;
             }
 
-            if (secondaries.TryGetValue(from, out result))
+            if (perGroup.TryGetValue((from, groupKey), out result))
+            {
+                return result;
+            }
+
+            if (global.TryGetValue(from, out result))
             {
                 return result;
             }
@@ -92,11 +102,9 @@ public partial class EcsCommandBuffer
 
         public void Clear()
         {
-            primaries.Clear();
-            secondaries.Clear();
+            perEntity.Clear();
+            global.Clear();
         }
-
-        private record struct LookupKey(Entity Prefab, EntityId CurrentEntity);
     }
 
     private struct EntityState
@@ -151,6 +159,17 @@ public partial class EcsCommandBuffer
         public readonly ComponentId ComponentId;
 
         /// <summary>
+        /// The group key used to lookup entity references.
+        /// </summary>
+        /// <remarks>
+        /// This isn't actually used by the setter, but is used by
+        /// <see cref="PrefabEntityTargetLookup"/> after the setter is applied.
+        /// Main reason for this being here is that this needs to be stored
+        /// on a per setter basis.
+        /// </remarks>
+        public readonly Entity PrefabGroupKey;
+
+        /// <summary>
         /// If <see cref="IsPrefab"/> is false,
         /// then this is the index of the value in the corresponding components list.
         /// </summary>
@@ -172,20 +191,21 @@ public partial class EcsCommandBuffer
         /// </summary>
         public bool IsPrefab => index < 0;
 
-        private SetterId(ComponentId componentId, int index)
+        private SetterId(ComponentId componentId, int index, Entity prefabGroupKey)
         {
             ComponentId = componentId;
             this.index = index;
+            PrefabGroupKey = prefabGroupKey;
         }
 
         public static SetterId FromValueIndex(ComponentId componentId, int index)
         {
-            return new SetterId(componentId, index);
+            return new SetterId(componentId, index, default);
         }
 
-        public static SetterId FromPrefabIndex(ComponentId componentId, int index)
+        public static SetterId FromPrefabIndex(ComponentId componentId, int index, Entity groupKey)
         {
-            return new SetterId(componentId, ~index);
+            return new SetterId(componentId, ~index, groupKey);
         }
     }
 
@@ -224,8 +244,10 @@ public partial class EcsCommandBuffer
         /// <summary>
         /// Creates a setter using a component stored by a prefab entity.
         /// </summary>
-        public void CreateFromPrefab(Entity prefab, ComponentId componentId, ref SetterId setterId)
+        public void CreateFromPrefab(Entity prefab, ComponentId componentId, Entity groupKey, ref SetterId setterId)
         {
+            AssertUtility.IsFalse(groupKey.IsDefault, "Group key can't be a default entity");
+
             var prefabIndex = prefabLookup.GetValueOrDefault(prefab, -1);
             if (prefabIndex == -1)
             {
@@ -234,7 +256,7 @@ public partial class EcsCommandBuffer
                 prefabLookup[prefab] = prefabIndex;
             }
 
-            setterId = SetterId.FromPrefabIndex(componentId, prefabIndex);
+            setterId = SetterId.FromPrefabIndex(componentId, prefabIndex, groupKey);
         }
 
         /// <summary>

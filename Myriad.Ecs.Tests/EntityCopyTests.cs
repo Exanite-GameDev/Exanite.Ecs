@@ -290,9 +290,9 @@ public class EntityCopyTests
 
         for (var i = 0; i < 20; i++)
         {
-            dstCommandBuffer.Create().CopyFrom(srcRoot).Set(new EcsInt32(i));
-            dstCommandBuffer.Create().CopyFrom(srcChild1).Set(new EcsInt32(i));
-            dstCommandBuffer.Create().CopyFrom(srcChild2).Set(new EcsInt32(i));
+            var dstRoot = dstCommandBuffer.Create().CopyFrom(srcRoot).Set(new EcsInt32(i));
+            dstCommandBuffer.Create().CopyFrom(srcChild1, dstRoot).Set(new EcsInt32(i));
+            dstCommandBuffer.Create().CopyFrom(srcChild2, dstRoot).Set(new EcsInt32(i));
         }
 
         dstCommandBuffer.Execute();
