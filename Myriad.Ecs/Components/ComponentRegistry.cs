@@ -14,7 +14,7 @@ internal static class ComponentRegistry
     private static readonly RwLock<State> Lock = new(new State());
 
     /// <summary>
-    /// Get the component ID for the given type.
+    /// Gets the component ID for the given type.
     /// </summary>
     public static ComponentId GetComponentId<T>() where T : IComponent
     {
@@ -35,7 +35,7 @@ internal static class ComponentRegistry
     }
 
     /// <summary>
-    /// Get the component ID for the given type.
+    /// Gets the component ID for the given type.
     /// </summary>
     public static ComponentId GetComponentId(Type type)
     {
@@ -55,7 +55,7 @@ internal static class ComponentRegistry
     }
 
     /// <summary>
-    /// Get the type for a given component ID.
+    /// Gets the type for a given component ID.
     /// </summary>
     public static Type GetComponentType(ComponentId id)
     {
@@ -66,7 +66,7 @@ internal static class ComponentRegistry
     }
 
     /// <summary>
-    /// Get the type for a given component ID.
+    /// Gets the dispatcher for a given component ID.
     /// </summary>
     internal static ComponentDispatcher GetComponentDispatcher(ComponentId id)
     {

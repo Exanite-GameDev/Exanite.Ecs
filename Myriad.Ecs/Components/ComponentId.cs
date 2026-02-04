@@ -38,6 +38,17 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     }
 
     /// <summary>
+    /// Gets the dispatcher for this component ID.
+    /// </summary>
+    /// <remarks>
+    /// The dispatcher can be used to invoke generic methods given only a component ID.
+    /// </remarks>
+    public ComponentDispatcher GetDispatcher()
+    {
+        return ComponentRegistry.GetComponentDispatcher(this);
+    }
+
+    /// <summary>
     /// Get the component ID for the given type.
     /// </summary>
     /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/>.</exception>

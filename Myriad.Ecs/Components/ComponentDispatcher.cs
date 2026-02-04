@@ -5,7 +5,10 @@ using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.Components;
 
-internal abstract class ComponentDispatcher
+/// <summary>
+/// Provides a performant way to invoke generic methods without having access to the component types at compile time.
+/// </summary>
+public abstract class ComponentDispatcher
 {
     public abstract TReturn Create<TFactory, TReturn>(TFactory factory) where TFactory : IComponentFactory<TReturn>;
     public abstract TReturn Create<TFactory, TInput, TReturn>(TFactory factory, TInput input) where TFactory : IComponentFactory<TInput, TReturn>;
@@ -13,11 +16,11 @@ internal abstract class ComponentDispatcher
     public abstract void Invoke<TAction>(TAction action) where TAction : IComponentAction;
     public abstract void Invoke<TAction, TInput>(TAction action, TInput input) where TAction : IComponentAction<TInput>;
 
-    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
-    public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
-    public abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
-    public abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
-    public abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
+    internal abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
+    internal abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
+    internal abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
+    internal abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
+    internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
 
     internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
     {
@@ -123,7 +126,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     public override void Invoke<TAction>(TAction action) => action.Invoke<T>();
     public override void Invoke<TAction, TInput>(TAction action, TInput input) => action.Invoke<T>(input);
 
-    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
+    internal override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
     {
         if (archetype.EntityCount == 0)
         {
@@ -168,7 +171,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
-    public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup)
+    internal override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup)
     {
         ref var component = ref entity.Get<T>();
 
@@ -185,7 +188,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
     }
 
-    public override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    internal override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
         ref var component = ref entity.Get<T>();
 
@@ -202,7 +205,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         entity.World.EventBus.Raise(new ComponentAddedEvent<T>(recursiveCommandBuffer, entity, ref component));
     }
 
-    public override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    internal override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
         ref var component = ref entity.Get<T>();
 
@@ -214,7 +217,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         entity.World.EventBus.Raise(new ComponentModifiedEvent<T>(recursiveCommandBuffer, entity, ref component));
     }
 
-    public override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
         ref var component = ref entity.Get<T>();
         entity.World.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
