@@ -310,6 +310,8 @@ public partial class EcsCommandBuffer
             }
 
             components.Clear();
+            prefabs.Clear();
+            prefabLookup.Clear();
         }
 
         private interface IComponentList
