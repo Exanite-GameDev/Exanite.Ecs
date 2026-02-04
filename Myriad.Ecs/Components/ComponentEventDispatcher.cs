@@ -98,19 +98,6 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
             return;
         }
 
-        if (componentCopied != null)
-        {
-            foreach (var chunk in archetype.Chunks)
-            {
-                foreach (var entity in chunk.Entities)
-                {
-                    ref var component = ref entity.Get<T>();
-
-                    componentCopied!.Invoke(ref component, entity.World, lookup);
-                }
-            }
-        }
-
         if (componentSelfReference != null)
         {
             foreach (var chunk in archetype.Chunks)
@@ -121,6 +108,19 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
                 for (var i = 0; i < entities.Length; i++)
                 {
                     componentSelfReference!.Invoke(ref components[i], entities[i]);
+                }
+            }
+        }
+
+        if (componentCopied != null)
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                foreach (var entity in chunk.Entities)
+                {
+                    ref var component = ref entity.Get<T>();
+
+                    componentCopied!.Invoke(ref component, entity.World, lookup);
                 }
             }
         }
