@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
@@ -10,9 +11,9 @@ namespace Exanite.Myriad.Ecs;
 
 internal struct EntityManager
 {
+    private readonly Lock sync = new();
     private readonly SegmentedList<EntityLocation> entities = new(EcsConstants.StorageLocationSegmentSize);
 
-    // Keep track of dead entities so their ID can be re-used
     /// <summary>
     /// Tracks released IDs so that they can be reused.
     /// </summary>
@@ -98,6 +99,8 @@ internal struct EntityManager
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityLocation AcquireId(out EntityId entityId)
     {
+        using var _ = sync.EnterScope();
+
         if (releasedIds.Count > 0)
         {
             var previousId = releasedIds[^1];
@@ -133,10 +136,13 @@ internal struct EntityManager
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void ReleaseId(EntityId entityId)
     {
+        using var _ = sync.EnterScope();
+
         ref var location = ref GetLocation(entityId);
 
-        // Increment version, this will invalidate the handle
+        // Invalidate the handle
         location.Version++;
+        location.Chunk = null!;
 
         // Store this ID for re-use later
         releasedIds.Add(entityId);

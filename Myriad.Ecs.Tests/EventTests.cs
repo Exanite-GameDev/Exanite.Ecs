@@ -420,8 +420,9 @@ public class EventTests
                 foreach (var entity in chunk.Entities)
                 {
                     commandBuffer
-                        .Set(entity, new Ecs0())
-                        .Set(entity, new Ecs0());
+                        .Use(entity)
+                        .Set(new Ecs0())
+                        .Set(new Ecs0());
                 }
             }
         }
@@ -514,18 +515,17 @@ public class EventTests
         var commandBuffer = world.AcquireCommandBuffer();
 
         var disposeCount = 0;
-        var bufferedEntity = commandBuffer.Create()
+        var entity = commandBuffer.Create()
             .Set(new EcsDisposable()
             {
                 DisposeAction = () => disposeCount++,
-            });
+            })
+            .Entity;
 
         commandBuffer.Execute();
         Assert.Equal(0, disposeCount);
 
-        var entity = bufferedEntity.Resolve();
         commandBuffer.Destroy(entity);
-
         commandBuffer.Execute();
         Assert.Equal(1, disposeCount);
     }

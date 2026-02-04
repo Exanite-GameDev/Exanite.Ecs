@@ -42,7 +42,7 @@ public class SegmentListTests
             _ = list[-1];
         });
 
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        Assert.Throws<IndexOutOfRangeException>(() =>
         {
             _ = list[16];
         });

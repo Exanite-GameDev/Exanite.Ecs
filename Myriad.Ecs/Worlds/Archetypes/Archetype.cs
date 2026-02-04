@@ -86,10 +86,10 @@ public sealed class Archetype
         Lookup = new ArchetypeComponentLookup(components);
     }
 
-    internal ref EntityLocation CreateEntity(EcsCommandBuffer commandBuffer, out EntityId entityId)
+    internal ref EntityLocation CreateEntity(EcsCommandBuffer commandBuffer, EntityId entityId)
     {
-        // Allocate an entity id and add it to this archetype
-        ref var location = ref World.Entities.AcquireId(out entityId);
+        // Add the entity to this archetype
+        ref var location = ref World.Entities.GetLocation(entityId);
         AddEntity(entityId, ref location);
 
         // Raise entity created event

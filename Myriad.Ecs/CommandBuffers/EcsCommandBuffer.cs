@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 using Exanite.Myriad.Ecs.Worlds.Archetypes;
 
@@ -34,7 +33,7 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// in smaller batches. This has similar cost to replaying commands without
 /// merging.
 /// </remarks>
-public sealed partial class EcsCommandBuffer
+public sealed class EcsCommandBuffer
 {
     /// <summary>
     /// The <see cref="World"/> this <see cref="EcsCommandBuffer"/> is modifying.
@@ -43,24 +42,31 @@ public sealed partial class EcsCommandBuffer
 
     public bool HasBufferedOperations { get; private set; }
     public bool IsExecuting { get; private set; }
-    internal uint Version { get; private set; }
 
     /// <summary>
-    /// Double buffer of resolvers.
-    /// One is readable, the other is writable.
+    /// New entities to be created.
     /// </summary>
-    private readonly EcsCommandBufferResolver[] resolvers;
+    private readonly List<Entity> newEntities = [];
 
     /// <summary>
-    /// Collection of all components to be set onto entities.
+    /// Contains component values to be set onto entities.
     /// </summary>
     private readonly ComponentSetterCollection setters = new();
 
-    private readonly List<BufferedEntityData> bufferedEntities = [];
+    /// <summary>
+    /// All entity modifications to be applied.
+    /// </summary>
     private readonly Dictionary<Entity, BufferedEntityModification> entityModifications = [];
 
+    /// <summary>
+    /// Entities to be destroyed.
+    /// </summary>
     private readonly List<Entity> destroys = [];
-    private readonly List<QueryView> queryDestroys = [];
+
+    /// <summary>
+    /// Archetypes to be destroyed.
+    /// </summary>
+    private readonly List<Archetype> archetypeDestroys = [];
 
     /// <summary>
     /// Stores an entity's component set after structural changes.
@@ -78,15 +84,6 @@ public sealed partial class EcsCommandBuffer
     internal EcsCommandBuffer(EcsWorld world)
     {
         World = world;
-
-        resolvers =
-        [
-            new EcsCommandBufferResolver(this),
-            new EcsCommandBufferResolver(this),
-        ];
-
-        // Swap once to initialize
-        SwapResolvers();
     }
 
     /// <summary>
@@ -97,24 +94,30 @@ public sealed partial class EcsCommandBuffer
         EnsureIsExternallyMutable();
         HasBufferedOperations = true;
 
-        // Get a set to hold all of the component setters
-        var setters = SimplePool<Dictionary<ComponentId, ComponentSetterCollection.SetterId>>.Acquire();
-        setters.Clear();
+        // Acquire an ID
+        // TODO: This can cause lock contention. Optimize by acquiring a batch of IDs.
+        World.Entities.AcquireId(out var entityId);
+        var entity = entityId.ToEntity(World);
+        newEntities.Add(entity);
 
-        // Store this entity in the collection of entities
-        // Put it in aggregate node 0 (i.e. no components)
-        var id = (uint)bufferedEntities.Count;
-        bufferedEntities.Add(new BufferedEntityData(id, setters));
+        return new BufferedEntity(entity, this);
+    }
 
-        return new BufferedEntity(id, GetWriteableResolver());
+    /// <summary>
+    /// Create a <see cref="BufferedEntity"/> using the specified entity.
+    /// </summary>
+    public BufferedEntity Use(Entity entity)
+    {
+        return new BufferedEntity(entity, this);
     }
 
     /// <summary>
     /// Add or overwrite a component attached to an entity.
     /// </summary>
-    public EcsCommandBuffer Set<T>(Entity entity, T value) where T : IComponent
+    public BufferedEntity Set<T>(Entity entity, T value) where T : IComponent
     {
         EnsureIsExternallyMutable();
+        EnsureIsFromCurrentWorld(entity);
         HasBufferedOperations = true;
 
         var modification = GetBufferedModification(entity, true, false);
@@ -134,15 +137,16 @@ public sealed partial class EcsCommandBuffer
         // Remove it from the "remove" set. In case it was previously removed
         modification.Removes?.Remove(id);
 
-        return this;
+        return new BufferedEntity(entity, this);
     }
 
     /// <summary>
     /// Remove a component attached to an entity.
     /// </summary>
-    public EcsCommandBuffer Remove<T>(Entity entity) where T : IComponent
+    public BufferedEntity Remove<T>(Entity entity) where T : IComponent
     {
         EnsureIsExternallyMutable();
+        EnsureIsFromCurrentWorld(entity);
         HasBufferedOperations = true;
 
         var modification = GetBufferedModification(entity, false, true);
@@ -154,7 +158,7 @@ public sealed partial class EcsCommandBuffer
         // Remove it from the setters, if it's there
         modification.Sets?.Remove(id);
 
-        return this;
+        return new BufferedEntity(entity, this);
     }
 
     /// <summary>
@@ -163,6 +167,7 @@ public sealed partial class EcsCommandBuffer
     public EcsCommandBuffer Destroy(Entity entity)
     {
         EnsureIsExternallyMutable();
+        EnsureIsFromCurrentWorld(entity);
         HasBufferedOperations = true;
 
         destroys.Add(entity);
@@ -173,9 +178,13 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Bulk destroy entities.
     /// </summary>
-    public EcsCommandBuffer Destroy(List<Entity> entities)
+    public EcsCommandBuffer Destroy(ReadOnlySpan<Entity> entities)
     {
         EnsureIsExternallyMutable();
+        foreach (var entity in entities)
+        {
+            EnsureIsFromCurrentWorld(entity);
+        }
         HasBufferedOperations = true;
 
         destroys.AddRange(entities);
@@ -186,13 +195,17 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Bulk destroy all entities which match the given query.
     /// </summary>
-    public EcsCommandBuffer Destroy(QueryView entities)
+    public EcsCommandBuffer Destroy(IArchetypeView query)
     {
         EnsureIsExternallyMutable();
-        GuardUtility.IsTrue(entities.World == World, "Cannot use query description from one world with a command buffer for another world");
-        HasBufferedOperations = true;
 
-        queryDestroys.Add(entities);
+        foreach (var archetype in query.Archetypes)
+        {
+            EnsureIsFromCurrentWorld(archetype);
+        }
+
+        archetypeDestroys.AddRange(query.Archetypes);
+        HasBufferedOperations = true;
 
         return this;
     }
@@ -200,16 +213,13 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Apply all buffered operations to the <see cref="World"/>. The returned resolver is valid until the next time <see cref="Execute"/> is called.
     /// </summary>
-    public EcsCommandBufferResolver Execute()
+    public void Execute()
     {
         EnsureIsExternallyMutable();
 
-        var resolver = GetWriteableResolver();
         if (!HasBufferedOperations)
         {
-            SwapResolvers();
-
-            return resolver;
+            return;
         }
 
         IsExecuting = true;
@@ -217,7 +227,7 @@ public sealed partial class EcsCommandBuffer
             using var _ = World.AcquireCommandBuffer(out var recursiveCommandBuffer);
 
             // Create buffered entities.
-            CreateBufferedEntities(recursiveCommandBuffer, resolver);
+            CreateEntities(recursiveCommandBuffer);
 
             // Destroy entities, this must occur before structural changes because it may trigger new structural changes
             // by adding a new phantom component.
@@ -228,20 +238,15 @@ public sealed partial class EcsCommandBuffer
             ApplyStructuralChanges(recursiveCommandBuffer);
 
             // Clear all temporary state
+            newEntities.Clear();
             setters.Clear(false);
             entityModifications.Clear();
-            archetypeEdges.Clear();
 
             HasBufferedOperations = false;
-
-            SwapResolvers();
 
             recursiveCommandBuffer.Execute();
         }
         IsExecuting = false;
-
-        // Return the resolver, which is now set to readable
-        return resolver;
     }
 
     /// <summary>
@@ -256,15 +261,13 @@ public sealed partial class EcsCommandBuffer
 
         EnsureIsExternallyMutable();
 
-        setters.Clear(true);
-
-        foreach (var bufferedEntity in bufferedEntities)
+        foreach (var newEntity in newEntities)
         {
-            var entitySetters = bufferedEntity.Setters;
-            entitySetters.Clear();
-            SimplePool.Release(entitySetters);
+            World.Entities.ReleaseId(newEntity.EntityId);
         }
-        bufferedEntities.Clear();
+        newEntities.Clear();
+
+        setters.Clear(true);
 
         foreach (var (_, data) in entityModifications)
         {
@@ -282,47 +285,28 @@ public sealed partial class EcsCommandBuffer
         }
         entityModifications.Clear();
 
-        archetypeEdges.Clear();
-
         destroys.Clear();
-        queryDestroys.Clear();
+        archetypeDestroys.Clear();
 
         HasBufferedOperations = false;
-
-        SwapResolvers();
     }
 
-    private EcsCommandBufferResolver GetReadableResolver()
+    private void CreateEntities(EcsCommandBuffer recursiveCommandBuffer)
     {
-        return resolvers[0];
-    }
-
-    private EcsCommandBufferResolver GetWriteableResolver()
-    {
-        return resolvers[1];
-    }
-
-    private void SwapResolvers()
-    {
-        Version++;
-
-        var temp = resolvers[0];
-        resolvers[0] = resolvers[1];
-        resolvers[1] = temp;
-
-        GetWriteableResolver().Reset();
+        var archetype = World.GetOrCreateArchetype(ImmutableOrderedListSet<ComponentId>.Empty.AsComponentIdSet());
+        foreach (var newEntity in newEntities)
+        {
+            archetype.CreateEntity(recursiveCommandBuffer, newEntity.EntityId);
+        }
     }
 
     private void DestroyEntities(EcsCommandBuffer recursiveCommandBuffer)
     {
-        foreach (var query in queryDestroys)
+        foreach (var archetype in archetypeDestroys)
         {
-            foreach (var archetype in query.Archetypes)
-            {
-                DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
-            }
+            DestroyArchetypeEntities(recursiveCommandBuffer, archetype);
         }
-        queryDestroys.Clear();
+        archetypeDestroys.Clear();
 
         foreach (var entity in destroys)
         {
@@ -460,111 +444,6 @@ public sealed partial class EcsCommandBuffer
         }
     }
 
-    private void CreateBufferedEntities(EcsCommandBuffer recursiveCommandBuffer, EcsCommandBufferResolver resolver)
-    {
-        // Keep a map from archetype key -> archetype.
-        // This means we only need to calculate it once per archetype key.
-        var archetypeLookup = ArrayPool<Archetype>.Shared.Rent(archetypeEdges.Count + 1);
-        Array.Clear(archetypeLookup, 0, archetypeLookup.Length);
-        try
-        {
-            foreach (var bufferedEntityData in bufferedEntities)
-            {
-                var components = bufferedEntityData.Setters;
-                try
-                {
-                    var archetype = GetArchetype(bufferedEntityData, archetypeLookup);
-
-                    var location = archetype.CreateEntity(recursiveCommandBuffer, out var entityId);
-
-                    // Store the new ID in the resolver so it can be retrieved later
-                    resolver.EntityIdsByBufferedEntityId.Add(bufferedEntityData.Id, entityId);
-
-                    // Write the components into the entity
-                    foreach (var setter in components.Values)
-                    {
-                        // Write component
-                        setters.Write(setter, location);
-                    }
-
-                    // Raise component added events
-                    foreach (var setter in components.Values)
-                    {
-                        var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[setter.ComponentId.Value];
-                        eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entityId.ToEntity(World));
-                    }
-                }
-                finally
-                {
-                    // Recycle
-                    components.Clear();
-                    SimplePool.Release(components);
-                }
-            }
-
-            bufferedEntities.Clear();
-        }
-        finally
-        {
-            ArrayPool<Archetype>.Shared.Return(archetypeLookup);
-        }
-    }
-
-    private Archetype GetArchetype(BufferedEntityData entityData, Archetype?[] archetypeLookup)
-    {
-        // Check the cache
-        if (entityData.ArchetypeKey >= 0)
-        {
-            var a = archetypeLookup[entityData.ArchetypeKey];
-            if (a != null)
-            {
-                return a;
-            }
-        }
-
-        // Get the archetype
-        var archetype = World.GetOrCreateArchetype(entityData.Setters.AsComponentIdSet());
-
-        // If the node ID is positive, cache it
-        if (entityData.ArchetypeKey >= 0)
-        {
-            archetypeLookup[entityData.ArchetypeKey] = archetype;
-        }
-
-        return archetype;
-    }
-
-    internal void SetBuffered<T>(uint id, T value) where T : IComponent
-    {
-        AssertUtility.IsTrue(id < bufferedEntities.Count, "Unknown entity ID in SetBuffered");
-
-        var bufferedEntity = bufferedEntities[(int)id];
-        var entitySetters = bufferedEntity.Setters;
-
-        var key = ComponentId.Get<T>();
-
-        if (entitySetters.TryGetValue(key, out var existing))
-        {
-            setters.Overwrite(existing, value);
-        }
-        else
-        {
-            // Add to global collection of setters
-            var setterIndex = setters.Add(value);
-
-            // Store the index in the per-entity collection
-            entitySetters.Add(key, setterIndex);
-
-            // Update node id. Skip it if it's in node -1, once an entity is
-            // marked as node -1 it's been opted out of aggregation.
-            if (bufferedEntity.ArchetypeKey != -1)
-            {
-                bufferedEntity.ArchetypeKey = GetArchetypeKey(bufferedEntity.ArchetypeKey, key);
-                bufferedEntities[(int)id] = bufferedEntity;
-            }
-        }
-    }
-
     private BufferedEntityModification GetBufferedModification(Entity entity, bool ensureSet, bool ensureRemove)
     {
         if (!entityModifications.TryGetValue(entity, out var modification))
@@ -667,42 +546,23 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Used to check if it is safe for external calls to modify the command buffer.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void EnsureIsExternallyMutable()
     {
         GuardUtility.IsFalse(World.IsDisposed, "World has been disposed");
         GuardUtility.IsFalse(IsExecuting, "Command buffer is currently executing");
     }
 
-    /// <summary>
-    /// Data about a new entity being created.
-    /// </summary>
-    private record struct BufferedEntityData
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void EnsureIsFromCurrentWorld(Entity entity)
     {
-        /// <summary>
-        /// ID of this buffered entity, used in resolver to get actual entity.
-        /// </summary>
-        public uint Id { get; }
+        GuardUtility.IsTrue(entity.World == World, "Entity must belong to the same world as the command buffer");
+    }
 
-        /// <summary>
-        /// All setters to be run on this entity.
-        /// </summary>
-        public Dictionary<ComponentId, ComponentSetterCollection.SetterId> Setters { get; }
-
-        /// <summary>
-        /// The "Node ID" of this entity, all buffered entities with the same node ID are in the same archetype (except -1).
-        /// </summary>
-        public int ArchetypeKey { get; set; }
-
-        /// <summary>
-        /// Data about a new entity being created.
-        /// </summary>
-        /// <param name="id">ID of this buffered entity, used in resolver to get actual entity.</param>
-        /// <param name="setters">All setters to be run on this entity.</param>
-        public BufferedEntityData(uint id, Dictionary<ComponentId, ComponentSetterCollection.SetterId> setters)
-        {
-            Id = id;
-            Setters = setters;
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void EnsureIsFromCurrentWorld(Archetype archetype)
+    {
+        GuardUtility.IsTrue(archetype.World == World, "Archetype must belong to the same world as the command buffer");
     }
 
     private record struct BufferedEntityModification(Dictionary<ComponentId, ComponentSetterCollection.SetterId>? Sets, OrderedListSet<ComponentId>? Removes);
