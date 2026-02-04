@@ -14,7 +14,7 @@ Also note, this ECS is not yet battle-tested. Many changes were made to the ECS 
   - Events (see the [event design section](#event-design))
   - Light relation support
     - Implemented through EcsRefs, which are strongly typed, storable references to components
-    - Events can also facilitate with implementing relations.
+    - Events can also facilitate the implementation of relations.
   - Entity copying support
     - Can be used to implement prefabs and world snapshots.
   - Queries, systems, threading, and serialization are considered high level features and should be implemented separately.
@@ -23,7 +23,8 @@ Also note, this ECS is not yet battle-tested. Many changes were made to the ECS 
   - Components are stored as managed structs instead of unmanaged memory.
   - All entity-focused structural modifications must be done through the command buffer.
   - TryGet methods for getting components.
-- Support for only latest .NET
+  - The ComponentDispatcher can simplify invoking generic methods when given only a ComponentId.
+- Support for only the latest .NET
   - This repository is primarily meant for Exanite.Engine, which currently uses .NET 10.
   - Notably, no Unity support.
 
