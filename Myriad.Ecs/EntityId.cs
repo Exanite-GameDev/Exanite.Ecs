@@ -34,7 +34,7 @@ internal readonly record struct EntityId : IComparable<EntityId>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override string ToString()
     {
-        return $"#{Index} v{Version}";
+        return $"{Index}:{Version}";
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

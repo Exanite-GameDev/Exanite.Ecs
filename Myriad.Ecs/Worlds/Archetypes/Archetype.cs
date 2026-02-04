@@ -133,7 +133,7 @@ public sealed class Archetype
     /// The source chunk must have the same component set.
     /// </summary>
     /// <remarks>
-    /// This is designed to be called by <see cref="EcsWorld.CopyTo"/>.
+    /// This is designed to be called by <see cref="EcsWorld.AddTo(EcsWorld, IArchetypeView)"/>.
     /// </remarks>
     internal void CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, Dictionary<Entity, Entity> lookup)
     {
