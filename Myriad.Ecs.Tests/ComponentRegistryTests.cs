@@ -44,7 +44,7 @@ public class ComponentRegistryTests
     [Fact]
     public void ThrowsForUnknownId()
     {
-        Assert.Throws<InvalidOperationException>(() =>
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
         {
             _ = default(ComponentId).Type;
         });
