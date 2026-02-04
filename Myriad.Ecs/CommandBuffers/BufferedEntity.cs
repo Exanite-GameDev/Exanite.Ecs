@@ -26,6 +26,12 @@ public readonly ref struct BufferedEntity
         return CommandBuffer.Set(Entity, value);
     }
 
+    /// <inheritdoc cref="EcsCommandBuffer.Set"/>
+    public BufferedEntity SetBoxed(object value)
+    {
+        return CommandBuffer.SetBoxed(Entity, value);
+    }
+
     /// <inheritdoc cref="EcsCommandBuffer.Remove"/>
     public BufferedEntity Remove<T>() where T : IComponent
     {

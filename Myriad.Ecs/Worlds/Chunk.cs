@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Events;
@@ -50,10 +49,13 @@ public sealed class Chunk
         Lookup = archetype.Lookup;
 
         entityColumn = new Entity[EcsConstants.ChunkEntityCount];
-        componentColumns = new Array[Lookup.ComponentTypesByColumnIndex.Length];
+        componentColumns = new Array[Lookup.ComponentIdByColumnIndex.Length];
+
+        var arrayFactory = new ArrayFactory();
         for (var i = 0; i < componentColumns.Length; i++)
         {
-            componentColumns[i] = ArrayFactory.Create(Lookup.ComponentTypesByColumnIndex[i], EcsConstants.ChunkEntityCount);
+            var dispatcher = Lookup.ComponentDispatcherByComponentId[Lookup.ComponentIdByColumnIndex[i].Value];
+            componentColumns[i] = dispatcher.Create<ArrayFactory, int, Array>(arrayFactory, EcsConstants.ChunkEntityCount);
         }
     }
 
@@ -257,5 +259,13 @@ public sealed class Chunk
 
         // Remove the entity from this chunk (using the old saved location)
         RemoveEntity(srcLocation);
+    }
+
+    private readonly struct ArrayFactory : ComponentDispatcher.IComponentFactory<int, Array>
+    {
+        public Array Create<T>(int capacity) where T : IComponent
+        {
+            return capacity == 0 ? [] : new T[capacity];
+        }
     }
 }

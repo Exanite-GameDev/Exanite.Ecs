@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Exanite.Core.Runtime;
 using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
 
 namespace Exanite.Myriad.Ecs.Components;
 
@@ -63,28 +61,18 @@ internal static class ComponentRegistry
     {
         using (Lock.EnterReadLock(out var state))
         {
-            if (!state.Value.TryGetComponentType(id, out var type))
-            {
-                throw new InvalidOperationException("Unknown component ID");
-            }
-
-            return type;
+            return state.Value.GetComponentType(id);
         }
     }
 
     /// <summary>
     /// Get the type for a given component ID.
     /// </summary>
-    internal static ComponentEventDispatcher GetComponentEventDispatcher(ComponentId id)
+    internal static ComponentDispatcher GetComponentDispatcher(ComponentId id)
     {
         using (Lock.EnterReadLock(out var state))
         {
-            if (!state.Value.TryGetComponentEventDispatcher(id, out var eventDispatcher))
-            {
-                throw new InvalidOperationException("Unknown component ID");
-            }
-
-            return eventDispatcher;
+            return state.Value.GetComponentDispatcher(id);
         }
     }
 
@@ -98,8 +86,8 @@ internal static class ComponentRegistry
 
     private class State
     {
-        private readonly Dictionary<ComponentId, Type> typesByComponentId = [];
-        private readonly Dictionary<ComponentId, ComponentEventDispatcher> eventDispatchersByComponentId = [];
+        private readonly List<Type> typesByComponentId = [];
+        private readonly List<ComponentDispatcher> dispatchersByComponentId = [];
 
         private readonly Dictionary<Type, ComponentId> componentIdByType = [];
 
@@ -117,21 +105,18 @@ internal static class ComponentRegistry
                 nextId++;
 
                 // Store for lookups
-                typesByComponentId[componentId] = type;
+                typesByComponentId.Add(type);
                 componentIdByType[type] = componentId;
 
-                // Initialize the array factory for this type
-                ArrayFactory.Initialize(type);
-
-                // Initialize the event dispatcher for this type
-                var eventDispatcherType = typeof(ComponentEventDispatcher<>).MakeGenericType(type);
-                var untypedEventDispatcher = Activator.CreateInstance(eventDispatcherType);
-                if (untypedEventDispatcher is not ComponentEventDispatcher eventDispatcher)
+                // Initialize the component dispatcher for this type
+                var dispatcherType = typeof(ComponentDispatcher<>).MakeGenericType(type);
+                var untypedDispatcher = Activator.CreateInstance(dispatcherType);
+                if (untypedDispatcher is not ComponentDispatcher dispatcher)
                 {
-                    throw new GuardException($"Failed to create event dispatcher for type: {type}");
+                    throw new GuardException($"Failed to create component dispatcher for type: {type}");
                 }
 
-                eventDispatchersByComponentId[componentId] = eventDispatcher;
+                dispatchersByComponentId.Add(dispatcher);
 
                 // Raise component id registered event
                 ComponentId.NotifyComponentIdRegistered(componentId);
@@ -145,14 +130,14 @@ internal static class ComponentRegistry
             return componentIdByType.TryGetValue(type, out id);
         }
 
-        public bool TryGetComponentType(ComponentId id, [MaybeNullWhen(false)] out Type type)
+        public Type GetComponentType(ComponentId id)
         {
-            return typesByComponentId.TryGetValue(id, out type);
+            return typesByComponentId[id.Value - 1];
         }
 
-        public bool TryGetComponentEventDispatcher(ComponentId id, [MaybeNullWhen(false)] out ComponentEventDispatcher eventDispatcher)
+        public ComponentDispatcher GetComponentDispatcher(ComponentId id)
         {
-            return eventDispatchersByComponentId.TryGetValue(id, out eventDispatcher);
+            return dispatchersByComponentId[id.Value - 1];
         }
     }
 }

@@ -488,6 +488,26 @@ public class EcsCommandBufferTests
     }
 
     [Fact]
+    public void SetBoxed()
+    {
+        var world = new EcsWorld();
+        var buffer = world.AcquireCommandBuffer();
+
+        // Create an entity with 2 components
+        var entity = buffer.Create()
+            .SetBoxed(new EcsFloat(123))
+            .SetBoxed(new EcsInt16(456))
+            .Entity;
+
+        buffer.Execute();
+
+        // Check the value has changed
+        Assert.True(entity.Has<EcsFloat>());
+        Assert.True(entity.Has<EcsInt16>());
+        Assert.Equal(456, entity.Get<EcsInt16>().Value);
+    }
+
+    [Fact]
     public void SetTwiceOnEntity()
     {
         var world = new EcsWorld();

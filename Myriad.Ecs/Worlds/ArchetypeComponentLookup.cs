@@ -10,11 +10,6 @@ namespace Exanite.Myriad.Ecs.Worlds;
 internal struct ArchetypeComponentLookup
 {
     /// <summary>
-    /// Map from column index to the component type.
-    /// </summary>
-    internal readonly Type[] ComponentTypesByColumnIndex;
-
-    /// <summary>
     /// Map from column index to the component ID.
     /// </summary>
     internal readonly ComponentId[] ComponentIdByColumnIndex;
@@ -25,9 +20,9 @@ internal struct ArchetypeComponentLookup
     internal readonly int[] ColumnIndexByComponentId;
 
     /// <summary>
-    /// Sparse map from component ID to component event dispatcher.
+    /// Sparse map from component ID to component dispatcher.
     /// </summary>
-    internal readonly ComponentEventDispatcher[] ComponentEventDispatcherByComponentId;
+    internal readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
 
     public ArchetypeComponentLookup(ImmutableOrderedListSet<ComponentId> components)
     {
@@ -41,8 +36,7 @@ internal struct ArchetypeComponentLookup
             }
         }
 
-        // Initialize a map from column index to component type and component ID
-        ComponentTypesByColumnIndex = new Type[components.Count];
+        // Initialize a map from column index to component ID
         ComponentIdByColumnIndex = new ComponentId[components.Count];
 
         // Initialize a sparse map from component ID to column index
@@ -53,7 +47,6 @@ internal struct ArchetypeComponentLookup
         var columnIndex = 0;
         foreach (var component in components)
         {
-            ComponentTypesByColumnIndex[columnIndex] = component.Type;
             ComponentIdByColumnIndex[columnIndex] = component;
 
             ColumnIndexByComponentId[component.Value] = columnIndex;
@@ -61,11 +54,11 @@ internal struct ArchetypeComponentLookup
             columnIndex++;
         }
 
-        // Create a sparse map from component ID to component event dispatcher
-        ComponentEventDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentEventDispatcher[maxComponentId + 1];
+        // Create a sparse map from component ID to component dispatcher
+        ComponentDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentDispatcher[maxComponentId + 1];
         foreach (var component in components)
         {
-            ComponentEventDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentEventDispatcher(component);
+            ComponentDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentDispatcher(component);
         }
     }
 }

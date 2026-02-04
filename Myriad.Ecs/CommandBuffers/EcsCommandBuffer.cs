@@ -22,7 +22,7 @@ namespace Exanite.Myriad.Ecs.CommandBuffers;
 /// where adding/removing multiple components causes the entity to be
 /// copied between multiple archetypes.
 /// <para/>
-/// Fully ordered events without dropping of intermediate events was considered,
+/// Fully ordered events without dropping intermediate events was considered,
 /// but the performance cost is likely too high.
 /// <para/>
 /// If fully ordered events are required, it's possible to submit commands
@@ -169,6 +169,20 @@ public sealed partial class EcsCommandBuffer
         entityState.Removes?.Remove(componentId);
 
         HasBufferedOperations = true;
+
+        return new BufferedEntity(entity, this);
+    }
+
+    /// <summary>
+    /// Add or overwrite a component attached to an entity.
+    /// </summary>
+    public BufferedEntity SetBoxed(Entity entity, object value)
+    {
+        var setAction = new SetAction(this);
+        var componentId = ComponentId.Get(value.GetType());
+        var dispatcher = ComponentRegistry.GetComponentDispatcher(componentId);
+
+        dispatcher.Invoke(setAction, new SetAction.Input(entity, value));
 
         return new BufferedEntity(entity, this);
     }

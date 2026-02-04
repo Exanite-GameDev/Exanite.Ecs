@@ -185,7 +185,7 @@ public readonly partial record struct Entity : IComparable<Entity>
             return "0:0:0";
         }
 
-        var result = $"{World.WorldId}:{Index}:{Version}";;
+        var result = $"{World.WorldId}:{Index}:{Version}";
         var location = World.Entities.GetLocation(EntityId.Index);
         if (EntityId.Version != location.Version)
         {

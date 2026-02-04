@@ -5,8 +5,14 @@ using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.Components;
 
-internal abstract class ComponentEventDispatcher
+internal abstract class ComponentDispatcher
 {
+    public abstract TReturn Create<TFactory, TReturn>(TFactory factory) where TFactory : IComponentFactory<TReturn>;
+    public abstract TReturn Create<TFactory, TInput, TReturn>(TFactory factory, TInput input) where TFactory : IComponentFactory<TInput, TReturn>;
+
+    public abstract void Invoke<TAction>(TAction action) where TAction : IComponentAction;
+    public abstract void Invoke<TAction, TInput>(TAction action, TInput input) where TAction : IComponentAction<TInput>;
+
     public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
     public abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
     public abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
@@ -37,9 +43,29 @@ internal abstract class ComponentEventDispatcher
     {
         component.OnRemoved();
     }
+
+    public interface IComponentFactory<out TReturn>
+    {
+        public TReturn Create<T>() where T : IComponent;
+    }
+
+    public interface IComponentFactory<in TInput, out TReturn>
+    {
+        public TReturn Create<T>(TInput input) where T : IComponent;
+    }
+
+    public interface IComponentAction
+    {
+        public void Invoke<T>() where T : IComponent;
+    }
+
+    public interface IComponentAction<in TInput>
+    {
+        public void Invoke<T>(TInput input) where T : IComponent;
+    }
 }
 
-internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : IComponent
+internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 {
     private delegate void ComponentSelfReferenceAction(ref T component, Entity entity);
 
@@ -53,43 +79,49 @@ internal class ComponentEventDispatcher<T> : ComponentEventDispatcher where T : 
     private readonly ComponentAction? componentSet;
     private readonly ComponentAction? componentRemoved;
 
-    public ComponentEventDispatcher()
+    public ComponentDispatcher()
     {
         if (typeof(T).IsAssignableTo(typeof(IComponentSelfReference<T>)))
         {
-            componentSelfReference = (ComponentSelfReferenceAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentSelfReference), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentSelfReference = (ComponentSelfReferenceAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentSelfReference), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentSelfReferenceAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentCopied)))
         {
-            componentCopied = (ComponentCopiedAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentCopied), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentCopied = (ComponentCopiedAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentCopied), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentCopiedAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentAdded)))
         {
-            componentAdded = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentAdded), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentAdded = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentAdded), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentSet)))
         {
-            componentSet = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentSet), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentSet = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentSet), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
 
         if (typeof(T).IsAssignableTo(typeof(IComponentRemoved)))
         {
-            componentRemoved = (ComponentAction)typeof(ComponentEventDispatcher).GetMethod(nameof(ComponentRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentRemoved = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentRemoved), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
     }
+
+    public override TReturn Create<TFactory, TReturn>(TFactory factory) => factory.Create<T>();
+    public override TReturn Create<TFactory, TInput, TReturn>(TFactory factory, TInput input) => factory.Create<T>(input);
+
+    public override void Invoke<TAction>(TAction action) => action.Invoke<T>();
+    public override void Invoke<TAction, TInput>(TAction action, TInput input) => action.Invoke<T>(input);
 
     public override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
     {

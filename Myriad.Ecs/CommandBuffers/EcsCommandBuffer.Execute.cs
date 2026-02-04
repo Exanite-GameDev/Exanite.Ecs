@@ -71,8 +71,8 @@ public partial class EcsCommandBuffer
                 // Raise component removed events
                 foreach (var componentId in entity.ComponentIds)
                 {
-                    var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                    eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                    var dispatcher = archetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                    dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
                 }
 
                 // Raise entity destroyed event
@@ -101,8 +101,8 @@ public partial class EcsCommandBuffer
         var archetype = location.Chunk.Archetype;
         foreach (var componentId in archetype.Components)
         {
-            var eventDispatcher = archetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+            var dispatcher = archetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+            dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
         }
 
         // Raise entity destroyed event
@@ -191,15 +191,15 @@ public partial class EcsCommandBuffer
                 {
                     foreach (var (componentId, setterId) in entityState.Sets)
                     {
-                        var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                        var dispatcher = dstArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
                         if (setterId.IsPrefab)
                         {
                             state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
-                            eventDispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
+                            dispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
                         }
                         else
                         {
-                            eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                            dispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
                         }
                     }
                 }
@@ -223,8 +223,8 @@ public partial class EcsCommandBuffer
                     {
                         if (srcArchetype.Components.Contains(componentId))
                         {
-                            var eventDispatcher = srcArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                            eventDispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                            var dispatcher = srcArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                            dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
                         }
 
                     }
@@ -241,14 +241,14 @@ public partial class EcsCommandBuffer
                 {
                     foreach (var componentId in entityState.Sets.Keys)
                     {
-                        var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
+                        var dispatcher = dstArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
                         if (srcArchetype.Components.Contains(componentId))
                         {
-                            eventDispatcher.OnComponentModified(recursiveCommandBuffer, entity);
+                            dispatcher.OnComponentModified(recursiveCommandBuffer, entity);
                         }
                         else
                         {
-                            eventDispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
+                            dispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
                         }
                     }
                 }
@@ -267,8 +267,8 @@ public partial class EcsCommandBuffer
                     var dstArchetype = location.Chunk.Archetype;
                     foreach (var componentId in entityState.Sets.Keys)
                     {
-                        var eventDispatcher = dstArchetype.Lookup.ComponentEventDispatcherByComponentId[componentId.Value];
-                        eventDispatcher.OnComponentModified(recursiveCommandBuffer, entity);
+                        var dispatcher = dstArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                        dispatcher.OnComponentModified(recursiveCommandBuffer, entity);
                     }
                 }
             }
