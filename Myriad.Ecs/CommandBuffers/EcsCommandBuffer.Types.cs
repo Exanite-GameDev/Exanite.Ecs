@@ -53,6 +53,23 @@ public partial class EcsCommandBuffer
         }
     }
 
+    private readonly struct SetAction : ComponentDispatcher.IComponentAction<SetAction.Input>
+    {
+        private readonly EcsCommandBuffer commandBuffer;
+
+        public SetAction(EcsCommandBuffer commandBuffer)
+        {
+            this.commandBuffer = commandBuffer;
+        }
+
+        public void Invoke<T>(Input input) where T : IComponent
+        {
+            commandBuffer.Set<T>(input.Entity, (T)input.Value);
+        }
+
+        public readonly record struct Input(Entity Entity, object Value);
+    }
+
     private class PrefabEntityTargetLookup : IEntityLookup
     {
         private readonly Dictionary<(Entity Prefab, EntityId CurrentEntity, Entity GroupKey), Entity> perEntity = [];

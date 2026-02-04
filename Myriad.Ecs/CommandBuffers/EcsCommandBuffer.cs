@@ -174,6 +174,20 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
+    /// Add or overwrite a component attached to an entity.
+    /// </summary>
+    public BufferedEntity SetBoxed(Entity entity, object value)
+    {
+        var setAction = new SetAction(this);
+        var componentId = ComponentId.Get(value.GetType());
+        var dispatcher = ComponentRegistry.GetComponentDispatcher(componentId);
+
+        dispatcher.Invoke(setAction, new SetAction.Input(entity, value));
+
+        return new BufferedEntity(entity, this);
+    }
+
+    /// <summary>
     /// Remove a component attached to an entity.
     /// </summary>
     public BufferedEntity Remove<T>(Entity entity) where T : IComponent
