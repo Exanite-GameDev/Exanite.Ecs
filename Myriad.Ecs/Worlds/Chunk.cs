@@ -54,7 +54,8 @@ public sealed class Chunk
         var arrayFactory = new ArrayFactory();
         for (var i = 0; i < componentColumns.Length; i++)
         {
-            componentColumns[i] = ComponentRegistry.GetComponentDispatcher(Lookup.ComponentIdByColumnIndex[i]).Create<ArrayFactory, int, Array>(arrayFactory, EcsConstants.ChunkEntityCount);
+            var dispatcher = Lookup.ComponentDispatcherByComponentId[Lookup.ComponentIdByColumnIndex[i].Value];
+            componentColumns[i] = dispatcher.Create<ArrayFactory, int, Array>(arrayFactory, EcsConstants.ChunkEntityCount);
         }
     }
 
