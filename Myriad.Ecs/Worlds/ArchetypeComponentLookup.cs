@@ -10,11 +10,6 @@ namespace Exanite.Myriad.Ecs.Worlds;
 internal struct ArchetypeComponentLookup
 {
     /// <summary>
-    /// Map from column index to the component type.
-    /// </summary>
-    internal readonly Type[] ComponentTypesByColumnIndex;
-
-    /// <summary>
     /// Map from column index to the component ID.
     /// </summary>
     internal readonly ComponentId[] ComponentIdByColumnIndex;
@@ -41,8 +36,7 @@ internal struct ArchetypeComponentLookup
             }
         }
 
-        // Initialize a map from column index to component type and component ID
-        ComponentTypesByColumnIndex = new Type[components.Count];
+        // Initialize a map from column index to component ID
         ComponentIdByColumnIndex = new ComponentId[components.Count];
 
         // Initialize a sparse map from component ID to column index
@@ -53,7 +47,6 @@ internal struct ArchetypeComponentLookup
         var columnIndex = 0;
         foreach (var component in components)
         {
-            ComponentTypesByColumnIndex[columnIndex] = component.Type;
             ComponentIdByColumnIndex[columnIndex] = component;
 
             ColumnIndexByComponentId[component.Value] = columnIndex;

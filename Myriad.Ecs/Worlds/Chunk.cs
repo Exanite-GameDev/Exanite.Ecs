@@ -49,7 +49,7 @@ public sealed class Chunk
         Lookup = archetype.Lookup;
 
         entityColumn = new Entity[EcsConstants.ChunkEntityCount];
-        componentColumns = new Array[Lookup.ComponentTypesByColumnIndex.Length];
+        componentColumns = new Array[Lookup.ComponentIdByColumnIndex.Length];
 
         var arrayFactory = new ArrayFactory();
         for (var i = 0; i < componentColumns.Length; i++)
