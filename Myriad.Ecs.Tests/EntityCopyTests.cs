@@ -362,6 +362,7 @@ public class EntityCopyTests
 
         public void OnCopied(EcsWorld newWorld, IEntityLookup lookup)
         {
+            Children = [..Children];
             foreach (ref var child in Children.AsSpan())
             {
                 child = lookup.Get(child);
