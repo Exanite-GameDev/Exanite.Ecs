@@ -19,7 +19,7 @@ namespace Exanite.Myriad.Ecs;
 /// </summary>
 public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 {
-    private static Lock IdLock = new();
+    private static readonly Lock IdLock = new();
     private static int NextWorldId = 1;
 
     public bool IsDisposing { get; private set; }
