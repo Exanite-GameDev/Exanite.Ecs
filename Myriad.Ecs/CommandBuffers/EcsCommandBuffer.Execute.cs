@@ -179,12 +179,12 @@ public partial class EcsCommandBuffer
                 // Write component values
                 WriteComponentValues(entityState, location);
 
-                // Raise component added/copied events
+                // Raise component copied/added events
                 if (entityState.Sets != null)
                 {
                     foreach (var (componentId, setterId) in entityState.Sets)
                     {
-                        // Did not already have the component, so we raise copied if needed, then modified
+                        // Did not already have the component, so we raise copied if needed, then added
                         var dispatcher = dstArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
                         if (setterId.IsPrefab)
                         {
@@ -227,7 +227,7 @@ public partial class EcsCommandBuffer
                 // Write component values
                 WriteComponentValues(entityState, location);
 
-                // Raise component added/copied/modified events
+                // Raise component copied/added/modified events
                 if (entityState.Sets != null)
                 {
                     foreach (var (componentId, setterId) in entityState.Sets)
@@ -246,7 +246,7 @@ public partial class EcsCommandBuffer
                         }
                         else
                         {
-                            // Did not already have the component, so we raise copied if needed, then modified
+                            // Did not already have the component, so we raise copied if needed, then added
                             if (setterId.IsPrefab)
                             {
                                 state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
