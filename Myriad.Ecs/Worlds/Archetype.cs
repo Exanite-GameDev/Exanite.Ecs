@@ -61,11 +61,6 @@ public sealed class Archetype
     private readonly List<Chunk> chunksList = [];
 
     /// <summary>
-    /// A list of chunks which might have space to put an entity in.
-    /// </summary>
-    private readonly List<Chunk> chunksWithSpace = [];
-
-    /// <summary>
     /// A list of empty chunks that have been removed from this archetype.
     /// </summary>
     private readonly Stack<Chunk> spareChunks = new(EcsConstants.ChunkHotSpareCount);
@@ -105,7 +100,7 @@ public sealed class Archetype
         location.Chunk.RemoveEntity(location);
 
         // Execute handler for when an entity is removed from a chunk
-        OnChunkEntityRemoved(location.Chunk);
+        OnChunkEntityRemoved();
     }
 
     internal void MigrateEntity(EntityId entity, Archetype dstArchetype, ref EntityLocation location)
@@ -117,7 +112,7 @@ public sealed class Archetype
         srcChunk.MigrateTo(entity, ref location, dstArchetype);
 
         // Execute handler for when an entity is removed from a chunk
-        OnChunkEntityRemoved(srcChunk);
+        OnChunkEntityRemoved();
     }
 
     /// <summary>
@@ -181,17 +176,6 @@ public sealed class Archetype
                 srcIndex--;
             }
         }
-
-        // Update chunks with space
-        chunksWithSpace.Clear();
-        if (srcIndex >= 0 && srcIndex < chunksList.Count)
-        {
-            var maybeFullChunk = chunksList[srcIndex];
-            if (!maybeFullChunk.IsFull)
-            {
-                chunksWithSpace.Add(maybeFullChunk);
-            }
-        }
     }
 
     /// <summary>
@@ -217,7 +201,6 @@ public sealed class Archetype
                 break;
             }
         }
-        chunksWithSpace.Clear();
         chunksList.Clear();
 
         // Done! No entities left.
@@ -229,10 +212,13 @@ public sealed class Archetype
     /// </summary>
     private Chunk GetChunkWithSpace()
     {
-        chunksWithSpace.RemoveAll(static chunk => chunk.IsFull);
-        if (chunksWithSpace.Count > 0)
+        if (chunksList.Count > 0)
         {
-            return chunksWithSpace[0];
+            var lastChunk = chunksList[^1];
+            if (!lastChunk.IsFull)
+            {
+                return lastChunk;
+            }
         }
 
         return GetEmptyChunk();
@@ -245,36 +231,23 @@ public sealed class Archetype
     {
         var newChunk = spareChunks.Count > 0 ? spareChunks.Pop() : new Chunk(this);
         chunksList.Add(newChunk);
-        chunksWithSpace.Add(newChunk);
 
         return newChunk;
     }
 
-    private void OnChunkEntityRemoved(Chunk chunk)
+    private void OnChunkEntityRemoved()
     {
         // Decrease archetype entity count
         EntityCount--;
 
-        switch (chunk.Entities.Length)
+        // Check if last chunk is empty
+        var lastChunk = chunksList[^1];
+        if (lastChunk.IsEmpty)
         {
-            // If the chunk is empty remove it from this archetype entirely
-            case 0:
+            chunksList.RemoveAt(chunksList.Count - 1);
+            if (spareChunks.Count < EcsConstants.ChunkHotSpareCount)
             {
-                chunksWithSpace.Remove(chunk);
-                chunksList.Remove(chunk);
-                if (spareChunks.Count < EcsConstants.ChunkHotSpareCount)
-                {
-                    spareChunks.Push(chunk);
-                }
-
-                break;
-            }
-
-            // If the chunk was previously full and now isn't, add it to the set of chunks with space
-            case EcsConstants.ChunkEntityCount - 1:
-            {
-                chunksWithSpace.Add(chunk);
-                break;
+                spareChunks.Push(lastChunk);
             }
         }
     }
