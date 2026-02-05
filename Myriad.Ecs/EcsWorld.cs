@@ -51,6 +51,9 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// <summary>
     /// The archetypes stored by this world.
     /// </summary>
+    /// <remarks>
+    /// This can include empty archetypes.
+    /// </remarks>
     public ReadOnlySpan<Archetype> Archetypes => archetypes.AsSpan();
 
     /// <inheritdoc cref="Archetypes"/>

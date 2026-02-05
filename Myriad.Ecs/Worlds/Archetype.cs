@@ -25,6 +25,9 @@ public sealed class Archetype
     /// <summary>
     /// The chunks contained in this archetype.
     /// </summary>
+    /// <remarks>
+    /// This will never include empty chunks.
+    /// </remarks>
     public ReadOnlySpan<Chunk> Chunks => chunksList.AsSpan();
 
     /// <summary>
