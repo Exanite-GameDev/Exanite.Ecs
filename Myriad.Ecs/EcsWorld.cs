@@ -140,7 +140,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
         // AddToInternal always creates new chunks
         // This can cause a lot of fragmentation if we don't compact here
-        Compact();
+        dstWorld.Compact();
 
         return lookup;
     }

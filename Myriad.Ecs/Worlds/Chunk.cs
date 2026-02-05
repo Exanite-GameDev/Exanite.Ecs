@@ -198,7 +198,7 @@ public sealed class Chunk
         }
 
         EntityCount -= copyCount;
-        dstChunk.EntityCount -= copyCount;
+        dstChunk.EntityCount += copyCount;
     }
 
     /// <remarks>
