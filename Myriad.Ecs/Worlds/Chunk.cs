@@ -166,7 +166,7 @@ public sealed class Chunk
     /// </remarks>
     internal void CompactInto(Chunk dstChunk)
     {
-        GuardUtility.IsTrue(dstChunk.Archetype.World == Archetype.World, "Internal: Cannot compact chunks that come from different worlds");
+        GuardUtility.IsTrue(dstChunk.Archetype == Archetype, "Internal: Cannot compact chunks that have different archetypes");
 
         var availableSpace = EcsConstants.ChunkEntityCount - dstChunk.EntityCount;
         var copyCount = int.Min(availableSpace, EntityCount);
