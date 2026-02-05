@@ -18,9 +18,15 @@ public abstract class ComponentDispatcher
 
     internal abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup);
     internal abstract void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup);
+
     internal abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
+    internal abstract void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype);
+
     internal abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
+    internal abstract void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype);
+
     internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
+    internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype);
 
     internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
     {
