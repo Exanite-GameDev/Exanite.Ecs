@@ -139,6 +139,8 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
             return;
         }
 
+        var world = archetype.World;
+
         if (componentSelfReference != null)
         {
             foreach (var chunk in archetype.Chunks)
@@ -157,22 +159,24 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         {
             foreach (var chunk in archetype.Chunks)
             {
-                foreach (var entity in chunk.Entities)
-                {
-                    ref var component = ref entity.Get<T>();
+                var components = chunk.GetSpan<T>();
+                var entities = chunk.Entities;
 
-                    componentCopied!.Invoke(ref component, entity.World, lookup);
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    componentCopied!.Invoke(ref components[i], world, lookup);
                 }
             }
         }
 
         foreach (var chunk in archetype.Chunks)
         {
-            foreach (var entity in chunk.Entities)
-            {
-                ref var component = ref entity.Get<T>();
+            var components = chunk.GetSpan<T>();
+            var entities = chunk.Entities;
 
-                entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
+            for (var i = 0; i < entities.Length; i++)
+            {
+                world.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entities[i], ref components[i], lookup));
             }
         }
     }
