@@ -30,7 +30,7 @@ public abstract class ComponentDispatcher
 
     internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype);
     internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk);
-    internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity, EcsWorld world);
+    internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
 
     internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
     {
@@ -291,8 +291,9 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         RaiseInterfaceRemoved(chunk);
     }
 
-    internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity, EcsWorld world)
+    internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
     {
+        var world = entity.World;
         ref var component = ref entity.Get<T>();
 
         // Notify world first before component
