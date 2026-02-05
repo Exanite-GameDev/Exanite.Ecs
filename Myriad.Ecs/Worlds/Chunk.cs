@@ -226,40 +226,46 @@ public sealed class Chunk
     /// </remarks>
     internal void RemoveEntity(EntityLocation location)
     {
-        var entityIndex = location.IndexInChunk;
+        var entityIndexInChunk = location.IndexInChunk;
 
-        // Clear out the components. This prevents chunks holding
-        // onto references to dead managed components, and keeping them in memory.
-        foreach (var componentColumn in componentColumns)
-        {
-            Array.Clear(componentColumn, entityIndex, 1);
-        }
+        // We are guaranteed to have at least 1 chunk and 1 entity
+        var lastChunk = Archetype.Chunks[^1];
+        var lastEntityIndexInChunk = lastChunk.EntityCount - 1;
 
-        // No work to do if there are no other entities
-        EntityCount -= 1;
-        if (EntityCount == 0)
+        var isSameLocation = this == lastChunk && entityIndexInChunk == lastEntityIndexInChunk;
+        if (!isSameLocation)
         {
-            entityColumn[entityIndex] = default;
-            return;
-        }
+            // Swap first
+            var lastEntity = lastChunk.entityColumn[lastEntityIndexInChunk];
 
-        // If we did not just destroy the top entity into place then swap the top
-        // entity down into this slot to keep the chunk continuous.
-        if (entityIndex != EntityCount)
-        {
-            var lastEntityIndex = EntityCount;
-            var lastEntity = entityColumn[lastEntityIndex];
+            // Update location
             ref var lastLocation = ref Archetype.World.Entities.GetLocation(lastEntity.EntityId);
-            entityColumn[entityIndex] = lastEntity;
-            entityColumn[lastEntityIndex] = default;
-            lastLocation.IndexInChunk = entityIndex;
+            lastLocation.Chunk = this;
+            lastLocation.IndexInChunk = entityIndexInChunk;
 
-            // Copy top entity components into place
-            foreach (var componentColumn in componentColumns)
+            // Copy entity
+            entityColumn[entityIndexInChunk] = lastEntity;
+
+            // Copy components
+            for (var i = 0; i < componentColumns.Length; i++)
             {
-                Array.Copy(componentColumn, lastEntityIndex, componentColumn, entityIndex, 1);
-                Array.Clear(componentColumn, lastEntityIndex, 1);
+                Array.Copy(lastChunk.componentColumns[i], lastEntityIndexInChunk, componentColumns[i], entityIndexInChunk, 1);
             }
+        }
+
+        // Clear last
+        {
+            // Clear entity
+            lastChunk.entityColumn[lastEntityIndexInChunk] = default;
+
+            // Clear components
+            foreach (var componentColumn in lastChunk.componentColumns)
+            {
+                Array.Clear(componentColumn, lastEntityIndexInChunk, 1);
+            }
+
+            // Decrement entity count
+            lastChunk.EntityCount--;
         }
     }
 

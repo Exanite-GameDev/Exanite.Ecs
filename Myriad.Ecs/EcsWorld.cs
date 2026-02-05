@@ -136,30 +136,48 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IEntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
     {
-        var lookup = AddToInternal(dstWorld, view);
+        using var _ = AcquireCommandBuffer(out var commandBuffer);
+        using var __ = ListPool<Chunk>.Acquire(out var newChunks);
 
-        // AddToInternal always creates new chunks
-        // This can cause a lot of fragmentation if we don't compact here
-        dstWorld.Compact();
+        var lookup = new EntityLookup();
+        foreach (var srcArchetype in view.Archetypes)
+        {
+            if (srcArchetype.EntityCount == 0)
+            {
+                continue;
+            }
+
+            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
+            foreach (var srcChunk in srcArchetype.Chunks)
+            {
+                var newChunk = dstArchetype.CreateChunkFrom(srcChunk, lookup);
+                newChunks.Add(newChunk);
+            }
+
+            dstArchetype.Compact();
+        }
+
+        foreach (var dstChunk in newChunks)
+        {
+            // Raise component copied/added events
+            var componentIdByColumnIndex = dstChunk.Lookup.ComponentIdByColumnIndex;
+            foreach (var componentId in componentIdByColumnIndex)
+            {
+                var dispatcher = dstChunk.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                dispatcher.OnComponentCopied(commandBuffer, dstChunk, lookup);
+                dispatcher.OnComponentAdded(commandBuffer, dstChunk);
+            }
+
+            // Raise entity created events
+            foreach (var dstEntity in dstChunk.Entities)
+            {
+                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstEntity));
+            }
+        }
+
+        commandBuffer.Execute();
 
         return lookup;
-    }
-
-    /// <summary>
-    /// Compacts all chunks within all archetypes by ensuring that
-    /// at most one chunk in each archetype is left partially filled.
-    /// <para/>
-    /// This does not remove empty archetypes.
-    /// </summary>
-    /// <remarks>
-    /// Note that chunks are already guaranteed to be contiguously filled.
-    /// </remarks>
-    public void Compact()
-    {
-        foreach (var archetype in archetypes)
-        {
-            archetype.Compact();
-        }
     }
 
     /// <summary>
@@ -200,51 +218,6 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
         GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
     }
-
-    private IEntityLookup AddToInternal(EcsWorld dstWorld, IArchetypeView view)
-    {
-        using var _ = AcquireCommandBuffer(out var commandBuffer);
-        using var __ = ListPool<Chunk>.Acquire(out var newChunks);
-
-        var lookup = new EntityLookup();
-        foreach (var srcArchetype in view.Archetypes)
-        {
-            if (srcArchetype.EntityCount == 0)
-            {
-                continue;
-            }
-
-            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
-            foreach (var srcChunk in srcArchetype.Chunks)
-            {
-                var newChunk = dstArchetype.CreateChunkFrom(srcChunk, lookup);
-                newChunks.Add(newChunk);
-            }
-        }
-
-        foreach (var dstChunk in newChunks)
-        {
-            // Raise component copied/added events
-            var componentIdByColumnIndex = dstChunk.Lookup.ComponentIdByColumnIndex;
-            foreach (var componentId in componentIdByColumnIndex)
-            {
-                var dispatcher = dstChunk.Lookup.ComponentDispatcherByComponentId[componentId.Value];
-                dispatcher.OnComponentCopied(commandBuffer, dstChunk, lookup);
-                dispatcher.OnComponentAdded(commandBuffer, dstChunk);
-            }
-
-            // Raise entity created events
-            foreach (var dstEntity in dstChunk.Entities)
-            {
-                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstEntity));
-            }
-        }
-
-        commandBuffer.Execute();
-
-        return lookup;
-    }
-
 
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.

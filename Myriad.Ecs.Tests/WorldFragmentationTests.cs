@@ -65,12 +65,7 @@ public class WorldFragmentationTests
     }
 
     [Fact]
-    // This documents that destroying entities can leave partially filled chunks
-    // and ensures that manual compaction works
-    //
-    // Whether destroying entities should leave partially filled chunks is another question,
-    // but not needing to get the last entity from the last chunk during entity destruction simplifies things
-    public void CreatingMaxPlusOneEntities_ThenDestroyingFirst_FragmentsChunks()
+    public void CreatingMaxPlusOneEntities_ThenDestroyingFirst_DoesNotFragmentChunks()
     {
         var world = new EcsWorld();
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
@@ -83,7 +78,7 @@ public class WorldFragmentationTests
 
         commandBuffer.Execute();
 
-        // Should be two chunks
+        // Should have two chunks
         Assert.Equal(EcsConstants.ChunkEntityCount + 1, world.Count());
         Assert.Equal(1, world.Archetypes.Length);
         Assert.Equal(2, world.Archetypes[0].Chunks.Length);
@@ -91,14 +86,7 @@ public class WorldFragmentationTests
         commandBuffer.Destroy(first);
         commandBuffer.Execute();
 
-        // Should still be two chunks
-        Assert.Equal(EcsConstants.ChunkEntityCount, world.Count());
-        Assert.Equal(1, world.Archetypes.Length);
-        Assert.Equal(2, world.Archetypes[0].Chunks.Length);
-
-        world.Compact();
-
-        // Now we should have one chunk
+        // Should have one chunk
         Assert.Equal(EcsConstants.ChunkEntityCount, world.Count());
         Assert.Equal(1, world.Archetypes.Length);
         Assert.Equal(1, world.Archetypes[0].Chunks.Length);
