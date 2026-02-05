@@ -168,7 +168,7 @@ public sealed class Chunk
         var srcIndex = EntityCount - copyCount;
         var dstIndex = dstChunk.EntityCount;
 
-        // Copy components
+        // Move components
         for (var columnIndex = 0; columnIndex < componentColumns.Length; columnIndex++)
         {
             var srcComponentColumn = componentColumns[columnIndex];
@@ -178,7 +178,8 @@ public sealed class Chunk
             Array.Clear(srcComponentColumn, srcIndex, copyCount);
         }
 
-        // Copy entities
+        // Move entities
+        // Clear is not strictly necessary since the only reference is to the world object, but keeps things clean
         Array.Copy(entityColumn, srcIndex, dstChunk.entityColumn, dstIndex, copyCount);
         Array.Clear(entityColumn, srcIndex, copyCount);
 
@@ -242,20 +243,17 @@ public sealed class Chunk
         // entity down into this slot to keep the chunk continuous.
         if (entityIndex != EntityCount)
         {
-            var lastEntity = entityColumn[EntityCount];
             var lastEntityIndex = EntityCount;
-            ref var lastInfo = ref Archetype.World.Entities.GetLocation(lastEntity.EntityId);
+            var lastEntity = entityColumn[lastEntityIndex];
+            ref var lastLocation = ref Archetype.World.Entities.GetLocation(lastEntity.EntityId);
             entityColumn[entityIndex] = lastEntity;
             entityColumn[lastEntityIndex] = default;
-            lastInfo.IndexInChunk = entityIndex;
+            lastLocation.IndexInChunk = entityIndex;
 
             // Copy top entity components into place
             foreach (var componentColumn in componentColumns)
             {
                 Array.Copy(componentColumn, lastEntityIndex, componentColumn, entityIndex, 1);
-
-                // Clear out the components we just moved. This prevents chunks holding
-                // onto references to dead managed components, and keeping them in memory.
                 Array.Clear(componentColumn, lastEntityIndex, 1);
             }
         }
