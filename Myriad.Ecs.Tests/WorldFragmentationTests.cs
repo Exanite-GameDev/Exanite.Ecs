@@ -22,9 +22,12 @@ public class WorldFragmentationTests
             srcWorld.AddTo(dstWorld);
         }
 
-        Assert.Equal(addCount, dstWorld.Count());
         Assert.Equal(1, dstWorld.Archetypes.Length);
         Assert.Equal(1, dstWorld.Archetypes[0].Chunks.Length);
+
+        Assert.Equal(addCount, dstWorld.Count());
+        Assert.Equal(addCount, dstWorld.Archetypes[0].EntityCount);
+        Assert.Equal(addCount, dstWorld.Archetypes[0].Chunks[0].Entities.Length);
     }
 
     [Fact]
