@@ -185,7 +185,7 @@ public sealed class Archetype
 
         // Update chunks with space
         chunksWithSpace.Clear();
-        if (srcIndex >= 0 && srcIndex < chunksList.Count && !chunksList[srcIndex].IsFull)
+        if (srcIndex >= 0 && srcIndex < chunksList.Count)
         {
             var maybeFullChunk = chunksList[srcIndex];
             if (!maybeFullChunk.IsFull)
