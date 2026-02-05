@@ -62,7 +62,7 @@ There are 2 ways of receiving events:
 1. Implementing the corresponding interface on the component
 2. Subscribing to the world event bus
 
-The component interface callbacks are intentionally simpler than the events raised by the event bus. \
+The component interface callbacks are intentionally simpler than the events raised by the event bus.
 
 This is because components should remain simple data storage containers. \
 The component events should be used to maintain data consistency.
