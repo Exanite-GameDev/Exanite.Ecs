@@ -38,7 +38,7 @@ Major modifications:
 - Removal of phantom components
   - Use events or tagging instead.
 - Buffered entities do not need to be resolved
-  - Entity IDs are reserved as soon as an entity is pending creation
+  - Entity IDs are reserved as soon as an entity is pending creation.
 - Archetypes and chunks are exposed to the user
   - This is to allow for querying systems to be implemented on top of the base ECS.
 
