@@ -9,6 +9,7 @@ using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Queries;
 using Exanite.Myriad.Ecs.Worlds;
 
@@ -152,12 +153,19 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
         foreach (var dstChunk in newChunks)
         {
+            // Raise component copied/added events
             var componentIdByColumnIndex = dstChunk.Lookup.ComponentIdByColumnIndex;
             foreach (var componentId in componentIdByColumnIndex)
             {
                 var dispatcher = dstChunk.Lookup.ComponentDispatcherByComponentId[componentId.Value];
                 dispatcher.OnComponentCopied(commandBuffer, dstChunk, lookup);
                 dispatcher.OnComponentAdded(commandBuffer, dstChunk);
+            }
+
+            // Raise entity created events
+            foreach (var dstEntity in dstChunk.Entities)
+            {
+                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstEntity));
             }
         }
 

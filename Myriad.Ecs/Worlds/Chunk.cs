@@ -154,9 +154,6 @@ public sealed class Chunk
             var originalEntity = srcChunk.Entities[location.IndexInChunk];
             var newEntity = entityId.ToEntity(world);
             lookup.Add(originalEntity, newEntity);
-
-            // Raise entity created event
-            world.EventBus.Raise(new EntityCreatedEvent(recursiveCommandBuffer, newEntity));
         }
     }
 
