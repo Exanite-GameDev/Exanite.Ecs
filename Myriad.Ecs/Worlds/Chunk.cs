@@ -4,7 +4,6 @@ using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
 
 namespace Exanite.Myriad.Ecs.Worlds;
 
@@ -155,6 +154,45 @@ public sealed class Chunk
             var newEntity = entityId.ToEntity(world);
             lookup.Add(originalEntity, newEntity);
         }
+    }
+
+    /// <remarks>
+    /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
+    /// </remarks>
+    internal void CompactInto(Chunk dstChunk)
+    {
+        GuardUtility.IsTrue(dstChunk.Archetype.World == Archetype.World, "Internal: Cannot compact chunks that come from different worlds");
+
+        var availableSpace = EcsConstants.ChunkEntityCount - dstChunk.EntityCount;
+        var copyCount = int.Min(availableSpace, EntityCount);
+        var srcIndex = EntityCount - copyCount;
+        var dstIndex = dstChunk.EntityCount;
+
+        // Copy components
+        for (var columnIndex = 0; columnIndex < componentColumns.Length; columnIndex++)
+        {
+            var srcComponentColumn = componentColumns[columnIndex];
+            var dstComponentColumn = dstChunk.componentColumns[columnIndex];
+
+            Array.Copy(srcComponentColumn, srcIndex, dstComponentColumn, dstIndex, copyCount);
+            Array.Clear(srcComponentColumn, srcIndex, copyCount);
+        }
+
+        // Copy entities
+        Array.Copy(entityColumn, srcIndex, dstChunk.entityColumn, dstIndex, copyCount);
+        Array.Clear(entityColumn, srcIndex, copyCount);
+
+        // Update entity locations
+        var world = Archetype.World;
+        for (var i = dstIndex; i < dstIndex + copyCount; i++)
+        {
+            ref var location = ref world.Entities.GetLocation(dstChunk.entityColumn[i].Index);
+            location.Chunk = dstChunk;
+            location.IndexInChunk = i;
+        }
+
+        EntityCount -= copyCount;
+        dstChunk.EntityCount -= copyCount;
     }
 
     /// <remarks>
