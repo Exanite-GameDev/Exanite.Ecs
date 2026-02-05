@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 
 namespace Exanite.Myriad.Ecs.Worlds;
@@ -138,7 +137,7 @@ public sealed class Chunk
     /// <remarks>
     /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
     /// </remarks>
-    internal void CopyFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, EntityLookup lookup)
+    internal void CopyFrom(Chunk srcChunk, EntityLookup lookup)
     {
         for (var i = 0; i < srcChunk.componentColumns.Length; i++)
         {

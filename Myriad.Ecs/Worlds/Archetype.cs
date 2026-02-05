@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
 
 namespace Exanite.Myriad.Ecs.Worlds;
@@ -128,12 +127,12 @@ public sealed class Archetype
     /// <remarks>
     /// This is designed to be called by <see cref="EcsWorld.AddTo(EcsWorld, IArchetypeView)"/>.
     /// </remarks>
-    internal Chunk CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, EntityLookup lookup)
+    internal Chunk CreateChunkFrom(Chunk srcChunk, EntityLookup lookup)
     {
         EntityCount += srcChunk.Entities.Length;
 
         var newChunk = GetEmptyChunk();
-        newChunk.CopyFrom(srcChunk, recursiveCommandBuffer, lookup);
+        newChunk.CopyFrom(srcChunk, lookup);
 
         return newChunk;
     }

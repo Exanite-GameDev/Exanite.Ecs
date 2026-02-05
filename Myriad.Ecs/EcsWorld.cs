@@ -217,7 +217,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
             foreach (var srcChunk in srcArchetype.Chunks)
             {
-                var newChunk = dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, lookup);
+                var newChunk = dstArchetype.CreateChunkFrom(srcChunk, lookup);
                 newChunks.Add(newChunk);
             }
         }
