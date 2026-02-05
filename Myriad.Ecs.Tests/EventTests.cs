@@ -45,7 +45,7 @@ public class EventTests
         Assert.Equal(0, srcHandler.ComponentCopiedCount);
 
         Assert.Equal(entityAddCount, dstHandler.EntityCreatedCount);
-        Assert.Equal(0, dstHandler.ComponentAddedCount);
+        Assert.Equal(entityAddCount, dstHandler.ComponentAddedCount);
         Assert.Equal(entityAddCount, dstHandler.ComponentCopiedCount);
     }
 
@@ -99,7 +99,7 @@ public class EventTests
         Assert.Equal(0, srcHandler.ComponentCopiedCount);
 
         Assert.Equal(entityAddCount, dstHandler.EntityCreatedCount);
-        Assert.Equal(0, dstHandler.ComponentAddedCount);
+        Assert.Equal(entityAddCount, dstHandler.ComponentAddedCount);
         Assert.Equal(entityAddCount, dstHandler.ComponentCopiedCount);
     }
 
