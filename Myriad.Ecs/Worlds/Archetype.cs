@@ -134,7 +134,7 @@ public sealed class Archetype
 
     /// <summary>
     /// Compacts the chunk contained in this archetype,
-    /// ensuring that at most one chunk is left partially filled.
+    /// ensuring that, at most, only the last chunk is left partially filled.
     /// </summary>
     internal void Compact()
     {
