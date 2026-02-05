@@ -85,6 +85,57 @@ public sealed class Archetype
     }
 
     /// <summary>
+    /// Find a chunk with space and add the given entity to it.
+    /// </summary>
+    /// <param name="entity">Entity to add to a chunk</param>
+    /// <param name="location">Location will be mutated to point to the new location</param>
+    internal void AddEntity(EntityId entity, ref EntityLocation location)
+    {
+        EntityCount++;
+
+        var chunk = GetChunkWithSpace();
+        chunk.AddEntity(entity, ref location);
+    }
+
+    internal void RemoveEntity(EntityLocation location)
+    {
+        // Remove the entity from the chunk, component data is lost after this point
+        location.Chunk.RemoveEntity(location);
+
+        // Execute handler for when an entity is removed from a chunk
+        OnChunkEntityRemoved(location.Chunk);
+    }
+
+    internal void MigrateEntity(EntityId entity, Archetype dstArchetype, ref EntityLocation location)
+    {
+        GuardUtility.IsFalse(dstArchetype == this, "Destination archetype is the same as the source archetype");
+
+        // Do the actual copying
+        var srcChunk = location.Chunk;
+        srcChunk.MigrateTo(entity, ref location, dstArchetype);
+
+        // Execute handler for when an entity is removed from a chunk
+        OnChunkEntityRemoved(srcChunk);
+    }
+
+    /// <summary>
+    /// Copies the entities from the source chunk to a new chunk in this archetype.
+    /// The source chunk must have the same component set.
+    /// </summary>
+    /// <remarks>
+    /// This is designed to be called by <see cref="EcsWorld.AddTo(EcsWorld, IArchetypeView)"/>.
+    /// </remarks>
+    internal Chunk CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, EntityLookup lookup)
+    {
+        EntityCount += srcChunk.Entities.Length;
+
+        var newChunk = GetEmptyChunk();
+        newChunk.CopyFrom(srcChunk, recursiveCommandBuffer, lookup);
+
+        return newChunk;
+    }
+
+    /// <summary>
     /// Destroy every Entity in this archetype
     /// </summary>
     internal void Clear()
@@ -115,36 +166,6 @@ public sealed class Archetype
     }
 
     /// <summary>
-    /// Copies the entities from the source chunk to a new chunk in this archetype.
-    /// The source chunk must have the same component set.
-    /// </summary>
-    /// <remarks>
-    /// This is designed to be called by <see cref="EcsWorld.AddTo(EcsWorld, IArchetypeView)"/>.
-    /// </remarks>
-    internal Chunk CreateChunkFrom(Chunk srcChunk, EcsCommandBuffer recursiveCommandBuffer, EntityLookup lookup)
-    {
-        EntityCount += srcChunk.Entities.Length;
-
-        var newChunk = GetEmptyChunk();
-        newChunk.CopyFrom(srcChunk, recursiveCommandBuffer, lookup);
-
-        return newChunk;
-    }
-
-    /// <summary>
-    /// Find a chunk with space and add the given entity to it.
-    /// </summary>
-    /// <param name="entity">Entity to add to a chunk</param>
-    /// <param name="location">Location will be mutated to point to the new location</param>
-    internal void AddEntity(EntityId entity, ref EntityLocation location)
-    {
-        EntityCount++;
-
-        var chunk = GetChunkWithSpace();
-        chunk.AddEntity(entity, ref location);
-    }
-
-    /// <summary>
     /// Returns a chunk that is not full.
     /// </summary>
     private Chunk GetChunkWithSpace()
@@ -168,27 +189,6 @@ public sealed class Archetype
         chunksWithSpace.Add(newChunk);
 
         return newChunk;
-    }
-
-    internal void RemoveEntity(EntityLocation location)
-    {
-        // Remove the entity from the chunk, component data is lost after this point
-        location.Chunk.RemoveEntity(location);
-
-        // Execute handler for when an entity is removed from a chunk
-        OnChunkEntityRemoved(location.Chunk);
-    }
-
-    internal void MigrateEntity(EntityId entity, Archetype dstArchetype, ref EntityLocation location)
-    {
-        GuardUtility.IsFalse(dstArchetype == this, "Destination archetype is the same as the source archetype");
-
-        // Do the actual copying
-        var srcChunk = location.Chunk;
-        srcChunk.MigrateTo(entity, ref location, dstArchetype);
-
-        // Execute handler for when an entity is removed from a chunk
-        OnChunkEntityRemoved(srcChunk);
     }
 
     private void OnChunkEntityRemoved(Chunk chunk)
