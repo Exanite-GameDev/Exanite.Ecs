@@ -178,6 +178,23 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     }
 
     /// <summary>
+    /// Compacts all chunks within all archetypes by ensuring that
+    /// at most one chunk in each archetype is left partially filled.
+    /// <para/>
+    /// This does not remove empty archetypes.
+    /// </summary>
+    /// <remarks>
+    /// Note that chunks are already guaranteed to be contiguously filled.
+    /// </remarks>
+    public void Compact()
+    {
+        foreach (var archetype in archetypes)
+        {
+            archetype.Compact();
+        }
+    }
+
+    /// <summary>
     /// Clears the world by destroying all entities.
     /// </summary>
     public void Clear()

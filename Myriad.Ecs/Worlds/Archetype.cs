@@ -139,6 +139,63 @@ public sealed class Archetype
     }
 
     /// <summary>
+    /// Compacts the chunk contained in this archetype,
+    /// ensuring that at most one chunk is left partially filled.
+    /// </summary>
+    internal void Compact()
+    {
+        if (chunksList.Count <= 1)
+        {
+            return;
+        }
+
+        var srcIndex = chunksList.Count - 1;
+        var dstIndex = 0;
+
+        while (dstIndex < srcIndex)
+        {
+            var dst = chunksList[dstIndex];
+            var src = chunksList[srcIndex];
+
+            if (dst.IsFull)
+            {
+                dstIndex++;
+                continue;
+            }
+
+            src.CompactInto(dst);
+
+            if (dst.IsFull)
+            {
+                dstIndex++;
+            }
+
+            if (src.IsEmpty)
+            {
+                // Add chunk back to pool if needed
+                if (spareChunks.Count < EcsConstants.ChunkHotSpareCount)
+                {
+                    spareChunks.Push(src);
+                }
+
+                chunksList.RemoveAt(srcIndex);
+                srcIndex--;
+            }
+        }
+
+        // Update chunks with space
+        chunksWithSpace.Clear();
+        if (srcIndex > chunksList.Count && !chunksList[srcIndex].IsFull)
+        {
+            var maybeFullChunk = chunksList[srcIndex];
+            if (!maybeFullChunk.IsFull)
+            {
+                chunksWithSpace.Add(maybeFullChunk);
+            }
+        }
+    }
+
+    /// <summary>
     /// Destroy every Entity in this archetype
     /// </summary>
     internal void Clear()

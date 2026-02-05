@@ -33,9 +33,14 @@ public sealed class Chunk
     internal bool IsFull => EntityCount == EcsConstants.ChunkEntityCount;
 
     /// <summary>
+    /// Whether the chunk is empty or not.
+    /// </summary>
+    internal bool IsEmpty => EntityCount == 0;
+
+    /// <summary>
     /// Get the number of entities currently in this chunk.
     /// </summary>
-    private int EntityCount { get; set; }
+    internal int EntityCount { get; set; }
 
     /// <summary>
     /// All entities in this chunk.
