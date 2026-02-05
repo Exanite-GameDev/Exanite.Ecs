@@ -302,17 +302,24 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     private void RaiseInterfaceSelfReference(Archetype archetype)
     {
-        if (componentSelfReference != null)
+        if (componentSelfReference == null)
         {
-            foreach (var chunk in archetype.Chunks)
-            {
-                RaiseInterfaceSelfReference(chunk);
-            }
+            return;
+        }
+
+        foreach (var chunk in archetype.Chunks)
+        {
+            RaiseInterfaceSelfReference(chunk);
         }
     }
 
     private void RaiseInterfaceSelfReference(Chunk chunk)
     {
+        if (componentSelfReference == null)
+        {
+            return;
+        }
+
         var components = chunk.GetSpan<T>();
         var entities = chunk.Entities;
 
@@ -324,17 +331,24 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     private void RaiseInterfaceCopied(Archetype archetype, IEntityLookup lookup, EcsWorld world)
     {
-        if (componentCopied != null)
+        if (componentCopied == null)
         {
-            foreach (var chunk in archetype.Chunks)
-            {
-                RaiseInterfaceCopied(chunk, lookup, world);
-            }
+            return;
+        }
+
+        foreach (var chunk in archetype.Chunks)
+        {
+            RaiseInterfaceCopied(chunk, lookup, world);
         }
     }
 
     private void RaiseInterfaceCopied(Chunk chunk, IEntityLookup lookup, EcsWorld world)
     {
+        if (componentCopied == null)
+        {
+            return;
+        }
+
         var components = chunk.GetSpan<T>();
         var entities = chunk.Entities;
 
@@ -365,17 +379,24 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     private void RaiseInterfaceAdded(Archetype archetype)
     {
-        if (componentAdded != null)
+        if (componentAdded == null)
         {
-            foreach (var chunk in archetype.Chunks)
-            {
-                RaiseInterfaceAdded(chunk);
-            }
+            return;
+        }
+
+        foreach (var chunk in archetype.Chunks)
+        {
+            RaiseInterfaceAdded(chunk);
         }
     }
 
     private void RaiseInterfaceAdded(Chunk chunk)
     {
+        if (componentAdded == null)
+        {
+            return;
+        }
+
         var components = chunk.GetSpan<T>();
         var entities = chunk.Entities;
 
@@ -406,17 +427,24 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     private void RaiseInterfaceModified(Archetype archetype)
     {
-        if (componentModified != null)
+        if (componentModified == null)
         {
-            foreach (var chunk in archetype.Chunks)
-            {
-                RaiseInterfaceModified(chunk);
-            }
+            return;
+        }
+
+        foreach (var chunk in archetype.Chunks)
+        {
+            RaiseInterfaceModified(chunk);
         }
     }
 
     private void RaiseInterfaceModified(Chunk chunk)
     {
+        if (componentModified == null)
+        {
+            return;
+        }
+
         var components = chunk.GetSpan<T>();
         var entities = chunk.Entities;
 
@@ -447,17 +475,24 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     private void RaiseInterfaceRemoved(Archetype archetype)
     {
-        if (componentRemoved != null)
+        if (componentRemoved == null)
         {
-            foreach (var chunk in archetype.Chunks)
-            {
-                RaiseInterfaceRemoved(chunk);
-            }
+            return;
+        }
+
+        foreach (var chunk in archetype.Chunks)
+        {
+            RaiseInterfaceRemoved(chunk);
         }
     }
 
     private void RaiseInterfaceRemoved(Chunk chunk)
     {
+        if (componentRemoved == null)
+        {
+            return;
+        }
+
         var components = chunk.GetSpan<T>();
         var entities = chunk.Entities;
 
