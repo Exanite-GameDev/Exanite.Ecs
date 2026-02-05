@@ -133,46 +133,14 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// Copies all entities and their components to the destination world.
     /// Data in the target world will be kept.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IEntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
     {
-        using var _ = AcquireCommandBuffer(out var commandBuffer);
-        using var __ = ListPool<Chunk>.Acquire(out var newChunks);
+        var lookup = AddToInternal(dstWorld, view);
 
-        var lookup = new EntityLookup();
-        foreach (var srcArchetype in view.Archetypes)
-        {
-            if (srcArchetype.EntityCount == 0)
-            {
-                continue;
-            }
-
-            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
-            foreach (var srcChunk in srcArchetype.Chunks)
-            {
-                var newChunk = dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, lookup);
-                newChunks.Add(newChunk);
-            }
-        }
-
-        foreach (var dstChunk in newChunks)
-        {
-            // Raise component copied/added events
-            var componentIdByColumnIndex = dstChunk.Lookup.ComponentIdByColumnIndex;
-            foreach (var componentId in componentIdByColumnIndex)
-            {
-                var dispatcher = dstChunk.Lookup.ComponentDispatcherByComponentId[componentId.Value];
-                dispatcher.OnComponentCopied(commandBuffer, dstChunk, lookup);
-                dispatcher.OnComponentAdded(commandBuffer, dstChunk);
-            }
-
-            // Raise entity created events
-            foreach (var dstEntity in dstChunk.Entities)
-            {
-                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstEntity));
-            }
-        }
-
-        commandBuffer.Execute();
+        // AddToInternal always creates new chunks
+        // This can cause a lot of fragmentation if we don't compact here
+        Compact();
 
         return lookup;
     }
@@ -232,6 +200,51 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
         GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
     }
+
+    private IEntityLookup AddToInternal(EcsWorld dstWorld, IArchetypeView view)
+    {
+        using var _ = AcquireCommandBuffer(out var commandBuffer);
+        using var __ = ListPool<Chunk>.Acquire(out var newChunks);
+
+        var lookup = new EntityLookup();
+        foreach (var srcArchetype in view.Archetypes)
+        {
+            if (srcArchetype.EntityCount == 0)
+            {
+                continue;
+            }
+
+            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
+            foreach (var srcChunk in srcArchetype.Chunks)
+            {
+                var newChunk = dstArchetype.CreateChunkFrom(srcChunk, commandBuffer, lookup);
+                newChunks.Add(newChunk);
+            }
+        }
+
+        foreach (var dstChunk in newChunks)
+        {
+            // Raise component copied/added events
+            var componentIdByColumnIndex = dstChunk.Lookup.ComponentIdByColumnIndex;
+            foreach (var componentId in componentIdByColumnIndex)
+            {
+                var dispatcher = dstChunk.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                dispatcher.OnComponentCopied(commandBuffer, dstChunk, lookup);
+                dispatcher.OnComponentAdded(commandBuffer, dstChunk);
+            }
+
+            // Raise entity created events
+            foreach (var dstEntity in dstChunk.Entities)
+            {
+                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstEntity));
+            }
+        }
+
+        commandBuffer.Execute();
+
+        return lookup;
+    }
+
 
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
