@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Events;
 using Exanite.Myriad.Ecs.Worlds;
@@ -286,6 +287,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceSelfReference(Archetype archetype)
     {
         if (componentSelfReference == null)
@@ -299,6 +301,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceSelfReference(Chunk chunk)
     {
         if (componentSelfReference == null)
@@ -315,6 +318,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceCopied(Archetype archetype, IEntityLookup lookup, EcsWorld world)
     {
         if (componentCopied == null)
@@ -328,6 +332,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceCopied(Chunk chunk, IEntityLookup lookup, EcsWorld world)
     {
         if (componentCopied == null)
@@ -344,6 +349,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup, EcsWorld world)
     {
         foreach (var chunk in archetype.Chunks)
@@ -352,6 +358,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldCopied(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk, IEntityLookup lookup, EcsWorld world)
     {
         var components = chunk.GetSpan<T>();
@@ -363,6 +370,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceAdded(Archetype archetype)
     {
         if (componentAdded == null)
@@ -376,6 +384,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceAdded(Chunk chunk)
     {
         if (componentAdded == null)
@@ -392,6 +401,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldAdded(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EcsWorld world)
     {
         foreach (var chunk in archetype.Chunks)
@@ -400,6 +410,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldAdded(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk, EcsWorld world)
     {
         var components = chunk.GetSpan<T>();
@@ -411,6 +422,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceModified(Archetype archetype)
     {
         if (componentModified == null)
@@ -424,6 +436,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceModified(Chunk chunk)
     {
         if (componentModified == null)
@@ -440,6 +453,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldModified(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EcsWorld world)
     {
         foreach (var chunk in archetype.Chunks)
@@ -448,6 +462,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldModified(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk, EcsWorld world)
     {
         var components = chunk.GetSpan<T>();
@@ -459,6 +474,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceRemoved(Archetype archetype)
     {
         if (componentRemoved == null)
@@ -472,6 +488,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RaiseInterfaceRemoved(Chunk chunk)
     {
         if (componentRemoved == null)
@@ -488,6 +505,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldRemoved(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, EcsWorld world)
     {
         foreach (var chunk in archetype.Chunks)
@@ -496,6 +514,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldRemoved(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk, EcsWorld world)
     {
         var components = chunk.GetSpan<T>();
