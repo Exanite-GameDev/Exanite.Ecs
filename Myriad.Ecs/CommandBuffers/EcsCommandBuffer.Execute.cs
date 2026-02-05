@@ -101,7 +101,7 @@ public partial class EcsCommandBuffer
         foreach (var componentId in archetype.Components)
         {
             var dispatcher = archetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
-            dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+            dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity, entity.World);
         }
 
         // Raise entity destroyed event
@@ -216,7 +216,7 @@ public partial class EcsCommandBuffer
                         if (srcArchetype.Components.Contains(componentId))
                         {
                             var dispatcher = srcArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
-                            dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
+                            dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity, entity.World);
                         }
                     }
                 }
