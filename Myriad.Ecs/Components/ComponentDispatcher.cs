@@ -74,6 +74,10 @@ public abstract class ComponentDispatcher
     }
 }
 
+/// <inheritdoc/>
+/// <remarks>
+/// The type check if statements should be removed when the JIT generic specializes each method.
+/// </remarks>
 internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 {
     private delegate void ComponentSelfReferenceAction(ref T component, Entity entity);
