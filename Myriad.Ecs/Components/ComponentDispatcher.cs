@@ -284,6 +284,8 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
             return;
         }
 
+        // Notify world first before component
+        // Component does the final cleanup
         var world = chunk.Archetype.World;
         RaiseWorldRemoved(recursiveCommandBuffer, chunk, world);
         RaiseInterfaceRemoved(chunk);
@@ -292,6 +294,9 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity, EcsWorld world)
     {
         ref var component = ref entity.Get<T>();
+
+        // Notify world first before component
+        // Component does the final cleanup
         world.EventBus.Raise(new ComponentRemovedEvent<T>(recursiveCommandBuffer, entity, ref component));
 
         if (component is IComponentRemoved)
