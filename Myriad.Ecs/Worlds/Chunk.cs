@@ -4,7 +4,6 @@ using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
 
 namespace Exanite.Myriad.Ecs.Worlds;
 
@@ -34,9 +33,14 @@ public sealed class Chunk
     internal bool IsFull => EntityCount == EcsConstants.ChunkEntityCount;
 
     /// <summary>
+    /// Whether the chunk is empty or not.
+    /// </summary>
+    internal bool IsEmpty => EntityCount == 0;
+
+    /// <summary>
     /// Get the number of entities currently in this chunk.
     /// </summary>
-    private int EntityCount { get; set; }
+    internal int EntityCount { get; set; }
 
     /// <summary>
     /// All entities in this chunk.
@@ -154,10 +158,47 @@ public sealed class Chunk
             var originalEntity = srcChunk.Entities[location.IndexInChunk];
             var newEntity = entityId.ToEntity(world);
             lookup.Add(originalEntity, newEntity);
-
-            // Raise entity created event
-            world.EventBus.Raise(new EntityCreatedEvent(recursiveCommandBuffer, newEntity));
         }
+    }
+
+    /// <remarks>
+    /// Must only be called by <see cref="Archetype"/> because <see cref="Archetype"/> needs to update its internal state.
+    /// </remarks>
+    internal void CompactInto(Chunk dstChunk)
+    {
+        GuardUtility.IsTrue(dstChunk.Archetype == Archetype, "Internal: Cannot compact chunks that have different archetypes");
+
+        var availableSpace = EcsConstants.ChunkEntityCount - dstChunk.EntityCount;
+        var copyCount = int.Min(availableSpace, EntityCount);
+        var srcIndex = EntityCount - copyCount;
+        var dstIndex = dstChunk.EntityCount;
+
+        // Move components
+        for (var columnIndex = 0; columnIndex < componentColumns.Length; columnIndex++)
+        {
+            var srcComponentColumn = componentColumns[columnIndex];
+            var dstComponentColumn = dstChunk.componentColumns[columnIndex];
+
+            Array.Copy(srcComponentColumn, srcIndex, dstComponentColumn, dstIndex, copyCount);
+            Array.Clear(srcComponentColumn, srcIndex, copyCount);
+        }
+
+        // Move entities
+        // Clear is not strictly necessary since the only reference is to the world object, but keeps things clean
+        Array.Copy(entityColumn, srcIndex, dstChunk.entityColumn, dstIndex, copyCount);
+        Array.Clear(entityColumn, srcIndex, copyCount);
+
+        // Update entity locations
+        var world = Archetype.World;
+        for (var i = dstIndex; i < dstIndex + copyCount; i++)
+        {
+            ref var location = ref world.Entities.GetLocation(dstChunk.entityColumn[i].Index);
+            location.Chunk = dstChunk;
+            location.IndexInChunk = i;
+        }
+
+        EntityCount -= copyCount;
+        dstChunk.EntityCount += copyCount;
     }
 
     /// <remarks>
@@ -207,20 +248,17 @@ public sealed class Chunk
         // entity down into this slot to keep the chunk continuous.
         if (entityIndex != EntityCount)
         {
-            var lastEntity = entityColumn[EntityCount];
             var lastEntityIndex = EntityCount;
-            ref var lastInfo = ref Archetype.World.Entities.GetLocation(lastEntity.EntityId);
+            var lastEntity = entityColumn[lastEntityIndex];
+            ref var lastLocation = ref Archetype.World.Entities.GetLocation(lastEntity.EntityId);
             entityColumn[entityIndex] = lastEntity;
             entityColumn[lastEntityIndex] = default;
-            lastInfo.IndexInChunk = entityIndex;
+            lastLocation.IndexInChunk = entityIndex;
 
             // Copy top entity components into place
             foreach (var componentColumn in componentColumns)
             {
                 Array.Copy(componentColumn, lastEntityIndex, componentColumn, entityIndex, 1);
-
-                // Clear out the components we just moved. This prevents chunks holding
-                // onto references to dead managed components, and keeping them in memory.
                 Array.Clear(componentColumn, lastEntityIndex, 1);
             }
         }

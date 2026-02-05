@@ -155,11 +155,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     internal override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk, IEntityLookup lookup)
     {
-        if (chunk.Entities.Length == 0)
-        {
-            return;
-        }
-
         var world = chunk.Archetype.World;
         RaiseInterfaceSelfReference(chunk);
         RaiseInterfaceCopied(chunk, lookup, world);
@@ -199,11 +194,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     internal override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk)
     {
-        if (chunk.Entities.Length == 0)
-        {
-            return;
-        }
-
         var world = chunk.Archetype.World;
         RaiseInterfaceSelfReference(chunk);
         RaiseInterfaceAdded(chunk);
@@ -242,11 +232,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     internal override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk)
     {
-        if (chunk.Entities.Length == 0)
-        {
-            return;
-        }
-
         var world = chunk.Archetype.World;
         RaiseInterfaceModified(chunk);
         RaiseWorldModified(recursiveCommandBuffer, chunk, world);
@@ -279,11 +264,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
     internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Chunk chunk)
     {
-        if (chunk.Entities.Length == 0)
-        {
-            return;
-        }
-
         // Notify world first before component
         // Component does the final cleanup
         var world = chunk.Archetype.World;
