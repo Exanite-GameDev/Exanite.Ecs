@@ -54,8 +54,10 @@ The following events are provided:
 - Entity created - Raised when the entity is created, after its components are set
 - Entity destroyed - Raised when the entity is destroyed, before its components are removed
 - Component added - Raised when the component is set on an entity that never had the component
-- Component set - Raised when the component is set on an entity that already had the component
+- Component modified - Raised when the component is set on an entity that already had the component
+  - Modifications from outside the command buffer don't trigger this event.
 - Component copied - Raised when the component is copied from an existing entity to another entity
+  - Copied will be called before added or modified.
 - Component removed - Raised when the component is removed from an entity
 
 There are 2 ways of receiving events:

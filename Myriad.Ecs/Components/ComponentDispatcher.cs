@@ -43,9 +43,9 @@ public abstract class ComponentDispatcher
         component.OnAdded();
     }
 
-    internal static void ComponentSet<T>(ref T component) where T : IComponent, IComponentSet
+    internal static void ComponentModified<T>(ref T component) where T : IComponent, IComponentModified
     {
-        component.OnSet();
+        component.OnModified();
     }
 
     internal static void ComponentRemoved<T>(ref T component) where T : IComponent, IComponentRemoved
@@ -85,7 +85,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     private readonly ComponentSelfReferenceAction? componentSelfReference;
     private readonly ComponentCopiedAction? componentCopied;
     private readonly ComponentAction? componentAdded;
-    private readonly ComponentAction? componentSet;
+    private readonly ComponentAction? componentModified;
     private readonly ComponentAction? componentRemoved;
 
     public ComponentDispatcher()
@@ -111,9 +111,9 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
                 .CreateDelegate(typeof(ComponentAction), null);
         }
 
-        if (typeof(T).IsAssignableTo(typeof(IComponentSet)))
+        if (typeof(T).IsAssignableTo(typeof(IComponentModified)))
         {
-            componentSet = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentSet), BindingFlags.NonPublic | BindingFlags.Static)!
+            componentModified = (ComponentAction)typeof(ComponentDispatcher).GetMethod(nameof(ComponentModified), BindingFlags.NonPublic | BindingFlags.Static)!
                 .MakeGenericMethod(typeof(T))
                 .CreateDelegate(typeof(ComponentAction), null);
         }
@@ -132,6 +132,24 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     public override void Invoke<TAction>(TAction action) => action.Invoke<T>();
     public override void Invoke<TAction, TInput>(TAction action, TInput input) => action.Invoke<T>(input);
 
+    internal override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup)
+    {
+        var world = entity.World;
+        ref var component = ref entity.Get<T>();
+
+        if (component is IComponentSelfReference<T>)
+        {
+            componentSelfReference!.Invoke(ref component, entity);
+        }
+
+        if (component is IComponentCopied)
+        {
+            componentCopied!.Invoke(ref component, world, lookup);
+        }
+
+        world.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
+    }
+
     internal override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
     {
         if (archetype.EntityCount == 0)
@@ -139,8 +157,90 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
             return;
         }
 
-        var world = archetype.World;
+        RaiseInterfaceSelfReference(archetype);
+        RaiseInterfaceCopied(archetype, lookup);
+        RaiseWorldCopied(recursiveCommandBuffer, archetype, lookup);
+    }
 
+    internal override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    {
+        var world = entity.World;
+        ref var component = ref entity.Get<T>();
+
+        if (component is IComponentSelfReference<T>)
+        {
+            componentSelfReference!.Invoke(ref component, entity);
+        }
+
+        if (component is IComponentAdded)
+        {
+            componentAdded!.Invoke(ref component);
+        }
+
+        world.EventBus.Raise(new ComponentAddedEvent<T>(recursiveCommandBuffer, entity, ref component));
+    }
+
+    internal override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
+    {
+        if (archetype.EntityCount == 0)
+        {
+            return;
+        }
+
+        RaiseInterfaceSelfReference(archetype);
+        RaiseInterfaceAdded(archetype);
+        RaiseWorldAdded(recursiveCommandBuffer, archetype);
+    }
+
+    internal override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    {
+        var world = entity.World;
+        ref var component = ref entity.Get<T>();
+
+        if (component is IComponentModified)
+        {
+            componentModified!.Invoke(ref component);
+        }
+
+        world.EventBus.Raise(new ComponentModifiedEvent<T>(recursiveCommandBuffer, entity, ref component));
+    }
+
+    internal override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
+    {
+        if (archetype.EntityCount == 0)
+        {
+            return;
+        }
+
+        RaiseInterfaceModified(archetype);
+        RaiseWorldModified(recursiveCommandBuffer, archetype);
+    }
+
+    internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    {
+        var world = entity.World;
+        ref var component = ref entity.Get<T>();
+        world.EventBus.Raise(new ComponentRemovedEvent<T>(recursiveCommandBuffer, entity, ref component));
+
+        if (component is IComponentRemoved)
+        {
+            componentRemoved!.Invoke(ref component);
+        }
+    }
+
+    internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
+    {
+        if (archetype.EntityCount == 0)
+        {
+            return;
+        }
+
+        RaiseWorldRemoved(recursiveCommandBuffer, archetype);
+        RaiseInterfaceRemoved(archetype);
+    }
+
+    private void RaiseInterfaceSelfReference(Archetype archetype)
+    {
         if (componentSelfReference != null)
         {
             foreach (var chunk in archetype.Chunks)
@@ -154,9 +254,13 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
                 }
             }
         }
+    }
 
+    private void RaiseInterfaceCopied(Archetype archetype, IEntityLookup lookup)
+    {
         if (componentCopied != null)
         {
+            var world = archetype.World;
             foreach (var chunk in archetype.Chunks)
             {
                 var components = chunk.GetSpan<T>();
@@ -168,7 +272,11 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
                 }
             }
         }
+    }
 
+    private static void RaiseWorldCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, IEntityLookup lookup)
+    {
+        var world = archetype.World;
         foreach (var chunk in archetype.Chunks)
         {
             var components = chunk.GetSpan<T>();
@@ -181,60 +289,99 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
     }
 
-    internal override void OnComponentCopied(EcsCommandBuffer recursiveCommandBuffer, Entity entity, IEntityLookup lookup)
+    private void RaiseInterfaceAdded(Archetype archetype)
     {
-        ref var component = ref entity.Get<T>();
-
-        if (component is IComponentSelfReference<T>)
+        if (componentAdded != null)
         {
-            componentSelfReference!.Invoke(ref component, entity);
-        }
+            foreach (var chunk in archetype.Chunks)
+            {
+                var components = chunk.GetSpan<T>();
+                var entities = chunk.Entities;
 
-        if (component is IComponentCopied)
-        {
-            componentCopied!.Invoke(ref component, entity.World, lookup);
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    componentAdded!.Invoke(ref components[i]);
+                }
+            }
         }
-
-        entity.World.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entity, ref component, lookup));
     }
 
-    internal override void OnComponentAdded(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    private static void RaiseWorldAdded(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
     {
-        ref var component = ref entity.Get<T>();
-
-        if (component is IComponentSelfReference<T>)
+        var world = archetype.World;
+        foreach (var chunk in archetype.Chunks)
         {
-            componentSelfReference!.Invoke(ref component, entity);
-        }
+            var components = chunk.GetSpan<T>();
+            var entities = chunk.Entities;
 
-        if (component is IComponentAdded)
-        {
-            componentAdded!.Invoke(ref component);
+            for (var i = 0; i < entities.Length; i++)
+            {
+                world.EventBus.Raise(new ComponentAddedEvent<T>(recursiveCommandBuffer, entities[i], ref components[i]));
+            }
         }
-
-        entity.World.EventBus.Raise(new ComponentAddedEvent<T>(recursiveCommandBuffer, entity, ref component));
     }
 
-    internal override void OnComponentModified(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    private void RaiseInterfaceModified(Archetype archetype)
     {
-        ref var component = ref entity.Get<T>();
-
-        if (component is IComponentSet)
+        if (componentModified != null)
         {
-            componentSet!.Invoke(ref component);
-        }
+            foreach (var chunk in archetype.Chunks)
+            {
+                var components = chunk.GetSpan<T>();
+                var entities = chunk.Entities;
 
-        entity.World.EventBus.Raise(new ComponentModifiedEvent<T>(recursiveCommandBuffer, entity, ref component));
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    componentModified!.Invoke(ref components[i]);
+                }
+            }
+        }
     }
 
-    internal override void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity)
+    private static void RaiseWorldModified(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
     {
-        ref var component = ref entity.Get<T>();
-        entity.World.EventBus.Raise(new ComponentRemoved<T>(recursiveCommandBuffer, entity, ref component));
-
-        if (component is IComponentRemoved)
+        var world = archetype.World;
+        foreach (var chunk in archetype.Chunks)
         {
-            componentRemoved!.Invoke(ref component);
+            var components = chunk.GetSpan<T>();
+            var entities = chunk.Entities;
+
+            for (var i = 0; i < entities.Length; i++)
+            {
+                world.EventBus.Raise(new ComponentModifiedEvent<T>(recursiveCommandBuffer, entities[i], ref components[i]));
+            }
+        }
+    }
+
+    private void RaiseInterfaceRemoved(Archetype archetype)
+    {
+        if (componentRemoved != null)
+        {
+            foreach (var chunk in archetype.Chunks)
+            {
+                var components = chunk.GetSpan<T>();
+                var entities = chunk.Entities;
+
+                for (var i = 0; i < entities.Length; i++)
+                {
+                    componentRemoved!.Invoke(ref components[i]);
+                }
+            }
+        }
+    }
+
+    private static void RaiseWorldRemoved(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype)
+    {
+        var world = archetype.World;
+        foreach (var chunk in archetype.Chunks)
+        {
+            var components = chunk.GetSpan<T>();
+            var entities = chunk.Entities;
+
+            for (var i = 0; i < entities.Length; i++)
+            {
+                world.EventBus.Raise(new ComponentRemovedEvent<T>(recursiveCommandBuffer, entities[i], ref components[i]));
+            }
         }
     }
 }
