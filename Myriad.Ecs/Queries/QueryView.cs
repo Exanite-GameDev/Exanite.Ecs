@@ -14,9 +14,9 @@ namespace Exanite.Myriad.Ecs.Queries;
 public sealed class QueryView : IArchetypeView
 {
     /// <summary>
-    /// Cached value from the last time <see cref="GetArchetypeMatchResult"/> was called.
+    /// Cached value from the last time <see cref="GetMatchResult"/> was called.
     /// </summary>
-    private readonly RwLock<ArchetypeMatches?> resultLock = new(null);
+    private readonly RwLock<MatchResult?> resultLock = new(null);
     private readonly OrderedListSet<ComponentId> temporarySet = [];
 
     private readonly ComponentBloomFilter includeBloom;
@@ -113,10 +113,10 @@ public sealed class QueryView : IArchetypeView
     /// <summary>
     /// The archetypes matched by this query.
     /// </summary>
-    public ReadOnlySpan<Archetype> Archetypes => GetArchetypeMatchResult().Archetypes.AsSpan();
+    public ReadOnlySpan<Archetype> Archetypes => GetMatchResult().Archetypes.AsSpan();
 
     /// <inheritdoc cref="Archetypes"/>
-    public IReadOnlyList<Archetype> ArchetypesList => GetArchetypeMatchResult().Archetypes;
+    public IReadOnlyList<Archetype> ArchetypesList => GetMatchResult().Archetypes;
 
     /// <summary>
     /// Checks if an entity matches this query.
@@ -128,7 +128,7 @@ public sealed class QueryView : IArchetypeView
             return false;
         }
 
-        var matchResult = GetArchetypeMatchResult();
+        var matchResult = GetMatchResult();
         return matchResult.ArchetypeSet.Contains(entity.World.Entities.GetLocation(entity.EntityId).Archetype);
     }
 
@@ -137,11 +137,11 @@ public sealed class QueryView : IArchetypeView
     /// </summary>
     public bool IsMatch(Archetype archetype)
     {
-        var matchResult = GetArchetypeMatchResult();
+        var matchResult = GetMatchResult();
         return matchResult.ArchetypeSet.Contains(archetype);
     }
 
-    private ArchetypeMatches GetArchetypeMatchResult()
+    private MatchResult GetMatchResult()
     {
         // Quickly check if we already have a non-stale result
         using (resultLock.EnterReadLock(out var result))
@@ -169,7 +169,7 @@ public sealed class QueryView : IArchetypeView
                 }
 
                 // Store result for next time
-                result.Value = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
+                result.Value = new MatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
 
                 // Return matches
                 return result.Value.Value;
@@ -182,7 +182,7 @@ public sealed class QueryView : IArchetypeView
                 var newMatches = default(OrderedListSet<ArchetypeMatch>?);
 
                 // Check every new archetype
-                for (var i = result.Value.Value.ArchetypeWatermark; i < World.Archetypes.Length; i++)
+                for (var i = result.Value.Value.Version; i < World.Archetypes.Length; i++)
                 {
                     if (!TryMatch(World.Archetypes[i], out var match))
                     {
@@ -199,12 +199,12 @@ public sealed class QueryView : IArchetypeView
                 if (newMatches == null)
                 {
                     // Copy is null, meaning nothing new was found, just use the old result with the new watermark
-                    result.Value = new ArchetypeMatches(World.Archetypes.Length, result.Value.Value.ArchetypesMatches);
+                    result.Value = new MatchResult(World.Archetypes.Length, result.Value.Value.ArchetypesMatches);
                 }
                 else
                 {
                     // Create a new match result
-                    result.Value = new ArchetypeMatches(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
+                    result.Value = new MatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
                 }
             }
 
@@ -279,13 +279,8 @@ public sealed class QueryView : IArchetypeView
         return true;
     }
 
-    private readonly struct ArchetypeMatches
+    private readonly struct MatchResult
     {
-        /// <summary>
-        /// The archetypes matching this query.
-        /// </summary>
-        public ImmutableOrderedListSet<ArchetypeMatch> ArchetypesMatches { get; }
-
         /// <summary>
         /// The archetypes matching this query.
         /// </summary>
@@ -297,14 +292,19 @@ public sealed class QueryView : IArchetypeView
         public HashSet<Archetype> ArchetypeSet { get; }
 
         /// <summary>
+        /// The archetypes matching this query.
+        /// </summary>
+        public ImmutableOrderedListSet<ArchetypeMatch> ArchetypesMatches { get; }
+
+        /// <summary>
         /// The number of archetypes in the world when this cache was created. Used for caching purposes.
         /// </summary>
-        public int ArchetypeWatermark { get; }
+        public int Version { get; }
 
-        public ArchetypeMatches(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
+        public MatchResult(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
         {
             ArchetypesMatches = archetypesMatches;
-            ArchetypeWatermark = watermark;
+            Version = watermark;
 
             Archetypes = new List<Archetype>(archetypesMatches.Count);
             foreach (var match in archetypesMatches)
@@ -317,7 +317,7 @@ public sealed class QueryView : IArchetypeView
 
         public bool IsStale(EcsWorld world)
         {
-            return ArchetypeWatermark < world.Archetypes.Length;
+            return Version < world.Archetypes.Length;
         }
     }
 
