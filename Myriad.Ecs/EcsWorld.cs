@@ -42,6 +42,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
+    internal readonly Lock QueryViewCacheLock = new();
     internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
     private readonly QueryView allEntitiesQuery;
 
