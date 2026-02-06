@@ -211,7 +211,7 @@ public sealed class Archetype
 
     /// <remarks>
     /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>>
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Ref<T> GetRef<T>(int entityIndex) where T : IComponent
     {
@@ -220,7 +220,7 @@ public sealed class Archetype
 
     /// <remarks>
     /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>>
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Ref<T> GetRef<T>(int entityIndex, ComponentId id) where T : IComponent
     {
@@ -229,7 +229,7 @@ public sealed class Archetype
 
     /// <remarks>
     /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>>
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref T Get<T>(int entityIndex) where T : IComponent
     {
@@ -238,7 +238,7 @@ public sealed class Archetype
 
     /// <remarks>
     /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>>
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref T Get<T>(int entityIndex, ComponentId id) where T : IComponent
     {
