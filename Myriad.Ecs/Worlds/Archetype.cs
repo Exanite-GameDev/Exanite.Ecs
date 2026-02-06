@@ -12,6 +12,17 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// </summary>
 public sealed class Archetype
 {
+    /// <inheritdoc cref="EntityStorage"/>
+    private EntityStorage storage;
+
+    /// <inheritdoc cref="ArchetypeInfo"/>
+    internal readonly ArchetypeInfo Info;
+
+    /// <summary>
+    /// The total number of entities in this archetype.
+    /// </summary>
+    private int entityCount;
+
     /// <summary>
     /// The world which this archetype belongs to.
     /// </summary>
@@ -31,17 +42,6 @@ public sealed class Archetype
     /// The max number of entities that can be stored in this archetype without resizing.
     /// </summary>
     public int Capacity => storage.Capacity;
-
-    /// <summary>
-    /// The total number of entities in this archetype.
-    /// </summary>
-    private int entityCount;
-
-    /// <inheritdoc cref="ArchetypeInfo"/>
-    internal readonly ArchetypeInfo Info;
-
-    /// <inheritdoc cref="EntityStorage"/>
-    private EntityStorage storage;
 
     internal Archetype(EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
     {

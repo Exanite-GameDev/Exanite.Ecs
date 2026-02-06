@@ -8,11 +8,6 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// </summary>
 internal readonly struct EntityStorage
 {
-    /// <summary>
-    /// The max number of entities this storage can hold.
-    /// </summary>
-    public readonly int Capacity;
-
     /// <remarks>
     /// Indexed using entity index.
     /// </remarks>
@@ -22,6 +17,11 @@ internal readonly struct EntityStorage
     /// Indexed using column index, then entity index.
     /// </remarks>
     public readonly Array[] ComponentColumns;
+
+    /// <summary>
+    /// The max number of entities this storage can hold.
+    /// </summary>
+    public readonly int Capacity;
 
     public EntityStorage(ref readonly ArchetypeInfo info, int capacity)
     {
