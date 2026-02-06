@@ -279,7 +279,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
 
         var components = archetype.GetSpan<T>();
-        var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
@@ -308,7 +307,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
 
         var components = archetype.GetSpan<T>();
-        var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
@@ -337,7 +335,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
 
         var components = archetype.GetSpan<T>();
-        var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
@@ -366,7 +363,6 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
         }
 
         var components = archetype.GetSpan<T>();
-        var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
