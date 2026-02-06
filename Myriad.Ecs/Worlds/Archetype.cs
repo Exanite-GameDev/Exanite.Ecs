@@ -179,7 +179,7 @@ public sealed class Archetype
     }
 
     /// <summary>
-    /// Destroy every Entity in this archetype
+    /// Destroy every entity in this archetype
     /// </summary>
     internal void Clear()
     {
