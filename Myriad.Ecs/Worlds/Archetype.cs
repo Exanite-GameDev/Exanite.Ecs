@@ -95,7 +95,7 @@ public sealed class Archetype
 
         // We are guaranteed to have at least 1 entity
         var lastEntityIndex = entityCount - 1;
-        var lastRange = new EntityStorageRange(in storage, currentEntityIndex, 1);
+        var lastRange = new EntityStorageRange(in storage, lastEntityIndex, 1);
 
         var isSameLocation = currentEntityIndex == lastEntityIndex;
         if (!isSameLocation)
@@ -112,7 +112,7 @@ public sealed class Archetype
         // Clear last
         lastRange.Clear();
 
-        // Decrement entity count
+        // Update entity count
         entityCount--;
     }
 
@@ -145,10 +145,6 @@ public sealed class Archetype
 
         // Remove the entity from this chunk (using the old saved location)
         RemoveEntity(srcLocation);
-
-        // Update entity count
-        entityCount--;
-        dstArchetype.entityCount++;
     }
 
     /// <summary>
@@ -179,6 +175,9 @@ public sealed class Archetype
             var newEntity = entityId.ToEntity(World);
             lookup.Add(originalEntity, newEntity);
         }
+
+        // Update entity count
+        entityCount += srcArchetype.entityCount;
     }
 
     /// <summary>

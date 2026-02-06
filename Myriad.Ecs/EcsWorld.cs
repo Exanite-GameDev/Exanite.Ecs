@@ -160,18 +160,19 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             var dstArchetype = dstArchetypes[archetypeI];
 
             // Raise component copied/added events
+            var dstStart = dstArchetype.Entities.Length - srcArchetype.Entities.Length;
             var componentIdByColumnIndex = dstArchetype.Info.ComponentIdByColumnIndex;
             foreach (var componentId in componentIdByColumnIndex)
             {
                 var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
-                dispatcher.OnComponentCopied(commandBuffer, dstArchetype, dstArchetype.Entities.Length - srcArchetype.Entities.Length, srcArchetype.Entities.Length, lookup);
-                dispatcher.OnComponentAdded(commandBuffer, dstArchetype, dstArchetype.Entities.Length - srcArchetype.Entities.Length, srcArchetype.Entities.Length);
+                dispatcher.OnComponentCopied(commandBuffer, dstArchetype, dstStart, srcArchetype.Entities.Length, lookup);
+                dispatcher.OnComponentAdded(commandBuffer, dstArchetype, dstStart, srcArchetype.Entities.Length);
             }
 
             // Raise entity created events
             for (var entityI = 0; entityI < srcArchetype.Entities.Length; entityI++)
             {
-                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstArchetype.Entities[srcArchetype.Entities.Length + entityI]));
+                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstArchetype.Entities[dstStart + entityI]));
             }
         }
 
