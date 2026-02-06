@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
@@ -141,6 +142,7 @@ public sealed class QueryView : IArchetypeView
         return matchResult.ArchetypeSet.Contains(archetype);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private MatchResult GetMatchResult()
     {
         // Quickly check if we already have a non-stale result
@@ -152,6 +154,11 @@ public sealed class QueryView : IArchetypeView
             }
         }
 
+        return GetMatchResultCold();
+    }
+
+    private MatchResult GetMatchResultCold()
+    {
         // We don't have a valid cached result, calculate it now
         using (resultLock.EnterWriteLock(out var result))
         {
