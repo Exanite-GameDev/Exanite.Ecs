@@ -23,6 +23,18 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     private static readonly Lock IdLock = new();
     private static int NextWorldId = 1;
 
+    internal EntityManager Entities = new();
+
+    private readonly List<Archetype> archetypes = [];
+    private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
+
+    internal readonly Lock QueryViewCacheLock = new();
+    internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
+    private readonly QueryView allEntitiesQuery;
+
+    private readonly Pool<EcsCommandBuffer> commandBufferPool;
+    private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
+
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
 
@@ -35,19 +47,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// but this is mainly for debugging and
     /// you have to create a lot of worlds to overflow.
     /// </remarks>
-    public readonly int WorldId;
-
-    internal EntityManager Entities = new();
-
-    private readonly List<Archetype> archetypes = [];
-    private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
-
-    internal readonly Lock QueryViewCacheLock = new();
-    internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
-    private readonly QueryView allEntitiesQuery;
-
-    private readonly Pool<EcsCommandBuffer> commandBufferPool;
-    private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
+    public readonly int Id;
 
     /// <summary>
     /// The archetypes stored by this world.
@@ -66,7 +66,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     {
         using (IdLock.EnterScope())
         {
-            WorldId = NextWorldId++;
+            Id = NextWorldId++;
         }
 
         allEntitiesQuery = new QueryFilter().Build(this);
