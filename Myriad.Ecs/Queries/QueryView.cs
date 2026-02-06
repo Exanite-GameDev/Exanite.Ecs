@@ -14,7 +14,7 @@ namespace Exanite.Myriad.Ecs.Queries;
 public sealed class QueryView : IArchetypeView
 {
     /// <summary>
-    /// Cached result.Value from the last time <see cref="GetArchetypeMatchResult"/> was called.
+    /// Cached value from the last time <see cref="GetArchetypeMatchResult"/> was called.
     /// </summary>
     private readonly RwLock<ArchetypeMatches?> resultLock = new(null);
     private readonly OrderedListSet<ComponentId> temporarySet = [];
