@@ -15,12 +15,12 @@ internal readonly struct EntityStorage
 
     /// <remarks>
     /// Indexed using entity index.
-    /// </remarks>>
+    /// </remarks>
     public readonly Entity[] EntityColumn;
 
     /// <remarks>
     /// Indexed using column index, then entity index.
-    /// </remarks>>
+    /// </remarks>
     public readonly Array[] ComponentColumns;
 
     public EntityStorage(ref readonly ArchetypeInfo info, int capacity)
