@@ -83,7 +83,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get the set of components which this entity currently has.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ComponentIds => World.Entities.GetArchetype(EntityId).Components;
+    public ImmutableOrderedListSet<ComponentId> ComponentIds => World.Entities.GetLocation(EntityId).Archetype.Components;
 
     /// <summary>
     /// Get a boxed array of all components.

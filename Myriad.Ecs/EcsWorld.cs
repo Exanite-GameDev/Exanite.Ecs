@@ -137,42 +137,41 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     public IEntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
     {
         using var _ = AcquireCommandBuffer(out var commandBuffer);
-        using var __ = ListPool<Chunk>.Acquire(out var newChunks);
+        using var __ = ListPool<Archetype>.Acquire(out var dstArchetypes);
 
         var lookup = new EntityLookup();
-        foreach (var srcArchetype in view.Archetypes)
+        var srcArchetypes = view.Archetypes;
+
+        foreach (var srcArchetype in srcArchetypes)
         {
-            if (srcArchetype.EntityCount == 0)
+            if (srcArchetype.Entities.Length == 0)
             {
                 continue;
             }
 
-            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Hash);
+            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Info.Hash);
             dstArchetype.AddFrom(srcArchetype, lookup);
-            foreach (var srcChunk in srcArchetype.Chunks)
-            {
-                var newChunk = dstArchetype.CreateChunkFrom(srcChunk, lookup);
-                newChunks.Add(newChunk);
-            }
-
-            dstArchetype.Compact();
+            dstArchetypes.Add(dstArchetype);
         }
 
-        foreach (var dstChunk in newChunks)
+        for (var archetypeI = 0; archetypeI < dstArchetypes.Count; archetypeI++)
         {
+            var srcArchetype = srcArchetypes[archetypeI];
+            var dstArchetype = dstArchetypes[archetypeI];
+
             // Raise component copied/added events
-            var componentIdByColumnIndex = dstChunk.Lookup.ComponentIdByColumnIndex;
+            var componentIdByColumnIndex = dstArchetype.Info.ComponentIdByColumnIndex;
             foreach (var componentId in componentIdByColumnIndex)
             {
-                var dispatcher = dstChunk.Lookup.ComponentDispatcherByComponentId[componentId.Value];
-                dispatcher.OnComponentCopied(commandBuffer, dstChunk, lookup);
-                dispatcher.OnComponentAdded(commandBuffer, dstChunk);
+                var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
+                dispatcher.OnComponentCopied(commandBuffer, dstArchetype, dstArchetype.Entities.Length - srcArchetype.Entities.Length, srcArchetype.Entities.Length, lookup);
+                dispatcher.OnComponentAdded(commandBuffer, dstArchetype, dstArchetype.Entities.Length - srcArchetype.Entities.Length, srcArchetype.Entities.Length);
             }
 
             // Raise entity created events
-            foreach (var dstEntity in dstChunk.Entities)
+            for (var entityI = 0; entityI < srcArchetype.Entities.Length; entityI++)
             {
-                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstEntity));
+                dstWorld.EventBus.Raise(new EntityCreatedEvent(commandBuffer, dstArchetype.Entities[srcArchetype.Entities.Length + entityI]));
             }
         }
 

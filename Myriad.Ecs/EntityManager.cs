@@ -59,44 +59,6 @@ internal struct EntityManager
     }
 
     /// <summary>
-    /// Get the current version for the specified entity.
-    /// </summary>
-    /// <returns>The entity version, or zero if the entity does not exist.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public uint GetVersion(int entityIndex)
-    {
-        if (entityIndex <= 0 || entityIndex >= entities.TotalCapacity)
-        {
-            return 0;
-        }
-
-        return GetLocation(entityIndex).Version;
-    }
-
-    /// <inheritdoc cref="GetVersion(int)"/>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public uint GetVersion(EntityId entityId)
-    {
-        return GetLocation(entityId).Version;
-    }
-
-    /// <summary>
-    /// Gets the archetype for the specified entity.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Archetype GetArchetype(int entityIndex)
-    {
-        return GetLocation(entityIndex).Archetype.Archetype;
-    }
-
-    /// <inheritdoc cref="GetArchetype(int)"/>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Archetype GetArchetype(EntityId entityId)
-    {
-        return GetLocation(entityId).Archetype.Archetype;
-    }
-
-    /// <summary>
     /// Acquires a new <see cref="EntityId"/>.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
