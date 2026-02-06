@@ -67,9 +67,9 @@ internal struct ArchetypeInfo
         // Fill previously mentioned maps
         for (var i = 0; i < components.Count; i++)
         {
-            var component = components[i];
-            ComponentIdByColumnIndex[i] = component;
-            ColumnIndexByComponentId[component.Value] = i;
+            var componentId = components[i];
+            ComponentIdByColumnIndex[i] = componentId;
+            ColumnIndexByComponentId[componentId.Value] = i;
         }
 
         // Create a sparse map from component ID to component dispatcher
