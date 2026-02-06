@@ -243,13 +243,13 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         }
 
         // Didn't find one, create the new archetype
-        var a = new Archetype(this, components.ToImmutableOrderedListSet());
+        var newArchetype = new Archetype(this, components.ToImmutableOrderedListSet());
 
         // Add it to the relevant lists
-        archetypes.Add(a);
-        candidates.Add(a);
+        archetypes.Add(newArchetype);
+        candidates.Add(newArchetype);
 
-        return a;
+        return newArchetype;
     }
 
     /// <summary>
