@@ -154,15 +154,15 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             dstArchetypes.Add(dstArchetype);
         }
 
-        for (var archetypeI = 0; archetypeI < dstArchetypes.Count; archetypeI++)
+        for (var archetypeI = 0; archetypeI < srcArchetypes.Length; archetypeI++)
         {
             var srcArchetype = srcArchetypes[archetypeI];
             var dstArchetype = dstArchetypes[archetypeI];
 
             // Raise component copied/added events
             var dstStart = dstArchetype.Entities.Length - srcArchetype.Entities.Length;
-            var componentIdByColumnIndex = dstArchetype.Info.ComponentIdByColumnIndex;
-            foreach (var componentId in componentIdByColumnIndex)
+            var dstComponentIdByColumnIndex = dstArchetype.Info.ComponentIdByColumnIndex;
+            foreach (var componentId in dstComponentIdByColumnIndex)
             {
                 var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
                 dispatcher.OnComponentCopied(commandBuffer, dstArchetype, dstStart, srcArchetype.Entities.Length, lookup);
