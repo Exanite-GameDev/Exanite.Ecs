@@ -86,14 +86,14 @@ internal struct EntityManager
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Archetype GetArchetype(int entityIndex)
     {
-        return GetLocation(entityIndex).Chunk.Archetype;
+        return GetLocation(entityIndex).Archetype.Archetype;
     }
 
     /// <inheritdoc cref="GetArchetype(int)"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Archetype GetArchetype(EntityId entityId)
     {
-        return GetLocation(entityId).Chunk.Archetype;
+        return GetLocation(entityId).Archetype.Archetype;
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ internal struct EntityManager
 
         // Invalidate the handle
         location.Version++;
-        location.Chunk = null!;
+        location.Archetype = null!;
 
         // Store this ID for re-use later
         releasedIds.Add(entityId);

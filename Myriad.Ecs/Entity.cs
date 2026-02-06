@@ -27,7 +27,7 @@ public readonly partial record struct Entity : IComparable<Entity>
             }
 
             ref var location = ref World.Entities.GetLocation(Index);
-            return location.Version == Version && location.Chunk != null!;
+            return location.Version == Version && location.Archetype != null!;
         }
     }
 
@@ -45,7 +45,7 @@ public readonly partial record struct Entity : IComparable<Entity>
             }
 
             ref var location = ref World.Entities.GetLocation(Index);
-            return location.Version == Version && location.Chunk == null!;
+            return location.Version == Version && location.Archetype == null!;
         }
     }
 
@@ -116,7 +116,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     public ref T Get<T>() where T : IComponent
     {
         ref var location = ref World.Entities.GetLocation(EntityId);
-        return ref location.Chunk.Get<T>(location.IndexInChunk);
+        return ref location.Archetype.Get<T>(location.IndexInArchetype);
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     public Ref<T> GetRef<T>() where T : IComponent
     {
         ref var location = ref World.Entities.GetLocation(EntityId);
-        return location.Chunk.GetRef<T>(location.IndexInChunk);
+        return location.Archetype.GetRef<T>(location.IndexInArchetype);
     }
 
     /// <summary>
@@ -174,7 +174,7 @@ public readonly partial record struct Entity : IComparable<Entity>
         }
 
         ref var location = ref World.Entities.GetLocation(EntityId);
-        return location.Chunk.GetComponentArray(id).GetValue(location.IndexInChunk);
+        return location.Archetype.GetComponentArray(id).GetValue(location.IndexInArchetype);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -191,7 +191,7 @@ public readonly partial record struct Entity : IComparable<Entity>
         {
             result += " (Destroyed)";
         }
-        else if (location.Chunk == null!)
+        else if (location.Archetype == null!)
         {
             result += " (Pending)";
         }

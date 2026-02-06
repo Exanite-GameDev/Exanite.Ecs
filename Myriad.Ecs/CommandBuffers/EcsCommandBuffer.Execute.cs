@@ -97,7 +97,7 @@ public partial class EcsCommandBuffer
 
         // Raise component removed events
         var entity = entityId.ToEntity(World);
-        var archetype = location.Chunk.Archetype;
+        var archetype = location.Archetype.Archetype;
         foreach (var componentId in archetype.Components)
         {
             var dispatcher = archetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
@@ -108,7 +108,7 @@ public partial class EcsCommandBuffer
         World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
 
         // Notify archetype this entity is dead
-        location.Chunk.Archetype.RemoveEntity(location);
+        location.Archetype.Archetype.RemoveEntity(location);
 
         // Release ID
         World.Entities.ReleaseId(entityId);
@@ -132,7 +132,7 @@ public partial class EcsCommandBuffer
             if (!entityState.NeedsCreation)
             {
                 // Add existing components to set
-                var archetype = location.Chunk.Archetype;
+                var archetype = location.Archetype.Archetype;
 
                 archetypeHash = archetype.Hash;
                 componentIdSet.UnionWith(archetype.Components);
@@ -205,7 +205,7 @@ public partial class EcsCommandBuffer
             // Case 2: Entity moved
             if (setChanged)
             {
-                var srcArchetype = location.Chunk.Archetype;
+                var srcArchetype = location.Archetype.Archetype;
                 var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
 
                 // Raise component removed events
@@ -269,7 +269,7 @@ public partial class EcsCommandBuffer
                 // Raise component copied/modified events
                 if (entityState.Sets != null)
                 {
-                    var dstArchetype = location.Chunk.Archetype;
+                    var dstArchetype = location.Archetype.Archetype;
                     foreach (var (componentId, setterId) in entityState.Sets)
                     {
                         // Already had the component, so we raise copied if needed, then modified

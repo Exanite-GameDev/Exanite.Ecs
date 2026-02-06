@@ -10,9 +10,14 @@ namespace Exanite.Myriad.Ecs.Worlds;
 internal struct ArchetypeInfo
 {
     /// <summary>
+    /// The components of entities in this archetype.
+    /// </summary>
+    public readonly ImmutableOrderedListSet<ComponentId> Components;
+
+    /// <summary>
     /// A bloom filter of all the components in this archetype.
     /// </summary>
-    public readonly ComponentBloomFilter ComponentsBloomFilter;
+    public readonly ComponentBloomFilter BloomFilter;
 
     /// <summary>
     /// The hash of all components IDs in this archetype.
@@ -36,8 +41,10 @@ internal struct ArchetypeInfo
 
     public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components)
     {
+        Components = components;
+
         // Create bloom filter
-        ComponentsBloomFilter = components.ToBloomFilter();
+        BloomFilter = components.ToBloomFilter();
 
         // Calculate max component ID and archetype hash
         var maxComponentId = int.MinValue;

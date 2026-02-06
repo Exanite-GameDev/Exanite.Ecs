@@ -133,15 +133,6 @@ public sealed class QueryView : IArchetypeView
     }
 
     /// <summary>
-    /// Checks if a chunk matches this query.
-    /// </summary>
-    public bool IsMatch(Chunk chunk)
-    {
-        var matchResult = GetArchetypeMatchResult();
-        return matchResult.ArchetypeSet.Contains(chunk.Archetype);
-    }
-
-    /// <summary>
     /// Checks if an archetype matches this query.
     /// </summary>
     public bool IsMatch(Archetype archetype)
@@ -228,7 +219,7 @@ public sealed class QueryView : IArchetypeView
         // Apply the Include filter
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
-        if (IncludeFilter.Count > 0 && !archetype.ComponentsBloomFilter.MaybeIntersects(in includeBloom))
+        if (IncludeFilter.Count > 0 && !archetype.Info.BloomFilter.MaybeIntersects(in includeBloom))
         {
             return false;
         }
@@ -242,7 +233,7 @@ public sealed class QueryView : IArchetypeView
         // Apply the Exclude filter
         // If this is false it means there is definitely _not_ an intersection, which means we can skip
         // the inner check.
-        if (ExcludeFilter.Count > 0 && excludeBloom.MaybeIntersects(in archetype.ComponentsBloomFilter))
+        if (ExcludeFilter.Count > 0 && excludeBloom.MaybeIntersects(in archetype.Info.BloomFilter))
         {
             if (archetype.Components.Overlaps(ExcludeFilter))
             {
@@ -338,7 +329,7 @@ public sealed class QueryView : IArchetypeView
         /// <inheritdoc/>
         public int CompareTo(ArchetypeMatch other)
         {
-            return Archetype.Hash.CompareTo(other.Archetype.Hash);
+            return Archetype.Info.Hash.CompareTo(other.Archetype.Info.Hash);
         }
     }
 }
