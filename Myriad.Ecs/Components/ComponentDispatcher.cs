@@ -280,7 +280,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             componentCopied!.Invoke(ref components[entityIndex], world, lookup);
@@ -292,7 +292,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     {
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             world.EventBus.Raise(new ComponentCopiedEvent<T>(recursiveCommandBuffer, entities[entityIndex], ref components[entityIndex], lookup));
@@ -309,7 +309,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             componentAdded!.Invoke(ref components[entityIndex]);
@@ -321,7 +321,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     {
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             world.EventBus.Raise(new ComponentAddedEvent<T>(recursiveCommandBuffer, entities[entityIndex], ref components[entityIndex]));
@@ -338,7 +338,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             componentModified!.Invoke(ref components[entityIndex]);
@@ -350,7 +350,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     {
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             world.EventBus.Raise(new ComponentModifiedEvent<T>(recursiveCommandBuffer, entities[entityIndex], ref components[entityIndex]));
@@ -367,7 +367,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
 
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             componentRemoved!.Invoke(ref components[entityIndex]);
@@ -379,7 +379,7 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     {
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
-        for (var i = 0; i < entities.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             var entityIndex = startIndex + i;
             world.EventBus.Raise(new ComponentRemovedEvent<T>(recursiveCommandBuffer, entities[entityIndex], ref components[entityIndex]));
