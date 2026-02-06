@@ -50,10 +50,10 @@ internal struct ArchetypeInfo
         var maxComponentId = int.MinValue;
         foreach (var component in components)
         {
+            Hash = Hash.Toggle(component);
             if (component.Value > maxComponentId)
             {
                 maxComponentId = component.Value;
-                Hash = Hash.Toggle(component);
             }
         }
 
