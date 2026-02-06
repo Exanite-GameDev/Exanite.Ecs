@@ -5,11 +5,11 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// <summary>
 /// Specifies a range of stored entities and contains utility methods for manipulating that range.
 /// </summary>
-internal ref struct EntityStorageRange
+internal readonly ref struct EntityStorageRange
 {
-    public ref readonly EntityStorage Storage;
-    public int StartIndex;
-    public int Length;
+    public readonly ref readonly EntityStorage Storage;
+    public readonly int StartIndex;
+    public readonly int Length;
 
     public EntityStorageRange(ref readonly EntityStorage storage, int startIndex, int length)
     {
