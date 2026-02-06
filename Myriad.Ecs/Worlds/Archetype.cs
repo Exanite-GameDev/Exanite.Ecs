@@ -171,7 +171,7 @@ public sealed class Archetype
             storage.EntityColumn[dstRange.StartIndex + i] = entityId.ToEntity(World);
 
             // Add the entity pair to the lookup dictionary
-            var originalEntity = srcArchetype.Entities[location.IndexInArchetype];
+            var originalEntity = srcArchetype.Entities[i];
             var newEntity = entityId.ToEntity(World);
             lookup.Add(originalEntity, newEntity);
         }
