@@ -5,34 +5,48 @@ using Exanite.Myriad.Ecs.Components;
 namespace Exanite.Myriad.Ecs.Worlds;
 
 /// <summary>
-/// Stores component type mapping information for an archetype and its chunks.
+/// Stores information about the components stored in an archetype.
 /// </summary>
-internal struct ArchetypeComponentLookup
+internal struct ArchetypeInfo
 {
+    /// <summary>
+    /// A bloom filter of all the components in this archetype.
+    /// </summary>
+    public readonly ComponentBloomFilter ComponentsBloomFilter;
+
+    /// <summary>
+    /// The hash of all components IDs in this archetype.
+    /// </summary>
+    public ArchetypeHash Hash { get; }
+
     /// <summary>
     /// Map from column index to the component ID.
     /// </summary>
-    internal readonly ComponentId[] ComponentIdByColumnIndex;
+    public readonly ComponentId[] ComponentIdByColumnIndex;
 
     /// <summary>
     /// Sparse map from component ID to column index.
     /// </summary>
-    internal readonly int[] ColumnIndexByComponentId;
+    public readonly int[] ColumnIndexByComponentId;
 
     /// <summary>
     /// Sparse map from component ID to component dispatcher.
     /// </summary>
-    internal readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
+    public readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
 
-    public ArchetypeComponentLookup(ImmutableOrderedListSet<ComponentId> components)
+    public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components)
     {
-        // Calculate max component ID
+        // Create bloom filter
+        ComponentsBloomFilter = components.ToBloomFilter();
+
+        // Calculate max component ID and archetype hash
         var maxComponentId = int.MinValue;
         foreach (var component in components)
         {
             if (component.Value > maxComponentId)
             {
                 maxComponentId = component.Value;
+                Hash = Hash.Toggle(component);
             }
         }
 

@@ -66,7 +66,7 @@ public partial class EcsCommandBuffer
         // Mark entities as dead and send events
         foreach (var componentId in archetype.Components)
         {
-            var dispatcher = archetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+            var dispatcher = archetype.Info.ComponentDispatcherByComponentId[componentId.Value];
             dispatcher.OnComponentRemoved(recursiveCommandBuffer, archetype);
         }
 
@@ -185,7 +185,7 @@ public partial class EcsCommandBuffer
                     foreach (var (componentId, setterId) in entityState.Sets)
                     {
                         // Did not already have the component, so we raise copied if needed, then added
-                        var dispatcher = dstArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                        var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
                         if (setterId.IsPrefab)
                         {
                             state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
@@ -232,7 +232,7 @@ public partial class EcsCommandBuffer
                 {
                     foreach (var (componentId, setterId) in entityState.Sets)
                     {
-                        var dispatcher = dstArchetype.Lookup.ComponentDispatcherByComponentId[componentId.Value];
+                        var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
                         if (srcArchetype.Components.Contains(componentId))
                         {
                             // Already had the component, so we raise copied if needed, then modified
