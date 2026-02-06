@@ -319,7 +319,7 @@ public sealed class QueryView : IArchetypeView
                 Archetypes.Add(match.Archetype);
             }
 
-            ArchetypeSet = [..Archetypes];
+            ArchetypeSet = new HashSet<Archetype>(Archetypes);
         }
 
         public bool IsStale(EcsWorld world)
