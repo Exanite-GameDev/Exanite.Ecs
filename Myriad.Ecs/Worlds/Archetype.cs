@@ -143,7 +143,7 @@ public sealed class Archetype
             Array.Copy(srcArray, srcLocation.IndexInArchetype, dstArray, location.IndexInArchetype, 1);
         }
 
-        // Remove the entity from this chunk (using the old saved location)
+        // Remove the entity from this archetype (using the old saved location)
         RemoveEntity(srcLocation);
     }
 
