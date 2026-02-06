@@ -194,6 +194,8 @@ public sealed class Archetype
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> GetSpan<T>() where T : IComponent
     {
+        // This is safe because we have to get the column index using the component id
+        // If the component id is invalid, then we will get an index out of bounds
         var componentId = ComponentId.Get<T>();
         var array = GetComponentArray(componentId);
         return Unsafe.As<Array, T[]>(ref array);
