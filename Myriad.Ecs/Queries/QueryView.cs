@@ -139,7 +139,7 @@ public sealed class QueryView : IArchetypeView
         {
             return false;
         }
-        
+
         return Archetypes.BinarySearch(archetype, new ArchetypeComparer()) >= 0;
     }
 
