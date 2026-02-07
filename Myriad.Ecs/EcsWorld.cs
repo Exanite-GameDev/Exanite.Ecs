@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -28,12 +29,20 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
+    /// <summary>
+    /// Must be read using <see cref="Volatile"/>.
+    /// </summary>
+    internal int Version;
+
     internal readonly Lock QueryViewCacheLock = new();
     internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
     private readonly QueryView allEntitiesQuery;
 
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
     private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
+
+    internal readonly ConcurrentBag<List<Archetype>> ArchetypeListsToRecycle = new();
+    internal readonly ConcurrentBag<HashSet<Archetype>> ArchetypeSetsToRecycle = new();
 
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
@@ -137,6 +146,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IEntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
     {
+        OnSyncPoint();
+
         using var _ = AcquireCommandBuffer(out var commandBuffer);
         using var __ = ListPool<Archetype>.Acquire(out var dstArchetypes);
 
@@ -187,6 +198,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// </summary>
     public void Clear()
     {
+        OnSyncPoint();
+
         using var _ = AcquireCommandBuffer(out var commandBuffer);
         commandBuffer.Destroy(allEntitiesQuery);
         commandBuffer.Execute();
@@ -222,6 +235,22 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     }
 
     /// <summary>
+    /// Call when a sync point is reached to clean up internal data.
+    /// </summary>
+    internal void OnSyncPoint()
+    {
+        while (ArchetypeListsToRecycle.TryTake(out var list))
+        {
+            ListPool<Archetype>.Release(list);
+        }
+
+        while (ArchetypeSetsToRecycle.TryTake(out var set))
+        {
+            HashSetPool<Archetype>.Release(set);
+        }
+    }
+
+    /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
     internal Archetype GetOrCreateArchetype<T>(T components, ArchetypeHash hash) where T : IComponentIdSet
@@ -248,6 +277,9 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         // Add it to the relevant lists
         archetypes.Add(newArchetype);
         candidates.Add(newArchetype);
+
+        // Increment version
+        Interlocked.Increment(ref Version);
 
         return newArchetype;
     }
