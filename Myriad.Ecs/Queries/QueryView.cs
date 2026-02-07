@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Exanite.Core.Threading;
+using System.Threading;
+using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
@@ -14,14 +15,11 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// </summary>
 public sealed class QueryView : IArchetypeView
 {
-    /// <summary>
-    /// Cached value from the last time <see cref="GetMatchResult"/> was called.
-    /// </summary>
-    private readonly RwLock<MatchResult?> resultLock = new(null);
-    private readonly OrderedListSet<ComponentId> temporarySet = [];
+    private MatchResult result = new(0, ImmutableOrderedListSet<ArchetypeMatch>.Empty);
 
     private readonly ComponentBloomFilter includeBloom;
     private readonly ComponentBloomFilter excludeBloom;
+    private readonly Lock updateLock = new();
 
     /// <summary>
     /// The <see cref="EcsWorld"/> that this query is for.
@@ -146,80 +144,78 @@ public sealed class QueryView : IArchetypeView
     private MatchResult GetMatchResult()
     {
         // Quickly check if we already have a non-stale result
-        using (resultLock.EnterReadLock(out var result))
+        var currentResult = Volatile.Read(in result);
+        if (currentResult.Version == Volatile.Read(in World.Version))
         {
-            if (result.Value != null && !result.Value.Value.IsStale(World))
-            {
-                return result.Value.Value;
-            }
+            return currentResult;
         }
 
-        return GetMatchResultCold();
+        return GetMatchResultCold(this);
     }
 
-    private MatchResult GetMatchResultCold()
+    /// <summary>
+    /// This assumes the current result is stale.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="view"/> is passed in manually to avoid accessing instance state on accident.
+    /// </remarks>
+    private static MatchResult GetMatchResultCold(QueryView view)
     {
-        // We don't have a valid cached result, calculate it now
-        using (resultLock.EnterWriteLock(out var result))
+        // Allow only one thread to update at a time
+        // Updates are usually incremental and fast so this is fine
+        using var _ = view.updateLock.EnterScope();
+
+        var oldResult = Volatile.Read(in view.result);
+
+        // Lazily allocated set of new archetype matches
+        var newMatches = default(OrderedListSet<ArchetypeMatch>?);
+
+        // Check every new archetype
+        var world = view.World;
+        var archetypes = world.Archetypes;
         {
-            // If this query has never been evaluated before do it now
-            if (result.Value == null)
+            // Acquire temporary set from pool
+            // No need to clear on returning since component id does not have managed references
+            using var __ = SimplePool<OrderedListSet<ComponentId>>.Acquire(out var temporarySet);
+            for (var i = oldResult.Version; i < archetypes.Length; i++)
             {
-                // Check every archetype
-                var matches = new List<ArchetypeMatch>();
-                foreach (var archetype in World.Archetypes)
+                if (!view.TryMatch(archetypes[i], temporarySet, out var match))
                 {
-                    if (TryMatch(archetype, out var match))
-                    {
-                        matches.Add(match);
-                    }
+                    continue;
                 }
 
-                // Store result for next time
-                result.Value = new MatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(matches));
+                // Initialize new matches now that we know we need it
+                newMatches ??= new OrderedListSet<ArchetypeMatch>(oldResult.ArchetypesMatches);
 
-                // Return matches
-                return result.Value.Value;
+                // Add the match
+                newMatches.Add(match);
             }
-
-            // If the number of archetypes has changed since last time regenerate the cache
-            if (result.Value.Value.IsStale(World))
-            {
-                // Lazily allocated set of new archetype matches
-                var newMatches = default(OrderedListSet<ArchetypeMatch>?);
-
-                // Check every new archetype
-                for (var i = result.Value.Value.Version; i < World.Archetypes.Length; i++)
-                {
-                    if (!TryMatch(World.Archetypes[i], out var match))
-                    {
-                        continue;
-                    }
-
-                    // Initialize new matches now that we know we need it
-                    newMatches ??= new OrderedListSet<ArchetypeMatch>(result.Value.Value.ArchetypesMatches);
-
-                    // Add the match
-                    newMatches.Add(match);
-                }
-
-                if (newMatches == null)
-                {
-                    // Copy is null, meaning nothing new was found, just use the old result with the new watermark
-                    result.Value = new MatchResult(World.Archetypes.Length, result.Value.Value.ArchetypesMatches);
-                }
-                else
-                {
-                    // Create a new match result
-                    result.Value = new MatchResult(World.Archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
-                }
-            }
-
-            return result.Value.Value;
         }
+
+        MatchResult localResult;
+        if (newMatches == null)
+        {
+            // Copy is null, meaning nothing new was found, just use the old result with the new watermark
+            localResult = new MatchResult(archetypes.Length, oldResult.ArchetypesMatches);
+        }
+        else
+        {
+            // Create a new match result
+            localResult = new MatchResult(archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
+        }
+
+        // Replace old data
+        Volatile.Write(ref view.result, localResult);
+
+        // Defer the recycling of old collections to the world
+        // The world will recycle them at the next sync point
+        world.Recycle(oldResult.Archetypes);
+        world.Recycle(oldResult.ArchetypeSet);
+
+        return localResult;
     }
 
-    private bool TryMatch(Archetype archetype, out ArchetypeMatch match)
+    private bool TryMatch(Archetype archetype, OrderedListSet<ComponentId> temporarySet, out ArchetypeMatch match)
     {
         match = default;
 
@@ -286,45 +282,43 @@ public sealed class QueryView : IArchetypeView
         return true;
     }
 
-    private readonly struct MatchResult
+    private class MatchResult
     {
         /// <summary>
         /// The archetypes matching this query.
         /// </summary>
-        public List<Archetype> Archetypes { get; }
+        public readonly List<Archetype> Archetypes;
 
         /// <summary>
         /// The archetypes matching this query.
         /// </summary>
-        public HashSet<Archetype> ArchetypeSet { get; }
+        public readonly HashSet<Archetype> ArchetypeSet;
 
         /// <summary>
         /// The archetypes matching this query.
         /// </summary>
-        public ImmutableOrderedListSet<ArchetypeMatch> ArchetypesMatches { get; }
+        public readonly ImmutableOrderedListSet<ArchetypeMatch> ArchetypesMatches;
 
         /// <summary>
         /// The number of archetypes in the world when this cache was created. Used for caching purposes.
         /// </summary>
-        public int Version { get; }
+        public readonly int Version;
 
-        public MatchResult(int watermark, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
+        public MatchResult(int version, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
         {
             ArchetypesMatches = archetypesMatches;
-            Version = watermark;
+            Version = version;
 
-            Archetypes = new List<Archetype>(archetypesMatches.Count);
+            Archetypes = ListPool<Archetype>.Acquire();
+            Archetypes.EnsureCapacity(archetypesMatches.Count);
             foreach (var match in archetypesMatches)
             {
                 Archetypes.Add(match.Archetype);
             }
 
-            ArchetypeSet = new HashSet<Archetype>(Archetypes);
-        }
-
-        public bool IsStale(EcsWorld world)
-        {
-            return Version < world.Archetypes.Length;
+            ArchetypeSet = HashSetPool<Archetype>.Acquire();
+            ArchetypeSet.EnsureCapacity(ArchetypesMatches.Count);
+            ArchetypeSet.UnionWith(Archetypes);
         }
     }
 

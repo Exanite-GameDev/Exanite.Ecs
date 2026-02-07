@@ -198,7 +198,7 @@ public sealed class Archetype
         // If the component id is invalid, then we will get an index out of bounds
         var componentId = ComponentId.Get<T>();
         var array = GetComponentArray(componentId);
-        return Unsafe.As<Array, T[]>(ref array);
+        return Unsafe.As<Array, T[]>(ref array).AsSpan(0, entityCount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

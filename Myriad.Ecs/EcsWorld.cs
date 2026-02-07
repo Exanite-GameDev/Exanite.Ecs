@@ -28,12 +28,25 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     private readonly List<Archetype> archetypes = [];
     private readonly Dictionary<ArchetypeHash, List<Archetype>> archetypesByHash = [];
 
+    /// <summary>
+    /// Must be read using <see cref="Volatile"/>.
+    /// </summary>
+    /// <remarks>
+    /// Guaranteed to be the same as the archetype count,
+    /// however, since this is a field, it can be read using <see cref="Volatile"/>.
+    /// </remarks>
+    internal int Version;
+
     internal readonly Lock QueryViewCacheLock = new();
     internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
     private readonly QueryView allEntitiesQuery;
 
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
     private readonly HashSet<EcsCommandBuffer> activeCommandBuffers = new();
+
+    private readonly Lock recycleLock = new();
+    private readonly List<List<Archetype>> archetypeListsToRecycle = new();
+    private readonly List<HashSet<Archetype>> archetypeSetsToRecycle = new();
 
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
@@ -137,6 +150,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IEntityLookup AddTo(EcsWorld dstWorld, IArchetypeView view)
     {
+        OnSyncPoint();
+
         using var _ = AcquireCommandBuffer(out var commandBuffer);
         using var __ = ListPool<Archetype>.Acquire(out var dstArchetypes);
 
@@ -187,6 +202,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// </summary>
     public void Clear()
     {
+        OnSyncPoint();
+
         using var _ = AcquireCommandBuffer(out var commandBuffer);
         commandBuffer.Destroy(allEntitiesQuery);
         commandBuffer.Execute();
@@ -221,6 +238,37 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         GuardUtility.IsTrue(allEntitiesQuery.Count() == 0, "Expected entity count to be 0 after world disposal");
     }
 
+    internal void Recycle(List<Archetype> value)
+    {
+        using var _ = recycleLock.EnterScope();
+        archetypeListsToRecycle.Add(value);
+    }
+
+    internal void Recycle(HashSet<Archetype> value)
+    {
+        using var _ = recycleLock.EnterScope();
+        archetypeSetsToRecycle.Add(value);
+    }
+
+    /// <summary>
+    /// Call when a sync point is reached to clean up internal data.
+    /// </summary>
+    internal void OnSyncPoint()
+    {
+        using var _ = recycleLock.EnterScope();
+
+        foreach (var value in archetypeListsToRecycle)
+        {
+            ListPool<Archetype>.Release(value);
+        }
+        archetypeListsToRecycle.Clear();
+
+        foreach (var value in archetypeSetsToRecycle)
+        {
+            HashSetPool<Archetype>.Release(value);
+        }
+    }
+
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
@@ -248,6 +296,9 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         // Add it to the relevant lists
         archetypes.Add(newArchetype);
         candidates.Add(newArchetype);
+
+        // Increment version
+        Interlocked.Increment(ref Version);
 
         return newArchetype;
     }
