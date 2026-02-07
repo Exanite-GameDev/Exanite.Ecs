@@ -32,7 +32,7 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
 
         return true;
     }
@@ -66,8 +66,8 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
 
         return true;
     }
@@ -108,9 +108,9 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
 
         return true;
     }
@@ -158,10 +158,10 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
 
         return true;
     }
@@ -216,11 +216,11 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
 
         return true;
     }
@@ -282,12 +282,12 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
 
         return true;
     }
@@ -356,13 +356,13 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
 
         return true;
     }
@@ -438,14 +438,14 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
 
         return true;
     }
@@ -528,15 +528,15 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
 
         return true;
     }
@@ -626,16 +626,16 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype, componentId9);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
 
         return true;
     }
@@ -732,17 +732,17 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype, componentId9);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype, componentId10);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
 
         return true;
     }
@@ -846,18 +846,18 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype, componentId9);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype, componentId10);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype, componentId11);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
 
         return true;
     }
@@ -968,19 +968,19 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype, componentId9);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype, componentId10);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype, componentId11);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype, componentId12);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
 
         return true;
     }
@@ -1098,20 +1098,20 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype, componentId9);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype, componentId10);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype, componentId11);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype, componentId12);
-        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype, componentId13);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
+        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype);
 
         return true;
     }
@@ -1236,21 +1236,21 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype, componentId9);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype, componentId10);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype, componentId11);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype, componentId12);
-        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype, componentId13);
-        ref14 = location.Archetype.GetRef<T14>(location.IndexInArchetype, componentId14);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
+        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype);
+        ref14 = location.Archetype.GetRef<T14>(location.IndexInArchetype);
 
         return true;
     }
@@ -1382,22 +1382,22 @@ public readonly partial record struct Entity
             return false;
         }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype, componentId0);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype, componentId1);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype, componentId2);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype, componentId3);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype, componentId4);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype, componentId5);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype, componentId6);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype, componentId7);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype, componentId8);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype, componentId9);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype, componentId10);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype, componentId11);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype, componentId12);
-        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype, componentId13);
-        ref14 = location.Archetype.GetRef<T14>(location.IndexInArchetype, componentId14);
-        ref15 = location.Archetype.GetRef<T15>(location.IndexInArchetype, componentId15);
+        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
+        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype);
+        ref14 = location.Archetype.GetRef<T14>(location.IndexInArchetype);
+        ref15 = location.Archetype.GetRef<T15>(location.IndexInArchetype);
 
         return true;
     }

@@ -5,7 +5,7 @@ internal static class EcsConstants
     /// <summary>
     /// The size of each segment in the storage location lookup list.
     /// </summary>
-    internal const int StorageLocationSegmentSize = 1024;
+    internal const int StorageLocationSegmentSize = 4096;
 
     /// <summary>
     /// The initial entity capacity of an archetype.

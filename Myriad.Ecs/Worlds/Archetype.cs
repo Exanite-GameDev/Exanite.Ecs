@@ -194,13 +194,11 @@ public sealed class Archetype
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> GetSpan<T>() where T : IComponent
     {
-        return GetSpan<T>(ComponentId.Get<T>());
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Span<T> GetSpan<T>(ComponentId id) where T : IComponent
-    {
-        return ((T[])GetComponentArray(id)).AsSpan(0, entityCount);
+        // Unsafe.As() is safe because we have to get the column index using the component id
+        // If the component id is invalid, then we will get an index out of bounds
+        var componentId = ComponentId.Get<T>();
+        var array = GetComponentArray(componentId);
+        return Unsafe.As<Array, T[]>(ref array);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -209,40 +207,16 @@ public sealed class Archetype
         return storage.ComponentColumns[Info.ColumnIndexByComponentId[id.Value]];
     }
 
-    /// <remarks>
-    /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal ref T Get<T>(int entityIndex) where T : IComponent
+    {
+        return ref GetSpan<T>()[entityIndex];
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Ref<T> GetRef<T>(int entityIndex) where T : IComponent
     {
         return new Ref<T>(ref Get<T>(entityIndex));
-    }
-
-    /// <remarks>
-    /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal Ref<T> GetRef<T>(int entityIndex, ComponentId id) where T : IComponent
-    {
-        return new Ref<T>(ref Get<T>(entityIndex, id));
-    }
-
-    /// <remarks>
-    /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ref T Get<T>(int entityIndex) where T : IComponent
-    {
-        return ref Get<T>(entityIndex, ComponentId.Get<T>());
-    }
-
-    /// <remarks>
-    /// Providing the component ID can prevent repeated component ID lookups.
-    /// </remarks>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ref T Get<T>(int entityIndex, ComponentId id) where T : IComponent
-    {
-        return ref GetSpan<T>(id)[entityIndex];
     }
 
     /// <inheritdoc/>
