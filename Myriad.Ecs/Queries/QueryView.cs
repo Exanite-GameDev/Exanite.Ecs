@@ -150,7 +150,7 @@ public sealed class QueryView : IArchetypeView
             return currentResult;
         }
 
-        return GetMatchResultCold(this, currentResult);
+        return GetMatchResultCold(this);
     }
 
     /// <summary>
@@ -159,11 +159,13 @@ public sealed class QueryView : IArchetypeView
     /// <remarks>
     /// <see cref="view"/> is passed in manually to avoid accessing instance state on accident.
     /// </remarks>
-    private static MatchResult GetMatchResultCold(QueryView view, MatchResult oldResult)
+    private static MatchResult GetMatchResultCold(QueryView view)
     {
         // Allow only one thread to update at a time
         // Updates are usually incremental and fast so this is fine
         using var _ = view.updateLock.EnterScope();
+
+        var oldResult = Volatile.Read(in view.result);
 
         // Lazily allocated set of new archetype matches
         var newMatches = default(OrderedListSet<ArchetypeMatch>?);
