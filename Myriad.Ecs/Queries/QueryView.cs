@@ -162,7 +162,7 @@ public sealed class QueryView : IArchetypeView
     private static MatchResult GetMatchResultCold(QueryView view, MatchResult oldResult)
     {
         // Allow only one thread to update at a time
-        // Updates are usually incremental and fast so this fine
+        // Updates are usually incremental and fast so this is fine
         using var _ = view.updateLock.EnterScope();
 
         // Lazily allocated set of new archetype matches
