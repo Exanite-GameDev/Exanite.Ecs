@@ -267,6 +267,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         {
             HashSetPool<Archetype>.Release(value);
         }
+        archetypeSetsToRecycle.Clear();
     }
 
     /// <summary>
