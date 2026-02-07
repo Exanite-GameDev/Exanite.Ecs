@@ -15,7 +15,7 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// </summary>
 public sealed class QueryView : IArchetypeView
 {
-    private MatchResult result = new(0, ImmutableOrderedListSet<ArchetypeMatch>.Empty);
+    private MatchResult result = new(0, []);
 
     private readonly ComponentBloomFilter includeBloom;
     private readonly ComponentBloomFilter excludeBloom;
@@ -127,8 +127,7 @@ public sealed class QueryView : IArchetypeView
             return false;
         }
 
-        var matchResult = GetMatchResult();
-        return matchResult.ArchetypeSet.Contains(entity.World.Entities.GetLocation(entity.EntityId).Archetype);
+        return IsMatch(entity.Archetype);
     }
 
     /// <summary>
@@ -136,8 +135,7 @@ public sealed class QueryView : IArchetypeView
     /// </summary>
     public bool IsMatch(Archetype archetype)
     {
-        var matchResult = GetMatchResult();
-        return matchResult.ArchetypeSet.Contains(archetype);
+        return Archetypes.BinarySearch(archetype, new ArchetypeComparer()) >= 0;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -168,7 +166,7 @@ public sealed class QueryView : IArchetypeView
         var oldResult = Volatile.Read(in view.result);
 
         // Lazily allocated set of new archetype matches
-        var newMatches = default(OrderedListSet<ArchetypeMatch>?);
+        var newMatches = default(List<Archetype>?);
 
         // Check every new archetype
         var world = view.World;
@@ -179,46 +177,47 @@ public sealed class QueryView : IArchetypeView
             using var __ = SimplePool<OrderedListSet<ComponentId>>.Acquire(out var temporarySet);
             for (var i = oldResult.Version; i < archetypes.Length; i++)
             {
-                if (!view.TryMatch(archetypes[i], temporarySet, out var match))
+                var archetype = archetypes[i];
+                if (!view.IsMatch(archetype, temporarySet))
                 {
                     continue;
                 }
 
-                // Initialize new matches now that we know we need it
-                newMatches ??= new OrderedListSet<ArchetypeMatch>(oldResult.ArchetypesMatches);
+                // Add the matched archetype
+                if (newMatches == null)
+                {
+                    newMatches = ListPool<Archetype>.Acquire();
+                    newMatches.AddRange(oldResult.Archetypes);
+                }
 
-                // Add the match
-                newMatches.Add(match);
+                newMatches.Add(archetype);
             }
         }
 
-        MatchResult localResult;
+        MatchResult newResult;
         if (newMatches == null)
         {
-            // Copy is null, meaning nothing new was found, just use the old result with the new watermark
-            localResult = new MatchResult(archetypes.Length, oldResult.ArchetypesMatches);
+            // Copy is null, meaning nothing new was found, just use the old result with the new version
+            newResult = new MatchResult(archetypes.Length, oldResult.Archetypes);
         }
         else
         {
             // Create a new match result
-            localResult = new MatchResult(archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
+            newResult = new MatchResult(archetypes.Length, newMatches);
+
+            // Defer the recycling of the old list to the world
+            // The world will recycle them at the next sync point
+            world.Recycle(oldResult.Archetypes);
         }
 
         // Replace old data
-        Volatile.Write(ref view.result, localResult);
+        Volatile.Write(ref view.result, newResult);
 
-        // Defer the recycling of old collections to the world
-        // The world will recycle them at the next sync point
-        world.Recycle(oldResult.Archetypes);
-        world.Recycle(oldResult.ArchetypeSet);
-
-        return localResult;
+        return newResult;
     }
 
-    private bool TryMatch(Archetype archetype, OrderedListSet<ComponentId> temporarySet, out ArchetypeMatch match)
+    private bool IsMatch(Archetype archetype, OrderedListSet<ComponentId> temporarySet)
     {
-        match = default;
-
         // Apply the Include filter
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
@@ -277,8 +276,6 @@ public sealed class QueryView : IArchetypeView
         }
 
         temporarySet.Clear();
-        match = new ArchetypeMatch(archetype);
-
         return true;
     }
 
@@ -290,47 +287,23 @@ public sealed class QueryView : IArchetypeView
         public readonly List<Archetype> Archetypes;
 
         /// <summary>
-        /// The archetypes matching this query.
-        /// </summary>
-        public readonly HashSet<Archetype> ArchetypeSet;
-
-        /// <summary>
-        /// The archetypes matching this query.
-        /// </summary>
-        public readonly ImmutableOrderedListSet<ArchetypeMatch> ArchetypesMatches;
-
-        /// <summary>
         /// The number of archetypes in the world when this cache was created. Used for caching purposes.
         /// </summary>
         public readonly int Version;
 
-        public MatchResult(int version, ImmutableOrderedListSet<ArchetypeMatch> archetypesMatches)
+        public MatchResult(int version, List<Archetype> archetypes)
         {
-            ArchetypesMatches = archetypesMatches;
             Version = version;
-
-            Archetypes = ListPool<Archetype>.Acquire();
-            Archetypes.EnsureCapacity(archetypesMatches.Count);
-            foreach (var match in archetypesMatches)
-            {
-                Archetypes.Add(match.Archetype);
-            }
-
-            ArchetypeSet = HashSetPool<Archetype>.Acquire();
-            ArchetypeSet.EnsureCapacity(ArchetypesMatches.Count);
-            ArchetypeSet.UnionWith(Archetypes);
+            Archetypes = archetypes;
         }
     }
 
-    /// <summary>
-    /// An archetype that matched a query.
-    /// </summary>
-    private readonly record struct ArchetypeMatch(Archetype Archetype) : IComparable<ArchetypeMatch>
+    private readonly struct ArchetypeComparer : IComparer<Archetype>
     {
-        /// <inheritdoc/>
-        public int CompareTo(ArchetypeMatch other)
+        public int Compare(Archetype? left, Archetype? right)
         {
-            return Archetype.Info.Hash.CompareTo(other.Archetype.Info.Hash);
+            // Archetypes are never null when this comparer is used
+            return left!.Id.CompareTo(right!.Id);
         }
     }
 }

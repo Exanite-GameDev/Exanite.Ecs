@@ -46,7 +46,6 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     private readonly Lock recycleLock = new();
     private readonly List<List<Archetype>> archetypeListsToRecycle = new();
-    private readonly List<HashSet<Archetype>> archetypeSetsToRecycle = new();
 
     public bool IsDisposing { get; private set; }
     public bool IsDisposed { get; private set; }
@@ -244,12 +243,6 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         archetypeListsToRecycle.Add(value);
     }
 
-    internal void Recycle(HashSet<Archetype> value)
-    {
-        using var _ = recycleLock.EnterScope();
-        archetypeSetsToRecycle.Add(value);
-    }
-
     /// <summary>
     /// Call when a sync point is reached to clean up internal data.
     /// </summary>
@@ -262,12 +255,6 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             ListPool<Archetype>.Release(value);
         }
         archetypeListsToRecycle.Clear();
-
-        foreach (var value in archetypeSetsToRecycle)
-        {
-            HashSetPool<Archetype>.Release(value);
-        }
-        archetypeSetsToRecycle.Clear();
     }
 
     /// <summary>
@@ -292,7 +279,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         }
 
         // Didn't find one, create the new archetype
-        var newArchetype = new Archetype(this, components.ToImmutableOrderedListSet());
+        var newArchetype = new Archetype(archetypes.Count, this, components.ToImmutableOrderedListSet());
 
         // Add it to the relevant lists
         archetypes.Add(newArchetype);

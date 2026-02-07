@@ -23,6 +23,8 @@ public sealed class Archetype
     /// </summary>
     private int entityCount;
 
+    internal readonly int Id;
+
     /// <summary>
     /// The world which this archetype belongs to.
     /// </summary>
@@ -43,8 +45,9 @@ public sealed class Archetype
     /// </summary>
     public int Capacity => storage.Capacity;
 
-    internal Archetype(EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
+    internal Archetype(int id, EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
     {
+        Id = id;
         World = world;
         Info = new ArchetypeInfo(components);
         storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);

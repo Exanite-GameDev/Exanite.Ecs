@@ -5,6 +5,7 @@ using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs;
 
@@ -64,6 +65,11 @@ public readonly partial record struct Entity : IComparable<Entity>
     public readonly EcsWorld World;
 
     /// <summary>
+    /// The archetype of the entity.
+    /// </summary>
+    public Archetype Archetype => World.Entities.GetLocation(EntityId).Archetype;
+
+    /// <summary>
     /// The index of this entity.
     /// May be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
@@ -83,7 +89,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get the set of components which this entity currently has.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ComponentIds => World.Entities.GetLocation(EntityId).Archetype.Components;
+    public ImmutableOrderedListSet<ComponentId> ComponentIds => Archetype.Components;
 
     /// <summary>
     /// Get a boxed array of all components.
