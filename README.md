@@ -77,6 +77,7 @@ To facilitate this, the events raised by the event bus provide a command buffer 
 Overall, query iteration speeds are extremely fast while structural changes are much slower.
 
 Comparison using https://github.com/Doraku/Ecs.CSharp.Benchmark:
+- These comparisons focus on the single-threaded, non-SIMD cases.
 - Iteration speed matches `Frent_QueryInline` for the 1 component case, slower for the 2/3 component case.
   - It's easily possible to beat Frent's iteration speed if I use Frent's query iteration approach,
     but Frent's approach causes high register pressure that is bad for real world usage.
