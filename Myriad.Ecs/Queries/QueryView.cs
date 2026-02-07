@@ -165,18 +165,23 @@ public sealed class QueryView : IArchetypeView
 
         // Check every new archetype
         var archetypes = view.World.Archetypes;
-        for (var i = oldResult.Version; i < archetypes.Length; i++)
         {
-            if (!view.TryMatch(archetypes[i], out var match))
+            // Acquire temporary set from pool
+            // No need to clear on returning since component id does not have managed references
+            using var _ = SimplePool<OrderedListSet<ComponentId>>.Acquire(out var temporarySet);
+            for (var i = oldResult.Version; i < archetypes.Length; i++)
             {
-                continue;
+                if (!view.TryMatch(archetypes[i], temporarySet, out var match))
+                {
+                    continue;
+                }
+
+                // Initialize new matches now that we know we need it
+                newMatches ??= new OrderedListSet<ArchetypeMatch>(oldResult.ArchetypesMatches);
+
+                // Add the match
+                newMatches.Add(match);
             }
-
-            // Initialize new matches now that we know we need it
-            newMatches ??= new OrderedListSet<ArchetypeMatch>(oldResult.ArchetypesMatches);
-
-            // Add the match
-            newMatches.Add(match);
         }
 
         MatchResult localResult;
@@ -206,13 +211,13 @@ public sealed class QueryView : IArchetypeView
         // Successfully replaced
         // Defer the recycling of old collections to the world
         // The world will recycle them at the next sync point
-        view.World.ArchetypeListsToRecycle.Add(oldResult.Archetypes);
-        view.World.ArchetypeSetsToRecycle.Add(oldResult.ArchetypeSet);
+        view.World.Recycle(oldResult.Archetypes);
+        view.World.Recycle(oldResult.ArchetypeSet);
 
         return localResult;
     }
 
-    private bool TryMatch(Archetype archetype, out ArchetypeMatch match)
+    private bool TryMatch(Archetype archetype, OrderedListSet<ComponentId> temporarySet, out ArchetypeMatch match)
     {
         match = default;
 
@@ -240,11 +245,6 @@ public sealed class QueryView : IArchetypeView
                 return false;
             }
         }
-
-        // Acquire set from pool
-        // No need to clear on returning since component id does not have managed references
-        using var _ = SimplePool<OrderedListSet<ComponentId>>.Acquire(out var temporarySet);
-        temporarySet.Clear();
 
         // Apply the ExactlyOne filter
         if (ExactlyOneFilter.Count > 0)
