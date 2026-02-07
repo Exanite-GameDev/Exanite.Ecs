@@ -31,6 +31,10 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// <summary>
     /// Must be read using <see cref="Volatile"/>.
     /// </summary>
+    /// <remarks>
+    /// Guaranteed to be the same as the archetype count,
+    /// however, since this is a field, it can be read using <see cref="Volatile"/>.
+    /// </remarks>
     internal int Version;
 
     internal readonly Lock QueryViewCacheLock = new();
