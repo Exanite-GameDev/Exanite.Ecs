@@ -169,7 +169,8 @@ public sealed class QueryView : IArchetypeView
         var newMatches = default(OrderedListSet<ArchetypeMatch>?);
 
         // Check every new archetype
-        var archetypes = view.World.Archetypes;
+        var world = view.World;
+        var archetypes = world.Archetypes;
         {
             // Acquire temporary set from pool
             // No need to clear on returning since component id does not have managed references
@@ -206,8 +207,8 @@ public sealed class QueryView : IArchetypeView
 
         // Defer the recycling of old collections to the world
         // The world will recycle them at the next sync point
-        view.World.Recycle(oldResult.Archetypes);
-        view.World.Recycle(oldResult.ArchetypeSet);
+        world.Recycle(oldResult.Archetypes);
+        world.Recycle(oldResult.ArchetypeSet);
 
         return localResult;
     }
