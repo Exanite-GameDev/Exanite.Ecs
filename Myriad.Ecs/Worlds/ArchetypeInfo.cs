@@ -22,7 +22,7 @@ internal struct ArchetypeInfo
     /// <summary>
     /// The hash of all components IDs in this archetype.
     /// </summary>
-    public ArchetypeHash Hash { get; }
+    public readonly ArchetypeHash Hash;
 
     /// <summary>
     /// Map from column index to the component ID.
