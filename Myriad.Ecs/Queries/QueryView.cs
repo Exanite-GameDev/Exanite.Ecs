@@ -19,6 +19,7 @@ public sealed class QueryView : IArchetypeView
 
     private readonly ComponentBloomFilter includeBloom;
     private readonly ComponentBloomFilter excludeBloom;
+    private readonly Lock updateLock = new();
 
     /// <summary>
     /// The <see cref="EcsWorld"/> that this query is for.
@@ -160,6 +161,10 @@ public sealed class QueryView : IArchetypeView
     /// </remarks>
     private static MatchResult GetMatchResultCold(QueryView view, MatchResult oldResult)
     {
+        // Allow only one thread to update at a time
+        // Updates are usually incremental and fast so this fine
+        using var _ = view.updateLock.EnterScope();
+
         // Lazily allocated set of new archetype matches
         var newMatches = default(OrderedListSet<ArchetypeMatch>?);
 
@@ -168,7 +173,7 @@ public sealed class QueryView : IArchetypeView
         {
             // Acquire temporary set from pool
             // No need to clear on returning since component id does not have managed references
-            using var _ = SimplePool<OrderedListSet<ComponentId>>.Acquire(out var temporarySet);
+            using var __ = SimplePool<OrderedListSet<ComponentId>>.Acquire(out var temporarySet);
             for (var i = oldResult.Version; i < archetypes.Length; i++)
             {
                 if (!view.TryMatch(archetypes[i], temporarySet, out var match))
@@ -196,19 +201,9 @@ public sealed class QueryView : IArchetypeView
             localResult = new MatchResult(archetypes.Length, ImmutableOrderedListSet<ArchetypeMatch>.Create(newMatches));
         }
 
-        var exchangeResult = Interlocked.CompareExchange(ref view.result, localResult, oldResult);
-        if (exchangeResult != oldResult)
-        {
-            // Someone updated it before us
-            // Recycle our collections immediately since no other thread has access yet
-            ListPool<Archetype>.Release(localResult.Archetypes);
-            HashSetPool<Archetype>.Release(localResult.ArchetypeSet);
+        // Replace old data
+        Volatile.Write(ref view.result, localResult);
 
-            // Read again to get the absolute latest data
-            return Volatile.Read(in view.result);
-        }
-
-        // Successfully replaced
         // Defer the recycling of old collections to the world
         // The world will recycle them at the next sync point
         view.World.Recycle(oldResult.Archetypes);
