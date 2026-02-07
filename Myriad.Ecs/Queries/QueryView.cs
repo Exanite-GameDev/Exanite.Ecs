@@ -135,6 +135,11 @@ public sealed class QueryView : IArchetypeView
     /// </summary>
     public bool IsMatch(Archetype archetype)
     {
+        if (archetype.World != World)
+        {
+            return false;
+        }
+        
         return Archetypes.BinarySearch(archetype, new ArchetypeComparer()) >= 0;
     }
 
