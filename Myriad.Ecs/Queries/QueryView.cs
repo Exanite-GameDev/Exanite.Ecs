@@ -17,14 +17,14 @@ public sealed class QueryView : IArchetypeView
 {
     private MatchResult result = new(0, []);
 
-    private readonly ComponentBloomFilter includeBloom;
-    private readonly ComponentBloomFilter excludeBloom;
-    private readonly Lock updateLock = new();
-
     /// <summary>
     /// The <see cref="EcsWorld"/> that this query is for.
     /// </summary>
     public EcsWorld World { get; }
+
+    private readonly Lock updateLock = new();
+    private readonly ComponentBloomFilter includeBloom;
+    private readonly ComponentBloomFilter excludeBloom;
 
     /// <summary>
     /// The components which must be present on an entity for it to match this query.
