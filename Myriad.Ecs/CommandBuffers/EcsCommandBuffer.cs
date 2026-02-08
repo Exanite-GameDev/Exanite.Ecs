@@ -188,6 +188,29 @@ public sealed partial class EcsCommandBuffer
     }
 
     /// <summary>
+    /// Clears an existing set or remove operation from the command buffer.
+    /// Not the same as <see cref="Remove{T}"/>
+    /// </summary>
+    public BufferedEntity Unset<T>(Entity entity) where T : IComponent
+    {
+        EnsureIsExternallyMutable();
+        EnsureIsFromCurrentWorld(entity);
+
+        var componentId = ComponentId.Get<T>();
+
+        // Store the command
+        ref var entityState = ref GetEntityState(entity.EntityId);
+
+        // Prevent the set or remove, if they exist
+        entityState.Sets?.Remove(componentId);
+        entityState.Removes?.Remove(componentId);
+
+        HasBufferedOperations = true;
+
+        return new BufferedEntity(entity, this);
+    }
+
+    /// <summary>
     /// Remove a component attached to an entity.
     /// </summary>
     public BufferedEntity Remove<T>(Entity entity) where T : IComponent
