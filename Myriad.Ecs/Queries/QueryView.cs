@@ -192,6 +192,7 @@ public sealed class QueryView : IArchetypeView
                 if (newMatches == null)
                 {
                     newMatches = ListPool<Archetype>.Acquire();
+                    newMatches.EnsureCapacity(oldResult.Archetypes.Count + 1);
                     newMatches.AddRange(oldResult.Archetypes);
                 }
 
