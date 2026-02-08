@@ -8,10 +8,12 @@ namespace Exanite.Myriad.Ecs.Events;
 /// Warning: Modifications without setting through the command buffer will NOT raise this event.
 /// </summary>
 /// <remarks>
-/// This event does not provide the old value because the event cannot guarantee that
-/// the component has not been modified since the previous <see cref="ComponentModifiedEvent{T}"/> event.
+/// This event by itself cannot guarantee that
+/// the component has not been modified since the previous modified event.
 /// <para/>
-/// Code that relies on the previous component value should store it manually.
+/// Capturing and providing the old component value for every component change event is also very expensive.
+/// <para/>
+/// Code that relies on the previous component value should store it manually or ensure the component is readonly to ensure that immutable modifications are used.
 /// </remarks>
 public readonly ref struct ComponentModifiedEvent<T> where T : IComponent
 {
