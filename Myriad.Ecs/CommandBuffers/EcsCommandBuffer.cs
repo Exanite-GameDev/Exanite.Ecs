@@ -173,9 +173,7 @@ public sealed partial class EcsCommandBuffer
         return new BufferedEntity(entity, this);
     }
 
-    /// <summary>
-    /// Add or overwrite a component attached to an entity.
-    /// </summary>
+    /// <inheritdoc cref="Set"/>
     public BufferedEntity SetBoxed(Entity entity, object value)
     {
         var setAction = new SetAction(this);
@@ -210,6 +208,18 @@ public sealed partial class EcsCommandBuffer
         return new BufferedEntity(entity, this);
     }
 
+    /// <inheritdoc cref="Unset"/>
+    public BufferedEntity Unset(Entity entity, Type component)
+    {
+        var setAction = new UnsetAction(this);
+        var componentId = ComponentId.Get(component);
+        var dispatcher = ComponentRegistry.GetComponentDispatcher(componentId);
+
+        dispatcher.Invoke(setAction, entity);
+
+        return new BufferedEntity(entity, this);
+    }
+
     /// <summary>
     /// Remove a component attached to an entity.
     /// </summary>
@@ -228,6 +238,18 @@ public sealed partial class EcsCommandBuffer
         entityState.Sets?.Remove(componentId);
 
         HasBufferedOperations = true;
+
+        return new BufferedEntity(entity, this);
+    }
+
+    /// <inheritdoc cref="Remove"/>
+    public BufferedEntity Remove(Entity entity, Type component)
+    {
+        var setAction = new RemoveAction(this);
+        var componentId = ComponentId.Get(component);
+        var dispatcher = ComponentRegistry.GetComponentDispatcher(componentId);
+
+        dispatcher.Invoke(setAction, entity);
 
         return new BufferedEntity(entity, this);
     }

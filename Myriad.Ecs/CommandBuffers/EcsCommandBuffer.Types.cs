@@ -70,6 +70,36 @@ public partial class EcsCommandBuffer
         public readonly record struct Input(Entity Entity, object Value);
     }
 
+    private readonly struct UnsetAction : ComponentDispatcher.IComponentAction<Entity>
+    {
+        private readonly EcsCommandBuffer commandBuffer;
+
+        public UnsetAction(EcsCommandBuffer commandBuffer)
+        {
+            this.commandBuffer = commandBuffer;
+        }
+
+        public void Invoke<T>(Entity input) where T : IComponent
+        {
+            commandBuffer.Unset<T>(input);
+        }
+    }
+
+    private readonly struct RemoveAction : ComponentDispatcher.IComponentAction<Entity>
+    {
+        private readonly EcsCommandBuffer commandBuffer;
+
+        public RemoveAction(EcsCommandBuffer commandBuffer)
+        {
+            this.commandBuffer = commandBuffer;
+        }
+
+        public void Invoke<T>(Entity input) where T : IComponent
+        {
+            commandBuffer.Remove<T>(input);
+        }
+    }
+
     private class PrefabEntityTargetLookup : IEntityLookup
     {
         private readonly Dictionary<(Entity Prefab, EntityId CurrentEntity, Entity GroupKey), Entity> perEntity = [];
