@@ -1,4 +1,6 @@
-﻿namespace Exanite.Myriad.Ecs.CommandBuffers;
+﻿using System;
+
+namespace Exanite.Myriad.Ecs.CommandBuffers;
 
 /// <summary>
 /// An entity that is being processed by a command buffer.
@@ -32,10 +34,28 @@ public readonly ref struct BufferedEntity
         return CommandBuffer.SetBoxed(Entity, value);
     }
 
+    /// <inheritdoc cref="EcsCommandBuffer.Unset"/>
+    public BufferedEntity Unset<T>() where T : IComponent
+    {
+        return CommandBuffer.Unset<T>(Entity);
+    }
+
+    /// <inheritdoc cref="EcsCommandBuffer.Unset"/>
+    public BufferedEntity Unset(Type component)
+    {
+        return CommandBuffer.Unset(Entity, component);
+    }
+
     /// <inheritdoc cref="EcsCommandBuffer.Remove"/>
     public BufferedEntity Remove<T>() where T : IComponent
     {
         return CommandBuffer.Remove<T>(Entity);
+    }
+
+    /// <inheritdoc cref="EcsCommandBuffer.Remove"/>
+    public BufferedEntity Remove(Type component)
+    {
+        return CommandBuffer.Remove(Entity, component);
     }
 
     /// <inheritdoc cref="EcsCommandBuffer.CopyFromInternal"/>
