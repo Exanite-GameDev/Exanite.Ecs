@@ -17,6 +17,7 @@ Also note, this ECS is not yet battle-tested. Many changes were made to the ECS 
     - Events can also facilitate the implementation of relations.
   - Entity copying support
     - Can be used to implement prefabs and world snapshots.
+    - Entity references can be automatically updated when worlds are copied.
   - Queries, systems, threading, and serialization are considered high level features and should be implemented separately.
 - Strong performance focus, but without sacrificing simplicity, safety, or functionality
   - This means that this ECS is likely slower than other ECS's available.
