@@ -1,80 +1,96 @@
-﻿using System.Numerics;
+using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
-/// A list which stores data in "segments", this removes the need for copying data when the list grows.
+/// Implementation of a doubling segmented list for use by the <see cref="EntityManager"/>.
 /// </summary>
 /// <remarks>
-/// This data structure is not fully thread safe and is designed for <see cref="EntityManager"/>.
-/// Specifically, it assumes that data corresponding to indices added by <see cref="Grow"/> are never
-/// accessed before the <see cref="Grow"/> operation is fully completed.
+/// Grow is assumed to be accessed under a lock owned by <see cref="EntityManager"/>.
 /// <para/>
-/// <see cref="EntityManager.AcquireId"/> does this by growing this list, then returning an ID pointing to a new index.
-/// Both operations are done using the same external lock.
-/// <para/>
-/// Behavior is undefined if an index not returned by <see cref="EntityManager.AcquireId"/> is used.
+/// Behavior is undefined if an invalid index is accessed.
 /// <para/>
 /// Reference stability to values returned by the indexer is guaranteed.
 /// </remarks>
-internal class SegmentedList<T>
+public struct SegmentedList<T>
 {
-    private readonly Lock growLock = new();
+    private const int BaseShift = EcsConstants.SegmentedListBaseCapacityPowerOf2;
+    private const int BaseCapacity = 1 << BaseShift;
+    private const int MaxSegments = 31 - BaseShift;
 
-    private volatile T[][] segments = [];
-    private readonly int shift;
-    private readonly int mask;
-
-    /// <summary>
-    /// The capacity of a single segment within the list.
-    /// </summary>
-    public int SegmentCapacity { get; }
+    private SegmentArray segments;
+    private int segmentCount = 0;
 
     /// <summary>
     /// The total capacity of the list.
     /// </summary>
-    public int TotalCapacity => segments.Length * SegmentCapacity;
+    public int Capacity => (1 << (segmentCount + BaseShift)) - BaseCapacity;
 
-    public SegmentedList(int segmentCapacity)
+    public SegmentedList()
     {
-        GuardUtility.IsTrue(segmentCapacity.IsPowerOfTwo(), "Segment capacity must be a power of 2");
-
-        SegmentCapacity = segmentCapacity;
-        shift = BitOperations.TrailingZeroCount(segmentCapacity);
-        mask = segmentCapacity - 1;
-
         Grow();
     }
 
-    /// <summary>
-    /// Get a reference to the item with the specified index.
-    /// </summary>
     public ref T this[int index]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            var localSegments = segments;
+            // Calculate the segment index
+            var adjustedIndex = (uint)index + BaseCapacity;
+            var leadingZeroCount = BitOperations.LeadingZeroCount(adjustedIndex);
+            var segmentIndex = 31 - leadingZeroCount - BaseShift;
 
-            var segmentIndex = index >> shift;
-            var segment = localSegments[segmentIndex];
-            var rowIndex = index & mask;
+            // Use a mask to calculate the index within the segment
+            var indexMask = (1u << (31 - leadingZeroCount)) - 1;
+            var indexInSegment = (int)(adjustedIndex & indexMask);
 
-            return ref segment[rowIndex];
+            var segment = GetSegment(segmentIndex);
+            return ref segment[indexInSegment];
         }
     }
 
-    /// <summary>
-    /// Add another segment.
-    /// </summary>
+    public void EnsureCapacity(int capacity)
+    {
+        var adjustedCapacity = (uint)capacity + BaseCapacity;
+        var leadingZeroCount = BitOperations.LeadingZeroCount(adjustedCapacity);
+        var requiredSegmentCount = 32 - leadingZeroCount - BaseShift;
+        while (requiredSegmentCount > segmentCount)
+        {
+            Grow();
+        }
+    }
+
     public void Grow()
     {
-        using var _ = growLock.EnterScope();
+        if (segmentCount >= MaxSegments)
+        {
+            throw new InvalidOperationException("Segmented list has reached maximum capacity.");
+        }
 
-        T[][] newSegments = [..segments, new T[SegmentCapacity]];
-        Interlocked.Exchange(ref segments, newSegments);
+        var nextSegmentIndex = segmentCount;
+
+        // Size doubles: 1024, 2048, 4096, 8192...
+        var newSegmentSize = 1 << (nextSegmentIndex + BaseShift);
+
+        var newSegment = new T[newSegmentSize];
+        Volatile.Write(ref GetSegment(nextSegmentIndex), newSegment);
+        Interlocked.Increment(ref segmentCount);
+    }
+
+    private ref T[] GetSegment(int segmentIndex)
+    {
+        ref var arrayBase = ref Unsafe.As<SegmentArray, T[]>(ref segments);
+        ref var element = ref Unsafe.Add(ref arrayBase, segmentIndex);
+        return ref Unsafe.AsRef(ref element);
+    }
+
+    [InlineArray(MaxSegments)]
+    private struct SegmentArray
+    {
+        private T[] element0;
     }
 }
