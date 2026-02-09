@@ -1,11 +1,13 @@
+using Exanite.Myriad.Ecs.Collections;
+
 namespace Exanite.Myriad.Ecs;
 
 internal static class EcsConstants
 {
     /// <summary>
-    /// The size of each segment in the storage location lookup list.
+    /// Defines the power of 2 base capacity of the <see cref="SegmentedList{T}"/>.
     /// </summary>
-    internal const int StorageLocationSegmentSize = 4096;
+    internal const int SegmentedListBaseCapacityPowerOf2 = 10;
 
     /// <summary>
     /// The initial entity capacity of an archetype.

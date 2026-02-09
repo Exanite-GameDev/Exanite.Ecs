@@ -12,7 +12,7 @@ namespace Exanite.Myriad.Ecs;
 internal struct EntityManager
 {
     private readonly Lock sync = new();
-    private readonly SegmentedList<EntityLocation> entities = new(EcsConstants.StorageLocationSegmentSize);
+    private SegmentedList<EntityLocation> entities = new();
 
     /// <summary>
     /// Tracks released IDs so that they can be reused.
@@ -84,7 +84,7 @@ internal struct EntityManager
         {
             // Allocate a new ID. This must not overflow!
             entityId = new EntityId(checked(nextIndex++), 1);
-            if (entityId.Index >= entities.TotalCapacity)
+            if (entityId.Index >= entities.Capacity)
             {
                 // Check if the collection of all entities needs to grow
                 entities.Grow();
