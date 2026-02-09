@@ -231,6 +231,9 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         // Clear event handlers
         EventBus.Dispose();
 
+        // Run the sync point again to ensure everything has been recycled
+        OnSyncPoint();
+
         IsDisposing = false;
         IsDisposed = true;
 

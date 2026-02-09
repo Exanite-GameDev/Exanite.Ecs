@@ -143,6 +143,12 @@ public sealed class QueryView : IArchetypeView
         return Archetypes.BinarySearch(archetype, new ArchetypeComparer()) >= 0;
     }
 
+    internal void DisposeInternal()
+    {
+        World.Recycle(result.Archetypes);
+        result = null!;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private MatchResult GetMatchResult()
     {
