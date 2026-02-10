@@ -13,7 +13,7 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// <summary>
 /// Contains the set of matched archetypes based on a filter described by <see cref="QueryFilter"/>.
 /// </summary>
-public sealed class QueryView : IArchetypeView
+public sealed class QueryView : IFilteredArchetypeView
 {
     private MatchResult result = new(0, []);
 

@@ -9,7 +9,7 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// <summary>
 /// Wraps a group of queries and exposes them as a single view.
 /// </summary>
-public class QueryViewGroup : IArchetypeView
+public class QueryViewGroup : IFilteredArchetypeView
 {
     private readonly QueryView[] queries;
     private readonly RwLock<List<Archetype>> resultLock = new([]);
@@ -42,7 +42,7 @@ public class QueryViewGroup : IArchetypeView
     /// <summary>
     /// Creates a <see cref="QueryViewGroup"/> when multiple worlds are provided or a <see cref="QueryView"/> when one group is provided.
     /// </summary>
-    public static IArchetypeView Create(QueryFilter filter, ReadOnlySpan<EcsWorld> worlds)
+    public static IFilteredArchetypeView Create(QueryFilter filter, ReadOnlySpan<EcsWorld> worlds)
     {
         if (worlds.Length == 1)
         {
