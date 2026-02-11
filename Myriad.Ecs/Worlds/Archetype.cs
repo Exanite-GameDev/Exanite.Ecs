@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
@@ -223,6 +224,28 @@ public sealed class Archetype
         range.Clear();
 
         EntityCount = 0;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IInterfaceComponent
+    {
+        var interfaceId = InterfaceId.Get<T>();
+        var interfaceIndex = ~interfaceId.Value;
+        if ((uint)interfaceIndex >= Info.InterfaceByInterfaceId.Length)
+        {
+            instance = null;
+            return false;
+        }
+
+        var interfaceInstance = Info.InterfaceByInterfaceId[interfaceIndex];
+        if (interfaceInstance == null)
+        {
+            instance = null;
+            return false;
+        }
+
+        instance = Unsafe.As<object, T>(ref interfaceInstance);
+        return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
