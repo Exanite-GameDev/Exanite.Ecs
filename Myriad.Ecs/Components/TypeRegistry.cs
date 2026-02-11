@@ -27,11 +27,26 @@ internal static partial class TypeRegistry
         private int nextComponentId = 1;
         private int nextInterfaceId = -1;
 
+        public TypeId GetOrAddTypeId(Type type)
+        {
+            if (type.IsValueType)
+            {
+                return GetOrAddComponentId(type);
+            }
+
+            if (type.IsInterface)
+            {
+                return GetOrAddInterfaceId(type);
+            }
+
+            throw new GuardException("Components must be either structs or interfaces");
+        }
+
         public ComponentId GetOrAddComponentId(Type type)
         {
             if (!typeIdByType.TryGetValue(type, out var typeId))
             {
-                GuardUtility.IsTrue(type.IsValueType, "Components must be structs");
+                GuardUtility.IsTrue(type.IsValueType, "Storage-backed components must be structs");
                 GuardUtility.IsTrue(typeof(IInterfaceComponent).IsAssignableFrom(type), $"{type.FullName} must implement the {nameof(IComponent)} interface");
 
                 // Get next ID
@@ -84,6 +99,16 @@ internal static partial class TypeRegistry
         public bool TryGetTypeId(Type type, out TypeId typeId)
         {
             return typeIdByType.TryGetValue(type, out typeId);
+        }
+
+        public Type GetBackingType(TypeId typeId)
+        {
+            if (typeId.IsComponent)
+            {
+                return TypeRegistry.GetComponentType((ComponentId)typeId);
+            }
+
+            return TypeRegistry.GetInterfaceType((InterfaceId)typeId);
         }
 
         public Type GetComponentType(ComponentId componentId)

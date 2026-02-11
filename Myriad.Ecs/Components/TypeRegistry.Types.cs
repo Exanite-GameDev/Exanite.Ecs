@@ -5,52 +5,52 @@ namespace Exanite.Myriad.Ecs.Components;
 internal static partial class TypeRegistry
 {
     /// <summary>
-    /// Gets the interface ID for the given type.
+    /// Gets the type ID for the given type.
     /// </summary>
-    public static InterfaceId GetInterfaceId<T>() where T : IInterfaceComponent
+    public static TypeId GetTypeId<T>() where T : IEcsType
     {
         var type = typeof(T);
         using (Lock.EnterReadLock(out var state))
         {
             if (state.Value.TryGetTypeId(type, out var typeId))
             {
-                return (InterfaceId)typeId;
+                return typeId;
             }
         }
 
         using (Lock.EnterWriteLock(out var state))
         {
-            return state.Value.GetOrAddInterfaceId(type);
+            return state.Value.GetOrAddTypeId(type);
         }
     }
 
     /// <summary>
-    /// Gets the interface ID for the given type.
+    /// Gets the type ID for the given type.
     /// </summary>
-    public static InterfaceId GetInterfaceId(Type type)
+    public static TypeId GetTypeId(Type type)
     {
         using (Lock.EnterReadLock(out var state))
         {
             if (state.Value.TryGetTypeId(type, out var typeId))
             {
-                return (InterfaceId)typeId;
+                return typeId;
             }
         }
 
         using (Lock.EnterWriteLock(out var state))
         {
-            return state.Value.GetOrAddInterfaceId(type);
+            return state.Value.GetOrAddTypeId(type);
         }
     }
 
     /// <summary>
-    /// Gets the type for a given interface ID.
+    /// Gets the type for a given type ID.
     /// </summary>
-    public static Type GetInterfaceType(InterfaceId interfaceId)
+    public static Type GetBackingType(TypeId typeId)
     {
         using (Lock.EnterReadLock(out var state))
         {
-            return state.Value.GetInterfaceType(interfaceId);
+            return state.Value.GetBackingType(typeId);
         }
     }
 }

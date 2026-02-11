@@ -4,8 +4,8 @@ using Exanite.Myriad.Ecs.Components;
 namespace Exanite.Myriad.Ecs.Queries;
 
 internal record struct QueryCacheKey(
-    ImmutableOrderedListSet<ComponentId> IncludeFilter,
-    ImmutableOrderedListSet<ComponentId> ExcludeFilter,
-    ImmutableOrderedListSet<ComponentId> AtLeastOneFilter,
-    ImmutableOrderedListSet<ComponentId> ExactlyOneFilter,
-    ImmutableOrderedListSet<ComponentId> NotAllFilter);
+    ImmutableOrderedListSet<TypeId> IncludeFilter,
+    ImmutableOrderedListSet<TypeId> ExcludeFilter,
+    ImmutableOrderedListSet<TypeId> AtLeastOneFilter,
+    ImmutableOrderedListSet<TypeId> ExactlyOneFilter,
+    ImmutableOrderedListSet<TypeId> NotAllFilter);

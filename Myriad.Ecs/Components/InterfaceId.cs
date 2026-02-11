@@ -70,7 +70,7 @@ public readonly record struct InterfaceId : IComparable<InterfaceId>
 internal static class InterfaceId<T> where T : IInterfaceComponent
 {
     /// <summary>
-    /// The component ID for <typeparamref name="T"/>.
+    /// The interface ID for <typeparamref name="T"/>.
     /// </summary>
     /// <remarks>
     /// This property is cached, making repeated accesses very efficient.

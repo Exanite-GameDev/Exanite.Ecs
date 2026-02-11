@@ -10,24 +10,9 @@ namespace Exanite.Myriad.Ecs.Worlds;
 internal struct ArchetypeInfo
 {
     /// <summary>
-    /// The components of entities in this archetype.
-    /// </summary>
-    public readonly ImmutableOrderedListSet<ComponentId> Components;
-
-    /// <summary>
-    /// A bloom filter of all the components in this archetype.
-    /// </summary>
-    public readonly ComponentBloomFilter BloomFilter;
-
-    /// <summary>
     /// The hash of all components IDs in this archetype.
     /// </summary>
     public readonly ArchetypeHash Hash;
-
-    /// <summary>
-    /// Map from column index to the component ID.
-    /// </summary>
-    public readonly ComponentId[] ComponentIdByColumnIndex;
 
     /// <summary>
     /// Sparse map from component ID to column index.
@@ -39,12 +24,56 @@ internal struct ArchetypeInfo
     /// </summary>
     public readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
 
-    public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components)
+    /// <summary>
+    /// Map from column index to the component ID.
+    /// </summary>
+    public readonly ComponentId[] ComponentIdByColumnIndex;
+
+    /// <summary>
+    /// A bloom filter of all the components in this archetype.
+    /// </summary>
+    public readonly ComponentBloomFilter BloomFilter;
+
+    /// <summary>
+    /// The components of entities in this archetype, including interface components.
+    /// </summary>
+    public readonly ImmutableOrderedListSet<TypeId> Types;
+
+    /// <summary>
+    /// The components of entities in this archetype.
+    /// </summary>
+    public readonly ImmutableOrderedListSet<ComponentId> Components;
+
+    /// <summary>
+    /// The interface components of entities in this archetype.
+    /// </summary>
+    public readonly ImmutableOrderedListSet<InterfaceId> Interfaces;
+
+    public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components, ImmutableOrderedListSet<InterfaceId> interfaces)
     {
         Components = components;
+        Interfaces = interfaces;
+
+        // Build final set of types
+        {
+            var types = new OrderedListSet<TypeId>();
+            types.EnsureCapacity(components.Count + interfaces.Count);
+
+            foreach (var componentId in components)
+            {
+                types.Add(componentId);
+            }
+
+            foreach (var interfaceId in interfaces)
+            {
+                types.Add(interfaceId);
+            }
+
+            Types = types.ToImmutable();
+        }
 
         // Create bloom filter
-        BloomFilter = components.ToBloomFilter();
+        BloomFilter = Types.ToBloomFilter();
 
         // Calculate max component ID and archetype hash
         var maxComponentId = int.MinValue;

@@ -3,4 +3,4 @@
 /// <summary>
 /// Marker interface for storage-backed components.
 /// </summary>
-public interface IComponent;
+public interface IComponent : IEcsType;

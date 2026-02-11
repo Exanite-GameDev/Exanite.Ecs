@@ -1,6 +1,6 @@
 namespace Exanite.Myriad.Ecs;
 
 /// <summary>
-/// Marker interfaces for virtual interface components
+/// Marker interface for virtual interface components
 /// </summary>
-public interface IInterfaceComponent;
+public interface IInterfaceComponent : IEcsType;

@@ -1,6 +1,4 @@
 using System;
-using Exanite.Core.Runtime;
-using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.Components;
 
@@ -12,7 +10,6 @@ internal static partial class TypeRegistry
     public static ComponentId GetComponentId<T>() where T : IComponent
     {
         var type = typeof(T);
-
         using (Lock.EnterReadLock(out var state))
         {
             if (state.Value.TryGetTypeId(type, out var typeId))

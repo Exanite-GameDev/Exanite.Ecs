@@ -29,38 +29,38 @@ public sealed class QueryView : IFilteredArchetypeView
     /// <summary>
     /// The components which must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> IncludeFilter { get; }
+    public ImmutableOrderedListSet<TypeId> IncludeFilter { get; }
 
     /// <summary>
     /// The components which must not be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ExcludeFilter { get; }
+    public ImmutableOrderedListSet<TypeId> ExcludeFilter { get; }
 
     /// <summary>
     /// At least one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> AtLeastOneFilter { get; }
+    public ImmutableOrderedListSet<TypeId> AtLeastOneFilter { get; }
 
     /// <summary>
     /// Exactly one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ExactlyOneFilter { get; }
+    public ImmutableOrderedListSet<TypeId> ExactlyOneFilter { get; }
 
     /// <summary>
     /// Not all of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> NotAllFilter { get; }
+    public ImmutableOrderedListSet<TypeId> NotAllFilter { get; }
 
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
     internal QueryView(
         EcsWorld world,
-        ImmutableOrderedListSet<ComponentId> includeFilter,
-        ImmutableOrderedListSet<ComponentId> excludeFilter,
-        ImmutableOrderedListSet<ComponentId> atLeastOneFilter,
-        ImmutableOrderedListSet<ComponentId> exactlyOneFilter,
-        ImmutableOrderedListSet<ComponentId> notAllFilter)
+        ImmutableOrderedListSet<TypeId> includeFilter,
+        ImmutableOrderedListSet<TypeId> excludeFilter,
+        ImmutableOrderedListSet<TypeId> atLeastOneFilter,
+        ImmutableOrderedListSet<TypeId> exactlyOneFilter,
+        ImmutableOrderedListSet<TypeId> notAllFilter)
     {
         World = world;
 
@@ -185,7 +185,7 @@ public sealed class QueryView : IFilteredArchetypeView
         {
             // Acquire temporary set from pool
             // No need to clear on returning since component id does not have managed references
-            using var __ = SimplePool<OrderedListSet<ComponentId>>.Acquire(out var temporarySet);
+            using var __ = SimplePool<OrderedListSet<TypeId>>.Acquire(out var temporarySet);
             for (var i = oldResult.Version; i < archetypes.Length; i++)
             {
                 var archetype = archetypes[i];
@@ -228,7 +228,7 @@ public sealed class QueryView : IFilteredArchetypeView
         return newResult;
     }
 
-    private bool IsMatch(Archetype archetype, OrderedListSet<ComponentId> temporarySet)
+    private bool IsMatch(Archetype archetype, OrderedListSet<TypeId> temporarySet)
     {
         // Apply the Include filter
         // Quick bloom filter test if the included components intersects with the archetype.
@@ -239,7 +239,7 @@ public sealed class QueryView : IFilteredArchetypeView
         }
 
         // Do the full set check for included components
-        if (!archetype.Components.IsSupersetOf(IncludeFilter))
+        if (!archetype.Types.IsSupersetOf(IncludeFilter))
         {
             return false;
         }
@@ -249,7 +249,7 @@ public sealed class QueryView : IFilteredArchetypeView
         // the inner check.
         if (ExcludeFilter.Count > 0 && excludeBloom.MaybeIntersects(in archetype.Info.BloomFilter))
         {
-            if (archetype.Components.Overlaps(ExcludeFilter))
+            if (archetype.Types.Overlaps(ExcludeFilter))
             {
                 return false;
             }
@@ -259,7 +259,7 @@ public sealed class QueryView : IFilteredArchetypeView
         if (ExactlyOneFilter.Count > 0)
         {
             temporarySet.Clear();
-            temporarySet.UnionWith(archetype.Components);
+            temporarySet.UnionWith(archetype.Types);
             temporarySet.IntersectWith(ExactlyOneFilter);
             if (temporarySet.Count != 1)
             {
@@ -272,7 +272,7 @@ public sealed class QueryView : IFilteredArchetypeView
         if (AtLeastOneFilter.Count > 0)
         {
             temporarySet.Clear();
-            temporarySet.UnionWith(archetype.Components);
+            temporarySet.UnionWith(archetype.Types);
             temporarySet.IntersectWith(AtLeastOneFilter);
             if (temporarySet.Count == 0)
             {
@@ -282,7 +282,7 @@ public sealed class QueryView : IFilteredArchetypeView
         }
 
         // Apply the NotAll filter
-        if (NotAllFilter.Count > 0 && archetype.Components.IsSupersetOf(NotAllFilter))
+        if (NotAllFilter.Count > 0 && archetype.Types.IsSupersetOf(NotAllFilter))
         {
             return false;
         }

@@ -8,7 +8,7 @@ using Myriad.Ecs.xxHash;
 namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
-/// Probabilistic set of component IDs. Can be used to check if two sets intersect.<br/>
+/// Probabilistic set of type IDs. Can be used to check if two sets intersect.<br/>
 ///
 /// False positives are possible (i.e. If Intersects returns true, then there <b>might</b> be an overlap).<br/>
 /// False negatives are <b>not</b> possible (i.e. If Intersects return false, then there <b>definitely</b> is no overlap).<br/>
@@ -23,7 +23,7 @@ internal struct ComponentBloomFilter
     private ulong e;
     private ulong f;
 
-    public void Add(ComponentId id)
+    public void Add(TypeId id)
     {
         Span<int> value = stackalloc int[] { id.Value };
         var bytes = MemoryMarshal.Cast<int, byte>(value);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Exanite.Myriad.Ecs.Components;
 
@@ -42,22 +43,30 @@ public readonly record struct TypeId : IComparable<TypeId>
     /// <summary>
     /// The type this type ID represents.
     /// </summary>
-    public Type Type
-    {
-        get
-        {
-            if (IsComponent)
-            {
-                return TypeRegistry.GetComponentType((ComponentId)this);
-            }
-
-            return TypeRegistry.GetInterfaceType((InterfaceId)this);
-        }
-    }
+    public Type Type => TypeRegistry.GetBackingType(this);
 
     internal TypeId(int value)
     {
         Value = value;
+    }
+
+    /// <summary>
+    /// Get the interface ID for the given type.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/> nor <see cref="IInterfaceComponent"/>.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TypeId Get(Type type)
+    {
+        return TypeRegistry.GetTypeId(type);
+    }
+
+    /// <summary>
+    /// Get the interface ID for the given type.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TypeId Get<T>() where T : IEcsType
+    {
+        return TypeId<T>.Id;
     }
 
     /// <inheritdoc/>
@@ -71,4 +80,15 @@ public readonly record struct TypeId : IComparable<TypeId>
     {
         return $"{Type} ({Value})";
     }
+}
+
+internal static class TypeId<T> where T : IEcsType
+{
+    /// <summary>
+    /// The type ID for <typeparamref name="T"/>.
+    /// </summary>
+    /// <remarks>
+    /// This property is cached, making repeated accesses very efficient.
+    /// </remarks>
+    public static readonly TypeId Id = TypeRegistry.GetTypeId<T>();
 }

@@ -30,10 +30,14 @@ public sealed class Archetype
     /// </summary>
     public readonly EcsWorld World;
 
-    /// <summary>
-    /// The components of entities in this archetype.
-    /// </summary>
+    /// <inheritdoc cref="ArchetypeInfo.Components"/>
+    public ImmutableOrderedListSet<TypeId> Types => Info.Types;
+
+    /// <inheritdoc cref="ArchetypeInfo.Components"/>
     public ImmutableOrderedListSet<ComponentId> Components => Info.Components;
+
+    /// <inheritdoc cref="ArchetypeInfo.Components"/>
+    public ImmutableOrderedListSet<InterfaceId> Interfaces => Info.Interfaces;
 
     /// <summary>
     /// All entities in this archetype.

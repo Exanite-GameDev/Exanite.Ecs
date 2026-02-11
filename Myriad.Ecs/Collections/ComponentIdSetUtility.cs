@@ -19,8 +19,8 @@ internal static class ComponentIdSetUtility
     {
         return new ComponentIdImmutableOrderedListSet(componentIds);
     }
-    
-    public static ComponentBloomFilter ToBloomFilter(this ImmutableOrderedListSet<ComponentId> set)
+
+    public static ComponentBloomFilter ToBloomFilter(this ImmutableOrderedListSet<TypeId> set)
     {
         var filter = new ComponentBloomFilter();
         foreach (var item in set)
