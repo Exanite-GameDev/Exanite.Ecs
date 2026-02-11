@@ -116,9 +116,8 @@ public partial class EcsCommandBuffer
 
     private void CreateAndApplyStructuralChanges(EcsCommandBuffer recursiveCommandBuffer, Dictionary<EntityId, EntityState> entityStates)
     {
-        // Use a flat list to gather and sort modifications into batches
-        using var _ = ListPool<EntityModification>.Acquire(out var modifications);
         // Gather modifications and calculate src/dst archetypes
+        using var _ = ListPool<EntityModification>.Acquire(out var modifications);
         foreach (var (entityId, entityState) in entityStates)
         {
             ref var location = ref World.Entities.GetLocation(entityId.Index);
