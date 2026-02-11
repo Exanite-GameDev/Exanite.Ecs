@@ -51,7 +51,7 @@ public readonly record struct TypeId : IComparable<TypeId>
     }
 
     /// <summary>
-    /// Get the interface ID for the given type.
+    /// Get the type ID for the given type.
     /// </summary>
     /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/> nor <see cref="IInterfaceComponent"/>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -61,7 +61,7 @@ public readonly record struct TypeId : IComparable<TypeId>
     }
 
     /// <summary>
-    /// Get the interface ID for the given type.
+    /// Get the type ID for the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TypeId Get<T>() where T : IEcsType
