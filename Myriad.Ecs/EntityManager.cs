@@ -103,7 +103,9 @@ internal struct EntityManager
         // Reuse as many ids as possible
         var reuseCount = int.Min(releasedIds.Count, entityIds.Length);
         var reuseStartIndex = releasedIds.Count - reuseCount;
-        releasedIds.AsSpan().Slice(reuseStartIndex, reuseCount).CopyTo(entityIds);
+        var releasedIdsSpan = releasedIds.AsSpan().Slice(reuseStartIndex, reuseCount);
+        releasedIdsSpan.Reverse();
+        releasedIdsSpan.CopyTo(entityIds);
         releasedIds.RemoveRange(reuseStartIndex, reuseCount);
 
         for (var i = 0; i < reuseCount; i++)
