@@ -84,11 +84,7 @@ internal struct EntityManager
         {
             // Allocate a new ID. This must not overflow!
             entityId = new EntityId(checked(nextIndex++), 1);
-            if (entityId.Index >= entities.Capacity)
-            {
-                // Check if the collection of all entities needs to grow
-                entities.Grow();
-            }
+            entities.EnsureCapacity(entityId.Index);
         }
 
         // Update the version
