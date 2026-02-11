@@ -31,7 +31,7 @@ public readonly record struct InterfaceId : IComparable<InterfaceId>
 
     public static explicit operator InterfaceId(TypeId value)
     {
-        GuardUtility.IsTrue(value.IsComponent, "The specified type ID does not represent an interface ID");
+        GuardUtility.IsTrue(value.IsInterface, "The specified type ID does not represent an interface ID");
         return new InterfaceId(value.Value);
     }
 
