@@ -15,20 +15,20 @@ internal readonly record struct ArchetypeHash : IComparable<ArchetypeHash>
     /// <summary>
     /// Toggle (add or remove) the given component
     /// </summary>
-    public ArchetypeHash Toggle(ComponentId component)
+    public ArchetypeHash Toggle(TypeId typeId)
     {
         return new ArchetypeHash
         {
-            Value = Toggle(Value, component),
+            Value = Toggle(Value, typeId),
         };
     }
 
-    private static long Toggle(long value, ComponentId component)
+    private static long Toggle(long value, TypeId typeId)
     {
         unsafe
         {
             // Hash component value to smear bits across 64 bit hash space
-            var cv = component.Value;
+            var cv = typeId.Value;
             var v = unchecked((long)xxHash64.ComputeHash(new Span<byte>(&cv, 4), 17));
 
             // xor this value to toggle it in the set

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
@@ -30,13 +31,13 @@ public sealed class Archetype
     /// </summary>
     public readonly EcsWorld World;
 
-    /// <inheritdoc cref="ArchetypeInfo.Components"/>
+    /// <inheritdoc cref="ArchetypeArchetypeInfots"/>
     public ImmutableOrderedListSet<TypeId> Types => Info.Types;
 
-    /// <inheritdoc cref="ArchetypeInfo.Components"/>
+    /// <inheritdoc cref="ArchetypeArchetypeInfots"/>
     public ImmutableOrderedListSet<ComponentId> Components => Info.Components;
 
-    /// <inheritdoc cref="ArchetypeInfo.Components"/>
+    /// <inheritdoc cref="ArchetypeArchetypeInfots"/>
     public ImmutableOrderedListSet<InterfaceId> Interfaces => Info.Interfaces;
 
     /// <summary>
@@ -53,7 +54,31 @@ public sealed class Archetype
     {
         Id = id;
         World = world;
+
+        // Build initial archetype info
         Info = new ArchetypeInfo(components);
+
+        // Resolve interface components
+        // Iterate backwards so latest takes priority
+        var interfaceComponents = new Dictionary<InterfaceId, object>();
+        for (var i = World.InterfaceResolvers.Count - 1; i >= 0; i--)
+        {
+            var registration = World.InterfaceResolvers[i];
+            if (interfaceComponents.ContainsKey(registration.Id))
+            {
+                continue;
+            }
+
+            if (registration.Filter.Build(world).IsMatch(this))
+            {
+                interfaceComponents[registration.Id] = registration.Factory.Invoke(components);
+            }
+        }
+
+        // Build final archetype info
+        Info = new ArchetypeInfo(Info, interfaceComponents);
+
+        // Allocate storage
         Storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);
     }
 

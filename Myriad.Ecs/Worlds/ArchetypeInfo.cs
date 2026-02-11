@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
@@ -7,7 +8,7 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// <summary>
 /// Stores information about the components stored in an archetype.
 /// </summary>
-internal struct ArchetypeInfo
+internal record struct ArchetypeInfo
 {
     /// <summary>
     /// The hash of all components IDs in this archetype.
@@ -23,6 +24,11 @@ internal struct ArchetypeInfo
     /// Sparse map from component ID to component dispatcher.
     /// </summary>
     public readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
+
+    /// <summary>
+    /// Sparse map from component ID to component dispatcher.
+    /// </summary>
+    public readonly object?[] InterfaceByInterfaceId;
 
     /// <summary>
     /// Map from column index to the component ID.
@@ -49,24 +55,21 @@ internal struct ArchetypeInfo
     /// </summary>
     public readonly ImmutableOrderedListSet<InterfaceId> Interfaces;
 
-    public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components, ImmutableOrderedListSet<InterfaceId> interfaces)
+    public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components)
     {
         Components = components;
-        Interfaces = interfaces;
 
-        // Build final set of types
+        // Interfaces are not available while bootstrapping the archetype info
+        Interfaces = ImmutableOrderedListSet<InterfaceId>.Empty;
+        InterfaceByInterfaceId = [];
+
+        // Build initial set of types
         {
             var types = new OrderedListSet<TypeId>();
-            types.EnsureCapacity(components.Count + interfaces.Count);
-
+            types.EnsureCapacity(components.Count);
             foreach (var componentId in components)
             {
                 types.Add(componentId);
-            }
-
-            foreach (var interfaceId in interfaces)
-            {
-                types.Add(interfaceId);
             }
 
             Types = types.ToImmutable();
@@ -77,12 +80,12 @@ internal struct ArchetypeInfo
 
         // Calculate max component ID and archetype hash
         var maxComponentId = int.MinValue;
-        foreach (var component in components)
+        foreach (var componentId in components)
         {
-            Hash = Hash.Toggle(component);
-            if (component.Value > maxComponentId)
+            Hash = Hash.Toggle(componentId);
+            if (componentId.Value > maxComponentId)
             {
-                maxComponentId = component.Value;
+                maxComponentId = componentId.Value;
             }
         }
 
@@ -106,6 +109,52 @@ internal struct ArchetypeInfo
         foreach (var component in components)
         {
             ComponentDispatcherByComponentId[component.Value] = TypeRegistry.GetComponentDispatcher(component);
+        }
+    }
+
+    public ArchetypeInfo(ArchetypeInfo existing, Dictionary<InterfaceId, object> interfaceComponents)
+    {
+        // Initialize with existing info
+        this = existing;
+
+        // Create interface type set
+        Interfaces = ImmutableOrderedListSet<InterfaceId>.Create(interfaceComponents);
+
+        // Build final set of types
+        {
+            var types = new OrderedListSet<TypeId>();
+            types.EnsureCapacity(Components.Count + Interfaces.Count);
+
+            foreach (var componentId in Components)
+            {
+                types.Add(componentId);
+            }
+
+            foreach (var interfaceId in Interfaces)
+            {
+                types.Add(interfaceId);
+            }
+
+            Types = types.ToImmutable();
+        }
+
+        // Calculate max interface index and archetype hash
+        var maxInterfaceIndex = int.MinValue;
+        foreach (var interfaceId in Interfaces)
+        {
+            Hash = Hash.Toggle(interfaceId);
+            var interfaceIndex = ~interfaceId.Value;
+            if (interfaceIndex > maxInterfaceIndex)
+            {
+                maxInterfaceIndex = interfaceIndex;
+            }
+        }
+
+        // Create a sparse map from interface ID to interface instance
+        InterfaceByInterfaceId = maxInterfaceIndex == int.MinValue ? [] : new object[maxInterfaceIndex + 1];
+        foreach (var (interfaceId, interfaceInstance) in interfaceComponents)
+        {
+            InterfaceByInterfaceId[~interfaceId.Value] = interfaceInstance;
         }
     }
 }

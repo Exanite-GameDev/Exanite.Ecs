@@ -31,14 +31,14 @@ public readonly record struct TypeId : IComparable<TypeId>
     public readonly int Value;
 
     /// <summary>
-    /// Whether this ID represents an interface ID.
-    /// </summary>
-    public bool IsInterface => Value > 0;
-
-    /// <summary>
     /// Whether this ID represents a component ID.
     /// </summary>
-    public bool IsComponent => Value < 0;
+    public bool IsComponent => Value > 0;
+
+    /// <summary>
+    /// Whether this ID represents an interface ID.
+    /// </summary>
+    public bool IsInterface => Value < 0;
 
     /// <summary>
     /// The type this type ID represents.

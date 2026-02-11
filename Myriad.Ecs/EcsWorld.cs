@@ -37,6 +37,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// </remarks>
     internal int Version;
 
+    internal readonly List<InterfaceResolverRegistration> InterfaceResolvers = new();
+
     internal readonly Lock QueryViewCacheLock = new();
     internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
     private readonly QueryView allEntitiesQuery;
@@ -194,6 +196,19 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         commandBuffer.Execute();
 
         return lookup;
+    }
+
+    /// <summary>
+    /// Add an interface that will be resolved for all archetypes that match the specified filter.
+    /// </summary>
+    /// <param name="filter">The archetypes that this interface component will be resolved for. Must only match against normal components.</param>
+    /// <param name="getInterfaceComponent">Get or create the concrete implementation of the interface component for the specified archetype.</param>
+    public void AddInterfaceResolver<T>(QueryFilter filter, Func<ImmutableOrderedListSet<ComponentId>, T> getInterfaceComponent) where T : class, IInterfaceComponent
+    {
+        GuardUtility.IsFalse(filter.HasInterfaces, "Filters used to resolve interfaces must only match against normal components");
+        GuardUtility.IsTrue(archetypes.Count == 0, "Interface resolvers can only be registered when no archetypes have been created");
+
+        InterfaceResolvers.Add(new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, getInterfaceComponent));
     }
 
     /// <summary>
