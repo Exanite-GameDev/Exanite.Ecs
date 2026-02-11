@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.Components;
 using Xunit;
 
@@ -10,7 +11,7 @@ public class TypeRegistryTests
     [Fact]
     public void CannotAssignNonComponent()
     {
-        Assert.Throws<ArgumentException>(() =>
+        Assert.Throws<GuardException>(() =>
         {
             ComponentId.Get(typeof(int));
         });
