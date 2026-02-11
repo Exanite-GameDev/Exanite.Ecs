@@ -174,15 +174,11 @@ public partial class EcsCommandBuffer
                     }
                 }
 
-                // Only store the sets for each modified entity
-                // Sets vary per entity
-                // Removes vary per archetype
-                var entitySets = new EntityModification(entityId, entityState.Sets);
-
                 // Case 1: Entity created
                 if (entityState.NeedsCreation)
                 {
                     var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
+                    var entitySets = new EntityModification(entityId, 0, dstArchetype.Id, entityState.Sets);
                     AddToCreates(dstArchetype, entitySets);
                     continue;
                 }
@@ -191,12 +187,17 @@ public partial class EcsCommandBuffer
                 if (setChanged)
                 {
                     var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
+                    var entitySets = new EntityModification(entityId, location.Archetype.Id, dstArchetype.Id, entityState.Sets);
                     AddToMoves(location.Archetype, dstArchetype, entitySets);
                     continue;
                 }
 
                 // Case 3: Entity unmoved
-                unmoved.Add(entitySets);
+                {
+                    var archetypeId = location.Archetype.Id;
+                    var entitySets = new EntityModification(entityId, archetypeId, archetypeId, entityState.Sets);
+                    unmoved.Add(entitySets);
+                }
             }
 
             // Handle creates

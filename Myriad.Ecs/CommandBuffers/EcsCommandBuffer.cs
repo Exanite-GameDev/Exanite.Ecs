@@ -62,13 +62,7 @@ public sealed partial class EcsCommandBuffer
     internal EcsCommandBuffer(EcsWorld world)
     {
         World = world;
-        compareByArchetype = (left, right) =>
-        {
-            // TODO: Remove this lookup
-            ref var leftLocation = ref World.Entities.GetLocation(left.EntityId.Index);
-            ref var rightLocation = ref World.Entities.GetLocation(right.EntityId.Index);
-            return leftLocation.Archetype.Id.CompareTo(rightLocation.Archetype.Id);
-        };
+        compareByArchetype = (left, right) => left.SrcArchetypeId.CompareTo(right.SrcArchetypeId);
     }
 
     /// <summary>

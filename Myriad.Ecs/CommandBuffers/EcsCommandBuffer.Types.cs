@@ -157,7 +157,7 @@ public partial class EcsCommandBuffer
 
     private record struct ArchetypeMove(Archetype SrcArchetype, Archetype DstArchetype);
 
-    private record struct EntityModification(EntityId EntityId, Dictionary<ComponentId, SetterId>? Sets);
+    private record struct EntityModification(EntityId EntityId, int SrcArchetypeId, int DstArchetypeId, Dictionary<ComponentId, SetterId>? Sets);
 
     private struct EntityState
     {
