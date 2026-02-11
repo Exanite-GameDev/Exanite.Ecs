@@ -62,21 +62,7 @@ public sealed partial class EcsCommandBuffer
     internal EcsCommandBuffer(EcsWorld world)
     {
         World = world;
-        sortModifications = (left, right) =>
-        {
-            // This sorts by creates first, then by dst archetype, then by src archetype
-            // This ensures that writes are optimized
-            //
-            // This packs the sort key to be the following format:
-            // (1 bit type) | (32 bits dst archetype) | (31 bits src archetype)
-            //
-            // Note that the exact number of bits we use for the archetype ID
-            // doesn't matter much as long as it is sufficiently high
-            // We will never hit the maximum number of archetypes
-            var leftKey = (left.SrcArchetypeId == 0 ? 0u : 1ul << 63) | (ulong)left.DstArchetypeId << 31 | (uint)left.SrcArchetypeId;
-            var rightKey = (right.SrcArchetypeId == 0 ? 0u : 1ul << 63) | (ulong)right.DstArchetypeId << 31 | (uint)right.SrcArchetypeId;
-            return leftKey.CompareTo(rightKey);
-        };
+        sortModifications = (left, right) => left.SortKey.CompareTo(right.SortKey);
     }
 
     /// <summary>

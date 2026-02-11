@@ -155,7 +155,33 @@ public partial class EcsCommandBuffer
         }
     }
 
-    private record struct EntityModification(EntityId EntityId, int SrcArchetypeId, int DstArchetypeId, Dictionary<ComponentId, SetterId>? Sets);
+    private readonly struct EntityModification
+    {
+        public readonly EntityId EntityId;
+        public readonly int SrcArchetypeId;
+        public readonly int DstArchetypeId;
+        public readonly Dictionary<ComponentId, SetterId>? Sets;
+        public readonly ulong SortKey;
+
+        public EntityModification(EntityId entityId, int srcArchetypeId, int dstArchetypeId, Dictionary<ComponentId, SetterId>? sets)
+        {
+            EntityId = entityId;
+            SrcArchetypeId = srcArchetypeId;
+            DstArchetypeId = dstArchetypeId;
+            Sets = sets;
+
+            // This allows sorts to sort by creates first, then by dst archetype, then by src archetype
+            // This ensures that writes are optimized
+            //
+            // This packs the sort key to be the following format:
+            // (1 bit type) | (32 bits dst archetype) | (31 bits src archetype)
+            //
+            // Note that the exact number of bits we use for the archetype ID
+            // doesn't matter much as long as it is sufficiently high
+            // We will never hit the maximum number of archetypes
+            SortKey = (SrcArchetypeId == 0 ? 0u : 1ul << 63) | (ulong)DstArchetypeId << 31 | (uint)SrcArchetypeId;
+        }
+    }
 
     private struct EntityState
     {
