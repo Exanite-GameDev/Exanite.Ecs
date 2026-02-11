@@ -70,7 +70,7 @@ public sealed class Archetype
                 continue;
             }
 
-            if (registration.Filter.Build(world).IsMatch(this))
+            if (registration.Filter.Build(world).IsMatch(Info.Types, in Info.BloomFilter))
             {
                 interfaceComponents[registration.Id] = registration.Factory.Invoke(components);
             }

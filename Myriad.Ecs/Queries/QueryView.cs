@@ -143,6 +143,12 @@ public sealed class QueryView : IFilteredArchetypeView
         return Archetypes.BinarySearch(archetype, new ArchetypeComparer()) >= 0;
     }
 
+    internal bool IsMatch(ImmutableOrderedListSet<TypeId> components, in ComponentBloomFilter bloomFilter)
+    {
+        using var _ = SimplePool<OrderedListSet<TypeId>>.Acquire(out var temporarySet);
+        return IsMatch(components, in bloomFilter, temporarySet);
+    }
+
     internal void DisposeInternal()
     {
         World.Recycle(result.Archetypes);
@@ -228,18 +234,24 @@ public sealed class QueryView : IFilteredArchetypeView
         return newResult;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool IsMatch(Archetype archetype, OrderedListSet<TypeId> temporarySet)
+    {
+        return IsMatch(archetype.Info.Types, in archetype.Info.BloomFilter, temporarySet);
+    }
+
+    private bool IsMatch(ImmutableOrderedListSet<TypeId> components, in ComponentBloomFilter bloomFilter, OrderedListSet<TypeId> temporarySet)
     {
         // Apply the Include filter
         // Quick bloom filter test if the included components intersects with the archetype.
         // If this returns false there is definitely no overlap at all and we can early exit.
-        if (IncludeFilter.Count > 0 && !archetype.Info.BloomFilter.MaybeIntersects(in includeBloom))
+        if (IncludeFilter.Count > 0 && !bloomFilter.MaybeIntersects(in includeBloom))
         {
             return false;
         }
 
         // Do the full set check for included components
-        if (!archetype.Types.IsSupersetOf(IncludeFilter))
+        if (!components.IsSupersetOf(IncludeFilter))
         {
             return false;
         }
@@ -247,9 +259,9 @@ public sealed class QueryView : IFilteredArchetypeView
         // Apply the Exclude filter
         // If this is false it means there is definitely _not_ an intersection, which means we can skip
         // the inner check.
-        if (ExcludeFilter.Count > 0 && excludeBloom.MaybeIntersects(in archetype.Info.BloomFilter))
+        if (ExcludeFilter.Count > 0 && excludeBloom.MaybeIntersects(in bloomFilter))
         {
-            if (archetype.Types.Overlaps(ExcludeFilter))
+            if (components.Overlaps(ExcludeFilter))
             {
                 return false;
             }
@@ -259,7 +271,7 @@ public sealed class QueryView : IFilteredArchetypeView
         if (ExactlyOneFilter.Count > 0)
         {
             temporarySet.Clear();
-            temporarySet.UnionWith(archetype.Types);
+            temporarySet.UnionWith(components);
             temporarySet.IntersectWith(ExactlyOneFilter);
             if (temporarySet.Count != 1)
             {
@@ -272,7 +284,7 @@ public sealed class QueryView : IFilteredArchetypeView
         if (AtLeastOneFilter.Count > 0)
         {
             temporarySet.Clear();
-            temporarySet.UnionWith(archetype.Types);
+            temporarySet.UnionWith(components);
             temporarySet.IntersectWith(AtLeastOneFilter);
             if (temporarySet.Count == 0)
             {
@@ -282,7 +294,7 @@ public sealed class QueryView : IFilteredArchetypeView
         }
 
         // Apply the NotAll filter
-        if (NotAllFilter.Count > 0 && archetype.Types.IsSupersetOf(NotAllFilter))
+        if (NotAllFilter.Count > 0 && components.IsSupersetOf(NotAllFilter))
         {
             return false;
         }
@@ -290,6 +302,7 @@ public sealed class QueryView : IFilteredArchetypeView
         temporarySet.Clear();
         return true;
     }
+
 
     private class MatchResult
     {
