@@ -159,12 +159,31 @@ internal struct EntityManager
     /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseIds(Span<EntityId> entityIds)
+    public void ReleaseIds(ReadOnlySpan<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
         for (var i = entityIds.Length - 1; i >= 0; i--)
         {
             ReleaseId(entityIds[i]);
+        }
+    }
+
+    /// <summary>
+    /// Bulk releases used IDs.
+    /// See <see cref="ReleaseId"/>.
+    /// </summary>
+    /// <remarks>
+    /// IDs are released in reverse order.
+    /// The ID at index 0 will be released last.
+    /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
+    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReleaseIds(ReadOnlySpan<Entity> entityIds)
+    {
+        using var _ = sync.EnterScope();
+        for (var i = entityIds.Length - 1; i >= 0; i--)
+        {
+            ReleaseId(entityIds[i].EntityId);
         }
     }
 
@@ -178,7 +197,7 @@ internal struct EntityManager
     /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseUnusedIds(Span<EntityId> entityIds)
+    public void ReleaseUnusedIds(ReadOnlySpan<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
         for (var i = entityIds.Length - 1; i >= 0; i--)

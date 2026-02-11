@@ -70,14 +70,14 @@ public partial class EcsCommandBuffer
             dispatcher.OnComponentRemoved(recursiveCommandBuffer, archetype, 0, archetype.Entities.Length);
         }
 
+        // Raise entity destroyed events
         foreach (var entity in archetype.Entities)
         {
-            // Raise entity destroyed event
             World.EventBus.Raise(new EntityDestroyedEvent(recursiveCommandBuffer, entity));
-
-            // Release ID
-            World.Entities.ReleaseId(entity.EntityId);
         }
+
+        // Release IDs
+        World.Entities.ReleaseIds(archetype.Entities);
 
         // Clear the archetype
         archetype.Clear();
