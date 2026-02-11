@@ -41,6 +41,15 @@ public sealed class QueryFilter
     private readonly TypeIdSet notAllFilter;
 
     /// <summary>
+    /// Whether this query checks against any interface components.
+    /// </summary>
+    public bool HasInterfaces => includeFilter.HasInterfaces
+        || excludeFilter.HasInterfaces
+        || atLeastOneFilter.HasInterfaces
+        || exactlyOneFilter.HasInterfaces
+        || notAllFilter.HasInterfaces;
+
+    /// <summary>
     /// Create a new <see cref="QueryFilter"/>
     /// </summary>
     public QueryFilter()
@@ -85,7 +94,7 @@ public sealed class QueryFilter
     /// <summary>
     /// The given component must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter Include<T>() where T : IComponent
+    public QueryFilter Include<T>() where T : IEcsType
     {
         includeFilter.Add<T>();
         return this;
@@ -112,7 +121,7 @@ public sealed class QueryFilter
     /// <summary>
     /// The given component must not exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter Exclude<T>() where T : IComponent
+    public QueryFilter Exclude<T>() where T : IEcsType
     {
         excludeFilter.Add<T>();
         return this;
@@ -139,7 +148,7 @@ public sealed class QueryFilter
     /// <summary>
     /// At least one of all components specified as AtLeastOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter AtLeastOne<T>() where T : IComponent
+    public QueryFilter AtLeastOne<T>() where T : IEcsType
     {
         atLeastOneFilter.Add<T>();
         return this;
@@ -166,7 +175,7 @@ public sealed class QueryFilter
     /// <summary>
     /// Exactly one of all components specified as ExactlyOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter ExactlyOne<T>() where T : IComponent
+    public QueryFilter ExactlyOne<T>() where T : IEcsType
     {
         exactlyOneFilter.Add<T>();
         return this;
@@ -193,7 +202,7 @@ public sealed class QueryFilter
     /// <summary>
     /// Not all of the components specified as NotAll must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter NotAll<T>() where T : IComponent
+    public QueryFilter NotAll<T>() where T : IEcsType
     {
         notAllFilter.Add<T>();
         return this;
@@ -220,6 +229,7 @@ public sealed class QueryFilter
     private class TypeIdSet
     {
         public readonly OrderedListSet<TypeId> Items = [];
+        public bool HasInterfaces;
 
         private ImmutableOrderedListSet<TypeId>? immutableSet;
 
@@ -234,12 +244,9 @@ public sealed class QueryFilter
             return immutableSet;
         }
 
-        public void Add(TypeId id)
+        public void Add<T>() where T : IEcsType
         {
-            if (Items.Add(id))
-            {
-                immutableSet = null;
-            }
+            Add(TypeId.Get<T>());
         }
 
         public void Add(Type type)
@@ -247,9 +254,13 @@ public sealed class QueryFilter
             Add(TypeId.Get(type));
         }
 
-        public void Add<T>() where T : IComponent
+        public void Add(TypeId id)
         {
-            Add(TypeId.Get<T>());
+            if (Items.Add(id))
+            {
+                HasInterfaces |= id.IsInterface;
+                immutableSet = null;
+            }
         }
     }
 }
