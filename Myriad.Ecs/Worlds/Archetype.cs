@@ -28,7 +28,7 @@ public sealed class Archetype
     /// <summary>
     /// The world which this archetype belongs to.
     /// </summary>
-    public EcsWorld World { get; }
+    public readonly EcsWorld World;
 
     /// <summary>
     /// The components of entities in this archetype.
