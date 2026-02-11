@@ -21,7 +21,7 @@ internal struct EntityManager
     /// The ID version should be incremented when re-acquired.
     /// </remarks>
     private readonly List<EntityId> releasedIds = [];
-    private int nextIndex = 1;
+    private int nextId = 1;
 
     public EntityManager() {}
 
@@ -83,7 +83,7 @@ internal struct EntityManager
         else
         {
             // Allocate a new ID. This must not overflow!
-            entityId = new EntityId(checked(nextIndex++), 1);
+            entityId = new EntityId(checked(nextId++), 1);
             entities.EnsureCapacity(entityId.Index);
         }
 
@@ -139,9 +139,44 @@ internal struct EntityManager
     public void AcquireIds(Span<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
-        for (var i = 0; i < entityIds.Length; i++)
+
+        // Reuse as many ids as possible
+        var reuseCount = int.Min(releasedIds.Count, entityIds.Length);
+        var reuseStartIndex = releasedIds.Count - reuseCount;
+        releasedIds.AsSpan().Slice(reuseStartIndex, reuseCount).CopyTo(entityIds);
+        releasedIds.RemoveRange(reuseStartIndex, reuseCount);
+
+        for (var i = 0; i < reuseCount; i++)
         {
-            AcquireId(out entityIds[i]);
+            ref var entityId = ref entityIds[i];
+
+            var version = entityId.Version + 1;
+            if (version == 0)
+            {
+                // Ensure ID is never 0, even if it overflows and wraps around
+                version += 1;
+            }
+
+            entityId = new EntityId(entityId.Index, version);
+        }
+
+        // Allocate new ids for the rest
+        var firstNewId = nextId;
+        var newCount = int.Max(0, entityIds.Length - reuseCount);
+        entities.EnsureCapacity(firstNewId + newCount);
+        for (var i = 0; i < newCount; i++)
+        {
+            // Allocate a new ID. This must not overflow!
+            ref var entityId = ref entityIds[reuseCount + i];
+            entityId = new EntityId(checked(nextId++), 1);
+        }
+
+        // Update versions
+        foreach (var entityId in entityIds)
+        {
+            // Update the version
+            ref var location = ref GetLocation(entityId.Index);
+            location.Version = entityId.Version;
         }
     }
 
