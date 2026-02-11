@@ -163,12 +163,14 @@ internal struct EntityManager
         // Allocate new ids for the rest
         var firstNewId = nextId;
         var newCount = int.Max(0, entityIds.Length - reuseCount);
+
+        nextId = checked(firstNewId + newCount);
         entities.EnsureCapacity(firstNewId + newCount);
         for (var i = 0; i < newCount; i++)
         {
             // Allocate a new ID. This must not overflow!
             ref var entityId = ref entityIds[reuseCount + i];
-            entityId = new EntityId(checked(nextId++), 1);
+            entityId = new EntityId(firstNewId + i, 1);
         }
 
         // Update versions
