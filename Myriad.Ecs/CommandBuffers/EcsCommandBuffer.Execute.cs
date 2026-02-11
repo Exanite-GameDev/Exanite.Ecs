@@ -425,6 +425,16 @@ public partial class EcsCommandBuffer
         finally
         {
             // Release pooled collections
+            foreach (var list in creates.Values)
+            {
+                ListPool<EntityModification>.Release(list);
+            }
+
+            foreach (var list in moves.Values)
+            {
+                ListPool<EntityModification>.Release(list);
+            }
+
             DictionaryPool<Archetype, List<EntityModification>>.Release(creates);
             DictionaryPool<ArchetypeMove, List<EntityModification>>.Release(moves);
             ListPool<EntityModification>.Release(unmoved);
