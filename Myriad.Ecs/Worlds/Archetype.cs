@@ -32,13 +32,13 @@ public sealed class Archetype
     /// </summary>
     public readonly EcsWorld World;
 
-    /// <inheritdoc cref="ArchetypeArchetypeInfots"/>
+    /// <inheritdoc cref="ArchetypeInfo.Types"/>
     public ImmutableOrderedListSet<TypeId> Types => Info.Types;
 
-    /// <inheritdoc cref="ArchetypeArchetypeInfots"/>
+    /// <inheritdoc cref="ArchetypeInfo.Components"/>
     public ImmutableOrderedListSet<ComponentId> Components => Info.Components;
 
-    /// <inheritdoc cref="ArchetypeArchetypeInfots"/>
+    /// <inheritdoc cref="ArchetypeInfo.Interfaces"/>
     public ImmutableOrderedListSet<InterfaceId> Interfaces => Info.Interfaces;
 
     /// <summary>
