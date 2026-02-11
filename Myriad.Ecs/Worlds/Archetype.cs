@@ -157,6 +157,7 @@ public sealed class Archetype
     {
         var srcEntityCount = srcArchetype.EntityCount;
         EnsureCapacity(EntityCount + srcEntityCount);
+        lookup.Entries.EnsureCapacity(lookup.Entries.Count + srcEntityCount);
 
         // Copy component data
         var srcRange = new EntityStorageRange(in srcArchetype.Storage, 0, srcEntityCount);
