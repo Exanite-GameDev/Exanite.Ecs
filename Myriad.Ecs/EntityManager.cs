@@ -65,7 +65,6 @@ internal struct EntityManager
     public ref EntityLocation AcquireId(out EntityId entityId)
     {
         using var _ = sync.EnterScope();
-
         if (releasedIds.Count > 0)
         {
             var previousId = releasedIds[^1];
@@ -157,7 +156,6 @@ internal struct EntityManager
     public void ReleaseId(EntityId entityId)
     {
         using var _ = sync.EnterScope();
-
         ref var location = ref GetLocation(entityId);
 
         // Invalidate the handle
@@ -178,13 +176,20 @@ internal struct EntityManager
     /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseIds(ReadOnlySpan<EntityId> entityIds)
+    public void ReleaseIds(Span<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
-        for (var i = entityIds.Length - 1; i >= 0; i--)
+        entityIds.Reverse();
+        foreach (var entityId in entityIds)
         {
-            ReleaseId(entityIds[i]);
+            ref var location = ref GetLocation(entityId);
+
+            // Invalidate the handle
+            location.Version++;
+            location.Archetype = null!;
         }
+
+        releasedIds.AddRange(entityIds);
     }
 
     /// <summary>
@@ -197,12 +202,21 @@ internal struct EntityManager
     /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseIds(ReadOnlySpan<Entity> entityIds)
+    public void ReleaseIds(Span<Entity> entityIds)
     {
         using var _ = sync.EnterScope();
+        releasedIds.EnsureCapacity(releasedIds.Count + entityIds.Length);
         for (var i = entityIds.Length - 1; i >= 0; i--)
         {
-            ReleaseId(entityIds[i].EntityId);
+            var entityId = entityIds[i].EntityId;
+            ref var location = ref GetLocation(entityId);
+
+            // Invalidate the handle
+            location.Version++;
+            location.Archetype = null!;
+
+            // Store this ID for re-use later
+            releasedIds.Add(entityId);
         }
     }
 
@@ -215,8 +229,6 @@ internal struct EntityManager
     public void ReleaseUnusedId(EntityId entityId)
     {
         using var _ = sync.EnterScope();
-
-        // Store this ID for re-use later
         releasedIds.Add(entityId);
     }
 
@@ -230,12 +242,10 @@ internal struct EntityManager
     /// This is to ensure that reacquiring will lead to the ID at index 0 being first again.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseUnusedIds(ReadOnlySpan<EntityId> entityIds)
+    public void ReleaseUnusedIds(Span<EntityId> entityIds)
     {
         using var _ = sync.EnterScope();
-        for (var i = entityIds.Length - 1; i >= 0; i--)
-        {
-            ReleaseUnusedId(entityIds[i]);
-        }
+        entityIds.Reverse();
+        releasedIds.AddRange(entityIds);
     }
 }

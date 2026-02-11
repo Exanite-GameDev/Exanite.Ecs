@@ -77,7 +77,7 @@ public partial class EcsCommandBuffer
         }
 
         // Release IDs
-        World.Entities.ReleaseIds(archetype.Entities);
+        World.Entities.ReleaseIds(archetype.Storage.EntityColumn.AsSpan(0, archetype.EntityCount));
 
         // Clear the archetype
         archetype.Clear();

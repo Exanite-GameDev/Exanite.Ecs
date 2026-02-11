@@ -13,7 +13,7 @@ namespace Exanite.Myriad.Ecs.Worlds;
 public sealed class Archetype
 {
     /// <inheritdoc cref="EntityStorage"/>
-    private EntityStorage storage;
+    internal EntityStorage Storage;
 
     /// <inheritdoc cref="ArchetypeInfo"/>
     internal readonly ArchetypeInfo Info;
@@ -21,7 +21,7 @@ public sealed class Archetype
     /// <summary>
     /// The total number of entities in this archetype.
     /// </summary>
-    private int entityCount;
+    internal int EntityCount;
 
     internal readonly int Id;
 
@@ -38,19 +38,19 @@ public sealed class Archetype
     /// <summary>
     /// All entities in this archetype.
     /// </summary>
-    public ReadOnlySpan<Entity> Entities => storage.EntityColumn.AsSpan(0, entityCount);
+    public ReadOnlySpan<Entity> Entities => Storage.EntityColumn.AsSpan(0, EntityCount);
 
     /// <summary>
     /// The max number of entities that can be stored in this archetype without resizing.
     /// </summary>
-    public int Capacity => storage.Capacity;
+    public int Capacity => Storage.Capacity;
 
     internal Archetype(int id, EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
     {
         Id = id;
         World = world;
         Info = new ArchetypeInfo(components);
-        storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);
+        Storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);
     }
 
     /// <summary>
@@ -58,33 +58,33 @@ public sealed class Archetype
     /// </summary>
     public void EnsureCapacity(int capacity)
     {
-        if (storage.Capacity >= capacity)
+        if (Storage.Capacity >= capacity)
         {
             return;
         }
 
         // Save old storage
-        var oldStorage = storage;
-        var oldRange = new EntityStorageRange(in oldStorage, 0, entityCount);
+        var oldStorage = Storage;
+        var oldRange = new EntityStorageRange(in oldStorage, 0, EntityCount);
 
         // Reallocate storage
         capacity = M.GetNextPowerOfTwo(capacity);
-        storage = new EntityStorage(in Info, capacity);
+        Storage = new EntityStorage(in Info, capacity);
 
         // Copy from old to new
-        var newRange = new EntityStorageRange(in storage, 0, entityCount);
+        var newRange = new EntityStorageRange(in Storage, 0, EntityCount);
         oldRange.CopyAllTo(newRange);
     }
 
     internal void AddEntity(EntityId entityId, ref EntityLocation location)
     {
-        EnsureCapacity(entityCount + 1);
+        EnsureCapacity(EntityCount + 1);
 
         // Use the next free slot
-        var entityIndex = entityCount++;
+        var entityIndex = EntityCount++;
 
         // Store the entity in this archetype
-        storage.EntityColumn[entityIndex] = entityId.ToEntity(World);
+        Storage.EntityColumn[entityIndex] = entityId.ToEntity(World);
 
         // Update the storage location to refer to this archetype
         location.IndexInArchetype = entityIndex;
@@ -94,17 +94,17 @@ public sealed class Archetype
     internal void RemoveEntity(EntityLocation location)
     {
         var currentEntityIndex = location.IndexInArchetype;
-        var currentRange = new EntityStorageRange(in storage, currentEntityIndex, 1);
+        var currentRange = new EntityStorageRange(in Storage, currentEntityIndex, 1);
 
         // We are guaranteed to have at least 1 entity
-        var lastEntityIndex = entityCount - 1;
-        var lastRange = new EntityStorageRange(in storage, lastEntityIndex, 1);
+        var lastEntityIndex = EntityCount - 1;
+        var lastRange = new EntityStorageRange(in Storage, lastEntityIndex, 1);
 
         var isSameLocation = currentEntityIndex == lastEntityIndex;
         if (!isSameLocation)
         {
             // Update location
-            var lastEntity = storage.EntityColumn[lastEntityIndex];
+            var lastEntity = Storage.EntityColumn[lastEntityIndex];
             ref var lastLocation = ref World.Entities.GetLocation(lastEntity.EntityId);
             lastLocation.IndexInArchetype = currentEntityIndex;
 
@@ -116,7 +116,7 @@ public sealed class Archetype
         lastRange.Clear();
 
         // Update entity count
-        entityCount--;
+        EntityCount--;
     }
 
     internal void MigrateEntity(EntityId entity, Archetype dstArchetype, ref EntityLocation location)
@@ -130,7 +130,7 @@ public sealed class Archetype
         dstArchetype.AddEntity(entity, ref location);
 
         // Copy across everything that exists in the destination archetype
-        for (var i = 0; i < storage.ComponentColumns.Length; i++)
+        for (var i = 0; i < Storage.ComponentColumns.Length; i++)
         {
             var componentId = Info.ComponentIdByColumnIndex[i].Value;
 
@@ -141,8 +141,8 @@ public sealed class Archetype
             }
 
             // Copy from source archetype to destination
-            var srcArray = storage.ComponentColumns[i];
-            var dstArray = dstArchetype.storage.ComponentColumns[dstArchetype.Info.ColumnIndexByComponentId[componentId]];
+            var srcArray = Storage.ComponentColumns[i];
+            var dstArray = dstArchetype.Storage.ComponentColumns[dstArchetype.Info.ColumnIndexByComponentId[componentId]];
             Array.Copy(srcArray, srcLocation.IndexInArchetype, dstArray, location.IndexInArchetype, 1);
         }
 
@@ -155,11 +155,11 @@ public sealed class Archetype
     /// </summary>
     internal void AddFrom(Archetype srcArchetype, EntityLookup lookup)
     {
-        EnsureCapacity(entityCount + srcArchetype.Entities.Length);
+        EnsureCapacity(EntityCount + srcArchetype.Entities.Length);
 
         // Copy component data
-        var srcRange = new EntityStorageRange(in srcArchetype.storage, 0, srcArchetype.Entities.Length);
-        var dstRange = new EntityStorageRange(in storage, entityCount, srcArchetype.Entities.Length);
+        var srcRange = new EntityStorageRange(in srcArchetype.Storage, 0, srcArchetype.Entities.Length);
+        var dstRange = new EntityStorageRange(in Storage, EntityCount, srcArchetype.Entities.Length);
         srcRange.CopyComponentsTo(dstRange);
 
         // Allocate new entity ids
@@ -171,7 +171,7 @@ public sealed class Archetype
             location.Archetype = this;
 
             // Store the entity in this archetype
-            storage.EntityColumn[dstRange.StartIndex + i] = entityId.ToEntity(World);
+            Storage.EntityColumn[dstRange.StartIndex + i] = entityId.ToEntity(World);
 
             // Add the entity pair to the lookup dictionary
             var originalEntity = srcArchetype.Entities[i];
@@ -180,7 +180,7 @@ public sealed class Archetype
         }
 
         // Update entity count
-        entityCount += srcArchetype.entityCount;
+        EntityCount += srcArchetype.EntityCount;
     }
 
     /// <summary>
@@ -188,10 +188,10 @@ public sealed class Archetype
     /// </summary>
     internal void Clear()
     {
-        var range = new EntityStorageRange(in storage, 0, entityCount);
+        var range = new EntityStorageRange(in Storage, 0, EntityCount);
         range.Clear();
 
-        entityCount = 0;
+        EntityCount = 0;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -201,13 +201,13 @@ public sealed class Archetype
         // If the component id is invalid, then we will get an index out of bounds
         var componentId = ComponentId.Get<T>();
         var array = GetComponentArray(componentId);
-        return Unsafe.As<Array, T[]>(ref array).AsSpan(0, entityCount);
+        return Unsafe.As<Array, T[]>(ref array).AsSpan(0, EntityCount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Array GetComponentArray(ComponentId id)
     {
-        return storage.ComponentColumns[Info.ColumnIndexByComponentId[id.Value]];
+        return Storage.ComponentColumns[Info.ColumnIndexByComponentId[id.Value]];
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
