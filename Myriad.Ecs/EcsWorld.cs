@@ -72,7 +72,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// <inheritdoc cref="Archetypes"/>
     public IReadOnlyList<Archetype> ArchetypesList => archetypes;
 
-    public EventBus EventBus { get; } = new();
+    public readonly EventBus EventBus = new();
 
     public EcsWorld()
     {
