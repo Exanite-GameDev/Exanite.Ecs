@@ -25,7 +25,7 @@ public sealed class QueryFilter
     /// <summary>
     /// At least one of all these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<TypeId> AtLeastOneFiler => atLeastOneFilter.Items;
+    public IReadOnlyList<TypeId> AtLeastOneFilter => atLeastOneFilter.Items;
     private readonly TypeIdSet atLeastOneFilter;
 
     /// <summary>
