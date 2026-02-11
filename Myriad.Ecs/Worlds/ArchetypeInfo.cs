@@ -26,7 +26,7 @@ internal record struct ArchetypeInfo
     public readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
 
     /// <summary>
-    /// Sparse map from component ID to component dispatcher.
+    /// Sparse map from component ID to interface instance.
     /// </summary>
     public readonly object?[] InterfaceByInterfaceId;
 
