@@ -76,7 +76,7 @@ internal struct ArchetypeInfo
         ComponentDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentDispatcher[maxComponentId + 1];
         foreach (var component in components)
         {
-            ComponentDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentDispatcher(component);
+            ComponentDispatcherByComponentId[component.Value] = TypeRegistry.GetComponentDispatcher(component);
         }
     }
 }

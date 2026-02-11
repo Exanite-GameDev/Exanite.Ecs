@@ -1,40 +1,38 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.Components;
 
 /// <summary>
-/// Unique numeric ID for a type which implements IComponent.
+/// Unique ID for a type that implements <see cref="IComponent"/>.
 /// </summary>
 public readonly record struct ComponentId : IComparable<ComponentId>
 {
-    private static readonly ConcurrentBag<ComponentId> registeredComponentIds = new();
-
-    /// <summary>
-    /// All component IDs that have been discovered and registered so far.
-    /// </summary>
-    public static IReadOnlyCollection<ComponentId> RegisteredComponentIds => registeredComponentIds;
-
-    /// <summary>
-    /// Raised when a new component ID is registered. May be called from any thread.
-    /// </summary>
-    public static event Action<ComponentId>? ComponentIdRegistered;
-
     /// <summary>
     /// Get the raw value of this ID.
     /// </summary>
     public readonly int Value;
 
     /// <summary>
-    /// The <see cref="System.Type"/> of the component this ID is for.
+    /// The type this component ID represents.
     /// </summary>
-    public Type Type => ComponentRegistry.GetComponentType(this);
+    public Type Type => TypeRegistry.GetComponentType(this);
 
     internal ComponentId(int value)
     {
         Value = value;
+    }
+
+    public static implicit operator TypeId(ComponentId value)
+    {
+        return new TypeId(value.Value);
+    }
+
+    public static explicit operator ComponentId(TypeId value)
+    {
+        GuardUtility.IsTrue(value.IsComponent, "The specified type ID does not represent a component ID");
+        return new ComponentId(value.Value);
     }
 
     /// <summary>
@@ -45,7 +43,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// </remarks>
     public ComponentDispatcher GetDispatcher()
     {
-        return ComponentRegistry.GetComponentDispatcher(this);
+        return TypeRegistry.GetComponentDispatcher(this);
     }
 
     /// <summary>
@@ -55,7 +53,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ComponentId Get(Type type)
     {
-        return ComponentRegistry.GetComponentId(type);
+        return TypeRegistry.GetComponentId(type);
     }
 
     /// <summary>
@@ -78,13 +76,6 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     {
         return $"{Type} ({Value})";
     }
-
-    internal static void NotifyComponentIdRegistered(ComponentId componentId)
-    {
-        registeredComponentIds.Add(componentId);
-
-        ComponentIdRegistered?.Invoke(componentId);
-    }
 }
 
 internal static class ComponentId<T> where T : IComponent
@@ -95,5 +86,5 @@ internal static class ComponentId<T> where T : IComponent
     /// <remarks>
     /// This property is cached, making repeated accesses very efficient.
     /// </remarks>
-    public static readonly ComponentId Id = ComponentRegistry.GetComponentId<T>();
+    public static readonly ComponentId Id = TypeRegistry.GetComponentId<T>();
 }

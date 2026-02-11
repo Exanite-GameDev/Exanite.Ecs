@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
-public class ComponentRegistryTests
+public class TypeRegistryTests
 {
     [Fact]
     public void CannotAssignNonComponent()
