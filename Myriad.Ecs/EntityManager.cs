@@ -152,7 +152,7 @@ internal struct EntityManager
         location.Archetype = null!;
 
         // Store this ID for re-use later
-        releasedIds.Add(entityId);
+        releasedIds.Add(new EntityId(entityId.Index, location.Version));
     }
 
     /// <summary>
