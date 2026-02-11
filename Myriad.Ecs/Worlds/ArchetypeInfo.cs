@@ -138,6 +138,9 @@ internal record struct ArchetypeInfo
             Types = types.ToImmutable();
         }
 
+        // Create bloom filter
+        BloomFilter = Types.ToBloomFilter();
+
         // Calculate max interface index
         var maxInterfaceIndex = int.MinValue;
         foreach (var interfaceId in Interfaces)
