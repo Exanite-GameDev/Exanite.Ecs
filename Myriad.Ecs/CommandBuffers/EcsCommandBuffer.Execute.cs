@@ -204,16 +204,15 @@ public partial class EcsCommandBuffer
 
         // Split into batches
         var leftIndex = 0;
-        var srcArchetypeId = modifications[0].SrcArchetypeId;
-        var dstArchetypeId = modifications[0].DstArchetypeId;
+        var sortKey = modifications[0].SortKey;
         for (var rightIndex = 1; rightIndex <= modifications.Count; rightIndex++)
         {
-            if (rightIndex == modifications.Count
-                || srcArchetypeId != modifications[rightIndex].SrcArchetypeId
-                || dstArchetypeId != modifications[rightIndex].DstArchetypeId)
+            if (rightIndex == modifications.Count || sortKey != modifications[rightIndex].SortKey)
             {
                 // New batch detected
                 var batch = modifications.AsSpan().Slice(leftIndex, rightIndex - leftIndex);
+                var srcArchetypeId = modifications[leftIndex].SrcArchetypeId;
+                var dstArchetypeId = modifications[leftIndex].DstArchetypeId;
                 if (srcArchetypeId == 0)
                 {
                     // Create
@@ -425,8 +424,7 @@ public partial class EcsCommandBuffer
                 if (rightIndex != modifications.Count)
                 {
                     leftIndex = rightIndex;
-                    srcArchetypeId = modifications[rightIndex].SrcArchetypeId;
-                    dstArchetypeId = modifications[rightIndex].DstArchetypeId;
+                    sortKey = modifications[rightIndex].SortKey;
                 }
             }
         }
