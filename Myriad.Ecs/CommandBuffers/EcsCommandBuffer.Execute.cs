@@ -15,6 +15,7 @@ public partial class EcsCommandBuffer
     /// Stores temporary data. Clear before use.
     /// </remarks>
     private readonly OrderedListSet<ComponentId> tempComponentSet = [];
+    private readonly Comparison<EntityModification> compareByArchetype;
 
     private void ExecuteInternal()
     {
@@ -115,11 +116,10 @@ public partial class EcsCommandBuffer
 
     private void CreateAndApplyStructuralChanges(EcsCommandBuffer recursiveCommandBuffer, Dictionary<EntityId, EntityState> entityStates)
     {
-        // Sort entities by target archetype
-        // TODO: Take advantage of the fact that the entity ids are likely already partially sorted by archetype ID due to the way that queries iterate
-        var creates = DictionaryPool<Archetype, List<(EntityId EntityId, Dictionary<ComponentId, SetterId>? Sets)>>.Acquire();
-        var moves = DictionaryPool<Archetype, List<EntityId>>.Acquire();
-        var unmoved = ListPool<EntityId>.Acquire();
+        // Sort entities by modification type and the source/destination archetypes
+        var creates = DictionaryPool<Archetype, List<EntityModification>>.Acquire();
+        var moves = DictionaryPool<ArchetypeMove, List<EntityModification>>.Acquire();
+        var unmoved = ListPool<EntityModification>.Acquire();
         try
         {
             foreach (var (entityId, entityState) in entityStates)
@@ -174,11 +174,16 @@ public partial class EcsCommandBuffer
                     }
                 }
 
+                // Only store the sets for each modified entity
+                // Sets vary per entity
+                // Removes vary per archetype
+                var entitySets = new EntityModification(entityId, entityState.Sets);
+
                 // Case 1: Entity created
                 if (entityState.NeedsCreation)
                 {
                     var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
-                    AddToDictionary(creates, dstArchetype, (entityId, entityState.Sets));
+                    AddToCreates(dstArchetype, entitySets);
                     continue;
                 }
 
@@ -186,39 +191,39 @@ public partial class EcsCommandBuffer
                 if (setChanged)
                 {
                     var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
-                    AddToDictionary(moves, dstArchetype, entityId);
+                    AddToMoves(location.Archetype, dstArchetype, entitySets);
                     continue;
                 }
 
                 // Case 3: Entity unmoved
-                unmoved.Add(entityId);
+                unmoved.Add(entitySets);
             }
 
             // Handle creates
-            foreach (var (dstArchetype, entityCreates) in creates)
+            foreach (var (dstArchetype, modifications) in creates)
             {
-                dstArchetype.EnsureCapacity(dstArchetype.EntityCount + entityCreates.Count);
-                foreach (var entityCreate in entityCreates)
+                dstArchetype.EnsureCapacity(dstArchetype.EntityCount + modifications.Count);
+                foreach (var modification in modifications)
                 {
                     // Create the entity
-                    ref var location = ref World.Entities.GetLocation(entityCreate.EntityId.Index);
-                    dstArchetype.AddEntity(entityCreate.EntityId, ref location);
+                    ref var location = ref World.Entities.GetLocation(modification.EntityId.Index);
+                    dstArchetype.AddEntity(modification.EntityId, ref location);
 
-                    // TODO: This is inefficient. Rework how writes are done
+                    // TODO: This is inefficient due to repeated dst component column lookup. Rework how writes are done
                     // Write component values
-                    WriteComponentValues(entityCreate.Sets, location);
+                    WriteComponentValues(modification.Sets, location);
 
                     // Raise component copied events
-                    if (entityCreate.Sets != null)
+                    if (modification.Sets != null)
                     {
-                        foreach (var (componentId, setterId) in entityCreate.Sets)
+                        foreach (var (componentId, setterId) in modification.Sets)
                         {
                             // Did not already have the component, so we raise copied if needed, then added
                             if (setterId.IsPrefab)
                             {
                                 var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
-                                state.Lookup.SetContext(entityCreate.EntityId, setterId.PrefabGroupKey);
-                                dispatcher.OnComponentCopied(recursiveCommandBuffer, entityCreate.EntityId.ToEntity(World), state.Lookup);
+                                state.Lookup.SetContext(modification.EntityId, setterId.PrefabGroupKey);
+                                dispatcher.OnComponentCopied(recursiveCommandBuffer, modification.EntityId.ToEntity(World), state.Lookup);
                             }
                         }
                     }
@@ -228,111 +233,200 @@ public partial class EcsCommandBuffer
                 foreach (var componentId in dstArchetype.Components)
                 {
                     var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
-                    dispatcher.OnComponentAdded(recursiveCommandBuffer, dstArchetype, dstArchetype.EntityCount - entityCreates.Count, entityCreates.Count);
+                    dispatcher.OnComponentAdded(recursiveCommandBuffer, dstArchetype, dstArchetype.EntityCount - modifications.Count, modifications.Count);
                 }
 
                 // Raise entity created events
-                foreach (var entityCreate in entityCreates)
+                foreach (var modification in modifications)
                 {
-                    World.EventBus.Raise(new EntityCreatedEvent(recursiveCommandBuffer, entityCreate.EntityId.ToEntity(World)));
+                    World.EventBus.Raise(new EntityCreatedEvent(recursiveCommandBuffer, modification.EntityId.ToEntity(World)));
                 }
             }
 
             // Handle moves
+            foreach (var ((srcArchetype, dstArchetype), modifications) in moves)
             {
-                   // // Raise component removed events
-                    // if (entityState.Removes != null)
-                    // {
-                    //     foreach (var componentId in entityState.Removes)
-                    //     {
-                    //         if (srcArchetype.Components.Contains(componentId))
-                    //         {
-                    //             var dispatcher = srcArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
-                    //             dispatcher.OnComponentRemoved(recursiveCommandBuffer, entity);
-                    //         }
-                    //     }
-                    // }
-                    //
-                    // // Migrate the entity
-                    // srcArchetype.MigrateEntity(entityId, dstArchetype, ref location);
-                    //
-                    // // Write component values
-                    // WriteComponentValues(entityState, location);
-                    //
-                    // // Raise component copied/added/modified events
-                    // if (entityState.Sets != null)
-                    // {
-                    //     foreach (var (componentId, setterId) in entityState.Sets)
-                    //     {
-                    //         var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
-                    //         if (srcArchetype.Components.Contains(componentId))
-                    //         {
-                    //             // Already had the component, so we raise copied if needed, then modified
-                    //             if (setterId.IsPrefab)
-                    //             {
-                    //                 state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
-                    //                 dispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
-                    //             }
-                    //
-                    //             dispatcher.OnComponentModified(recursiveCommandBuffer, entity);
-                    //         }
-                    //         else
-                    //         {
-                    //             // Did not already have the component, so we raise copied if needed, then added
-                    //             if (setterId.IsPrefab)
-                    //             {
-                    //                 state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
-                    //                 dispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
-                    //             }
-                    //
-                    //             dispatcher.OnComponentAdded(recursiveCommandBuffer, entity);
-                    //         }
-                    //     }
-                    // }
+                // Sort by source archetype for better cache locality
+                modifications.Sort(compareByArchetype);
+
+                // Raise component removed events
+                // Removes vary by source/destination archetype pair
+                {
+                    var srcComponents = srcArchetype.Components;
+                    var dstComponents = dstArchetype.Components;
+
+                    var srcIndex = 0;
+                    var dstIndex = 0;
+                    while (srcIndex < srcComponents.Count)
+                    {
+                        var srcComponentId = srcComponents[srcIndex];
+                        if (dstIndex >= dstComponents.Count || srcComponentId.Value < dstComponents[dstIndex].Value)
+                        {
+                            // Component was removed
+                            var dispatcher = srcArchetype.Info.ComponentDispatcherByComponentId[srcComponentId.Value];
+                            foreach (var modification in modifications)
+                            {
+                                // Raise the event per entity since we can't guarantee the source entities are contiguous
+                                dispatcher.OnComponentRemoved(recursiveCommandBuffer, modification.EntityId.ToEntity(World));
+                            }
+
+                            srcIndex++;
+                        }
+                        else if (srcComponentId.Value == dstComponents[dstIndex].Value)
+                        {
+                            // Component exists in both
+                            srcIndex++;
+                            dstIndex++;
+                        }
+                        else
+                        {
+                            // Component was added
+                            dstIndex++;
+                        }
+                    }
+                }
+
+                // Migrate the entities
+                dstArchetype.EnsureCapacity(dstArchetype.EntityCount + modifications.Count);
+                foreach (var modification in modifications)
+                {
+                    // Migrate the entity
+                    ref var location = ref World.Entities.GetLocation(modification.EntityId.Index);
+                    srcArchetype.MigrateEntity(modification.EntityId, dstArchetype, ref location);
+                }
+
+                // Write component values
+                foreach (var modification in modifications)
+                {
+                    // TODO: This is inefficient due to repeated dst component column lookup. Rework how writes are done
+                    ref var location = ref World.Entities.GetLocation(modification.EntityId.Index);
+                    WriteComponentValues(modification.Sets, location);
+                }
+
+                // Raise component copied events
+                foreach (var modification in modifications)
+                {
+                    if (modification.Sets != null)
+                    {
+                        foreach (var (componentId, setterId) in modification.Sets)
+                        {
+                            // Did not already have the component, so we raise copied if needed, then added
+                            if (setterId.IsPrefab)
+                            {
+                                var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
+                                state.Lookup.SetContext(modification.EntityId, setterId.PrefabGroupKey);
+                                dispatcher.OnComponentCopied(recursiveCommandBuffer, modification.EntityId.ToEntity(World), state.Lookup);
+                            }
+                        }
+                    }
+                }
+
+                // Raise component added events
+                // Adds vary by source/destination archetype pair
+                {
+                    var srcComponents = srcArchetype.Components;
+                    var dstComponents = dstArchetype.Components;
+
+                    var srcIndex = 0;
+                    var dstIndex = 0;
+                    while (dstIndex < dstComponents.Count)
+                    {
+                        var dstComponentId = dstComponents[dstIndex];
+                        if (srcIndex >= srcComponents.Count || dstComponentId.Value < srcComponents[srcIndex].Value)
+                        {
+                            // Component was added
+                            var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[dstComponentId.Value];
+                            dispatcher.OnComponentAdded(recursiveCommandBuffer, dstArchetype, dstArchetype.EntityCount - modifications.Count, modifications.Count);
+
+                            dstIndex++;
+                        }
+                        else if (dstComponentId.Value == srcComponents[srcIndex].Value)
+                        {
+                            // Component exists in both
+                            srcIndex++;
+                            dstIndex++;
+                        }
+                        else
+                        {
+                            // Component was removed
+                            srcIndex++;
+                        }
+                    }
+                }
+
+                // Raise component modified events
+                // Modifications vary per entity
+                //
+                // This is handled separately from the above loop
+                // because the number of sets is usually much lower than the number of matched components
+                foreach (var modification in modifications)
+                {
+                    if (modification.Sets != null)
+                    {
+                        foreach (var componentId in modification.Sets.Keys)
+                        {
+                            if (srcArchetype.Components.Contains(componentId))
+                            {
+                                var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
+                                dispatcher.OnComponentModified(recursiveCommandBuffer, modification.EntityId.ToEntity(World));
+                            }
+                        }
+                    }
+                }
             }
 
             // Handle unmoved
             {
-                // {
-                //
-                //     // Write component values
-                //     WriteComponentValues(entityState, location);
-                //
-                //     // Raise component copied/modified events
-                //     if (entityState.Sets != null)
-                //     {
-                //         var dstArchetype = location.Archetype;
-                //         foreach (var (componentId, setterId) in entityState.Sets)
-                //         {
-                //             // Already had the component, so we raise copied if needed, then modified
-                //             var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
-                //             if (setterId.IsPrefab)
-                //             {
-                //                 state.Lookup.SetContext(entityId, setterId.PrefabGroupKey);
-                //                 dispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
-                //             }
-                //
-                //             dispatcher.OnComponentModified(recursiveCommandBuffer, entity);
-                //         }
-                //     }
-                // }
+                // Sort by source archetype for better cache locality
+                unmoved.Sort(compareByArchetype);
+
+                foreach (var modification in unmoved)
+                {
+                    // Write component values
+                    ref var location = ref World.Entities.GetLocation(modification.EntityId.Index);
+                    WriteComponentValues(modification.Sets, location);
+
+                    // Raise component copied/modified events
+                    if (modification.Sets != null)
+                    {
+                        var entity = modification.EntityId.ToEntity(World);
+                        var dstArchetype = location.Archetype;
+                        foreach (var (componentId, setterId) in modification.Sets)
+                        {
+                            // Already had the component, so we raise copied if needed, then modified
+                            var dispatcher = dstArchetype.Info.ComponentDispatcherByComponentId[componentId.Value];
+                            if (setterId.IsPrefab)
+                            {
+                                state.Lookup.SetContext(modification.EntityId, setterId.PrefabGroupKey);
+                                dispatcher.OnComponentCopied(recursiveCommandBuffer, entity, state.Lookup);
+                            }
+
+                            dispatcher.OnComponentModified(recursiveCommandBuffer, entity);
+                        }
+                    }
+                }
+            }
+
+            void AddToCreates(Archetype dstArchetype, EntityModification modification)
+            {
+                ref var entityIds = ref CollectionsMarshal.GetValueRefOrAddDefault(creates, dstArchetype, out _);
+                entityIds ??= ListPool<EntityModification>.Acquire();
+                entityIds.Add(modification);
+            }
+
+            void AddToMoves(Archetype srcArchetype, Archetype dstArchetype, EntityModification modification)
+            {
+                ref var entityIds = ref CollectionsMarshal.GetValueRefOrAddDefault(moves, new ArchetypeMove(srcArchetype, dstArchetype), out _);
+                entityIds ??= ListPool<EntityModification>.Acquire();
+                entityIds.Add(modification);
             }
         }
         finally
         {
             // Release pooled collections
-            DictionaryPool<Archetype, List<(EntityId EntityId, Dictionary<ComponentId, SetterId>? Sets)>>.Release(creates);
-            DictionaryPool<Archetype, List<EntityId>>.Release(moves);
-            ListPool<EntityId>.Release(unmoved);
-        }
-
-        return;
-
-        void AddToDictionary<T>(Dictionary<Archetype, List<T>> collection, Archetype dstArchetype, T value)
-        {
-            ref var entityIds = ref CollectionsMarshal.GetValueRefOrAddDefault(collection, dstArchetype, out _);
-            entityIds ??= ListPool<T>.Acquire();
-            entityIds.Add(value);
+            DictionaryPool<Archetype, List<EntityModification>>.Release(creates);
+            DictionaryPool<ArchetypeMove, List<EntityModification>>.Release(moves);
+            ListPool<EntityModification>.Release(unmoved);
         }
     }
 
