@@ -73,12 +73,18 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// The index of this entity.
     /// May be re-used very quickly once an <see cref="Entity"/> is destroyed.
     /// </summary>
+    /// <remarks>
+    /// This will never be 0 for a valid entity.
+    /// </remarks>
     public int Index => EntityId.Index;
 
     /// <summary>
     /// The version of this entity.
     /// May be re-used, but only after the full 32 bit counter has been overflowed for this specific index.
     /// </summary>
+    /// <remarks>
+    /// This can be 0 for a valid entity.
+    /// </remarks>
     public uint Version => EntityId.Version;
 
     /// <summary>

@@ -289,6 +289,11 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldCopied(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, int startIndex, int length, IEntityLookup lookup, EcsWorld world)
     {
+        if (!world.EventBus.HasHandlers<ComponentCopiedEvent<T>>())
+        {
+            return;
+        }
+
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
@@ -317,6 +322,11 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldAdded(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, int startIndex, int length, EcsWorld world)
     {
+        if (!world.EventBus.HasHandlers<ComponentAddedEvent<T>>())
+        {
+            return;
+        }
+
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
@@ -345,6 +355,11 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldModified(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, int startIndex, int length, EcsWorld world)
     {
+        if (!world.EventBus.HasHandlers<ComponentModifiedEvent<T>>())
+        {
+            return;
+        }
+
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
@@ -373,6 +388,11 @@ internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void RaiseWorldRemoved(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, int startIndex, int length, EcsWorld world)
     {
+        if (!world.EventBus.HasHandlers<ComponentRemovedEvent<T>>())
+        {
+            return;
+        }
+
         var components = archetype.GetSpan<T>();
         var entities = archetype.Entities;
         for (var i = 0; i < length; i++)
