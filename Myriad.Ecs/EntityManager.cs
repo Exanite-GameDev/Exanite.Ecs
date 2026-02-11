@@ -70,7 +70,7 @@ internal struct EntityManager
             var previousId = releasedIds[^1];
             releasedIds.RemoveAt(releasedIds.Count - 1);
 
-            var version = previousId.Version + 1;
+            var version = previousId.Version;
             entityId = new EntityId(previousId.Index, version);
         }
         else
@@ -109,7 +109,7 @@ internal struct EntityManager
         for (var i = 0; i < reuseCount; i++)
         {
             ref var entityId = ref entityIds[i];
-            var version = entityId.Version + 1;
+            var version = entityId.Version;
             entityId = new EntityId(entityId.Index, version);
         }
 
@@ -167,13 +167,15 @@ internal struct EntityManager
     {
         using var _ = sync.EnterScope();
         entityIds.Reverse();
-        foreach (var entityId in entityIds)
+        for (var i = 0; i < entityIds.Length; i++)
         {
+            var entityId = entityIds[i];
             ref var location = ref GetLocation(entityId);
 
             // Invalidate the handle
             location.Version++;
             location.Archetype = null!;
+            entityIds[i] = new EntityId(entityId.Index, location.Version);
         }
 
         releasedIds.AddRange(entityIds);
@@ -203,7 +205,7 @@ internal struct EntityManager
             location.Archetype = null!;
 
             // Store this ID for re-use later
-            releasedIds.Add(entityId);
+            releasedIds.Add(new EntityId(entityId.Index, location.Version));
         }
     }
 
