@@ -95,39 +95,6 @@ internal struct EntityManager
     }
 
     /// <summary>
-    /// Releases a used <see cref="EntityId"/>.
-    /// This will increment the version.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseId(EntityId entityId)
-    {
-        using var _ = sync.EnterScope();
-
-        ref var location = ref GetLocation(entityId);
-
-        // Invalidate the handle
-        location.Version++;
-        location.Archetype = null!;
-
-        // Store this ID for re-use later
-        releasedIds.Add(entityId);
-    }
-
-    /// <summary>
-    /// Releases a used <see cref="EntityId"/>.
-    /// This will not increment the version.
-    /// Make sure the location corresponding to the ID has never been modified.
-    /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void ReleaseUnusedId(EntityId entityId)
-    {
-        using var _ = sync.EnterScope();
-
-        // Store this ID for re-use later
-        releasedIds.Add(entityId);
-    }
-
-    /// <summary>
     /// Bulk acquires IDs.
     /// See <see cref="AcquireId"/>.
     /// </summary>
@@ -183,6 +150,25 @@ internal struct EntityManager
     }
 
     /// <summary>
+    /// Releases a used <see cref="EntityId"/>.
+    /// This will increment the version.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReleaseId(EntityId entityId)
+    {
+        using var _ = sync.EnterScope();
+
+        ref var location = ref GetLocation(entityId);
+
+        // Invalidate the handle
+        location.Version++;
+        location.Archetype = null!;
+
+        // Store this ID for re-use later
+        releasedIds.Add(entityId);
+    }
+
+    /// <summary>
     /// Bulk releases used IDs.
     /// See <see cref="ReleaseId"/>.
     /// </summary>
@@ -218,6 +204,20 @@ internal struct EntityManager
         {
             ReleaseId(entityIds[i].EntityId);
         }
+    }
+
+    /// <summary>
+    /// Releases a used <see cref="EntityId"/>.
+    /// This will not increment the version.
+    /// Make sure the location corresponding to the ID has never been modified.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void ReleaseUnusedId(EntityId entityId)
+    {
+        using var _ = sync.EnterScope();
+
+        // Store this ID for re-use later
+        releasedIds.Add(entityId);
     }
 
     /// <summary>
