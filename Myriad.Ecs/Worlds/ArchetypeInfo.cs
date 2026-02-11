@@ -138,11 +138,10 @@ internal record struct ArchetypeInfo
             Types = types.ToImmutable();
         }
 
-        // Calculate max interface index and archetype hash
+        // Calculate max interface index
         var maxInterfaceIndex = int.MinValue;
         foreach (var interfaceId in Interfaces)
         {
-            Hash = Hash.Toggle(interfaceId);
             var interfaceIndex = ~interfaceId.Value;
             if (interfaceIndex > maxInterfaceIndex)
             {
