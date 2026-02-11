@@ -155,15 +155,16 @@ public sealed class Archetype
     /// </summary>
     internal void AddFrom(Archetype srcArchetype, EntityLookup lookup)
     {
-        EnsureCapacity(EntityCount + srcArchetype.Entities.Length);
+        var srcEntityCount = srcArchetype.EntityCount;
+        EnsureCapacity(EntityCount + srcEntityCount);
 
         // Copy component data
-        var srcRange = new EntityStorageRange(in srcArchetype.Storage, 0, srcArchetype.Entities.Length);
-        var dstRange = new EntityStorageRange(in Storage, EntityCount, srcArchetype.Entities.Length);
+        var srcRange = new EntityStorageRange(in srcArchetype.Storage, 0, srcEntityCount);
+        var dstRange = new EntityStorageRange(in Storage, EntityCount, srcEntityCount);
         srcRange.CopyComponentsTo(dstRange);
 
         // Allocate new entity ids
-        for (var i = 0; i < srcArchetype.Entities.Length; i++)
+        for (var i = 0; i < srcEntityCount; i++)
         {
             // Allocate an entity id and point it to this archetype
             ref var location = ref World.Entities.AcquireId(out var entityId);
@@ -180,7 +181,7 @@ public sealed class Archetype
         }
 
         // Update entity count
-        EntityCount += srcArchetype.EntityCount;
+        EntityCount += srcEntityCount;
     }
 
     /// <summary>
