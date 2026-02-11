@@ -71,12 +71,6 @@ internal struct EntityManager
             releasedIds.RemoveAt(releasedIds.Count - 1);
 
             var version = previousId.Version + 1;
-            if (version == 0)
-            {
-                // Ensure ID is never 0, even if it overflows and wraps around
-                version += 1;
-            }
-
             entityId = new EntityId(previousId.Index, version);
         }
         else
@@ -115,14 +109,7 @@ internal struct EntityManager
         for (var i = 0; i < reuseCount; i++)
         {
             ref var entityId = ref entityIds[i];
-
             var version = entityId.Version + 1;
-            if (version == 0)
-            {
-                // Ensure ID is never 0, even if it overflows and wraps around
-                version += 1;
-            }
-
             entityId = new EntityId(entityId.Index, version);
         }
 
