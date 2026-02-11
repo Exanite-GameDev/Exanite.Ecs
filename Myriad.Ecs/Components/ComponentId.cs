@@ -25,7 +25,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// <summary>
     /// Get the raw value of this ID.
     /// </summary>
-    public int Value { get; }
+    public readonly int Value;
 
     /// <summary>
     /// The <see cref="System.Type"/> of the component this ID is for.
