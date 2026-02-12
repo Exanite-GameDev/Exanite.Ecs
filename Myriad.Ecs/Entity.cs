@@ -150,7 +150,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public EcsRef<T> GetEcsRef<T>() where T : IComponent
     {
-        GuardUtility.IsTrue(IsAlive, "Entity does not exist");
+        GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         GuardUtility.IsTrue(Has<T>(), $"Component does not exist on entity: {GetType().Name}");
 
         return new EcsRef<T>(this);
@@ -174,20 +174,13 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Get a boxed copy of a component from this entity.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public object? GetBoxed(ComponentId id)
+    public object GetBoxed(ComponentId id)
     {
-        if (!IsAlive)
-        {
-            return null;
-        }
-
-        if (!ComponentIds.Contains(id))
-        {
-            return null;
-        }
+        GuardUtility.IsTrue(IsAlive, "Entity is not alive");
+        GuardUtility.IsTrue(ComponentIds.Contains(id), "Entity does not have the specified component");
 
         ref var location = ref World.Entities.GetLocation(EntityId);
-        return location.Archetype.GetComponentArray(id).GetValue(location.IndexInArchetype);
+        return location.Archetype.GetComponentArray(id).GetValue(location.IndexInArchetype)!;
     }
 
     /// <summary>
@@ -197,6 +190,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Resolve<T>() where T : class, IInterfaceComponent
     {
+        GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
         return location.Archetype.Resolve<T>();
     }
@@ -207,6 +201,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IInterfaceComponent
     {
+        GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
         return location.Archetype.TryResolve(out instance);
     }

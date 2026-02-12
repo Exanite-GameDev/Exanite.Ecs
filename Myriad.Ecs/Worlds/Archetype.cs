@@ -253,9 +253,17 @@ public sealed class Archetype
     {
         var interfaceId = InterfaceId.Get<T>();
         var interfaceIndex = ~interfaceId.Value;
-        var interfaceInstance = Info.InterfaceByInterfaceId[interfaceIndex];
+        if ((uint)interfaceIndex >= (uint)Info.InterfaceByInterfaceId.Length)
+        {
+            throw new GuardException("Archetype does not have the specified interface component");
+        }
 
-        GuardUtility.IsTrue(interfaceInstance != null, "Archetype does not have the specified interface component");
+        var interfaceInstance = Info.InterfaceByInterfaceId[interfaceIndex];
+        if (interfaceInstance == null)
+        {
+            throw new GuardException("Archetype does not have the specified interface component");
+        }
+
         return Unsafe.As<object, T>(ref interfaceInstance);
     }
 
