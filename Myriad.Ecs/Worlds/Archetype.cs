@@ -18,7 +18,7 @@ public sealed class Archetype
     internal EntityStorage Storage;
 
     /// <inheritdoc cref="ArchetypeInfo"/>
-    internal readonly ArchetypeInfo Info;
+    internal ArchetypeInfo Info;
 
     /// <summary>
     /// The total number of entities in this archetype.
@@ -59,6 +59,14 @@ public sealed class Archetype
         // Build initial archetype info
         Info = new ArchetypeInfo(components);
 
+        // Allocate storage
+        Storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);
+
+        UpdateInterfaceComponentResolutions();
+    }
+
+    internal void UpdateInterfaceComponentResolutions()
+    {
         // Resolve interface components
         // Iterate backwards so latest takes priority
         var interfaceComponents = new Dictionary<InterfaceId, object>();
@@ -70,17 +78,14 @@ public sealed class Archetype
                 continue;
             }
 
-            if (registration.Filter.Build(world).IsMatch(Info.Types, in Info.BloomFilter))
+            if (registration.Filter.Build(World).IsMatch(Info.Types, in Info.BloomFilter))
             {
-                interfaceComponents[registration.Id] = registration.Factory.Invoke(components);
+                interfaceComponents[registration.Id] = registration.Factory.Invoke(Components);
             }
         }
 
         // Build final archetype info
         Info = new ArchetypeInfo(Info, interfaceComponents);
-
-        // Allocate storage
-        Storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);
     }
 
     /// <summary>

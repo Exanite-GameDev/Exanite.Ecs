@@ -209,13 +209,15 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// <summary>
     /// Add an interface that will be resolved for all archetypes that match the specified filter.
     /// </summary>
+    /// <remarks>
+    /// Modifying resolvers will lead to all existing archetypes being updated and existing queries invalidated.
+    /// To avoid this, consider registering all resolvers before any archetypes are created.
+    /// </remarks>
     /// <param name="filter">The archetypes that this interface component will be resolved for. Must only match against normal components.</param>
     /// <param name="getInterfaceComponent">Get or create the concrete implementation of the interface component for the specified archetype.</param>
     public void RegisterInterfaceResolver<T>(QueryFilter filter, Func<ImmutableOrderedListSet<ComponentId>, T> getInterfaceComponent) where T : class, IInterfaceComponent
     {
         GuardUtility.IsFalse(filter.HasInterfaces, "Filters used to resolve interfaces must only match against normal components");
-        GuardUtility.IsTrue(archetypes.Count == 0, "Interface resolvers can only be registered when no archetypes have been created");
-
         RegisterInterfaceResolver(new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, getInterfaceComponent));
     }
 
@@ -223,6 +225,16 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     public void RegisterInterfaceResolver(InterfaceResolverRegistration registration)
     {
         interfaceResolvers.Add(registration);
+        OnResolversModified();
+    }
+
+    /// <summary>
+    /// Clears the resolvers list, updates all archetypes, and invalidates existing queries.
+    /// </summary>
+    public void ClearInterfaceResolvers()
+    {
+        interfaceResolvers.Clear();
+        OnResolversModified();
     }
 
     /// <summary>
@@ -287,6 +299,22 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             ListPool<Archetype>.Release(value);
         }
         archetypeListsToRecycle.Clear();
+    }
+
+    /// <summary>
+    /// Call when resolvers are modified to invalidate archetype infos and queries.
+    /// </summary>
+    internal void OnResolversModified()
+    {
+        foreach (var archetype in archetypes)
+        {
+            archetype.UpdateInterfaceComponentResolutions();
+        }
+
+        foreach (var queryView in QueryViewCache.Values)
+        {
+            queryView.Invalidate();
+        }
     }
 
     /// <summary>

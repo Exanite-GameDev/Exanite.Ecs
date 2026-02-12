@@ -149,6 +149,12 @@ public sealed class QueryView : IFilteredArchetypeView
         return IsMatch(components, in bloomFilter, temporarySet);
     }
 
+    internal void Invalidate()
+    {
+        using var _ = updateLock.EnterScope();
+        result = new MatchResult(0, []);
+    }
+
     internal void DisposeInternal()
     {
         World.Recycle(result.Archetypes);
