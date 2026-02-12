@@ -234,7 +234,10 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         OnResolversModified();
     }
 
-    /// <inheritdoc cref="RegisterInterfaceResolver{T}"/>
+    /// <summary>
+    /// Bulk registers a set of interface resolvers to avoid repeated invalidations of archetype and query data.
+    /// Also see <see cref="RegisterInterfaceResolver{T}"/>.
+    /// </summary>
     public void RegisterInterfaceResolvers(ReadOnlySpan<InterfaceResolverRegistration> registrations)
     {
         interfaceResolvers.AddRange(registrations);
@@ -242,7 +245,19 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     }
 
     /// <summary>
+    /// Replaces all interface resolvers in bulk to avoid repeated invalidations of archetype and query data.
+    /// Also see <see cref="RegisterInterfaceResolver{T}"/>.
+    /// </summary>
+    public void SetInterfaceResolvers(ReadOnlySpan<InterfaceResolverRegistration> registrations)
+    {
+        interfaceResolvers.Clear();
+        interfaceResolvers.AddRange(registrations);
+        OnResolversModified();
+    }
+
+    /// <summary>
     /// Clears the resolvers list, updates all archetypes, and invalidates existing queries.
+    /// Also see <see cref="RegisterInterfaceResolver{T}"/>.
     /// </summary>
     public void ClearInterfaceResolvers()
     {
