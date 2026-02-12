@@ -5,4 +5,8 @@ using Exanite.Myriad.Ecs.Queries;
 
 namespace Exanite.Myriad.Ecs.Worlds;
 
-internal record struct InterfaceResolverRegistration(InterfaceId Id, QueryFilter Filter, Func<ImmutableOrderedListSet<ComponentId>, object> Factory);
+/// <summary>
+/// Represents a registration for an interface resolver.
+/// See <see cref="EcsWorld.RegisterInterfaceResolver{T}"/>
+/// </summary>
+public record struct InterfaceResolverRegistration(InterfaceId Id, QueryFilter Filter, Func<ImmutableOrderedListSet<ComponentId>, object> Factory);

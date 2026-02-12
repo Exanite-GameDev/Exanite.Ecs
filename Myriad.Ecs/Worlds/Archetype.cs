@@ -62,7 +62,7 @@ public sealed class Archetype
         // Resolve interface components
         // Iterate backwards so latest takes priority
         var interfaceComponents = new Dictionary<InterfaceId, object>();
-        for (var i = World.InterfaceResolvers.Count - 1; i >= 0; i--)
+        for (var i = World.InterfaceResolvers.Length - 1; i >= 0; i--)
         {
             var registration = World.InterfaceResolvers[i];
             if (interfaceComponents.ContainsKey(registration.Id))
