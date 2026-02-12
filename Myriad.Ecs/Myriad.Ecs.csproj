@@ -22,6 +22,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Entity.TryGetEcsRef.g.cs</LastGenOutput>
     </None>
+    <None Update="Entity.Get.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Entity.Get.g.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Entity.TryGet.g.cs">
@@ -33,6 +37,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Entity.TryGetEcsRef.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Entity.Get.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Entity.Get.g.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
