@@ -216,7 +216,13 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         GuardUtility.IsFalse(filter.HasInterfaces, "Filters used to resolve interfaces must only match against normal components");
         GuardUtility.IsTrue(archetypes.Count == 0, "Interface resolvers can only be registered when no archetypes have been created");
 
-        interfaceResolvers.Add(new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, getInterfaceComponent));
+        RegisterInterfaceResolver(new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, getInterfaceComponent));
+    }
+
+    /// <inheritdoc cref="RegisterInterfaceResolver{T}"/>
+    public void RegisterInterfaceResolver(InterfaceResolverRegistration registration)
+    {
+        interfaceResolvers.Add(registration);
     }
 
     /// <summary>

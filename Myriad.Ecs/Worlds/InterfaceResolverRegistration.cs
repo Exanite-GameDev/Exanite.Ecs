@@ -9,4 +9,16 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// Represents a registration for an interface resolver.
 /// See <see cref="EcsWorld.RegisterInterfaceResolver{T}"/>
 /// </summary>
-public record struct InterfaceResolverRegistration(InterfaceId Id, QueryFilter Filter, Func<ImmutableOrderedListSet<ComponentId>, object> Factory);
+public struct InterfaceResolverRegistration
+{
+    public readonly InterfaceId Id;
+    public readonly QueryFilter Filter;
+    public readonly Func<ImmutableOrderedListSet<ComponentId>, object> Factory;
+
+    internal InterfaceResolverRegistration(InterfaceId id, QueryFilter filter, Func<ImmutableOrderedListSet<ComponentId>, object> factory)
+    {
+        Id = id;
+        Filter = filter;
+        Factory = factory;
+    }
+}
