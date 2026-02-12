@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
@@ -70,11 +71,10 @@ public sealed class Archetype
     internal void UpdateInterfaceComponentResolutions()
     {
         // Resolve interface components
-        // Iterate backwards so latest takes priority
-        using var _ = DictionaryPool<InterfaceId, object>.Acquire(out var interfaceComponents);
-        for (var i = World.InterfaceResolvers.Length - 1; i >= 0; i--)
+        // Iterate forwards and provide references to previous resolvers to allow for overriding functionality
+        using var __ = DictionaryPool<InterfaceId, object>.Acquire(out var interfaceComponents);
+        foreach (var registration in World.InterfaceResolvers)
         {
-            var registration = World.InterfaceResolvers[i];
             if (interfaceComponents.ContainsKey(registration.Id))
             {
                 continue;
@@ -82,7 +82,8 @@ public sealed class Archetype
 
             if (registration.Filter.Build(World).IsMatch(Info.Types, in Info.BloomFilter))
             {
-                interfaceComponents[registration.Id] = registration.Factory.Invoke(Components);
+                ref var current = ref CollectionsMarshal.GetValueRefOrAddDefault(interfaceComponents, registration.Id, out _);
+                current = registration.Factory.Invoke(current, Components);
             }
         }
 

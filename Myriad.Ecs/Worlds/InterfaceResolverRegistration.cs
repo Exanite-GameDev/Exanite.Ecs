@@ -1,5 +1,3 @@
-using System;
-using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 
@@ -13,9 +11,9 @@ public struct InterfaceResolverRegistration
 {
     public readonly InterfaceId Id;
     public readonly QueryFilter Filter;
-    public readonly Func<ImmutableOrderedListSet<ComponentId>, object> Factory;
+    public readonly InterfaceResolverFactory<object> Factory;
 
-    internal InterfaceResolverRegistration(InterfaceId id, QueryFilter filter, Func<ImmutableOrderedListSet<ComponentId>, object> factory)
+    internal InterfaceResolverRegistration(InterfaceId id, QueryFilter filter, InterfaceResolverFactory<object> factory)
     {
         Id = id;
         Filter = filter;

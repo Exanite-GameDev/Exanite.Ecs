@@ -214,11 +214,17 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// To avoid this, consider registering all resolvers before any archetypes are created.
     /// </remarks>
     /// <param name="filter">The archetypes that this interface component will be resolved for. Must only match against normal components.</param>
-    /// <param name="getInterfaceComponent">Get or create the concrete implementation of the interface component for the specified archetype.</param>
-    public void RegisterInterfaceResolver<T>(QueryFilter filter, Func<ImmutableOrderedListSet<ComponentId>, T> getInterfaceComponent) where T : class, IInterfaceComponent
+    /// <param name="factory">Get or create the concrete implementation of the interface component for the specified archetype.</param>
+    public void RegisterInterfaceResolver<T>(QueryFilter filter, InterfaceResolverFactory<T> factory) where T : class, IInterfaceComponent
     {
         GuardUtility.IsFalse(filter.HasInterfaces, "Filters used to resolve interfaces must only match against normal components");
-        RegisterInterfaceResolver(new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, getInterfaceComponent));
+
+        var registration = new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, (previous, components) =>
+        {
+            return factory.Invoke((T?)previous, components);
+        });
+
+        RegisterInterfaceResolver(registration);
     }
 
     /// <inheritdoc cref="RegisterInterfaceResolver{T}"/>
