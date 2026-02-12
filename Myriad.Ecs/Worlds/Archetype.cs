@@ -72,14 +72,9 @@ public sealed class Archetype
     {
         // Resolve interface components
         // Iterate forwards and provide references to previous resolvers to allow for overriding functionality
-        using var __ = DictionaryPool<InterfaceId, object>.Acquire(out var interfaceComponents);
+        using var __ = DictionaryPool<InterfaceId, object?>.Acquire(out var interfaceComponents);
         foreach (var registration in World.InterfaceResolvers)
         {
-            if (interfaceComponents.ContainsKey(registration.Id))
-            {
-                continue;
-            }
-
             if (registration.Filter.Build(World).IsMatch(Info.Types, in Info.BloomFilter))
             {
                 ref var current = ref CollectionsMarshal.GetValueRefOrAddDefault(interfaceComponents, registration.Id, out _);
@@ -87,8 +82,24 @@ public sealed class Archetype
             }
         }
 
+        // Remove null interface components
+        // Interface overriding allows for complete removal of the interface
+        using var ___ = ListPool<InterfaceId>.Acquire(out var interfaceIdsToRemove);
+        foreach (var (interfaceId, instance) in interfaceComponents)
+        {
+            if (instance == null)
+            {
+                interfaceIdsToRemove.Add(interfaceId);
+            }
+        }
+
+        foreach (var interfaceId in interfaceIdsToRemove)
+        {
+            interfaceComponents.Remove(interfaceId);
+        }
+
         // Build final archetype info
-        Info = new ArchetypeInfo(Info, interfaceComponents);
+        Info = new ArchetypeInfo(Info, interfaceComponents!);
     }
 
     /// <summary>
