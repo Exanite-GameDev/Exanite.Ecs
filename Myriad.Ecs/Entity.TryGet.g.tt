@@ -40,17 +40,14 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
+
 <#
     for (var t = 0; t < paramCount; t++)
     {
 #>
-
         var componentId<#= t #> = ComponentId.Get<T<#= t #>>();
-        if (!components.Contains(componentId<#= t #>))
-        {
-            return false;
-        }
 <#
     }
 #>
@@ -59,7 +56,16 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
     for (var t = 0; t < paramCount; t++)
     {
 #>
-        ref<#= t #> = location.Archetype.GetRef<T<#= t #>>(location.IndexInArchetype);
+        if (!components.Contains(componentId<#= t #>)) return false;
+<#
+    }
+#>
+
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+        ref<#= t #> = archetype.GetRef<T<#= t #>>(location.IndexInArchetype);
 <#
     }
 #>

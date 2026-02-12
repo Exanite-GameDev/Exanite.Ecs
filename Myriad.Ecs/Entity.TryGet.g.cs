@@ -24,15 +24,14 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
 
         return true;
     }
@@ -52,22 +51,17 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
 
         return true;
     }
@@ -88,29 +82,20 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
 
         return true;
     }
@@ -132,36 +117,23 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
 
         return true;
     }
@@ -184,43 +156,26 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
 
         return true;
     }
@@ -244,50 +199,29 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
 
         return true;
     }
@@ -312,57 +246,32 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
 
         return true;
     }
@@ -388,64 +297,35 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
 
         return true;
     }
@@ -472,71 +352,38 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
 
         return true;
     }
@@ -564,78 +411,41 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = archetype.GetRef<T9>(location.IndexInArchetype);
 
         return true;
     }
@@ -664,85 +474,44 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = archetype.GetRef<T10>(location.IndexInArchetype);
 
         return true;
     }
@@ -772,92 +541,47 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = archetype.GetRef<T11>(location.IndexInArchetype);
 
         return true;
     }
@@ -888,99 +612,50 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = archetype.GetRef<T12>(location.IndexInArchetype);
 
         return true;
     }
@@ -1012,106 +687,53 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
-
         var componentId13 = ComponentId.Get<T13>();
-        if (!components.Contains(componentId13))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
-        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
+        if (!components.Contains(componentId13)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = archetype.GetRef<T12>(location.IndexInArchetype);
+        ref13 = archetype.GetRef<T13>(location.IndexInArchetype);
 
         return true;
     }
@@ -1144,113 +766,56 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
-
         var componentId13 = ComponentId.Get<T13>();
-        if (!components.Contains(componentId13))
-        {
-            return false;
-        }
-
         var componentId14 = ComponentId.Get<T14>();
-        if (!components.Contains(componentId14))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
-        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype);
-        ref14 = location.Archetype.GetRef<T14>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
+        if (!components.Contains(componentId13)) return false;
+        if (!components.Contains(componentId14)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = archetype.GetRef<T12>(location.IndexInArchetype);
+        ref13 = archetype.GetRef<T13>(location.IndexInArchetype);
+        ref14 = archetype.GetRef<T14>(location.IndexInArchetype);
 
         return true;
     }
@@ -1284,120 +849,59 @@ public readonly partial record struct Entity
         }
 
         ref var location = ref locationRef.Value;
-        var components = location.Archetype.Components;
+        var archetype = location.Archetype;
+        var components = archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
-
         var componentId13 = ComponentId.Get<T13>();
-        if (!components.Contains(componentId13))
-        {
-            return false;
-        }
-
         var componentId14 = ComponentId.Get<T14>();
-        if (!components.Contains(componentId14))
-        {
-            return false;
-        }
-
         var componentId15 = ComponentId.Get<T15>();
-        if (!components.Contains(componentId15))
-        {
-            return false;
-        }
 
-        ref0 = location.Archetype.GetRef<T0>(location.IndexInArchetype);
-        ref1 = location.Archetype.GetRef<T1>(location.IndexInArchetype);
-        ref2 = location.Archetype.GetRef<T2>(location.IndexInArchetype);
-        ref3 = location.Archetype.GetRef<T3>(location.IndexInArchetype);
-        ref4 = location.Archetype.GetRef<T4>(location.IndexInArchetype);
-        ref5 = location.Archetype.GetRef<T5>(location.IndexInArchetype);
-        ref6 = location.Archetype.GetRef<T6>(location.IndexInArchetype);
-        ref7 = location.Archetype.GetRef<T7>(location.IndexInArchetype);
-        ref8 = location.Archetype.GetRef<T8>(location.IndexInArchetype);
-        ref9 = location.Archetype.GetRef<T9>(location.IndexInArchetype);
-        ref10 = location.Archetype.GetRef<T10>(location.IndexInArchetype);
-        ref11 = location.Archetype.GetRef<T11>(location.IndexInArchetype);
-        ref12 = location.Archetype.GetRef<T12>(location.IndexInArchetype);
-        ref13 = location.Archetype.GetRef<T13>(location.IndexInArchetype);
-        ref14 = location.Archetype.GetRef<T14>(location.IndexInArchetype);
-        ref15 = location.Archetype.GetRef<T15>(location.IndexInArchetype);
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
+        if (!components.Contains(componentId13)) return false;
+        if (!components.Contains(componentId14)) return false;
+        if (!components.Contains(componentId15)) return false;
+
+        ref0 = archetype.GetRef<T0>(location.IndexInArchetype);
+        ref1 = archetype.GetRef<T1>(location.IndexInArchetype);
+        ref2 = archetype.GetRef<T2>(location.IndexInArchetype);
+        ref3 = archetype.GetRef<T3>(location.IndexInArchetype);
+        ref4 = archetype.GetRef<T4>(location.IndexInArchetype);
+        ref5 = archetype.GetRef<T5>(location.IndexInArchetype);
+        ref6 = archetype.GetRef<T6>(location.IndexInArchetype);
+        ref7 = archetype.GetRef<T7>(location.IndexInArchetype);
+        ref8 = archetype.GetRef<T8>(location.IndexInArchetype);
+        ref9 = archetype.GetRef<T9>(location.IndexInArchetype);
+        ref10 = archetype.GetRef<T10>(location.IndexInArchetype);
+        ref11 = archetype.GetRef<T11>(location.IndexInArchetype);
+        ref12 = archetype.GetRef<T12>(location.IndexInArchetype);
+        ref13 = archetype.GetRef<T13>(location.IndexInArchetype);
+        ref14 = archetype.GetRef<T14>(location.IndexInArchetype);
+        ref15 = archetype.GetRef<T15>(location.IndexInArchetype);
 
         return true;
     }

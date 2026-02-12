@@ -29,10 +29,8 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
 
         return true;
     }
@@ -57,16 +55,10 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
 
         return true;
     }
@@ -92,22 +84,12 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
 
         return true;
     }
@@ -134,28 +116,14 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
 
         return true;
     }
@@ -183,34 +151,16 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
 
         return true;
     }
@@ -239,40 +189,18 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
 
         return true;
     }
@@ -302,46 +230,20 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
 
         return true;
     }
@@ -372,52 +274,22 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
 
         return true;
     }
@@ -449,58 +321,24 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
 
         return true;
     }
@@ -533,64 +371,26 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
 
         return true;
     }
@@ -624,70 +424,28 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
 
         return true;
     }
@@ -722,76 +480,30 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
 
         return true;
     }
@@ -827,82 +539,32 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
 
         return true;
     }
@@ -939,88 +601,34 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
-
         var componentId13 = ComponentId.Get<T13>();
-        if (!components.Contains(componentId13))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
+        if (!components.Contains(componentId13)) return false;
 
         return true;
     }
@@ -1058,94 +666,36 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
-
         var componentId13 = ComponentId.Get<T13>();
-        if (!components.Contains(componentId13))
-        {
-            return false;
-        }
-
         var componentId14 = ComponentId.Get<T14>();
-        if (!components.Contains(componentId14))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
+        if (!components.Contains(componentId13)) return false;
+        if (!components.Contains(componentId14)) return false;
 
         return true;
     }
@@ -1184,100 +734,38 @@ public readonly partial record struct Entity
         var components = location.Value.Archetype.Components;
 
         var componentId0 = ComponentId.Get<T0>();
-        if (!components.Contains(componentId0))
-        {
-            return false;
-        }
-
         var componentId1 = ComponentId.Get<T1>();
-        if (!components.Contains(componentId1))
-        {
-            return false;
-        }
-
         var componentId2 = ComponentId.Get<T2>();
-        if (!components.Contains(componentId2))
-        {
-            return false;
-        }
-
         var componentId3 = ComponentId.Get<T3>();
-        if (!components.Contains(componentId3))
-        {
-            return false;
-        }
-
         var componentId4 = ComponentId.Get<T4>();
-        if (!components.Contains(componentId4))
-        {
-            return false;
-        }
-
         var componentId5 = ComponentId.Get<T5>();
-        if (!components.Contains(componentId5))
-        {
-            return false;
-        }
-
         var componentId6 = ComponentId.Get<T6>();
-        if (!components.Contains(componentId6))
-        {
-            return false;
-        }
-
         var componentId7 = ComponentId.Get<T7>();
-        if (!components.Contains(componentId7))
-        {
-            return false;
-        }
-
         var componentId8 = ComponentId.Get<T8>();
-        if (!components.Contains(componentId8))
-        {
-            return false;
-        }
-
         var componentId9 = ComponentId.Get<T9>();
-        if (!components.Contains(componentId9))
-        {
-            return false;
-        }
-
         var componentId10 = ComponentId.Get<T10>();
-        if (!components.Contains(componentId10))
-        {
-            return false;
-        }
-
         var componentId11 = ComponentId.Get<T11>();
-        if (!components.Contains(componentId11))
-        {
-            return false;
-        }
-
         var componentId12 = ComponentId.Get<T12>();
-        if (!components.Contains(componentId12))
-        {
-            return false;
-        }
-
         var componentId13 = ComponentId.Get<T13>();
-        if (!components.Contains(componentId13))
-        {
-            return false;
-        }
-
         var componentId14 = ComponentId.Get<T14>();
-        if (!components.Contains(componentId14))
-        {
-            return false;
-        }
-
         var componentId15 = ComponentId.Get<T15>();
-        if (!components.Contains(componentId15))
-        {
-            return false;
-        }
+
+        if (!components.Contains(componentId0)) return false;
+        if (!components.Contains(componentId1)) return false;
+        if (!components.Contains(componentId2)) return false;
+        if (!components.Contains(componentId3)) return false;
+        if (!components.Contains(componentId4)) return false;
+        if (!components.Contains(componentId5)) return false;
+        if (!components.Contains(componentId6)) return false;
+        if (!components.Contains(componentId7)) return false;
+        if (!components.Contains(componentId8)) return false;
+        if (!components.Contains(componentId9)) return false;
+        if (!components.Contains(componentId10)) return false;
+        if (!components.Contains(componentId11)) return false;
+        if (!components.Contains(componentId12)) return false;
+        if (!components.Contains(componentId13)) return false;
+        if (!components.Contains(componentId14)) return false;
+        if (!components.Contains(componentId15)) return false;
 
         return true;
     }
