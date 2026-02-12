@@ -309,7 +309,6 @@ public sealed class QueryView : IFilteredArchetypeView
         return true;
     }
 
-
     private class MatchResult
     {
         /// <summary>
