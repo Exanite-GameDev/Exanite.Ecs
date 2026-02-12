@@ -1,6 +1,4 @@
-using System;
 using Exanite.Core.Runtime;
-using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Queries;
 using Xunit;
 

@@ -1,7 +1,6 @@
 ﻿using Exanite.Core.Runtime;
 using Exanite.Myriad.Ecs.Components;
 using Xunit;
-using Xunit.Internal;
 
 namespace Exanite.Myriad.Ecs.Tests;
 
