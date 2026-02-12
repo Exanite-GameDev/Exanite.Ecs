@@ -15,7 +15,7 @@ namespace Exanite.Myriad.Ecs.Queries;
 /// </summary>
 public sealed class QueryView : IFilteredArchetypeView
 {
-    private MatchResult result = new(0, []);
+    private MatchResult result = new(0, ListPool<Archetype>.Acquire());
 
     /// <summary>
     /// The <see cref="EcsWorld"/> that this query is for.
@@ -152,7 +152,7 @@ public sealed class QueryView : IFilteredArchetypeView
     internal void Invalidate()
     {
         using var _ = updateLock.EnterScope();
-        result = new MatchResult(0, []);
+        result = new MatchResult(0, ListPool<Archetype>.Acquire());
     }
 
     internal void DisposeInternal()
