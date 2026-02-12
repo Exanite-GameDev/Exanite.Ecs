@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
@@ -69,7 +70,7 @@ public sealed class Archetype
     {
         // Resolve interface components
         // Iterate backwards so latest takes priority
-        var interfaceComponents = new Dictionary<InterfaceId, object>();
+        using var _ = DictionaryPool<InterfaceId, object>.Acquire(out var interfaceComponents);
         for (var i = World.InterfaceResolvers.Length - 1; i >= 0; i--)
         {
             var registration = World.InterfaceResolvers[i];
