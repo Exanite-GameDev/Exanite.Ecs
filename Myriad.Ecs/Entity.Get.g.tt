@@ -16,15 +16,17 @@ public readonly partial record struct Entity
 for (var paramCount = 1; paramCount <= 16; paramCount++)
 {
     var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
-    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out Ref<T{t}> ref{t}"));
-    var queryConstraints = string.Join(" ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
+    var outParameters = string.Join(",\n        ", Enumerable.Range(0, paramCount).Select(t => $"out Ref<T{t}> ref{t}"));
+    var queryConstraints = string.Join("\n        ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
 #>
     /// <summary>
     /// Get a reference to a component of the given type. If the entity
     /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Get<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
+    public void Get<<#= genericArguments #>>(
+        <#= outParameters #>)
+        <#= queryConstraints #>
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {

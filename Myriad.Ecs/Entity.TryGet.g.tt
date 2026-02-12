@@ -16,14 +16,16 @@ public readonly partial record struct Entity
 for (var paramCount = 1; paramCount <= 16; paramCount++)
 {
     var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
-    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out Ref<T{t}> ref{t}"));
-    var queryConstraints = string.Join(" ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
+    var outParameters = string.Join(",\n        ", Enumerable.Range(0, paramCount).Select(t => $"out Ref<T{t}> ref{t}"));
+    var queryConstraints = string.Join("\n        ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
 #>
     /// <summary>
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
+    public bool TryGet<<#= genericArguments #>>(
+        <#= outParameters #>)
+        <#= queryConstraints #>
     {
 <#
     for (var t = 0; t < paramCount; t++)

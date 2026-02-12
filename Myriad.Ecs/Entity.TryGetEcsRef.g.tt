@@ -16,8 +16,8 @@ public readonly partial record struct Entity
 for (var paramCount = 1; paramCount <= 16; paramCount++)
 {
     var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
-    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out EcsRef<T{t}> ref{t}"));
-    var queryConstraints = string.Join(" ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
+    var outParameters = string.Join(",\n        ", Enumerable.Range(0, paramCount).Select(t => $"out EcsRef<T{t}> ref{t}"));
+    var queryConstraints = string.Join("\n        ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
 #>
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
@@ -26,7 +26,9 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
     /// This is because ComponentRef can check for the existence of the component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetEcsRef<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
+    public bool TryGetEcsRef<<#= genericArguments #>>(
+        <#= outParameters #>)
+        <#= queryConstraints #>
     {
 <#
     for (var t = 0; t < paramCount; t++)

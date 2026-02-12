@@ -14,7 +14,9 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0>(out Ref<T0> ref0) where T0 : IComponent
+    public bool TryGet<T0>(
+        out Ref<T0> ref0)
+        where T0 : IComponent
     {
         ref0 = default;
 
@@ -40,7 +42,11 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1>(out Ref<T0> ref0, out Ref<T1> ref1) where T0 : IComponent where T1 : IComponent
+    public bool TryGet<T0, T1>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1)
+        where T0 : IComponent
+        where T1 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -70,7 +76,13 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2) where T0 : IComponent where T1 : IComponent where T2 : IComponent
+    public bool TryGet<T0, T1, T2>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -104,7 +116,15 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent
+    public bool TryGet<T0, T1, T2, T3>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -142,7 +162,17 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -184,7 +214,19 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -230,7 +272,21 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -280,7 +336,23 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -334,7 +406,25 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -392,7 +482,27 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8, out Ref<T9> ref9) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8,
+        out Ref<T9> ref9)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -454,7 +564,29 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8, out Ref<T9> ref9, out Ref<T10> ref10) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8,
+        out Ref<T9> ref9,
+        out Ref<T10> ref10)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -520,7 +652,31 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8, out Ref<T9> ref9, out Ref<T10> ref10, out Ref<T11> ref11) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8,
+        out Ref<T9> ref9,
+        out Ref<T10> ref10,
+        out Ref<T11> ref11)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -590,7 +746,33 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8, out Ref<T9> ref9, out Ref<T10> ref10, out Ref<T11> ref11, out Ref<T12> ref12) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8,
+        out Ref<T9> ref9,
+        out Ref<T10> ref10,
+        out Ref<T11> ref11,
+        out Ref<T12> ref12)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -664,7 +846,35 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8, out Ref<T9> ref9, out Ref<T10> ref10, out Ref<T11> ref11, out Ref<T12> ref12, out Ref<T13> ref13) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8,
+        out Ref<T9> ref9,
+        out Ref<T10> ref10,
+        out Ref<T11> ref11,
+        out Ref<T12> ref12,
+        out Ref<T13> ref13)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -742,7 +952,37 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8, out Ref<T9> ref9, out Ref<T10> ref10, out Ref<T11> ref11, out Ref<T12> ref12, out Ref<T13> ref13, out Ref<T14> ref14) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8,
+        out Ref<T9> ref9,
+        out Ref<T10> ref10,
+        out Ref<T11> ref11,
+        out Ref<T12> ref12,
+        out Ref<T13> ref13,
+        out Ref<T14> ref14)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
     {
         ref0 = default;
         ref1 = default;
@@ -824,7 +1064,39 @@ public readonly partial record struct Entity
     /// Try to get a reference to a component of the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(out Ref<T0> ref0, out Ref<T1> ref1, out Ref<T2> ref2, out Ref<T3> ref3, out Ref<T4> ref4, out Ref<T5> ref5, out Ref<T6> ref6, out Ref<T7> ref7, out Ref<T8> ref8, out Ref<T9> ref9, out Ref<T10> ref10, out Ref<T11> ref11, out Ref<T12> ref12, out Ref<T13> ref13, out Ref<T14> ref14, out Ref<T15> ref15) where T0 : IComponent where T1 : IComponent where T2 : IComponent where T3 : IComponent where T4 : IComponent where T5 : IComponent where T6 : IComponent where T7 : IComponent where T8 : IComponent where T9 : IComponent where T10 : IComponent where T11 : IComponent where T12 : IComponent where T13 : IComponent where T14 : IComponent where T15 : IComponent
+    public bool TryGet<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+        out Ref<T0> ref0,
+        out Ref<T1> ref1,
+        out Ref<T2> ref2,
+        out Ref<T3> ref3,
+        out Ref<T4> ref4,
+        out Ref<T5> ref5,
+        out Ref<T6> ref6,
+        out Ref<T7> ref7,
+        out Ref<T8> ref8,
+        out Ref<T9> ref9,
+        out Ref<T10> ref10,
+        out Ref<T11> ref11,
+        out Ref<T12> ref12,
+        out Ref<T13> ref13,
+        out Ref<T14> ref14,
+        out Ref<T15> ref15)
+        where T0 : IComponent
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+        where T5 : IComponent
+        where T6 : IComponent
+        where T7 : IComponent
+        where T8 : IComponent
+        where T9 : IComponent
+        where T10 : IComponent
+        where T11 : IComponent
+        where T12 : IComponent
+        where T13 : IComponent
+        where T14 : IComponent
+        where T15 : IComponent
     {
         ref0 = default;
         ref1 = default;
