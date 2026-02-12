@@ -12,9 +12,9 @@ public readonly partial record struct Entity
 {
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0>(
@@ -39,9 +39,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1>(
@@ -71,9 +71,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2>(
@@ -108,9 +108,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3>(
@@ -150,9 +150,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4>(
@@ -197,9 +197,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5>(
@@ -249,9 +249,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6>(
@@ -306,9 +306,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7>(
@@ -368,9 +368,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8>(
@@ -435,9 +435,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
@@ -507,9 +507,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
@@ -584,9 +584,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
@@ -666,9 +666,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
@@ -753,9 +753,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
@@ -845,9 +845,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
@@ -942,9 +942,9 @@ public readonly partial record struct Entity
 
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(

@@ -21,9 +21,9 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
 #>
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<<#= genericArguments #>>(
