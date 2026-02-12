@@ -228,6 +228,13 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         OnResolversModified();
     }
 
+    /// <inheritdoc cref="RegisterInterfaceResolver{T}"/>
+    public void RegisterInterfaceResolvers(ReadOnlySpan<InterfaceResolverRegistration> registrations)
+    {
+        interfaceResolvers.AddRange(registrations);
+        OnResolversModified();
+    }
+
     /// <summary>
     /// Clears the resolvers list, updates all archetypes, and invalidates existing queries.
     /// </summary>
