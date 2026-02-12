@@ -1,0 +1,65 @@
+<#@ template language="C#" #>
+<#@ import namespace="System.Linq" #>
+#nullable enable
+
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using Exanite.Myriad.Ecs;
+
+namespace Exanite.Myriad.Ecs;
+
+public readonly partial record struct Entity
+{
+<#
+for (var paramCount = 1; paramCount <= 8; paramCount++)
+{
+    var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
+    var outParameters = string.Join(",\n        ", Enumerable.Range(0, paramCount).Select(t => $"[NotNullWhen(true)]out InterfaceBinding<T{t}> binding{t}"));
+    var queryConstraints = string.Join("\n        ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : class, IInterfaceComponent"));
+#>
+    /// <summary>
+    /// Tries to resolve the specified interface components from the entity's archetype as interfaces bound to this entity.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryResolveBinding<<#= genericArguments #>>(
+        <#= outParameters #>)
+        <#= queryConstraints #>
+    {
+        if (!TryResolve(
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+            out T<#= t #>? instance<#= t #><#= t == paramCount - 1 ? "" : "," #>
+<#
+    }
+#>
+        ))
+        {
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+            binding<#= t #> = default;
+<#
+    }
+#>
+            return false;
+        }
+
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+        binding<#= t #> = instance<#= t #>.Bind(this);
+<#
+    }
+#>
+
+        return true;
+    }
+
+<#
+}
+#>
+}
