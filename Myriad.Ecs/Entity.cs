@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
@@ -170,7 +171,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     }
 
     /// <summary>
-    /// Get a <b>boxed copy</b> of a component from this entity. Only use for debugging!
+    /// Get a boxed copy of a component from this entity.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object? GetBoxed(ComponentId id)
@@ -187,6 +188,27 @@ public readonly partial record struct Entity : IComparable<Entity>
 
         ref var location = ref World.Entities.GetLocation(EntityId);
         return location.Archetype.GetComponentArray(id).GetValue(location.IndexInArchetype);
+    }
+
+    /// <summary>
+    /// Resolves the specified interface component from the entity's archetype.
+    /// Throws if it fails.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T Resolve<T>() where T : class, IInterfaceComponent
+    {
+        var location = World.Entities.GetLocation(EntityId);
+        return location.Archetype.Resolve<T>();
+    }
+
+    /// <summary>
+    /// Tries to resolve the specified interface component from the entity's archetype.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IInterfaceComponent
+    {
+        var location = World.Entities.GetLocation(EntityId);
+        return location.Archetype.TryResolve(out instance);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
