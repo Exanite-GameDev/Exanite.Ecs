@@ -63,6 +63,7 @@ public sealed class Archetype
         // Allocate storage
         Storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);
 
+        // Resolve interfaces
         UpdateInterfaceComponentResolutions();
     }
 
