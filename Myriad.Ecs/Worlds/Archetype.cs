@@ -227,6 +227,17 @@ public sealed class Archetype
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T Resolve<T>() where T : class, IInterfaceComponent
+    {
+        var interfaceId = InterfaceId.Get<T>();
+        var interfaceIndex = ~interfaceId.Value;
+        var interfaceInstance = Info.InterfaceByInterfaceId[interfaceIndex];
+
+        GuardUtility.IsTrue(interfaceInstance != null, "Archetype does not have the specified interface component");
+        return Unsafe.As<object, T>(ref interfaceInstance);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IInterfaceComponent
     {
         var interfaceId = InterfaceId.Get<T>();
