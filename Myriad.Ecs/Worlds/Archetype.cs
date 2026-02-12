@@ -226,6 +226,9 @@ public sealed class Archetype
         EntityCount = 0;
     }
 
+    /// <summary>
+    /// Resolves the specified interface component from this archetype.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Resolve<T>() where T : class, IInterfaceComponent
     {
@@ -237,6 +240,9 @@ public sealed class Archetype
         return Unsafe.As<object, T>(ref interfaceInstance);
     }
 
+    /// <summary>
+    /// Tries to resolve the specified interface component from this archetype.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IInterfaceComponent
     {
