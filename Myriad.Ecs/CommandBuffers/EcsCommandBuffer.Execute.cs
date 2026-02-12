@@ -170,7 +170,7 @@ public partial class EcsCommandBuffer
             if (entityState.NeedsCreation)
             {
                 // Create the entity
-                var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
+                var dstArchetype = World.GetOrCreateArchetype(componentIdSet, archetypeHash);
                 dstArchetype.AddEntity(entityId, ref location);
 
                 // Write component values
@@ -203,7 +203,7 @@ public partial class EcsCommandBuffer
             if (setChanged)
             {
                 var srcArchetype = location.Archetype;
-                var dstArchetype = World.GetOrCreateArchetype(componentIdSet.AsComponentIdSet(), archetypeHash);
+                var dstArchetype = World.GetOrCreateArchetype(componentIdSet, archetypeHash);
 
                 // Raise component removed events
                 if (entityState.Removes != null)

@@ -34,13 +34,13 @@ public sealed class Archetype
     public readonly EcsWorld World;
 
     /// <inheritdoc cref="ArchetypeInfo.Types"/>
-    public ImmutableOrderedListSet<TypeId> Types => Info.Types;
+    public IReadOnlyOrderedListSet<TypeId> Types => Info.Types;
 
     /// <inheritdoc cref="ArchetypeInfo.Components"/>
-    public ImmutableOrderedListSet<ComponentId> Components => Info.Components;
+    public IReadOnlyOrderedListSet<ComponentId> Components => Info.Components;
 
     /// <inheritdoc cref="ArchetypeInfo.Interfaces"/>
-    public ImmutableOrderedListSet<InterfaceId> Interfaces => Info.Interfaces;
+    public IReadOnlyOrderedListSet<InterfaceId> Interfaces => Info.Interfaces;
 
     /// <summary>
     /// All entities in this archetype.
@@ -52,7 +52,7 @@ public sealed class Archetype
     /// </summary>
     public int Capacity => Storage.Capacity;
 
-    internal Archetype(int id, EcsWorld world, ImmutableOrderedListSet<ComponentId> components)
+    internal Archetype(int id, EcsWorld world, IReadOnlyOrderedListSet<ComponentId> components)
     {
         Id = id;
         World = world;

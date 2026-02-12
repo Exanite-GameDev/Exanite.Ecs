@@ -49,8 +49,7 @@ public class OrderedListSetTests
             4,
         };
 
-        var immutable = ImmutableOrderedListSet<int>.Create(ints);
-        set.UnionWith(immutable);
+        set.UnionWith(ints);
 
         Assert.Equal(4, set.Count);
         Assert.True(set.Contains(1));
@@ -128,7 +127,7 @@ public class OrderedListSetTests
             0,
         };
 
-        Assert.False(a.ToImmutable().SetEquals(b.ToImmutable()));
+        Assert.False(a.SetEquals(b));
     }
 
     [Fact]
@@ -248,8 +247,8 @@ public class OrderedListSetTests
             3,
         };
 
-        Assert.True(a.ToImmutable().IsSupersetOf(b.ToImmutable()));
-        Assert.False(b.ToImmutable().IsSupersetOf(a.ToImmutable()));
+        Assert.True(a.IsSupersetOf(b));
+        Assert.False(b.IsSupersetOf(a));
     }
 
     [Fact]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
@@ -95,7 +96,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// <summary>
     /// Get the set of components which this entity currently has.
     /// </summary>
-    public ImmutableOrderedListSet<ComponentId> ComponentIds => Archetype.Components;
+    public IReadOnlyOrderedListSet<ComponentId> ComponentIds => Archetype.Components;
 
     /// <summary>
     /// Get a boxed array of all components.
