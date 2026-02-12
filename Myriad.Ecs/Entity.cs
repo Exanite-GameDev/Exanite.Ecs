@@ -104,7 +104,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// This is very slow and the returned data is a copy of the original data.
     /// Avoid using this for anything other than debugging!
     /// </summary>
-    public object[] BoxedComponents => ComponentIds.Select(GetBoxed).ToArray()!;
+    public object[] BoxedComponents => ComponentIds.Select(GetBoxed).ToArray();
 
     internal Entity(EntityId id, EcsWorld world)
     {
@@ -204,6 +204,32 @@ public readonly partial record struct Entity : IComparable<Entity>
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
         return location.Archetype.TryResolve(out instance);
+    }
+
+    /// <summary>
+    /// Resolves the specified interface component from the entity's archetype as an interface bound to this entity.
+    /// Throws if it fails.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public InterfaceBinding<T> ResolveBinding<T>() where T : class, IInterfaceComponent
+    {
+        return Resolve<T>().Bind(this);
+    }
+
+    /// <summary>
+    /// Tries to resolve the specified interface component from the entity's archetype as an interface bound to this entity.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryResolveBinding<T>(out InterfaceBinding<T> binding) where T : class, IInterfaceComponent
+    {
+        if (!TryResolve<T>(out var interfaceInstance))
+        {
+            binding = default;
+            return false;
+        }
+
+        binding = interfaceInstance.Bind(this);
+        return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
