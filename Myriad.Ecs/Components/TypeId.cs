@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.Components;
 
@@ -78,7 +79,7 @@ public readonly record struct TypeId : IComparable<TypeId>
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{Type} ({Value})";
+        return $"{TypeUtility.FormatConciseName(Type)} ({Value})";
     }
 }
 

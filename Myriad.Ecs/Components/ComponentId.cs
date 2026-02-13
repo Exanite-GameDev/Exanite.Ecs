@@ -74,7 +74,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{Type} ({Value})";
+        return $"{TypeUtility.FormatConciseName(Type)} ({Value})";
     }
 }
 
