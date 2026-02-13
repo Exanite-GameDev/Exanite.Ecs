@@ -57,7 +57,7 @@ internal record struct ArchetypeInfo
 
     public ArchetypeInfo(IReadOnlyOrderedListSet<ComponentId> components)
     {
-        Components = components;
+        Components = components.MakeSelfImmutable();
 
         // Interfaces are not available while bootstrapping the archetype info
         Interfaces = OrderedListSet<InterfaceId>.Empty;
@@ -72,7 +72,7 @@ internal record struct ArchetypeInfo
                 types.Add(componentId);
             }
 
-            Types = types;
+            Types = types.MakeSelfImmutable();
         }
 
         // Create bloom filter
