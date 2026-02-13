@@ -11,7 +11,7 @@ namespace Exanite.Myriad.Ecs.Collections;
 /// </summary>
 /// <remarks>
 /// This represents both immutable and mutable versions of the data structure.
-/// Be very careful about what whether the usage expects the data to remain immutable.
+/// Be very careful about whether the usage expects the data to be immutable.
 /// </remarks>
 internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, IComparable<T>, IEquatable<T>
 {
