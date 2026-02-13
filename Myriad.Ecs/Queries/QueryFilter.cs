@@ -46,6 +46,15 @@ public sealed class QueryFilter
     /// <summary>
     /// Whether this query checks against any interface components.
     /// </summary>
+    public bool HasComponents => includeFilter.HasComponents
+        || excludeFilter.HasComponents
+        || atLeastOneFilter.HasComponents
+        || exactlyOneFilter.HasComponents
+        || notAllFilter.HasComponents;
+
+    /// <summary>
+    /// Whether this query checks against any interface components.
+    /// </summary>
     public bool HasInterfaces => includeFilter.HasInterfaces
         || excludeFilter.HasInterfaces
         || atLeastOneFilter.HasInterfaces
@@ -241,11 +250,11 @@ public sealed class QueryFilter
             builder.Append('[');
 
             var isFirst = true;
-            AppendFilter(builder, "Include", IncludeFilter, ref isFirst, includeComponents, includeInterfaces);
-            AppendFilter(builder, "Exclude", ExcludeFilter, ref isFirst, includeComponents, includeInterfaces);
-            AppendFilter(builder, "AtLeastOne", AtLeastOneFilter, ref isFirst, includeComponents, includeInterfaces);
-            AppendFilter(builder, "ExactlyOne", ExactlyOneFilter, ref isFirst, includeComponents, includeInterfaces);
-            AppendFilter(builder, "NotAll", NotAllFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "Include", includeFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "Exclude", excludeFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "AtLeastOne", atLeastOneFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "ExactlyOne", exactlyOneFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "NotAll", notAllFilter, ref isFirst, includeComponents, includeInterfaces);
 
             builder.Append(']');
 
@@ -253,9 +262,9 @@ public sealed class QueryFilter
         }
     }
 
-    private void AppendFilter(StringBuilder builder, string name, IReadOnlyList<TypeId> filter, ref bool isFirst, bool includeComponents, bool includeInterfaces)
+    private static void AppendFilter(StringBuilder builder, string name, TypeIdSet filter, ref bool isFirst, bool includeComponents, bool includeInterfaces)
     {
-        if (filter.Count == 0)
+        if ((!includeComponents || !filter.HasComponents) && (!includeInterfaces || !filter.HasInterfaces))
         {
             return;
         }
@@ -270,9 +279,8 @@ public sealed class QueryFilter
         builder.Append('<');
 
         var isFirstInFilter = true;
-        for (var i = 0; i < filter.Count; i++)
+        foreach (var typeId in filter.Items)
         {
-            var typeId = filter[i];
             if (typeId.IsComponent && !includeComponents)
             {
                 continue;
@@ -298,6 +306,7 @@ public sealed class QueryFilter
     private class TypeIdSet
     {
         public readonly OrderedListSet<TypeId> Items = [];
+        public bool HasComponents;
         public bool HasInterfaces;
 
         private IReadOnlyOrderedListSet<TypeId>? immutableSet;
@@ -327,6 +336,7 @@ public sealed class QueryFilter
         {
             if (Items.Add(id))
             {
+                HasComponents |= id.IsComponent;
                 HasInterfaces |= id.IsInterface;
                 immutableSet = null;
             }
