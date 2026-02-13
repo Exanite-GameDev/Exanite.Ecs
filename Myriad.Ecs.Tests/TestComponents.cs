@@ -1,5 +1,11 @@
 ﻿namespace Exanite.Myriad.Ecs.Tests;
 
+public interface IEcsInterface0 : IInterfaceComponent;
+
+public interface IEcsInterface1 : IInterfaceComponent;
+
+public interface IEcsInterface2 : IInterfaceComponent;
+
 public record struct EcsByte(byte Value) : IComponent;
 
 public record struct EcsInt16(short Value) : IComponent;
@@ -45,3 +51,8 @@ public record struct Ecs15 : IComponent;
 public record struct Ecs16 : IComponent;
 
 public record struct Ecs17 : IComponent;
+
+public record struct EcsGeneric<T> : IComponent
+{
+    public T Value;
+}

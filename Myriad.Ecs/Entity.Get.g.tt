@@ -20,49 +20,21 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
     var queryConstraints = string.Join("\n        ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
 #>
     /// <summary>
-    /// Try to get a reference to a component of the given type.
+    /// Get a reference to a component of the given type. If the entity
+    /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGet<<#= genericArguments #>>(
+    public void Get<<#= genericArguments #>>(
         <#= outParameters #>)
         <#= queryConstraints #>
     {
-<#
-    for (var t = 0; t < paramCount; t++)
-    {
-#>
-        ref<#= t #> = default;
-<#
-    }
-#>
-
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
-            return false;
+            throw new GuardException("Entity is not alive");
         }
 
         ref var location = ref locationRef.Value;
         var archetype = location.Archetype;
-        var components = archetype.Components;
-
-<#
-    for (var t = 0; t < paramCount; t++)
-    {
-#>
-        var componentId<#= t #> = ComponentId.Get<T<#= t #>>();
-<#
-    }
-#>
-
-<#
-    for (var t = 0; t < paramCount; t++)
-    {
-#>
-        if (!components.Contains(componentId<#= t #>)) return false;
-<#
-    }
-#>
-
 <#
     for (var t = 0; t < paramCount; t++)
     {
@@ -71,8 +43,6 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
 <#
     }
 #>
-
-        return true;
     }
 
 <#

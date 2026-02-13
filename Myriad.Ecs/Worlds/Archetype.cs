@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
@@ -16,7 +19,7 @@ public sealed class Archetype
     internal EntityStorage Storage;
 
     /// <inheritdoc cref="ArchetypeInfo"/>
-    internal readonly ArchetypeInfo Info;
+    internal ArchetypeInfo Info;
 
     /// <summary>
     /// The total number of entities in this archetype.
@@ -30,10 +33,14 @@ public sealed class Archetype
     /// </summary>
     public readonly EcsWorld World;
 
-    /// <summary>
-    /// The components of entities in this archetype.
-    /// </summary>
+    /// <inheritdoc cref="ArchetypeInfo.Types"/>
+    public ImmutableOrderedListSet<TypeId> Types => Info.Types;
+
+    /// <inheritdoc cref="ArchetypeInfo.Components"/>
     public ImmutableOrderedListSet<ComponentId> Components => Info.Components;
+
+    /// <inheritdoc cref="ArchetypeInfo.Interfaces"/>
+    public ImmutableOrderedListSet<InterfaceId> Interfaces => Info.Interfaces;
 
     /// <summary>
     /// All entities in this archetype.
@@ -49,8 +56,49 @@ public sealed class Archetype
     {
         Id = id;
         World = world;
+
+        // Build initial archetype info
         Info = new ArchetypeInfo(components);
+
+        // Allocate storage
         Storage = new EntityStorage(in Info, EcsConstants.ArchetypeInitialCapacity);
+
+        // Resolve interfaces
+        UpdateInterfaceComponentResolutions();
+    }
+
+    internal void UpdateInterfaceComponentResolutions()
+    {
+        // Resolve interface components
+        // Iterate forwards and provide references to previous resolvers to allow for overriding functionality
+        using var __ = DictionaryPool<InterfaceId, object?>.Acquire(out var interfaceComponents);
+        foreach (var registration in World.InterfaceResolvers)
+        {
+            if (registration.Filter.Build(World).IsMatch(Info.Types, in Info.BloomFilter))
+            {
+                ref var current = ref CollectionsMarshal.GetValueRefOrAddDefault(interfaceComponents, registration.Id, out _);
+                current = registration.Factory.Invoke(current, Components);
+            }
+        }
+
+        // Remove null interface components
+        // Interface overriding allows for complete removal of the interface
+        using var ___ = ListPool<InterfaceId>.Acquire(out var interfaceIdsToRemove);
+        foreach (var (interfaceId, instance) in interfaceComponents)
+        {
+            if (instance == null)
+            {
+                interfaceIdsToRemove.Add(interfaceId);
+            }
+        }
+
+        foreach (var interfaceId in interfaceIdsToRemove)
+        {
+            interfaceComponents.Remove(interfaceId);
+        }
+
+        // Build final archetype info
+        Info = new ArchetypeInfo(Info, interfaceComponents!);
     }
 
     /// <summary>
@@ -194,6 +242,53 @@ public sealed class Archetype
         range.Clear();
 
         EntityCount = 0;
+    }
+
+    /// <summary>
+    /// Resolves the specified interface component from this archetype.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T Resolve<T>() where T : class, IInterfaceComponent
+    {
+        var interfaceId = InterfaceId.Get<T>();
+        var interfaceIndex = ~interfaceId.Value;
+        if ((uint)interfaceIndex >= (uint)Info.InterfaceByInterfaceId.Length)
+        {
+            throw new GuardException("Archetype does not have the specified interface component");
+        }
+
+        var interfaceInstance = Info.InterfaceByInterfaceId[interfaceIndex];
+        if (interfaceInstance == null)
+        {
+            throw new GuardException("Archetype does not have the specified interface component");
+        }
+
+        return Unsafe.As<object, T>(ref interfaceInstance);
+    }
+
+    /// <summary>
+    /// Tries to resolve the specified interface component from this archetype.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IInterfaceComponent
+    {
+        var interfaceId = InterfaceId.Get<T>();
+        var interfaceIndex = ~interfaceId.Value;
+        if ((uint)interfaceIndex >= Info.InterfaceByInterfaceId.Length)
+        {
+            instance = null;
+            return false;
+        }
+
+        var interfaceInstance = Info.InterfaceByInterfaceId[interfaceIndex];
+        if (interfaceInstance == null)
+        {
+            instance = null;
+            return false;
+        }
+
+        instance = Unsafe.As<object, T>(ref interfaceInstance);
+        return true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

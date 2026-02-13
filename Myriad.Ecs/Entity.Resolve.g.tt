@@ -1,0 +1,47 @@
+<#@ template language="C#" #>
+<#@ import namespace="System.Linq" #>
+#nullable enable
+
+using System.Runtime.CompilerServices;
+using Exanite.Core.Runtime;
+using Exanite.Core.Utilities;
+using Exanite.Myriad.Ecs;
+
+namespace Exanite.Myriad.Ecs;
+
+public readonly partial record struct Entity
+{
+<#
+for (var paramCount = 1; paramCount <= 8; paramCount++)
+{
+    var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
+    var outParameters = string.Join(",\n        ", Enumerable.Range(0, paramCount).Select(t => $"out T{t} instance{t}"));
+    var queryConstraints = string.Join("\n        ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : class, IInterfaceComponent"));
+#>
+    /// <summary>
+    /// Resolves the specified interface components from the entity's archetype.
+    /// Throws if it fails.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void Resolve<<#= genericArguments #>>(
+        <#= outParameters #>)
+        <#= queryConstraints #>
+    {
+        GuardUtility.IsTrue(IsAlive, "Entity is not alive");
+        var location = World.Entities.GetLocation(EntityId);
+        var archetype = location.Archetype;
+
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+        instance<#= t #> = archetype.Resolve<T<#= t #>>();
+<#
+    }
+#>
+    }
+
+<#
+}
+#>
+}

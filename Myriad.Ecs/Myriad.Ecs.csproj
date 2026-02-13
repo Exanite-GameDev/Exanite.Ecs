@@ -22,6 +22,26 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Entity.TryGetEcsRef.g.cs</LastGenOutput>
     </None>
+    <None Update="Entity.Get.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Entity.Get.g.cs</LastGenOutput>
+    </None>
+    <None Update="Entity.Resolve.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Entity.Resolve.g.cs</LastGenOutput>
+    </None>
+    <None Update="Entity.TryResolve.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Entity.TryResolve.g.cs</LastGenOutput>
+    </None>
+    <None Update="Entity.TryResolveBinding.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Entity.TryResolveBinding.g.cs</LastGenOutput>
+    </None>
+    <None Update="Entity.ResolveBinding.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Entity.ResolveBinding.g.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Entity.TryGet.g.cs">
@@ -33,6 +53,31 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Entity.TryGetEcsRef.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Entity.Get.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Entity.Get.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Entity.Resolve.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Entity.Resolve.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Entity.TryResolve.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Entity.TryResolve.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Entity.TryResolveBinding.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Entity.TryResolveBinding.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Entity.ResolveBinding.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Entity.ResolveBinding.g.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

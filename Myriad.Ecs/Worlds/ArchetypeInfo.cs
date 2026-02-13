@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
@@ -7,27 +8,12 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// <summary>
 /// Stores information about the components stored in an archetype.
 /// </summary>
-internal struct ArchetypeInfo
+internal record struct ArchetypeInfo
 {
-    /// <summary>
-    /// The components of entities in this archetype.
-    /// </summary>
-    public readonly ImmutableOrderedListSet<ComponentId> Components;
-
-    /// <summary>
-    /// A bloom filter of all the components in this archetype.
-    /// </summary>
-    public readonly ComponentBloomFilter BloomFilter;
-
     /// <summary>
     /// The hash of all components IDs in this archetype.
     /// </summary>
     public readonly ArchetypeHash Hash;
-
-    /// <summary>
-    /// Map from column index to the component ID.
-    /// </summary>
-    public readonly ComponentId[] ComponentIdByColumnIndex;
 
     /// <summary>
     /// Sparse map from component ID to column index.
@@ -39,21 +25,67 @@ internal struct ArchetypeInfo
     /// </summary>
     public readonly ComponentDispatcher[] ComponentDispatcherByComponentId;
 
+    /// <summary>
+    /// Sparse map from component ID to interface instance.
+    /// </summary>
+    public readonly object?[] InterfaceByInterfaceId;
+
+    /// <summary>
+    /// Map from column index to the component ID.
+    /// </summary>
+    public readonly ComponentId[] ComponentIdByColumnIndex;
+
+    /// <summary>
+    /// A bloom filter of all the components in this archetype.
+    /// </summary>
+    public readonly ComponentBloomFilter BloomFilter;
+
+    /// <summary>
+    /// The components of entities in this archetype, including interface components.
+    /// </summary>
+    public readonly ImmutableOrderedListSet<TypeId> Types;
+
+    /// <summary>
+    /// The components of entities in this archetype.
+    /// </summary>
+    public readonly ImmutableOrderedListSet<ComponentId> Components;
+
+    /// <summary>
+    /// The interface components of entities in this archetype.
+    /// </summary>
+    public readonly ImmutableOrderedListSet<InterfaceId> Interfaces;
+
     public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components)
     {
         Components = components;
 
+        // Interfaces are not available while bootstrapping the archetype info
+        Interfaces = ImmutableOrderedListSet<InterfaceId>.Empty;
+        InterfaceByInterfaceId = [];
+
+        // Build initial set of types
+        {
+            var types = new OrderedListSet<TypeId>();
+            types.EnsureCapacity(components.Count);
+            foreach (var componentId in components)
+            {
+                types.Add(componentId);
+            }
+
+            Types = types.ToImmutable();
+        }
+
         // Create bloom filter
-        BloomFilter = components.ToBloomFilter();
+        BloomFilter = Types.ToBloomFilter();
 
         // Calculate max component ID and archetype hash
         var maxComponentId = int.MinValue;
-        foreach (var component in components)
+        foreach (var componentId in components)
         {
-            Hash = Hash.Toggle(component);
-            if (component.Value > maxComponentId)
+            Hash = Hash.Toggle(componentId);
+            if (componentId.Value > maxComponentId)
             {
-                maxComponentId = component.Value;
+                maxComponentId = componentId.Value;
             }
         }
 
@@ -76,7 +108,55 @@ internal struct ArchetypeInfo
         ComponentDispatcherByComponentId = maxComponentId == int.MinValue ? [] : new ComponentDispatcher[maxComponentId + 1];
         foreach (var component in components)
         {
-            ComponentDispatcherByComponentId[component.Value] = ComponentRegistry.GetComponentDispatcher(component);
+            ComponentDispatcherByComponentId[component.Value] = TypeRegistry.GetComponentDispatcher(component);
+        }
+    }
+
+    public ArchetypeInfo(ArchetypeInfo existing, Dictionary<InterfaceId, object> interfaceComponents)
+    {
+        // Initialize with existing info
+        this = existing;
+
+        // Create interface type set
+        Interfaces = ImmutableOrderedListSet<InterfaceId>.Create(interfaceComponents);
+
+        // Build final set of types
+        {
+            var types = new OrderedListSet<TypeId>();
+            types.EnsureCapacity(Components.Count + Interfaces.Count);
+
+            foreach (var componentId in Components)
+            {
+                types.Add(componentId);
+            }
+
+            foreach (var interfaceId in Interfaces)
+            {
+                types.Add(interfaceId);
+            }
+
+            Types = types.ToImmutable();
+        }
+
+        // Create bloom filter
+        BloomFilter = Types.ToBloomFilter();
+
+        // Calculate max interface index
+        var maxInterfaceIndex = int.MinValue;
+        foreach (var interfaceId in Interfaces)
+        {
+            var interfaceIndex = ~interfaceId.Value;
+            if (interfaceIndex > maxInterfaceIndex)
+            {
+                maxInterfaceIndex = interfaceIndex;
+            }
+        }
+
+        // Create a sparse map from interface ID to interface instance
+        InterfaceByInterfaceId = maxInterfaceIndex == int.MinValue ? [] : new object[maxInterfaceIndex + 1];
+        foreach (var (interfaceId, interfaceInstance) in interfaceComponents)
+        {
+            InterfaceByInterfaceId[~interfaceId.Value] = interfaceInstance;
         }
     }
 }

@@ -13,43 +13,52 @@ public sealed class QueryFilter
     /// <summary>
     /// An Entity must include all of these components to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> IncludeFilter => includeFilter.Items;
-    private readonly ComponentSet includeFilter;
+    public IReadOnlyList<TypeId> IncludeFilter => includeFilter.Items;
+    private readonly TypeIdSet includeFilter;
 
     /// <summary>
     /// Entities with these components will not be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> ExcludeFilter => excludeFilter.Items;
-    private readonly ComponentSet excludeFilter;
+    public IReadOnlyList<TypeId> ExcludeFilter => excludeFilter.Items;
+    private readonly TypeIdSet excludeFilter;
 
     /// <summary>
     /// At least one of all these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> AtLeastOneFiler => atLeastOneFilter.Items;
-    private readonly ComponentSet atLeastOneFilter;
+    public IReadOnlyList<TypeId> AtLeastOneFilter => atLeastOneFilter.Items;
+    private readonly TypeIdSet atLeastOneFilter;
 
     /// <summary>
     /// Exactly one of all these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> ExactlyOneFilter => exactlyOneFilter.Items;
-    private readonly ComponentSet exactlyOneFilter;
+    public IReadOnlyList<TypeId> ExactlyOneFilter => exactlyOneFilter.Items;
+    private readonly TypeIdSet exactlyOneFilter;
 
     /// <summary>
     /// Not all of these components must be on an Entity for it to be matched by this query.
     /// </summary>
-    public IReadOnlyList<ComponentId> NotAllFilter => notAllFilter.Items;
-    private readonly ComponentSet notAllFilter;
+    public IReadOnlyList<TypeId> NotAllFilter => notAllFilter.Items;
+    private readonly TypeIdSet notAllFilter;
+
+    /// <summary>
+    /// Whether this query checks against any interface components.
+    /// </summary>
+    public bool HasInterfaces => includeFilter.HasInterfaces
+        || excludeFilter.HasInterfaces
+        || atLeastOneFilter.HasInterfaces
+        || exactlyOneFilter.HasInterfaces
+        || notAllFilter.HasInterfaces;
 
     /// <summary>
     /// Create a new <see cref="QueryFilter"/>
     /// </summary>
     public QueryFilter()
     {
-        includeFilter = new ComponentSet();
-        excludeFilter = new ComponentSet();
-        atLeastOneFilter = new ComponentSet();
-        exactlyOneFilter = new ComponentSet();
-        notAllFilter = new ComponentSet();
+        includeFilter = new TypeIdSet();
+        excludeFilter = new TypeIdSet();
+        atLeastOneFilter = new TypeIdSet();
+        exactlyOneFilter = new TypeIdSet();
+        notAllFilter = new TypeIdSet();
     }
 
     /// <summary>
@@ -85,7 +94,7 @@ public sealed class QueryFilter
     /// <summary>
     /// The given component must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter Include<T>() where T : IComponent
+    public QueryFilter Include<T>() where T : IEcsType
     {
         includeFilter.Add<T>();
         return this;
@@ -103,7 +112,7 @@ public sealed class QueryFilter
     /// <summary>
     /// The given component must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter Include(ComponentId id)
+    public QueryFilter Include(TypeId id)
     {
         includeFilter.Add(id);
         return this;
@@ -112,7 +121,7 @@ public sealed class QueryFilter
     /// <summary>
     /// The given component must not exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter Exclude<T>() where T : IComponent
+    public QueryFilter Exclude<T>() where T : IEcsType
     {
         excludeFilter.Add<T>();
         return this;
@@ -130,7 +139,7 @@ public sealed class QueryFilter
     /// <summary>
     /// The given component must not exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter Exclude(ComponentId id)
+    public QueryFilter Exclude(TypeId id)
     {
         excludeFilter.Add(id);
         return this;
@@ -139,7 +148,7 @@ public sealed class QueryFilter
     /// <summary>
     /// At least one of all components specified as AtLeastOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter AtLeastOne<T>() where T : IComponent
+    public QueryFilter AtLeastOne<T>() where T : IEcsType
     {
         atLeastOneFilter.Add<T>();
         return this;
@@ -157,7 +166,7 @@ public sealed class QueryFilter
     /// <summary>
     /// At least one of all components specified as AtLeastOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter AtLeastOne(ComponentId id)
+    public QueryFilter AtLeastOne(TypeId id)
     {
         atLeastOneFilter.Add(id);
         return this;
@@ -166,7 +175,7 @@ public sealed class QueryFilter
     /// <summary>
     /// Exactly one of all components specified as ExactlyOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter ExactlyOne<T>() where T : IComponent
+    public QueryFilter ExactlyOne<T>() where T : IEcsType
     {
         exactlyOneFilter.Add<T>();
         return this;
@@ -184,7 +193,7 @@ public sealed class QueryFilter
     /// <summary>
     /// Exactly one of all components specified as ExactlyOne must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter ExactlyOne(ComponentId id)
+    public QueryFilter ExactlyOne(TypeId id)
     {
         exactlyOneFilter.Add(id);
         return this;
@@ -193,7 +202,7 @@ public sealed class QueryFilter
     /// <summary>
     /// Not all of the components specified as NotAll must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter NotAll<T>() where T : IComponent
+    public QueryFilter NotAll<T>() where T : IEcsType
     {
         notAllFilter.Add<T>();
         return this;
@@ -211,45 +220,47 @@ public sealed class QueryFilter
     /// <summary>
     /// Not all of the components specified as NotAll must exist for an entity to be matched by this query.
     /// </summary>
-    public QueryFilter NotAll(ComponentId id)
+    public QueryFilter NotAll(TypeId id)
     {
         notAllFilter.Add(id);
         return this;
     }
 
-    private class ComponentSet
+    private class TypeIdSet
     {
-        public readonly OrderedListSet<ComponentId> Items = [];
+        public readonly OrderedListSet<TypeId> Items = [];
+        public bool HasInterfaces;
 
-        private ImmutableOrderedListSet<ComponentId>? immutableSet;
+        private ImmutableOrderedListSet<TypeId>? immutableSet;
 
-        public ImmutableOrderedListSet<ComponentId> ToImmutableSet()
+        public ImmutableOrderedListSet<TypeId> ToImmutableSet()
         {
             if (immutableSet != null)
             {
                 return immutableSet;
             }
 
-            immutableSet = Items.Count == 0 ? ImmutableOrderedListSet<ComponentId>.Empty : ImmutableOrderedListSet<ComponentId>.Create(Items);
+            immutableSet = Items.Count == 0 ? ImmutableOrderedListSet<TypeId>.Empty : ImmutableOrderedListSet<TypeId>.Create(Items);
             return immutableSet;
         }
 
-        public void Add(ComponentId id)
+        public void Add<T>() where T : IEcsType
         {
-            if (Items.Add(id))
-            {
-                immutableSet = null;
-            }
+            Add(TypeId.Get<T>());
         }
 
         public void Add(Type type)
         {
-            Add(ComponentId.Get(type));
+            Add(TypeId.Get(type));
         }
 
-        public void Add<T>() where T : IComponent
+        public void Add(TypeId id)
         {
-            Add(ComponentId.Get<T>());
+            if (Items.Add(id))
+            {
+                HasInterfaces |= id.IsInterface;
+                immutableSet = null;
+            }
         }
     }
 }

@@ -136,12 +136,22 @@ public class EntityTests
         var component = (EcsInt16)entity.GetBoxed(ComponentId.Get<EcsInt16>())!;
         Assert.Equal(7, component.Value);
 
-        Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt32>()));
+        Assert.Throws<GuardException>(() =>
+        {
+            Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt32>()));
+        });
 
         commandBuffer.Destroy(entity);
         commandBuffer.Execute();
 
-        Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt16>()));
-        Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt32>()));
+        Assert.Throws<GuardException>(() =>
+        {
+            Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt16>()));
+        });
+
+        Assert.Throws<GuardException>(() =>
+        {
+            Assert.Null(entity.GetBoxed(ComponentId.Get<EcsInt32>()));
+        });
     }
 }

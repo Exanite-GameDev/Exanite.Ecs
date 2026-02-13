@@ -1,0 +1,7 @@
+namespace Exanite.Myriad.Ecs;
+
+/// <summary>
+/// Marker interface for types relevant to the ECS.
+/// Currently, this includes <see cref="IComponent"/> and <see cref="IInterfaceComponent"/>.
+/// </summary>
+public interface IEcsType;

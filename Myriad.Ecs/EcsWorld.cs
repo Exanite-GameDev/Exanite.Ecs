@@ -37,6 +37,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// </remarks>
     internal int Version;
 
+    private readonly List<InterfaceResolverRegistration> interfaceResolvers = new();
+
     internal readonly Lock QueryViewCacheLock = new();
     internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
     private readonly QueryView allEntitiesQuery;
@@ -71,6 +73,14 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     /// <inheritdoc cref="Archetypes"/>
     public IReadOnlyList<Archetype> ArchetypesList => archetypes;
+
+    /// <summary>
+    /// The interface resolvers registered for this world.
+    /// </summary>
+    public ReadOnlySpan<InterfaceResolverRegistration> InterfaceResolvers => interfaceResolvers.AsSpan();
+
+    /// <inheritdoc cref="InterfaceResolvers"/>
+    public IReadOnlyList<InterfaceResolverRegistration> InterfaceResolversList => interfaceResolvers;
 
     public readonly EventBus EventBus = new();
 
@@ -197,6 +207,65 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     }
 
     /// <summary>
+    /// Add an interface that will be resolved for all archetypes that match the specified filter.
+    /// </summary>
+    /// <remarks>
+    /// Modifying resolvers will lead to all existing archetypes being updated and existing queries invalidated.
+    /// To avoid this, consider registering all resolvers before any archetypes are created.
+    /// </remarks>
+    /// <param name="filter">The archetypes that this interface component will be resolved for. Must only match against normal components.</param>
+    /// <param name="factory">Get or create the concrete implementation of the interface component for the specified archetype.</param>
+    public void RegisterInterfaceResolver<T>(QueryFilter filter, InterfaceResolverFactory<T> factory) where T : class, IInterfaceComponent
+    {
+        GuardUtility.IsFalse(filter.HasInterfaces, "Filters used to resolve interfaces must only match against normal components");
+
+        var registration = new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, (previous, components) =>
+        {
+            return factory.Invoke((T?)previous, components);
+        });
+
+        RegisterInterfaceResolver(registration);
+    }
+
+    /// <inheritdoc cref="RegisterInterfaceResolver{T}"/>
+    public void RegisterInterfaceResolver(InterfaceResolverRegistration registration)
+    {
+        interfaceResolvers.Add(registration);
+        OnResolversModified();
+    }
+
+    /// <summary>
+    /// Bulk registers a set of interface resolvers to avoid repeated invalidations of archetype and query data.
+    /// Also see <see cref="RegisterInterfaceResolver{T}"/>.
+    /// </summary>
+    public void RegisterInterfaceResolvers(ReadOnlySpan<InterfaceResolverRegistration> registrations)
+    {
+        interfaceResolvers.AddRange(registrations);
+        OnResolversModified();
+    }
+
+    /// <summary>
+    /// Replaces all interface resolvers in bulk to avoid repeated invalidations of archetype and query data.
+    /// Also see <see cref="RegisterInterfaceResolver{T}"/>.
+    /// </summary>
+    public void SetInterfaceResolvers(ReadOnlySpan<InterfaceResolverRegistration> registrations)
+    {
+        interfaceResolvers.Clear();
+        interfaceResolvers.AddRange(registrations);
+        OnResolversModified();
+    }
+
+    /// <summary>
+    /// Clears the resolvers list, updates all archetypes, and invalidates existing queries.
+    /// Also see <see cref="RegisterInterfaceResolver{T}"/>.
+    /// </summary>
+    public void ClearInterfaceResolvers()
+    {
+        interfaceResolvers.Clear();
+        OnResolversModified();
+    }
+
+    /// <summary>
     /// Clears the world by destroying all entities.
     /// </summary>
     public void Clear()
@@ -258,6 +327,22 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             ListPool<Archetype>.Release(value);
         }
         archetypeListsToRecycle.Clear();
+    }
+
+    /// <summary>
+    /// Call when resolvers are modified to invalidate archetype infos and queries.
+    /// </summary>
+    internal void OnResolversModified()
+    {
+        foreach (var archetype in archetypes)
+        {
+            archetype.UpdateInterfaceComponentResolutions();
+        }
+
+        foreach (var queryView in QueryViewCache.Values)
+        {
+            queryView.Invalidate();
+        }
     }
 
     /// <summary>

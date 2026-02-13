@@ -16,17 +16,19 @@ public readonly partial record struct Entity
 for (var paramCount = 1; paramCount <= 16; paramCount++)
 {
     var genericArguments = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"T{t}"));
-    var outParameters = string.Join(", ", Enumerable.Range(0, paramCount).Select(t => $"out EcsRef<T{t}> ref{t}"));
-    var queryConstraints = string.Join(" ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
+    var outParameters = string.Join(",\n        ", Enumerable.Range(0, paramCount).Select(t => $"out EcsRef<T{t}> ref{t}"));
+    var queryConstraints = string.Join("\n        ", Enumerable.Range(0, paramCount).Select(t => $"where T{t} : IComponent"));
 #>
     /// <summary>
     /// Try to get a storable reference to a component of the given type.
-    /// It is safe to use the returned ComponentRefs even when this method returns false,
-    /// the ComponentRefs are just not guaranteed to point to a component in this case.
-    /// This is because ComponentRef can check for the existence of the component.
+    /// It is safe to use the returned EcsRefs even when this method returns false,
+    /// the EcsRefs are just not guaranteed to point to a component.
+    /// The EcsRef checks for the existence of the component when it gets accessed.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetEcsRef<<#= genericArguments #>>(<#= outParameters #>) <#= queryConstraints #>
+    public bool TryGetEcsRef<<#= genericArguments #>>(
+        <#= outParameters #>)
+        <#= queryConstraints #>
     {
 <#
     for (var t = 0; t < paramCount; t++)
@@ -43,16 +45,21 @@ for (var paramCount = 1; paramCount <= 16; paramCount++)
         }
 
         var components = location.Value.Archetype.Components;
+
 <#
     for (var t = 0; t < paramCount; t++)
     {
 #>
-
         var componentId<#= t #> = ComponentId.Get<T<#= t #>>();
-        if (!components.Contains(componentId<#= t #>))
-        {
-            return false;
-        }
+<#
+    }
+#>
+
+<#
+    for (var t = 0; t < paramCount; t++)
+    {
+#>
+        if (!components.Contains(componentId<#= t #>)) return false;
 <#
     }
 #>

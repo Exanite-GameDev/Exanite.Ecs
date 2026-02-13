@@ -178,7 +178,7 @@ public sealed partial class EcsCommandBuffer
     {
         var setAction = new SetAction(this);
         var componentId = ComponentId.Get(value.GetType());
-        var dispatcher = ComponentRegistry.GetComponentDispatcher(componentId);
+        var dispatcher = TypeRegistry.GetComponentDispatcher(componentId);
 
         dispatcher.Invoke(setAction, new SetAction.Input(entity, value));
 
@@ -213,7 +213,7 @@ public sealed partial class EcsCommandBuffer
     {
         var setAction = new UnsetAction(this);
         var componentId = ComponentId.Get(component);
-        var dispatcher = ComponentRegistry.GetComponentDispatcher(componentId);
+        var dispatcher = TypeRegistry.GetComponentDispatcher(componentId);
 
         dispatcher.Invoke(setAction, entity);
 
@@ -247,7 +247,7 @@ public sealed partial class EcsCommandBuffer
     {
         var setAction = new RemoveAction(this);
         var componentId = ComponentId.Get(component);
-        var dispatcher = ComponentRegistry.GetComponentDispatcher(componentId);
+        var dispatcher = TypeRegistry.GetComponentDispatcher(componentId);
 
         dispatcher.Invoke(setAction, entity);
 
