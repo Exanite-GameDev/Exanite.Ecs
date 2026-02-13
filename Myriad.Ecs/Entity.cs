@@ -198,6 +198,18 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Throws if it fails.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public object Resolve(InterfaceId interfaceId)
+    {
+        GuardUtility.IsTrue(IsAlive, "Entity is not alive");
+        var location = World.Entities.GetLocation(EntityId);
+        return location.Archetype.Resolve(interfaceId);
+    }
+
+    /// <summary>
+    /// Resolves the specified interface component from the entity's archetype.
+    /// Throws if it fails.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Resolve<T>() where T : class, IInterfaceComponent
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");

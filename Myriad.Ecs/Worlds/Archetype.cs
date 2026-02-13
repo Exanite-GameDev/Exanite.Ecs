@@ -280,6 +280,27 @@ public sealed class Archetype
     /// Resolves the specified interface component from this archetype.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public object Resolve(InterfaceId interfaceId)
+    {
+        var interfaceIndex = ~interfaceId.Value;
+        if ((uint)interfaceIndex >= (uint)Info.InterfaceByInterfaceId.Length)
+        {
+            throw new GuardException("Archetype does not have the specified interface component");
+        }
+
+        var interfaceInstance = Info.InterfaceByInterfaceId[interfaceIndex];
+        if (interfaceInstance == null)
+        {
+            throw new GuardException("Archetype does not have the specified interface component");
+        }
+
+        return interfaceInstance;
+    }
+
+    /// <summary>
+    /// Resolves the specified interface component from this archetype.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T Resolve<T>() where T : class, IInterfaceComponent
     {
         var interfaceId = InterfaceId.Get<T>();
