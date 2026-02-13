@@ -224,6 +224,7 @@ public class InterfaceResolverTests
         Assert.IsType<DefaultDamageable>(damageable);
 
         // Register another resolver that filters for the first
+        // This looks like a circular dependency, but is allowed because the filter only filters for existing interfaces
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<IEcsDamageable>(),
             (previous, _) => new ShieldedDamageable(previous!));
@@ -231,6 +232,28 @@ public class InterfaceResolverTests
         Assert.True(entity.TryResolve(out damageable));
         Assert.NotNull(damageable);
         Assert.IsType<ShieldedDamageable>(damageable);
+    }
+
+    [Fact]
+    public void CircularDependency_Throws()
+    {
+        using var world = new EcsWorld();
+
+        // Ensure at least 1 archetype exists to force the resolver sorting to occur every time a new resolver is added
+        using var _ = world.AcquireCommandBuffer(out var commandBuffer);
+        commandBuffer.Create();
+        commandBuffer.Execute();
+
+        world.RegisterInterfaceResolver<IEcsInterface0>(
+            new QueryFilter().Include<IEcsInterface1>(),
+            (_, _) => null);
+
+        Assert.Throws<GuardException>(() =>
+        {
+            world.RegisterInterfaceResolver<IEcsInterface1>(
+                new QueryFilter().Include<IEcsInterface0>(),
+                (_, _) => null);
+        });
     }
 
     private struct EcsHealth : IComponent
