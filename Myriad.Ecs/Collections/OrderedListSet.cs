@@ -1,134 +1,150 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Exanite.Myriad.Ecs.Components;
+using System.Diagnostics.CodeAnalysis;
+using Exanite.Core.Utilities;
 
 namespace Exanite.Myriad.Ecs.Collections;
 
 /// <summary>
 /// A set built out of an ordered list. This allows allocation free enumeration of the set.
 /// </summary>
-public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<T>, IEquatable<T>
+/// <remarks>
+/// This represents both immutable and mutable versions of the data structure.
+/// Be very careful about what whether the usage expects the data to remain immutable.
+/// </remarks>
+internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, IComparable<T>, IEquatable<T>
 {
+    public static readonly IReadOnlyOrderedListSet<T> Empty = new OrderedListSet<T>().MakeSelfImmutable();
+
     private readonly List<T> items = [];
+    private int? hashCode;
 
     public int Count => items.Count;
-
     public T this[int i] => items[i];
+    public ReadOnlySpan<T> Items => items.AsSpan();
 
-    #region Constructors
+    /// <inheritdoc/>
+    public bool IsImmutable { get; private set; }
 
     public OrderedListSet() {}
 
-    public OrderedListSet(List<T> items)
+    public OrderedListSet(ReadOnlySpan<T> other)
     {
-        this.items.EnsureCapacity(items.Count);
-        foreach (var item in items)
+        items.EnsureCapacity(other.Length);
+        foreach (var item in other)
         {
             Add(item);
         }
     }
 
-    public OrderedListSet(ReadOnlySpan<T> items)
+    public OrderedListSet(IReadOnlyOrderedListSet<T> other)
     {
-        this.items.EnsureCapacity(items.Length);
-        foreach (var item in items)
-        {
-            Add(item);
-        }
+        items = [..other.Items];
     }
 
-    public OrderedListSet(HashSet<T> items)
+    public static OrderedListSet<T> Create<TValue>(Dictionary<T, TValue> other)
     {
-        this.items.AddRange(items);
-        this.items.Sort();
+        var set = new OrderedListSet<T>();
+        set.items.AddRange(other.Keys);
+        set.items.Sort();
+        return set;
     }
 
-    public OrderedListSet(OrderedListSet<T> items)
+    /// <inheritdoc/>
+    public IReadOnlyOrderedListSet<T> MakeSelfImmutable()
     {
-        this.items = [..items.items];
+        IsImmutable = true;
+        return this;
     }
 
-    public OrderedListSet(ImmutableOrderedListSet<T> items)
+    /// <inheritdoc/>
+    public IReadOnlyOrderedListSet<T> MakeNewImmutable()
     {
-        this.items.EnsureCapacity(items.Count);
-        foreach (var item in items)
-        {
-            this.items.Add(item);
-        }
+        return new OrderedListSet<T>(this).MakeSelfImmutable();
     }
-
-    #endregion
-
-    public void CopyTo(List<T> dest)
-    {
-        dest.AddRange(items);
-    }
-
-    #region Add
 
     public void EnsureCapacity(int capacity)
     {
+        AssertUtility.IsFalse(IsImmutable, "Set has been marked as immutable");
         items.EnsureCapacity(capacity);
     }
 
     public bool Add(T item)
     {
+        AssertUtility.IsFalse(IsImmutable, "Set has been marked as immutable");
         var index = items.BinarySearch(item);
         if (index >= 0)
         {
             return false;
         }
 
+        hashCode = null;
         items.Insert(~index, item);
         return true;
     }
 
-    #endregion
-
-    #region UnionWith
-
-    public void UnionWith<TValue>(Dictionary<T, TValue> keys)
+    public void UnionWith<TValue>(Dictionary<T, TValue> other)
     {
-        EnsureCapacity(Count + keys.Count);
+        AssertUtility.IsFalse(IsImmutable, "Set has been marked as immutable");
+        if (other.Count == 0)
+        {
+            return;
+        }
 
+        hashCode = null;
+
+        EnsureCapacity(Count + other.Count);
         if (items.Count == 0)
         {
             // Since this is a key collection we know all the items must be
             // unique, therefore we can just add and sort
-            items.AddRange(keys.Keys);
+            items.AddRange(other.Keys);
             items.Sort();
         }
         else
         {
-            foreach (var key in keys.Keys)
+            foreach (var key in other.Keys)
             {
                 Add(key);
             }
         }
     }
 
-    public void UnionWith(ImmutableOrderedListSet<T> set)
+    public void UnionWith(IReadOnlyOrderedListSet<T> other)
     {
+        AssertUtility.IsFalse(IsImmutable, "Set has been marked as immutable");
+        if (other.Count == 0)
+        {
+            return;
+        }
+
+        hashCode = null;
+
         if (items.Count == 0)
         {
-            set.CopyTo(items);
+            items.AddRange(other.Items);
         }
         else
         {
-            items.EnsureCapacity(items.Count + set.Count);
-            foreach (var item in set)
+            items.EnsureCapacity(items.Count + other.Count);
+            foreach (var item in other)
             {
                 Add(item);
             }
         }
     }
 
-    #endregion
-
-    public void IntersectWith(ImmutableOrderedListSet<T> other)
+    public void IntersectWith(IReadOnlyOrderedListSet<T> other)
     {
+        AssertUtility.IsFalse(IsImmutable, "Set has been marked as immutable");
+        if (other.Count == 0)
+        {
+            return;
+        }
+
+        hashCode = null;
+
         for (var i = items.Count - 1; i >= 0; i--)
         {
             if (!other.Contains(items[i]))
@@ -140,30 +156,151 @@ public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<
 
     public bool Remove(T item)
     {
+        AssertUtility.IsFalse(IsImmutable, "Set has been marked as immutable");
         var index = items.BinarySearch(item);
         if (index < 0)
         {
             return false;
         }
 
+        hashCode = null;
         items.RemoveAt(index);
         return true;
     }
 
     public void Clear()
     {
+        AssertUtility.IsFalse(IsImmutable, "Set has been marked as immutable");
+        hashCode = null;
         items.Clear();
     }
 
-    /// <summary>
-    /// Copy this set to a new immutable set
-    /// </summary>
-    public ImmutableOrderedListSet<T> ToImmutable()
+    public bool Contains(T item)
     {
-        return ImmutableOrderedListSet<T>.Create(this);
+        return items.BinarySearch(item) >= 0;
     }
 
-    #region GetEnumerator
+    public bool IsSubsetOf(IReadOnlyOrderedListSet<T> other)
+    {
+        return other.IsSupersetOf(this);
+    }
+
+    public bool IsProperSupersetOf(IReadOnlyOrderedListSet<T> other)
+    {
+        return Count > other.Count && IsSupersetOf(other);
+    }
+
+    public bool IsProperSubsetOf(IReadOnlyOrderedListSet<T> other)
+    {
+        return Count < other.Count && IsSubsetOf(other);
+    }
+
+    public bool IsSupersetOf(IReadOnlyOrderedListSet<T> other)
+    {
+        var selfSpan = Items;
+        var otherSpan = other.Items;
+        if (otherSpan.Length > selfSpan.Length)
+        {
+            return false;
+        }
+
+        // Move forward through both lists, checking that all items in `other` are in `this`
+        var i = 0;
+        var j = 0;
+        while (i < selfSpan.Length && j < otherSpan.Length)
+        {
+            var comparison = selfSpan[i].CompareTo(otherSpan[j]);
+
+            if (comparison < 0)
+            {
+                // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
+                // Move to the next item in the superset.
+                i++;
+            }
+            else if (comparison == 0)
+            {
+                // Items are equal, move to the next item in both
+                i++;
+                j++;
+            }
+            else
+            {
+                // Item in `other` < `this`. That means `other` is not a subset!
+                return false;
+            }
+        }
+
+        return j == otherSpan.Length;
+    }
+
+    public bool Overlaps(IReadOnlyOrderedListSet<T> other)
+    {
+        var selfSpan = Items;
+        var otherSpan = other.Items;
+
+        if (selfSpan.Length == 0 || otherSpan.Length == 0)
+        {
+            return false;
+        }
+
+        // Move forward through both lists, checking if any item in `other` is in `this`
+        var i = 0;
+        var j = 0;
+        while (i < selfSpan.Length && j < otherSpan.Length)
+        {
+            var comparison = selfSpan[i].CompareTo(otherSpan[j]);
+
+            if (comparison < 0)
+            {
+                i++;
+            }
+            else if (comparison > 0)
+            {
+                j++;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool SetEquals(IReadOnlyOrderedListSet<T> other)
+    {
+        return Items.SequenceEqual(other.Items);
+    }
+
+    public bool Equals(IReadOnlyOrderedListSet<T>? other)
+    {
+        return other != null && SetEquals(other);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is IReadOnlyOrderedListSet<T> other && Equals(other);
+    }
+
+    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
+    public override int GetHashCode()
+    {
+        if (hashCode.HasValue)
+        {
+            return hashCode.Value;
+        }
+
+        var intermediate = new HashCode();
+        foreach (var item in items)
+        {
+            intermediate.Add(item);
+        }
+
+        var result = intermediate.ToHashCode();
+
+        hashCode = result;
+        return result;
+    }
 
     public List<T>.Enumerator GetEnumerator()
     {
@@ -179,216 +316,4 @@ public class OrderedListSet<T> : IReadOnlyList<T> where T : struct, IComparable<
     {
         return items.GetEnumerator();
     }
-
-    #endregion
-
-    public bool Contains(T item)
-    {
-        return items.BinarySearch(item) >= 0;
-    }
-
-    //todo: other set methods when needed
-
-    //public bool IsProperSubsetOf(IEnumerable<TItem> other)
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public bool IsProperSubsetOf(OrderedListSet<TItem> other)
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public bool IsProperSupersetOf(IEnumerable<TItem> other)
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public bool IsProperSupersetOf(OrderedListSet<TItem> other)
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public bool IsSubsetOf(IEnumerable<TItem> other)
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public bool IsSubsetOf(OrderedListSet<TItem> other)
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    #region IsSupersetOf
-
-    public bool IsSupersetOf(OrderedListSet<T> other)
-    {
-        if (other.Count > Count)
-        {
-            return false;
-        }
-
-        // Move forward through both lists, checking that all items in `other` are in `this`
-        var i = 0;
-        var j = 0;
-        while (i < items.Count && j < other.Count)
-        {
-            var cmp = items[i].CompareTo(other.items[j]);
-
-            if (cmp < 0)
-            {
-                // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
-                // Move to the next item in the superset.
-                i++;
-            }
-            else if (cmp == 0)
-            {
-                // Items are equal, move to the next item in both
-                i++;
-                j++;
-            }
-            else
-            {
-                // Item in `other` < `this`. That means `other` is not a subset!
-                return false;
-            }
-        }
-
-        return j == other.Count;
-    }
-
-    #endregion
-
-    #region Overlaps
-
-    public bool Overlaps(OrderedListSet<T> other)
-    {
-        if (Count == 0)
-        {
-            return false;
-        }
-
-        if (other.Count == 0)
-        {
-            return false;
-        }
-
-        // Move forward through both lists, checking if any item in `other` is in `this`
-        var i = 0;
-        var j = 0;
-        while (i < items.Count && j < other.Count)
-        {
-            var cmp = items[i].CompareTo(other.items[j]);
-
-            if (cmp < 0)
-            {
-                i++;
-            }
-            else if (cmp > 0)
-            {
-                j++;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    #endregion
-
-    #region SetEquals
-
-    public bool SetEquals(HashSet<T> other)
-    {
-        // Can't be equal if counts are different
-        if (other.Count != Count)
-        {
-            return false;
-        }
-
-        // Ensure every item in this is in other
-        foreach (var item in items)
-        {
-            if (!other.Contains(item))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public bool SetEquals(OrderedListSet<T> other)
-    {
-        if (Count != other.Count)
-        {
-            return false;
-        }
-
-        var a = CollectionsMarshal.AsSpan(items);
-        var b = CollectionsMarshal.AsSpan(other.items);
-
-        // Add a specialization for ComponentId. This allows it to be compared with fast SIMD equality
-        // instead of calling the equality implementation for every item individually.
-        if (typeof(T) == typeof(ComponentId))
-        {
-            var aa = MemoryMarshal.Cast<T, int>(a);
-            var bb = MemoryMarshal.Cast<T, int>(b);
-            return aa.SequenceEqual(bb);
-        }
-
-        return a.SequenceEqual(b);
-    }
-
-    public bool SetEquals<TValue>(Dictionary<T, TValue> other)
-    {
-        // Can't be equal if counts are different
-        if (other.Count != Count)
-        {
-            return false;
-        }
-
-        // Ensure every item in this is in other
-        foreach (var item in other.Keys)
-        {
-            if (items.BinarySearch(item) < 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    #endregion
-
-    #region LINQ
-
-    public T Single()
-    {
-        if (items.Count != 1)
-        {
-            throw new InvalidOperationException($"Cannot get single item, there are {items.Count} items");
-        }
-
-        return items[0];
-    }
-
-    public bool Any(Func<T, bool> predicate)
-    {
-        foreach (var item in items)
-        {
-            if (predicate(item))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    #endregion
 }

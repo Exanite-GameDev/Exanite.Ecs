@@ -67,11 +67,11 @@ public sealed class QueryFilter
     public QueryView Build(EcsWorld world)
     {
         var key = new QueryCacheKey(
-            includeFilter.ToImmutableSet(),
-            excludeFilter.ToImmutableSet(),
-            atLeastOneFilter.ToImmutableSet(),
-            exactlyOneFilter.ToImmutableSet(),
-            notAllFilter.ToImmutableSet());
+            includeFilter.ToReadOnlySet(),
+            excludeFilter.ToReadOnlySet(),
+            atLeastOneFilter.ToReadOnlySet(),
+            exactlyOneFilter.ToReadOnlySet(),
+            notAllFilter.ToReadOnlySet());
 
         using (world.QueryViewCacheLock.EnterScope())
         {
@@ -79,11 +79,11 @@ public sealed class QueryFilter
             {
                 world.QueryViewCache[key] = query = new QueryView(
                     world,
-                    includeFilter.ToImmutableSet(),
-                    excludeFilter.ToImmutableSet(),
-                    atLeastOneFilter.ToImmutableSet(),
-                    exactlyOneFilter.ToImmutableSet(),
-                    notAllFilter.ToImmutableSet()
+                    includeFilter.ToReadOnlySet(),
+                    excludeFilter.ToReadOnlySet(),
+                    atLeastOneFilter.ToReadOnlySet(),
+                    exactlyOneFilter.ToReadOnlySet(),
+                    notAllFilter.ToReadOnlySet()
                 );
             }
 
@@ -231,16 +231,16 @@ public sealed class QueryFilter
         public readonly OrderedListSet<TypeId> Items = [];
         public bool HasInterfaces;
 
-        private ImmutableOrderedListSet<TypeId>? immutableSet;
+        private IReadOnlyOrderedListSet<TypeId>? immutableSet;
 
-        public ImmutableOrderedListSet<TypeId> ToImmutableSet()
+        public IReadOnlyOrderedListSet<TypeId> ToReadOnlySet()
         {
             if (immutableSet != null)
             {
                 return immutableSet;
             }
 
-            immutableSet = Items.Count == 0 ? ImmutableOrderedListSet<TypeId>.Empty : ImmutableOrderedListSet<TypeId>.Create(Items);
+            immutableSet = Items.Count == 0 ? OrderedListSet<TypeId>.Empty : Items.MakeNewImmutable();
             return immutableSet;
         }
 

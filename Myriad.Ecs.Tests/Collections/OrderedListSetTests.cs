@@ -10,7 +10,6 @@ public class OrderedListSetTests
     public void Create()
     {
         var set = new OrderedListSet<int>();
-
         Assert.Equal(0, set.Count);
     }
 
@@ -49,8 +48,7 @@ public class OrderedListSetTests
             4,
         };
 
-        var immutable = ImmutableOrderedListSet<int>.Create(ints);
-        set.UnionWith(immutable);
+        set.UnionWith(ints);
 
         Assert.Equal(4, set.Count);
         Assert.True(set.Contains(1));
@@ -60,7 +58,7 @@ public class OrderedListSetTests
     }
 
     [Fact]
-    public void AddUnique()
+    public void CreateWithUnique()
     {
         var set = new OrderedListSet<int>
         {
@@ -75,7 +73,7 @@ public class OrderedListSetTests
     }
 
     [Fact]
-    public void AddDuplicates()
+    public void CreateWithDuplicates()
     {
         var set = new OrderedListSet<int>
         {
@@ -128,7 +126,7 @@ public class OrderedListSetTests
             0,
         };
 
-        Assert.False(a.ToImmutable().SetEquals(b.ToImmutable()));
+        Assert.False(a.SetEquals(b));
     }
 
     [Fact]
@@ -172,7 +170,7 @@ public class OrderedListSetTests
     }
 
     [Fact]
-    public void SetEquals_Enumerable_True()
+    public void SetEquals_False_DifferentCount()
     {
         var a = new OrderedListSet<int>
         {
@@ -181,47 +179,7 @@ public class OrderedListSetTests
             3,
         };
 
-        var b = new HashSet<int>
-        {
-            3,
-            2,
-            1,
-        };
-
-        Assert.True(a.SetEquals(b));
-    }
-
-    [Fact]
-    public void SetEquals_Enumerable_False_SameCount()
-    {
-        var a = new OrderedListSet<int>
-        {
-            1,
-            2,
-            3,
-        };
-
-        var b = new HashSet<int>
-        {
-            2,
-            1,
-            0,
-        };
-
-        Assert.False(a.SetEquals(b));
-    }
-
-    [Fact]
-    public void SetEquals_Enumerable_False_DifferentCount()
-    {
-        var a = new OrderedListSet<int>
-        {
-            1,
-            2,
-            3,
-        };
-
-        var b = new HashSet<int>
+        var b = new OrderedListSet<int>
         {
             3,
             2,
@@ -248,8 +206,8 @@ public class OrderedListSetTests
             3,
         };
 
-        Assert.True(a.ToImmutable().IsSupersetOf(b.ToImmutable()));
-        Assert.False(b.ToImmutable().IsSupersetOf(a.ToImmutable()));
+        Assert.True(a.IsSupersetOf(b));
+        Assert.False(b.IsSupersetOf(a));
     }
 
     [Fact]

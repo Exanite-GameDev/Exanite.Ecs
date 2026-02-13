@@ -43,24 +43,24 @@ internal record struct ArchetypeInfo
     /// <summary>
     /// The components of entities in this archetype, including interface components.
     /// </summary>
-    public readonly ImmutableOrderedListSet<TypeId> Types;
+    public readonly IReadOnlyOrderedListSet<TypeId> Types;
 
     /// <summary>
     /// The components of entities in this archetype.
     /// </summary>
-    public readonly ImmutableOrderedListSet<ComponentId> Components;
+    public readonly IReadOnlyOrderedListSet<ComponentId> Components;
 
     /// <summary>
     /// The interface components of entities in this archetype.
     /// </summary>
-    public readonly ImmutableOrderedListSet<InterfaceId> Interfaces;
+    public readonly IReadOnlyOrderedListSet<InterfaceId> Interfaces;
 
-    public ArchetypeInfo(ImmutableOrderedListSet<ComponentId> components)
+    public ArchetypeInfo(IReadOnlyOrderedListSet<ComponentId> components)
     {
-        Components = components;
+        Components = components.MakeSelfImmutable();
 
         // Interfaces are not available while bootstrapping the archetype info
-        Interfaces = ImmutableOrderedListSet<InterfaceId>.Empty;
+        Interfaces = OrderedListSet<InterfaceId>.Empty;
         InterfaceByInterfaceId = [];
 
         // Build initial set of types
@@ -72,11 +72,11 @@ internal record struct ArchetypeInfo
                 types.Add(componentId);
             }
 
-            Types = types.ToImmutable();
+            Types = types.MakeSelfImmutable();
         }
 
         // Create bloom filter
-        BloomFilter = Types.ToBloomFilter();
+        BloomFilter = Types.Items.ToBloomFilter();
 
         // Calculate max component ID and archetype hash
         var maxComponentId = int.MinValue;
@@ -118,7 +118,7 @@ internal record struct ArchetypeInfo
         this = existing;
 
         // Create interface type set
-        Interfaces = ImmutableOrderedListSet<InterfaceId>.Create(interfaceComponents);
+        Interfaces = OrderedListSet<InterfaceId>.Create(interfaceComponents).MakeSelfImmutable();
 
         // Build final set of types
         {
@@ -135,11 +135,11 @@ internal record struct ArchetypeInfo
                 types.Add(interfaceId);
             }
 
-            Types = types.ToImmutable();
+            Types = types.MakeSelfImmutable();
         }
 
         // Create bloom filter
-        BloomFilter = Types.ToBloomFilter();
+        BloomFilter = Types.Items.ToBloomFilter();
 
         // Calculate max interface index
         var maxInterfaceIndex = int.MinValue;

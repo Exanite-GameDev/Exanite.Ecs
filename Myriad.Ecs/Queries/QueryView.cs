@@ -29,38 +29,38 @@ public sealed class QueryView : IFilteredArchetypeView
     /// <summary>
     /// The components which must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<TypeId> IncludeFilter { get; }
+    public IReadOnlyOrderedListSet<TypeId> IncludeFilter { get; }
 
     /// <summary>
     /// The components which must not be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<TypeId> ExcludeFilter { get; }
+    public IReadOnlyOrderedListSet<TypeId> ExcludeFilter { get; }
 
     /// <summary>
     /// At least one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<TypeId> AtLeastOneFilter { get; }
+    public IReadOnlyOrderedListSet<TypeId> AtLeastOneFilter { get; }
 
     /// <summary>
     /// Exactly one of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<TypeId> ExactlyOneFilter { get; }
+    public IReadOnlyOrderedListSet<TypeId> ExactlyOneFilter { get; }
 
     /// <summary>
     /// Not all of these components must be present on an entity for it to match this query.
     /// </summary>
-    public ImmutableOrderedListSet<TypeId> NotAllFilter { get; }
+    public IReadOnlyOrderedListSet<TypeId> NotAllFilter { get; }
 
     /// <summary>
     /// Describes a query for entities, bound to a world.
     /// </summary>
     internal QueryView(
         EcsWorld world,
-        ImmutableOrderedListSet<TypeId> includeFilter,
-        ImmutableOrderedListSet<TypeId> excludeFilter,
-        ImmutableOrderedListSet<TypeId> atLeastOneFilter,
-        ImmutableOrderedListSet<TypeId> exactlyOneFilter,
-        ImmutableOrderedListSet<TypeId> notAllFilter)
+        IReadOnlyOrderedListSet<TypeId> includeFilter,
+        IReadOnlyOrderedListSet<TypeId> excludeFilter,
+        IReadOnlyOrderedListSet<TypeId> atLeastOneFilter,
+        IReadOnlyOrderedListSet<TypeId> exactlyOneFilter,
+        IReadOnlyOrderedListSet<TypeId> notAllFilter)
     {
         World = world;
 
@@ -70,8 +70,8 @@ public sealed class QueryView : IFilteredArchetypeView
         ExactlyOneFilter = exactlyOneFilter;
         NotAllFilter = notAllFilter;
 
-        includeBloom = includeFilter.ToBloomFilter();
-        excludeBloom = excludeFilter.ToBloomFilter();
+        includeBloom = includeFilter.Items.ToBloomFilter();
+        excludeBloom = excludeFilter.Items.ToBloomFilter();
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public sealed class QueryView : IFilteredArchetypeView
         return Archetypes.BinarySearch(archetype, new ArchetypeComparer()) >= 0;
     }
 
-    internal bool IsMatch(ImmutableOrderedListSet<TypeId> components, in ComponentBloomFilter bloomFilter)
+    internal bool IsMatch(IReadOnlyOrderedListSet<TypeId> components, in ComponentBloomFilter bloomFilter)
     {
         using var _ = SimplePool<OrderedListSet<TypeId>>.Acquire(out var temporarySet);
         return IsMatch(components, in bloomFilter, temporarySet);
@@ -246,7 +246,7 @@ public sealed class QueryView : IFilteredArchetypeView
         return IsMatch(archetype.Info.Types, in archetype.Info.BloomFilter, temporarySet);
     }
 
-    private bool IsMatch(ImmutableOrderedListSet<TypeId> components, in ComponentBloomFilter bloomFilter, OrderedListSet<TypeId> temporarySet)
+    private bool IsMatch(IReadOnlyOrderedListSet<TypeId> components, in ComponentBloomFilter bloomFilter, OrderedListSet<TypeId> temporarySet)
     {
         // Apply the Include filter
         // Quick bloom filter test if the included components intersects with the archetype.

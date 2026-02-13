@@ -8,4 +8,4 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// </summary>
 /// <param name="previous">The previous instance of the resolver. This can be wrapped by the new resolver to allow for override-like functionality.</param>
 /// <param name="components">The components of the matched archetype.</param>
-public delegate T? InterfaceResolverFactory<T>(T? previous, ImmutableOrderedListSet<ComponentId> components);
+public delegate T? InterfaceResolverFactory<T>(T? previous, IReadOnlyOrderedListSet<ComponentId> components);

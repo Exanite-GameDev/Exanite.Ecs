@@ -15,7 +15,7 @@ namespace Exanite.Myriad.Ecs.Collections;
 /// <para/>
 /// Reference stability to values returned by the indexer is guaranteed.
 /// </remarks>
-public struct SegmentedList<T>
+internal struct SegmentedList<T>
 {
     private const int BaseShift = EcsConstants.SegmentedListBaseCapacityPowerOf2;
     private const int BaseCapacity = 1 << BaseShift;

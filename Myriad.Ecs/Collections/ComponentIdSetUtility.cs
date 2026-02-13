@@ -1,31 +1,28 @@
-using System.Collections.Generic;
+using System;
 using Exanite.Myriad.Ecs.Components;
+using Exanite.Myriad.Ecs.Worlds;
 
 namespace Exanite.Myriad.Ecs.Collections;
 
 internal static class ComponentIdSetUtility
 {
-    public static ComponentIdDictionary<TValue> AsComponentIdSet<TValue>(this Dictionary<ComponentId, TValue> componentIds)
+    public static ArchetypeHash ToArchetypeHash(this ReadOnlySpan<ComponentId> componentIds)
     {
-        return new ComponentIdDictionary<TValue>(componentIds);
+        var hash = new ArchetypeHash();
+        foreach (var componentId in componentIds)
+        {
+            hash = hash.Toggle(componentId);
+        }
+
+        return hash;
     }
 
-    public static ComponentIdOrderedListSet AsComponentIdSet(this OrderedListSet<ComponentId> componentIds)
-    {
-        return new ComponentIdOrderedListSet(componentIds);
-    }
-
-    public static ComponentIdImmutableOrderedListSet AsComponentIdSet(this ImmutableOrderedListSet<ComponentId> componentIds)
-    {
-        return new ComponentIdImmutableOrderedListSet(componentIds);
-    }
-
-    public static ComponentBloomFilter ToBloomFilter(this ImmutableOrderedListSet<TypeId> set)
+    public static ComponentBloomFilter ToBloomFilter(this ReadOnlySpan<TypeId> typeIds)
     {
         var filter = new ComponentBloomFilter();
-        foreach (var item in set)
+        foreach (var typeId in typeIds)
         {
-            filter.Add(item);
+            filter.Add(typeId);
         }
 
         return filter;

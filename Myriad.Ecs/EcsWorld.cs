@@ -174,7 +174,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
                 continue;
             }
 
-            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components.AsComponentIdSet(), srcArchetype.Info.Hash);
+            var dstArchetype = dstWorld.GetOrCreateArchetype(srcArchetype.Components, srcArchetype.Info.Hash);
             dstArchetype.AddFrom(srcArchetype, lookup);
             dstArchetypes.Add(dstArchetype);
         }
@@ -348,7 +348,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// <summary>
     /// Find an archetype with the given set of components, using a precomputed archetype hash.
     /// </summary>
-    internal Archetype GetOrCreateArchetype<T>(T components, ArchetypeHash hash) where T : IComponentIdSet
+    internal Archetype GetOrCreateArchetype(IReadOnlyOrderedListSet<ComponentId> components, ArchetypeHash hash)
     {
         // Get list of all archetypes with this hash
         if (!archetypesByHash.TryGetValue(hash, out var candidates))
@@ -367,7 +367,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         }
 
         // Didn't find one, create the new archetype
-        var newArchetype = new Archetype(archetypes.Count + 1, this, components.ToImmutableOrderedListSet());
+        var newArchetype = new Archetype(archetypes.Count + 1, this, components.MakeNewImmutable());
 
         // Add it to the relevant lists
         archetypes.Add(newArchetype);
@@ -382,14 +382,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// <summary>
     /// Find an archetype with the given set of components.
     /// </summary>
-    internal Archetype GetOrCreateArchetype<T>(T components) where T : IComponentIdSet
-    {
-        return GetOrCreateArchetype(components, components.CreateArchetypeHash());
-    }
-
-    /// <inheritdoc cref="GetOrCreateArchetype{T}(T)"/>
     internal Archetype GetOrCreateArchetype(OrderedListSet<ComponentId> components)
     {
-        return GetOrCreateArchetype(components.AsComponentIdSet());
+        return GetOrCreateArchetype(components, components.Items.ToArchetypeHash());
     }
 }

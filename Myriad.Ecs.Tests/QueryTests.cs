@@ -55,8 +55,7 @@ public class QueryTests
         Assert.Equal(1, archetypes1.Length);
 
         // Add an archetype to the world that the query should match
-        var components1 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsFloat>() });
-        world.GetOrCreateArchetype(components1);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsFloat>()]);
 
         // Check it now matches 2 archetypes
         var archetypes2 = query.Archetypes;
@@ -67,8 +66,7 @@ public class QueryTests
         }
 
         // Add an archetype to the world that the query should NOT match
-        var components2 = new OrderedListSet<ComponentId>(new HashSet<ComponentId> { ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsByte>() });
-        world.GetOrCreateArchetype(components2);
+        world.GetOrCreateArchetype([ComponentId.Get<EcsInt32>(), ComponentId.Get<EcsByte>()]);
 
         // Check it now matches 2 archetypes
         var archetypes3 = query.Archetypes;
