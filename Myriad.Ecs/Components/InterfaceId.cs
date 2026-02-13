@@ -63,7 +63,7 @@ public readonly record struct InterfaceId : IComparable<InterfaceId>
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{TypeUtility.FormatConciseName(Type)} ({Value})";
+        return $"{TypeUtility.FormatConciseName(Type)} (ID={Value})";
     }
 }
 

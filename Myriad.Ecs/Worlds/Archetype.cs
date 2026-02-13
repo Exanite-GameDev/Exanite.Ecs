@@ -86,11 +86,9 @@ public sealed class Archetype
         //
         // Resolvers are processed in the same order as they are registered,
         // meaning that if the current resolver checks for an interface that will be added later, it will not see it
-        //
-        // This is a tradeoff to keep things simple and fast without needing to calculate interface resolver dependencies
-        // For normal physical components, everything works as expected since physical components are resolved up front and never modified
+        // This is fine because we topological sort the resolvers
         using var ___ = DictionaryPool<InterfaceId, object?>.Acquire(out var interfaceComponents);
-        foreach (var registration in World.InterfaceResolvers)
+        foreach (var registration in World.GetSortedResolvers())
         {
             if (registration.Filter.Build(World).IsMatch(currentTypes, in bloomFilter))
             {

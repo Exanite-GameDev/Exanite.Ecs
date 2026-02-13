@@ -12,7 +12,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
         var entity = commandBuffer.Create()
@@ -35,7 +35,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
         var entity = commandBuffer.Create()
@@ -54,7 +54,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var __ = world.AcquireCommandBuffer(out var commandBuffer);
         var entity = commandBuffer.Create()
@@ -75,7 +75,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
         var entity = commandBuffer.Create()
@@ -99,7 +99,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
         var entity = commandBuffer.Create()
@@ -125,7 +125,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
         var entity = commandBuffer.Create()
@@ -136,7 +136,7 @@ public class InterfaceResolverTests
 
         Assert.True(entity.TryResolve<IEcsDamageable>(out var damageable));
         Assert.NotNull(damageable);
-        Assert.IsType<DefaultDamageable>(damageable);
+        Assert.IsType<Damageable>(damageable);
 
         // Should deal 4 damage, leaving 6 health left
         ref var health = ref entity.Get<EcsHealth>();
@@ -162,7 +162,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
 
@@ -184,7 +184,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
 
@@ -203,8 +203,35 @@ public class InterfaceResolverTests
         // Allow matching any
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
         Assert.Equal(2, view.Count());
+    }
+
+    [Fact]
+    public void RepeatedReplacement_Works_AndIsNotACycle()
+    {
+        using var world = new EcsWorld();
+
+        // Ensure at least 1 archetype exists to force the resolver sorting to occur every time a new resolver is added
+        using var _ = world.AcquireCommandBuffer(out var commandBuffer);
+        commandBuffer.Create();
+        commandBuffer.Execute();
+
+        world.RegisterInterfaceResolver<IEcsDamageable>(
+            new QueryFilter(),
+            (_, _) => new Damageable());
+
+        world.RegisterInterfaceResolver<IEcsDamageable>(
+            new QueryFilter().Include<IEcsDamageable>(),
+            (_, _) => new Damageable());
+
+        world.RegisterInterfaceResolver<IEcsDamageable>(
+            new QueryFilter().Include<IEcsDamageable>(),
+            (_, _) => new Damageable());
+
+        world.RegisterInterfaceResolver<IEcsDamageable>(
+            new QueryFilter().Include<IEcsDamageable>(),
+            (_, _) => new Damageable());
     }
 
     [Fact]
@@ -213,7 +240,7 @@ public class InterfaceResolverTests
         using var world = new EcsWorld();
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<EcsHealth>(),
-            (_, _) => new DefaultDamageable());
+            (_, _) => new Damageable());
 
         using var _ = world.AcquireCommandBuffer(out var commandBuffer);
         var entity = commandBuffer.Create().Set(new EcsHealth(10)).Entity;
@@ -221,9 +248,11 @@ public class InterfaceResolverTests
 
         Assert.True(entity.TryResolve<IEcsDamageable>(out var damageable));
         Assert.NotNull(damageable);
-        Assert.IsType<DefaultDamageable>(damageable);
+        Assert.IsType<Damageable>(damageable);
 
         // Register another resolver that filters for the first
+        // This looks like a circular dependency, but is allowed
+        // because resolvers do not depend on themselves
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<IEcsDamageable>(),
             (previous, _) => new ShieldedDamageable(previous!));
@@ -231,6 +260,52 @@ public class InterfaceResolverTests
         Assert.True(entity.TryResolve(out damageable));
         Assert.NotNull(damageable);
         Assert.IsType<ShieldedDamageable>(damageable);
+    }
+
+    [Fact]
+    public void CircularDependency_Throws()
+    {
+        using var world = new EcsWorld();
+
+        // Ensure at least 1 archetype exists to force the resolver sorting to occur every time a new resolver is added
+        using var _ = world.AcquireCommandBuffer(out var commandBuffer);
+        commandBuffer.Create();
+        commandBuffer.Execute();
+
+        world.RegisterInterfaceResolver<IEcsInterface0>(
+            new QueryFilter().Include<IEcsInterface1>(),
+            (_, _) => null);
+
+        Assert.Throws<GuardException>(() =>
+        {
+            world.RegisterInterfaceResolver<IEcsInterface1>(
+                new QueryFilter().Include<IEcsInterface0>(),
+                (_, _) => null);
+        });
+    }
+
+    [Fact]
+    public void LaterInterfaces_CanBeUsedByEarlier()
+    {
+        using var world = new EcsWorld();
+        using var _ = world.AcquireCommandBuffer(out var commandBuffer);
+        var entity = commandBuffer.Create().Entity;
+        commandBuffer.Execute();
+
+        world.RegisterInterfaceResolver<IEcsInterface0>(
+            new QueryFilter().Include<IEcsInterface1>(),
+            (_, _) => new ConcreteInterface0());
+
+        Assert.False(entity.TryResolve<IEcsInterface0>(out var interfaceInstance));
+        Assert.Null(interfaceInstance);
+
+        world.RegisterInterfaceResolver<IEcsInterface1>(
+            new QueryFilter(),
+            (_, _) => new ConcreteInterface1());
+
+        Assert.True(entity.TryResolve(out interfaceInstance));
+        Assert.NotNull(interfaceInstance);
+        Assert.IsType<ConcreteInterface0>(interfaceInstance);
     }
 
     private struct EcsHealth : IComponent
@@ -243,7 +318,7 @@ public class InterfaceResolverTests
         }
     }
 
-    private class DefaultDamageable : IEcsDamageable
+    private class Damageable : IEcsDamageable
     {
         public void Damage(ref EcsHealth health, int amount)
         {
@@ -265,6 +340,9 @@ public class InterfaceResolverTests
             inner.Damage(ref health, amount / 2);
         }
     }
+
+    private class ConcreteInterface0 : IEcsInterface0;
+    private class ConcreteInterface1 : IEcsInterface1;
 
     private interface IEcsDamageable : IInterfaceComponent
     {

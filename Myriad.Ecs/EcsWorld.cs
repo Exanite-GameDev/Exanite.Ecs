@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
@@ -77,10 +80,13 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// <summary>
     /// The interface resolvers registered for this world.
     /// </summary>
-    public ReadOnlySpan<InterfaceResolverRegistration> InterfaceResolvers => interfaceResolvers.AsSpan();
+    /// <remarks>
+    /// This does not represent the actual processing order of the resolvers.
+    /// The resolvers are topologically sorted first by the interfaces they depend on.
+    /// </remarks>
+    public IReadOnlyList<InterfaceResolverRegistration> InterfaceResolvers => interfaceResolvers;
 
-    /// <inheritdoc cref="InterfaceResolvers"/>
-    public IReadOnlyList<InterfaceResolverRegistration> InterfaceResolversList => interfaceResolvers;
+    private readonly List<InterfaceResolverRegistration> sortedInterfaceResolvers = new();
 
     public readonly EventBus EventBus = new();
 
@@ -208,20 +214,23 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     /// <summary>
     /// Add an interface that will be resolved for all archetypes that match the specified filter.
-    /// This can be used to implement polymorphic behavior that is decided on the shape of an entity (ie, the archetype),
-    /// thus allowing patterns such as switch statements, vtables, and derived data to be replaced.
+    /// This can be used to implement polymorphic behavior that is decided on the shape of an entity (ie, the archetype).
+    /// Interfaces can replace patterns such as switch statements, vtables, and derived data.
     /// <para/>
-    /// Resolvers are evaluated in order of registration, with later resolvers being able to override the
-    /// interfaces provided by earlier resolvers.
+    /// Resolvers can filter by both physical components and interface components.
     /// <para/>
-    /// Resolvers can filter by both physical components and interface components,
-    /// but be aware that resolvers can only see components that are part of the archetype
-    /// that they are resolving for when they are being resolved.
+    /// Resolvers are evaluated after topologically sorting the resolvers
+    /// by the interface components the resolver filters by (explicit dependency)
+    /// and the resolvers that provide the same interface (implicit dependency).
     /// <para/>
-    /// For physical components, this does not affect anything since physical components are resolved up front and never modified.
+    /// Resolvers never depend on themselves, meaning that they can filter by the interface component they themselves provide.
+    /// In this case, the resolver filter will only see interface components that exist at time of filtering.
     /// <para/>
-    /// However, for interface components, this means that if a resolver checks for an interface component
-    /// that will be added later, that resolver will not see it.
+    /// For resolvers that only filter by physical components, the sorted order will exactly match the registration order.
+    /// For resolvers that filter by interface components, the sorted order will ensure that all resolver filters are evaluated consistently.
+    /// Cycles are not allowed.
+    /// <para/>
+    /// Later resolvers are able to override interfaces provided by earlier resolvers, according to the sorted evaluation order.
     /// </summary>
     /// <remarks>
     /// Modifying resolvers will lead to all existing archetypes being updated and existing queries invalidated.
@@ -346,6 +355,15 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// </summary>
     internal void OnResolversModified()
     {
+        // This will get recomputed on the next access
+        // Notably, this means that the sort only occurs if there is at least one archetype in Release mode
+        sortedInterfaceResolvers.Clear();
+
+#if DEBUG
+        // Eagerly recalculate resolvers in Debug mode to catch cycles as soon as they happen
+        GetSortedResolvers();
+#endif
+
         foreach (var archetype in archetypes)
         {
             archetype.UpdateInterfaceComponentResolutions();
@@ -354,6 +372,201 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         foreach (var queryView in QueryViewCache.Values)
         {
             queryView.Invalidate();
+        }
+    }
+
+    internal ReadOnlySpan<InterfaceResolverRegistration> GetSortedResolvers()
+    {
+        var count = interfaceResolvers.Count;
+        if (count == sortedInterfaceResolvers.Count)
+        {
+            // Already sorted
+            return sortedInterfaceResolvers.AsSpan();
+        }
+
+        // Tracks the number of dependencies each resolver is waiting for
+        // Index by resolver index
+        var rawDependencyCountByResolver = ArrayPool<int>.Shared.Rent(count);
+        var dependencyCountByResolver = rawDependencyCountByResolver.AsSpan(0, count);
+        dependencyCountByResolver.Clear();
+
+        // Tracks the resolvers to notify once the resolver at that index is done
+        // Index by resolver index
+        var rawDependentsByResolver = ArrayPool<List<int>?>.Shared.Rent(count);
+        var dependentsByResolver = rawDependentsByResolver.AsSpan(0, count);
+        dependentsByResolver.Clear();
+
+        // Tracks the resolvers that provide the specified interface
+        // Index by interface index
+        var providersByInterface = ListPool<List<int>?>.Acquire();
+
+        try
+        {
+            // Identify which resolvers produce each interface
+            for (var i = 0; i < interfaceResolvers.Count; i++)
+            {
+                var registration = interfaceResolvers[i];
+                var interfaceIndex = ~registration.Id.Value;
+                CollectionsMarshal.SetCount(providersByInterface, int.Max(providersByInterface.Count, interfaceIndex + 1));
+
+                ref var providers = ref providersByInterface.AsSpan()[interfaceIndex];
+                providers ??= ListPool<int>.Acquire();
+
+                if (providers.Count > 0)
+                {
+                    // There is an existing provider
+                    // Add it as an implicit dependency
+                    var providerIndex = providers[^1];
+
+                    dependencyCountByResolver[i]++;
+
+                    ref var dependants = ref dependentsByResolver[providerIndex];
+                    dependants ??= ListPool<int>.Acquire();
+                    dependants.Add(i);
+                }
+
+                providers.Add(i);
+            }
+
+            // Handle explicit dependencies by looking at the filters for each resolver
+            for (var i = 0; i < interfaceResolvers.Count; i++)
+            {
+                var registration = interfaceResolvers[i];
+                var filter = registration.Filter;
+                if (!filter.HasInterfaces)
+                {
+                    continue;
+                }
+
+                // Gather dependencies
+                using var _ = SimplePool<OrderedListSet<InterfaceId>>.Acquire(out var dependencies);
+                AddDependencies(filter.IncludeFilter, dependencies);
+                AddDependencies(filter.ExcludeFilter, dependencies);
+                AddDependencies(filter.AtLeastOneFilter, dependencies);
+                AddDependencies(filter.ExactlyOneFilter, dependencies);
+                AddDependencies(filter.NotAllFilter, dependencies);
+
+                // Add to tracking structures
+                foreach (var interfaceId in dependencies)
+                {
+                    // Add all resolvers that provide this interface as a dependency
+                    var interfaceIndex = ~interfaceId.Value;
+                    var providers = (uint)interfaceIndex < providersByInterface.Count ? providersByInterface[interfaceIndex] : null;
+                    if (providers != null)
+                    {
+                        foreach (var providerIndex in providers)
+                        {
+                            // Don't depend on self
+                            if (providerIndex == i)
+                            {
+                                continue;
+                            }
+
+                            // Don't depend on future providers that provide the current interface
+                            // These are handled as implicit dependencies
+                            if (providerIndex > i && registration.Id == interfaceId)
+                            {
+                                continue;
+                            }
+
+                            // Add as explicit dependency
+                            dependencyCountByResolver[i]++;
+
+                            ref var dependants = ref dependentsByResolver[providerIndex];
+                            dependants ??= ListPool<int>.Acquire();
+                            dependants.Add(i);
+                        }
+                    }
+                }
+            }
+
+            // Add resolvers with 0 dependencies to ready queue
+            using var __ = SimplePool<Queue<int>>.Acquire(out var ready);
+            for (var i = 0; i < dependencyCountByResolver.Length; i++)
+            {
+                var dependencyCount = dependencyCountByResolver[i];
+                if (dependencyCount == 0)
+                {
+                    ready.Enqueue(i);
+                }
+            }
+
+            // Process resolvers that are ready one by one
+            while (ready.TryDequeue(out var resolverIndex))
+            {
+                sortedInterfaceResolvers.Add(interfaceResolvers[resolverIndex]);
+
+                // Notify dependents
+                var dependents = dependentsByResolver[resolverIndex];
+                if (dependents != null)
+                {
+                    foreach (var dependentIndex in dependents)
+                    {
+                        dependencyCountByResolver[dependentIndex]--;
+                        if (dependencyCountByResolver[dependentIndex] == 0)
+                        {
+                            // Resolver has no more pending dependencies and is now ready
+                            ready.Enqueue(dependentIndex);
+                        }
+                    }
+                }
+            }
+
+            // If we didn't output some resolvers, then we have a cycle
+            if (sortedInterfaceResolvers.Count != interfaceResolvers.Count)
+            {
+                // Identify which resolvers participate in the cycle
+                // Don't care about allocations here since this is a cold path
+                var resolversInCycle = new List<InterfaceResolverRegistration>();
+                for (var i = 0; i < dependencyCountByResolver.Length; i++)
+                {
+                    var dependencyCount = dependencyCountByResolver[i];
+                    if (dependencyCount != 0)
+                    {
+                        resolversInCycle.Add(interfaceResolvers[i]);
+                    }
+                }
+
+                GuardUtility.Throw($"Cycle detected when sorting interface resolvers. Relevant resolvers:"
+                    + $"\n    {string.Join("\n    ", resolversInCycle.Select(r => r.ToString(false, true)))}");
+            }
+        }
+        finally
+        {
+            // Release pooled collections
+            ArrayPool<int>.Shared.Return(rawDependencyCountByResolver);
+
+            foreach (var list in dependentsByResolver)
+            {
+                if (list != null)
+                {
+                    ListPool<int>.Release(list);
+                }
+            }
+            dependentsByResolver.Clear();
+            ArrayPool<List<int>?>.Shared.Return(rawDependentsByResolver);
+
+            foreach (var list in providersByInterface)
+            {
+                if (list != null)
+                {
+                    ListPool<int>.Release(list);
+                }
+            }
+            ListPool<List<int>?>.Release(providersByInterface);
+        }
+
+        return sortedInterfaceResolvers.AsSpan();
+
+        static void AddDependencies(IReadOnlyList<TypeId> filter, OrderedListSet<InterfaceId> results)
+        {
+            foreach (var typeId in filter)
+            {
+                if (typeId.IsInterface)
+                {
+                    results.Add((InterfaceId)typeId);
+                }
+            }
         }
     }
 

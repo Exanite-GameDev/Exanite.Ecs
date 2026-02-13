@@ -79,7 +79,7 @@ public readonly record struct TypeId : IComparable<TypeId>
     /// <inheritdoc/>
     public override string ToString()
     {
-        return $"{TypeUtility.FormatConciseName(Type)} ({Value})";
+        return $"{TypeUtility.FormatConciseName(Type)} (ID={Value})";
     }
 }
 
