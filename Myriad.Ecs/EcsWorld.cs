@@ -384,6 +384,11 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             return sortedInterfaceResolvers.AsSpan();
         }
 
+        // Clear again for safety
+        // Usually the list should already be cleared,
+        // but this guarantees that no bad output due to pre-existing data is possible
+        sortedInterfaceResolvers.Clear();
+
         // Tracks the number of dependencies each resolver is waiting for
         // Index by resolver index
         var rawDependencyCountByResolver = ArrayPool<int>.Shared.Rent(count);
