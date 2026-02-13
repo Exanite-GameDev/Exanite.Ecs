@@ -29,15 +29,6 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
 
     public OrderedListSet() {}
 
-    public OrderedListSet(List<T> other)
-    {
-        items.EnsureCapacity(other.Count);
-        foreach (var item in other)
-        {
-            Add(item);
-        }
-    }
-
     public OrderedListSet(ReadOnlySpan<T> other)
     {
         items.EnsureCapacity(other.Length);
@@ -45,12 +36,6 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         {
             Add(item);
         }
-    }
-
-    public OrderedListSet(HashSet<T> other)
-    {
-        items.AddRange(other);
-        items.Sort();
     }
 
     public OrderedListSet(IReadOnlyOrderedListSet<T> other)
@@ -190,21 +175,6 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         items.Clear();
     }
 
-    public List<T>.Enumerator GetEnumerator()
-    {
-        return items.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return items.GetEnumerator();
-    }
-
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        return items.GetEnumerator();
-    }
-
     public bool Contains(T item)
     {
         return items.BinarySearch(item) >= 0;
@@ -265,12 +235,10 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
 
     public bool Overlaps(IReadOnlyOrderedListSet<T> other)
     {
-        if (Count == 0)
-        {
-            return false;
-        }
+        var selfSpan = Items;
+        var otherSpan = other.Items;
 
-        if (other.Count == 0)
+        if (selfSpan.Length == 0 || otherSpan.Length == 0)
         {
             return false;
         }
@@ -278,15 +246,15 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         // Move forward through both lists, checking if any item in `other` is in `this`
         var i = 0;
         var j = 0;
-        while (i < items.Count && j < other.Count)
+        while (i < selfSpan.Length && j < otherSpan.Length)
         {
-            var cmp = items[i].CompareTo(other.Items[j]);
+            var comparison = selfSpan[i].CompareTo(otherSpan[j]);
 
-            if (cmp < 0)
+            if (comparison < 0)
             {
                 i++;
             }
-            else if (cmp > 0)
+            else if (comparison > 0)
             {
                 j++;
             }
@@ -299,49 +267,9 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         return false;
     }
 
-    public bool SetEquals(HashSet<T> other)
-    {
-        // Can't be equal if counts are different
-        if (other.Count != Count)
-        {
-            return false;
-        }
-
-        // Ensure every item in this is in other
-        foreach (var item in items)
-        {
-            if (!other.Contains(item))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public bool SetEquals(IReadOnlyOrderedListSet<T> other)
     {
         return Items.SequenceEqual(other.Items);
-    }
-
-    public bool SetEquals<TValue>(Dictionary<T, TValue> other)
-    {
-        // Can't be equal if counts are different
-        if (other.Count != Count)
-        {
-            return false;
-        }
-
-        // Ensure every item in this is in other
-        foreach (var item in other.Keys)
-        {
-            if (items.BinarySearch(item) < 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public bool Equals(IReadOnlyOrderedListSet<T>? other)
@@ -372,5 +300,20 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
 
         hashCode = result;
         return result;
+    }
+
+    public List<T>.Enumerator GetEnumerator()
+    {
+        return items.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return items.GetEnumerator();
+    }
+
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    {
+        return items.GetEnumerator();
     }
 }

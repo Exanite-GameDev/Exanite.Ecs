@@ -10,7 +10,6 @@ public class OrderedListSetTests
     public void Create()
     {
         var set = new OrderedListSet<int>();
-
         Assert.Equal(0, set.Count);
     }
 
@@ -59,7 +58,7 @@ public class OrderedListSetTests
     }
 
     [Fact]
-    public void AddUnique()
+    public void CreateWithUnique()
     {
         var set = new OrderedListSet<int>
         {
@@ -74,7 +73,7 @@ public class OrderedListSetTests
     }
 
     [Fact]
-    public void AddDuplicates()
+    public void CreateWithDuplicates()
     {
         var set = new OrderedListSet<int>
         {
@@ -171,7 +170,7 @@ public class OrderedListSetTests
     }
 
     [Fact]
-    public void SetEquals_Enumerable_True()
+    public void SetEquals_False_DifferentCount()
     {
         var a = new OrderedListSet<int>
         {
@@ -180,47 +179,7 @@ public class OrderedListSetTests
             3,
         };
 
-        var b = new HashSet<int>
-        {
-            3,
-            2,
-            1,
-        };
-
-        Assert.True(a.SetEquals(b));
-    }
-
-    [Fact]
-    public void SetEquals_Enumerable_False_SameCount()
-    {
-        var a = new OrderedListSet<int>
-        {
-            1,
-            2,
-            3,
-        };
-
-        var b = new HashSet<int>
-        {
-            2,
-            1,
-            0,
-        };
-
-        Assert.False(a.SetEquals(b));
-    }
-
-    [Fact]
-    public void SetEquals_Enumerable_False_DifferentCount()
-    {
-        var a = new OrderedListSet<int>
-        {
-            1,
-            2,
-            3,
-        };
-
-        var b = new HashSet<int>
+        var b = new OrderedListSet<int>
         {
             3,
             2,
