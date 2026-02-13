@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Components;
 
 namespace Exanite.Myriad.Ecs.Collections;
 
@@ -212,13 +210,26 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         return items.BinarySearch(item) >= 0;
     }
 
-    // public bool IsProperSubsetOf(IReadOnlyOrderedListSet<T> other) => throw new NotImplementedException();
-    // public bool IsProperSupersetOf(IReadOnlyOrderedListSet<T> other) => throw new NotImplementedException();
-    // public bool IsSubsetOf(IReadOnlyOrderedListSet<T> other) => throw new NotImplementedException();
+    public bool IsSubsetOf(IReadOnlyOrderedListSet<T> other)
+    {
+        return other.IsSupersetOf(this);
+    }
+
+    public bool IsProperSupersetOf(IReadOnlyOrderedListSet<T> other)
+    {
+        return Count > other.Count && IsSupersetOf(other);
+    }
+
+    public bool IsProperSubsetOf(IReadOnlyOrderedListSet<T> other)
+    {
+        return Count < other.Count && IsSubsetOf(other);
+    }
 
     public bool IsSupersetOf(IReadOnlyOrderedListSet<T> other)
     {
-        if (other.Count > Count)
+        var selfSpan = Items;
+        var otherSpan = other.Items;
+        if (otherSpan.Length > selfSpan.Length)
         {
             return false;
         }
@@ -226,17 +237,17 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         // Move forward through both lists, checking that all items in `other` are in `this`
         var i = 0;
         var j = 0;
-        while (i < items.Count && j < other.Count)
+        while (i < selfSpan.Length && j < otherSpan.Length)
         {
-            var cmp = items[i].CompareTo(other.Items[j]);
+            var comparison = selfSpan[i].CompareTo(otherSpan[j]);
 
-            if (cmp < 0)
+            if (comparison < 0)
             {
                 // Item in `this` < `other`. That's acceptable, it means the item is in the superset and not in the subset.
                 // Move to the next item in the superset.
                 i++;
             }
-            else if (cmp == 0)
+            else if (comparison == 0)
             {
                 // Items are equal, move to the next item in both
                 i++;
@@ -249,7 +260,7 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
             }
         }
 
-        return j == other.Count;
+        return j == otherSpan.Length;
     }
 
     public bool Overlaps(IReadOnlyOrderedListSet<T> other)
@@ -310,24 +321,7 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
 
     public bool SetEquals(IReadOnlyOrderedListSet<T> other)
     {
-        if (Count != other.Count)
-        {
-            return false;
-        }
-
-        var a = Items;
-        var b = other.Items;
-
-        // Add a specialization for ComponentId. This allows it to be compared with fast SIMD equality
-        // instead of calling the equality implementation for every item individually.
-        if (typeof(T) == typeof(ComponentId))
-        {
-            var aa = MemoryMarshal.Cast<T, int>(a);
-            var bb = MemoryMarshal.Cast<T, int>(b);
-            return aa.SequenceEqual(bb);
-        }
-
-        return a.SequenceEqual(b);
+        return Items.SequenceEqual(other.Items);
     }
 
     public bool SetEquals<TValue>(Dictionary<T, TValue> other)
