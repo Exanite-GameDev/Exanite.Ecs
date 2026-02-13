@@ -95,15 +95,18 @@ public sealed class Archetype
             if (registration.Filter.Build(World).IsMatch(currentTypes, in bloomFilter))
             {
                 ref var current = ref CollectionsMarshal.GetValueRefOrAddDefault(interfaceComponents, registration.Id, out _);
-                current = registration.Factory.Invoke(current, Components);
+                var wasNull = current == null;
+                current = registration.Factory.Invoke(current, currentTypes);
 
-                if (current != null)
+                if (wasNull && current != null)
                 {
                     currentTypes.Add(registration.Id);
                     bloomFilter.Add(registration.Id);
                 }
-                else
+                else if (!wasNull && current == null)
                 {
+                    // This forces a complete rebuild of the bloom filter
+                    // since the bloom filter does not support remove operations
                     currentTypes.Remove(registration.Id);
                     bloomFilter = currentTypes.Items.ToBloomFilter();
                 }
