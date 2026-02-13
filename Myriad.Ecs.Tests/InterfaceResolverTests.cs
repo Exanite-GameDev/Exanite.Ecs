@@ -208,7 +208,7 @@ public class InterfaceResolverTests
     }
 
     [Fact]
-    public void RepeatedReplacement_Works_AndNotACycle()
+    public void RepeatedReplacement_Works_AndIsNotACycle()
     {
         using var world = new EcsWorld();
 
