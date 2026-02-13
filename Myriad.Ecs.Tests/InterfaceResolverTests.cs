@@ -224,7 +224,8 @@ public class InterfaceResolverTests
         Assert.IsType<DefaultDamageable>(damageable);
 
         // Register another resolver that filters for the first
-        // This looks like a circular dependency, but is allowed because the filter only filters for existing interfaces
+        // This looks like a circular dependency, but is allowed
+        // because resolvers do not depend on themselves
         world.RegisterInterfaceResolver<IEcsDamageable>(
             new QueryFilter().Include<IEcsDamageable>(),
             (previous, _) => new ShieldedDamageable(previous!));

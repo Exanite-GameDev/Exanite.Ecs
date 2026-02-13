@@ -223,6 +223,9 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// by the interface components the resolver filters by (explicit dependency)
     /// and the resolvers that provide the same interface (implicit dependency).
     /// <para/>
+    /// Resolvers never depend on themselves, meaning that they can filter by the interface component they themselves provide.
+    /// In this case, the resolver filter will only see interface components that exist at time of filtering.
+    /// <para/>
     /// For resolvers that only filter by physical components, the sorted order will exactly match the registration order.
     /// For resolvers that filter by interface components, the sorted order will ensure that all resolver filters are evaluated consistently.
     /// Cycles are not allowed.
