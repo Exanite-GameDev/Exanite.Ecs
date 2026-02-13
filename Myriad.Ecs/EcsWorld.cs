@@ -388,11 +388,13 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
         // Index by resolver index
         var rawDependencyCountByResolver = ArrayPool<int>.Shared.Rent(count);
         var dependencyCountByResolver = rawDependencyCountByResolver.AsSpan(0, count);
+        dependencyCountByResolver.Clear();
 
         // Tracks the resolvers to notify once the resolver at that index is done
         // Index by resolver index
         var rawDependentsByResolver = ArrayPool<List<int>?>.Shared.Rent(count);
         var dependentsByResolver = rawDependentsByResolver.AsSpan(0, count);
+        dependentsByResolver.Clear();
 
         // Tracks the resolvers that provide the specified interface
         // Index by interface index
@@ -534,6 +536,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
                     ListPool<int>.Release(list);
                 }
             }
+            dependentsByResolver.Clear();
             ArrayPool<List<int>?>.Shared.Return(rawDependentsByResolver);
 
             foreach (var list in providersByInterface)

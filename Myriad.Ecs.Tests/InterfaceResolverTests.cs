@@ -257,6 +257,30 @@ public class InterfaceResolverTests
         });
     }
 
+    [Fact]
+    public void LaterInterfaces_CanBeUsedByEarlier()
+    {
+        using var world = new EcsWorld();
+        using var _ = world.AcquireCommandBuffer(out var commandBuffer);
+        var entity = commandBuffer.Create().Entity;
+        commandBuffer.Execute();
+
+        world.RegisterInterfaceResolver<IEcsInterface0>(
+            new QueryFilter().Include<IEcsInterface1>(),
+            (_, _) => new ConcreteInterface0());
+
+        Assert.False(entity.TryResolve<IEcsInterface0>(out var interfaceInstance));
+        Assert.Null(interfaceInstance);
+
+        world.RegisterInterfaceResolver<IEcsInterface1>(
+            new QueryFilter(),
+            (_, _) => new ConcreteInterface1());
+
+        Assert.True(entity.TryResolve(out interfaceInstance));
+        Assert.NotNull(interfaceInstance);
+        Assert.IsType<ConcreteInterface0>(interfaceInstance);
+    }
+
     private struct EcsHealth : IComponent
     {
         public int Health;
@@ -289,6 +313,9 @@ public class InterfaceResolverTests
             inner.Damage(ref health, amount / 2);
         }
     }
+
+    private class ConcreteInterface0 : IEcsInterface0;
+    private class ConcreteInterface1 : IEcsInterface1;
 
     private interface IEcsDamageable : IInterfaceComponent
     {
