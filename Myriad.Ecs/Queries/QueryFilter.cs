@@ -231,16 +231,21 @@ public sealed class QueryFilter
 
     public override string ToString()
     {
+        return ToString(true, true);
+    }
+
+    public string ToString(bool includeComponents, bool includeInterfaces)
+    {
         using (StringBuilderPool.Acquire(out var builder))
         {
             builder.Append('[');
 
             var isFirst = true;
-            AppendFilter(builder, "Include", IncludeFilter, ref isFirst);
-            AppendFilter(builder, "Exclude", ExcludeFilter, ref isFirst);
-            AppendFilter(builder, "AtLeastOne", AtLeastOneFilter, ref isFirst);
-            AppendFilter(builder, "ExactlyOne", ExactlyOneFilter, ref isFirst);
-            AppendFilter(builder, "NotAll", NotAllFilter, ref isFirst);
+            AppendFilter(builder, "Include", IncludeFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "Exclude", ExcludeFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "AtLeastOne", AtLeastOneFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "ExactlyOne", ExactlyOneFilter, ref isFirst, includeComponents, includeInterfaces);
+            AppendFilter(builder, "NotAll", NotAllFilter, ref isFirst, includeComponents, includeInterfaces);
 
             builder.Append(']');
 
@@ -248,7 +253,7 @@ public sealed class QueryFilter
         }
     }
 
-    private void AppendFilter(StringBuilder builder, string name, IReadOnlyList<TypeId> filter, ref bool isFirst)
+    private void AppendFilter(StringBuilder builder, string name, IReadOnlyList<TypeId> filter, ref bool isFirst, bool includeComponents, bool includeInterfaces)
     {
         if (filter.Count == 0)
         {
@@ -264,14 +269,27 @@ public sealed class QueryFilter
         builder.Append(name);
         builder.Append('<');
 
+        var isFirstInFilter = true;
         for (var i = 0; i < filter.Count; i++)
         {
-            builder.Append(TypeUtility.FormatConciseName(filter[i].Type));
+            var typeId = filter[i];
+            if (typeId.IsComponent && !includeComponents)
+            {
+                continue;
+            }
 
-            if (i < filter.Count - 1)
+            if (typeId.IsInterface && !includeInterfaces)
+            {
+                continue;
+            }
+
+            if (!isFirstInFilter)
             {
                 builder.Append(", ");
             }
+            isFirstInFilter = false;
+
+            builder.Append(TypeUtility.FormatConciseName(typeId.Type));
         }
 
         builder.Append('>');

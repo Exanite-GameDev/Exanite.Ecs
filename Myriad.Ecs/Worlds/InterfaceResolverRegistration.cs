@@ -22,6 +22,11 @@ public readonly record struct InterfaceResolverRegistration
 
     public override string ToString()
     {
-        return $"{Id} {Filter}";
+        return ToString(true, true);
+    }
+
+    public string ToString(bool includeComponents, bool includeInterfaces)
+    {
+        return $"{Id} {Filter.ToString(includeComponents, includeInterfaces)}";
     }
 }

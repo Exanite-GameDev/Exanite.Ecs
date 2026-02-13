@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -520,7 +521,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
                 }
 
                 GuardUtility.Throw($"Cycle detected when sorting interface resolvers. "
-                    + $"Relevant resolvers: [{string.Join(", ", resolversInCycle)}]");
+                    + $"Relevant resolvers: [{string.Join(", ", resolversInCycle.Select(r => r.ToString(false, true)))}]");
             }
         }
         finally
