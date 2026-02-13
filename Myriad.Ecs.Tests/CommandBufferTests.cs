@@ -728,25 +728,25 @@ public class EcsCommandBufferTests
         buffer.Execute();
 
         // Check 1 has everything expected
-        Assert.Equal(4, entity0.ComponentIds.Count);
+        Assert.Equal(4, entity0.Components.Count);
         entity0.Get<Ecs0>();
         entity0.Get<Ecs1>();
         entity0.Get<Ecs2>();
         entity0.Get<Ecs3>();
 
         // Check 2 has everything expected
-        Assert.Equal(2, entity1.ComponentIds.Count);
+        Assert.Equal(2, entity1.Components.Count);
         entity1.Get<Ecs1>();
         entity1.Get<Ecs2>();
 
         // Check 3 has everything expected
-        Assert.Equal(3, entity2.ComponentIds.Count);
+        Assert.Equal(3, entity2.Components.Count);
         entity2.Get<Ecs1>();
         entity2.Get<Ecs2>();
         entity2.Get<Ecs4>();
 
         // Check other is unchanged
-        Assert.Equal(3, entity3.ComponentIds.Count);
+        Assert.Equal(3, entity3.Components.Count);
         entity3.Get<Ecs0>();
         entity3.Get<Ecs1>();
         entity3.Get<Ecs2>();

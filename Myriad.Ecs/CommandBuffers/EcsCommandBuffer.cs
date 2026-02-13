@@ -133,7 +133,7 @@ public sealed partial class EcsCommandBuffer
         // Store the commands
         ref var entityState = ref GetEntityState(entity.EntityId);
         var sets = entityState.GetOrAcquireSets();
-        foreach (var componentId in prefab.ComponentIds)
+        foreach (var componentId in prefab.Components)
         {
             ref var setterId = ref CollectionsMarshal.GetValueRefOrAddDefault(sets, componentId, out _);
             state.Setters.CreateFromPrefab(prefab, componentId, groupKey, ref setterId);

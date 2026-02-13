@@ -80,8 +80,8 @@ public class EntityTests
 
         commandBuffer.Execute();
 
-        Assert.Equal(1, entity.ComponentIds.Count);
-        Assert.True(entity.ComponentIds.Contains(ComponentId.Get<EcsInt16>()));
+        Assert.Equal(1, entity.Components.Count);
+        Assert.True(entity.Components.Contains(ComponentId.Get<EcsInt16>()));
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public class EntityTests
 
         Assert.Throws<GuardException>(() =>
         {
-            _ = entity.ComponentIds.Count;
+            _ = entity.Components.Count;
         });
     }
 

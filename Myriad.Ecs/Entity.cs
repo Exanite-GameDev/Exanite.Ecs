@@ -94,9 +94,19 @@ public readonly partial record struct Entity : IComparable<Entity>
     internal readonly EntityId EntityId;
 
     /// <summary>
-    /// Get the set of components which this entity currently has.
+    /// The set of components this entity has, including interface components.
     /// </summary>
-    public IReadOnlyOrderedListSet<ComponentId> ComponentIds => Archetype.Components;
+    public IReadOnlyOrderedListSet<TypeId> Types => Archetype.Types;
+
+    /// <summary>
+    /// The set of components this entity has.
+    /// </summary>
+    public IReadOnlyOrderedListSet<ComponentId> Components => Archetype.Components;
+
+    /// <summary>
+    /// The set of interface components this entity has.
+    /// </summary>
+    public IReadOnlyOrderedListSet<InterfaceId> Interfaces => Archetype.Interfaces;
 
     /// <summary>
     /// Get a boxed array of all components.
@@ -104,7 +114,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// This is very slow and the returned data is a copy of the original data.
     /// Avoid using this for anything other than debugging!
     /// </summary>
-    public object[] BoxedComponents => ComponentIds.Select(GetBoxed).ToArray();
+    public object[] BoxedComponents => Components.Select(GetBoxed).ToArray();
 
     internal Entity(EntityId id, EcsWorld world)
     {
@@ -118,7 +128,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Has<T>() where T : IComponent
     {
-        return ComponentIds.Contains(ComponentId.Get<T>());
+        return Components.Contains(ComponentId.Get<T>());
     }
 
     /// <summary>
@@ -177,7 +187,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     public object GetBoxed(ComponentId id)
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
-        GuardUtility.IsTrue(ComponentIds.Contains(id), "Entity does not have the specified component");
+        GuardUtility.IsTrue(Components.Contains(id), "Entity does not have the specified component");
 
         ref var location = ref World.Entities.GetLocation(EntityId);
         return location.Archetype.GetComponentArray(id).GetValue(location.IndexInArchetype)!;
