@@ -69,21 +69,53 @@ public sealed class Archetype
 
     internal void UpdateInterfaceComponentResolutions()
     {
+        // Track current types
+        using var __ = SimplePool<OrderedListSet<TypeId>>.Acquire(out var currentTypes);
+        currentTypes.Clear();
+        currentTypes.EnsureCapacity(Components.Count);
+        foreach (var componentId in Components)
+        {
+            currentTypes.Add(componentId);
+        }
+
+        var bloomFilter = currentTypes.Items.ToBloomFilter();
+
         // Resolve interface components
         // Iterate forwards and provide references to previous resolvers to allow for overriding functionality
-        using var __ = DictionaryPool<InterfaceId, object?>.Acquire(out var interfaceComponents);
+        // We track the current types that exist in the archetype as new interfaces are added/removed
+        //
+        // Resolvers are processed in the same order as they are registered,
+        // meaning that if the current resolver checks for an interface that will be added later, it will not see it
+        //
+        // This is a tradeoff to keep things simple and fast without needing to calculate interface resolver dependencies
+        // For normal physical components, everything works as expected since physical components are resolved up front and never modified
+        using var ___ = DictionaryPool<InterfaceId, object?>.Acquire(out var interfaceComponents);
         foreach (var registration in World.InterfaceResolvers)
         {
-            if (registration.Filter.Build(World).IsMatch(Info.Types, in Info.BloomFilter))
+            if (registration.Filter.Build(World).IsMatch(currentTypes, in bloomFilter))
             {
                 ref var current = ref CollectionsMarshal.GetValueRefOrAddDefault(interfaceComponents, registration.Id, out _);
-                current = registration.Factory.Invoke(current, Components);
+                var wasNull = current == null;
+                current = registration.Factory.Invoke(current, currentTypes);
+
+                if (wasNull && current != null)
+                {
+                    currentTypes.Add(registration.Id);
+                    bloomFilter.Add(registration.Id);
+                }
+                else if (!wasNull && current == null)
+                {
+                    // This forces a complete rebuild of the bloom filter
+                    // since the bloom filter does not support remove operations
+                    currentTypes.Remove(registration.Id);
+                    bloomFilter = currentTypes.Items.ToBloomFilter();
+                }
             }
         }
 
         // Remove null interface components
         // Interface overriding allows for complete removal of the interface
-        using var ___ = ListPool<InterfaceId>.Acquire(out var interfaceIdsToRemove);
+        using var ____ = ListPool<InterfaceId>.Acquire(out var interfaceIdsToRemove);
         foreach (var (interfaceId, instance) in interfaceComponents)
         {
             if (instance == null)

@@ -207,6 +207,32 @@ public class InterfaceResolverTests
         Assert.Equal(2, view.Count());
     }
 
+    [Fact]
+    public void Resolvers_CanFilterBy_InterfaceComponents()
+    {
+        using var world = new EcsWorld();
+        world.RegisterInterfaceResolver<IEcsDamageable>(
+            new QueryFilter().Include<EcsHealth>(),
+            (_, _) => new DefaultDamageable());
+
+        using var _ = world.AcquireCommandBuffer(out var commandBuffer);
+        var entity = commandBuffer.Create().Set(new EcsHealth(10)).Entity;
+        commandBuffer.Execute();
+
+        Assert.True(entity.TryResolve<IEcsDamageable>(out var damageable));
+        Assert.NotNull(damageable);
+        Assert.IsType<DefaultDamageable>(damageable);
+
+        // Register another resolver that filters for the first
+        world.RegisterInterfaceResolver<IEcsDamageable>(
+            new QueryFilter().Include<IEcsDamageable>(),
+            (previous, _) => new ShieldedDamageable(previous!));
+
+        Assert.True(entity.TryResolve(out damageable));
+        Assert.NotNull(damageable);
+        Assert.IsType<ShieldedDamageable>(damageable);
+    }
+
     private struct EcsHealth : IComponent
     {
         public int Health;

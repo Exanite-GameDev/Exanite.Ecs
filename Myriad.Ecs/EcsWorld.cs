@@ -208,17 +208,29 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     /// <summary>
     /// Add an interface that will be resolved for all archetypes that match the specified filter.
+    /// This can be used to implement polymorphic behavior that is decided on the shape of an entity (ie, the archetype),
+    /// thus allowing patterns such as switch statements, vtables, and derived data to be replaced.
+    /// <para/>
+    /// Resolvers are evaluated in order of registration, with later resolvers being able to override the
+    /// interfaces provided by earlier resolvers.
+    /// <para/>
+    /// Resolvers can filter by both physical components and interface components,
+    /// but be aware that resolvers can only see components that are part of the archetype
+    /// that they are resolving for when they are being resolved.
+    /// <para/>
+    /// For physical components, this does not affect anything since physical components are resolved up front and never modified.
+    /// <para/>
+    /// However, for interface components, this means that if a resolver checks for an interface component
+    /// that will be added later, that resolver will not see it.
     /// </summary>
     /// <remarks>
     /// Modifying resolvers will lead to all existing archetypes being updated and existing queries invalidated.
     /// To avoid this, consider registering all resolvers before any archetypes are created.
     /// </remarks>
-    /// <param name="filter">The archetypes that this interface component will be resolved for. Must only match against normal components.</param>
+    /// <param name="filter">The archetypes that this interface component will be resolved for.</param>
     /// <param name="factory">Get or create the concrete implementation of the interface component for the specified archetype.</param>
     public void RegisterInterfaceResolver<T>(QueryFilter filter, InterfaceResolverFactory<T> factory) where T : class, IInterfaceComponent
     {
-        GuardUtility.IsFalse(filter.HasInterfaces, "Filters used to resolve interfaces must only match against normal components");
-
         var registration = new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, (previous, components) =>
         {
             return factory.Invoke((T?)previous, components);
