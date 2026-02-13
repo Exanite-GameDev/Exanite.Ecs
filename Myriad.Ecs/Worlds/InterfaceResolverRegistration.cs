@@ -1,3 +1,4 @@
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Components;
 using Exanite.Myriad.Ecs.Queries;
 
@@ -27,6 +28,6 @@ public readonly record struct InterfaceResolverRegistration
 
     public string ToString(bool includeComponents, bool includeInterfaces)
     {
-        return $"{Id} {Filter.ToString(includeComponents, includeInterfaces)}";
+        return $"{TypeUtility.FormatConciseName(Id.Type)} {Filter.ToString(includeComponents, includeInterfaces)}";
     }
 }

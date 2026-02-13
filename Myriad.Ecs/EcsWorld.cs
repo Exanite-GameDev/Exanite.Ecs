@@ -520,8 +520,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
                     }
                 }
 
-                GuardUtility.Throw($"Cycle detected when sorting interface resolvers. "
-                    + $"Relevant resolvers: [{string.Join(", ", resolversInCycle.Select(r => r.ToString(false, true)))}]");
+                GuardUtility.Throw($"Cycle detected when sorting interface resolvers. Relevant resolvers:"
+                    + $"\n    {string.Join("\n    ", resolversInCycle.Select(r => r.ToString(false, true)))}");
             }
         }
         finally
