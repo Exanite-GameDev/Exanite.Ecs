@@ -227,7 +227,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// Modifying resolvers will lead to all existing archetypes being updated and existing queries invalidated.
     /// To avoid this, consider registering all resolvers before any archetypes are created.
     /// </remarks>
-    /// <param name="filter">The archetypes that this interface component will be resolved for. Must only match against normal components.</param>
+    /// <param name="filter">The archetypes that this interface component will be resolved for.</param>
     /// <param name="factory">Get or create the concrete implementation of the interface component for the specified archetype.</param>
     public void RegisterInterfaceResolver<T>(QueryFilter filter, InterfaceResolverFactory<T> factory) where T : class, IInterfaceComponent
     {
