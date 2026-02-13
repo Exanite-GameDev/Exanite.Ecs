@@ -462,6 +462,13 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
                                 continue;
                             }
 
+                            // Don't depend on future providers that provide the current interface
+                            // These are handled as implicit dependencies
+                            if (providerIndex > i && registration.Id == interfaceId)
+                            {
+                                continue;
+                            }
+
                             // Add as explicit dependency
                             dependencyCountByResolver[i]++;
 
@@ -529,7 +536,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
             // Release pooled collections
             ArrayPool<int>.Shared.Return(rawDependencyCountByResolver);
 
-            foreach (var list in rawDependentsByResolver)
+            foreach (var list in dependentsByResolver)
             {
                 if (list != null)
                 {
