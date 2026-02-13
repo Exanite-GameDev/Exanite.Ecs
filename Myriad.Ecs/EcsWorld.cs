@@ -208,6 +208,20 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     /// <summary>
     /// Add an interface that will be resolved for all archetypes that match the specified filter.
+    /// This can be used to implement polymorphic behavior that is decided on the shape of an entity (ie, the archetype),
+    /// thus allowing patterns such as switch statements, vtables, and derived data to be replaced.
+    /// <para/>
+    /// Resolvers are evaluated in order of registration, with later resolvers being able to override the
+    /// interfaces provided by earlier resolvers.
+    /// <para/>
+    /// Resolvers can filter by both physical components and interface components,
+    /// but be aware that resolvers can only see components that are part of the archetype
+    /// that they are resolving for when they are being resolved.
+    /// <para/>
+    /// For physical components, this does not affect anything since physical components are resolved up front and never modified.
+    /// <para/>
+    /// However, for interface components, this means that if a resolver checks for an interface component
+    /// that will be added later, that resolver will not see it.
     /// </summary>
     /// <remarks>
     /// Modifying resolvers will lead to all existing archetypes being updated and existing queries invalidated.
