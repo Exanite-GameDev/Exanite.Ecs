@@ -44,6 +44,15 @@ public sealed class QueryFilter
     private readonly TypeIdSet notAllFilter;
 
     /// <summary>
+    /// Whether this query checks against any interface components.
+    /// </summary>
+    public bool HasInterfaces => includeFilter.HasInterfaces
+        || excludeFilter.HasInterfaces
+        || atLeastOneFilter.HasInterfaces
+        || exactlyOneFilter.HasInterfaces
+        || notAllFilter.HasInterfaces;
+
+    /// <summary>
     /// Create a new <see cref="QueryFilter"/>
     /// </summary>
     public QueryFilter()
@@ -271,6 +280,8 @@ public sealed class QueryFilter
     private class TypeIdSet
     {
         public readonly OrderedListSet<TypeId> Items = [];
+        public bool HasInterfaces;
+
         private IReadOnlyOrderedListSet<TypeId>? immutableSet;
 
         public IReadOnlyOrderedListSet<TypeId> ToReadOnlySet()
@@ -298,6 +309,7 @@ public sealed class QueryFilter
         {
             if (Items.Add(id))
             {
+                HasInterfaces |= id.IsInterface;
                 immutableSet = null;
             }
         }
