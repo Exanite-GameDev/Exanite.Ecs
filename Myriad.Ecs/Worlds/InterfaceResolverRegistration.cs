@@ -7,7 +7,7 @@ namespace Exanite.Myriad.Ecs.Worlds;
 /// Represents a registration for an interface resolver.
 /// See <see cref="EcsWorld.RegisterInterfaceResolver{T}"/>
 /// </summary>
-public struct InterfaceResolverRegistration
+public readonly record struct InterfaceResolverRegistration
 {
     public readonly InterfaceId Id;
     public readonly QueryFilter Filter;
@@ -18,5 +18,10 @@ public struct InterfaceResolverRegistration
         Id = id;
         Filter = filter;
         Factory = factory;
+    }
+
+    public override string ToString()
+    {
+        return $"{Id} {Filter}";
     }
 }

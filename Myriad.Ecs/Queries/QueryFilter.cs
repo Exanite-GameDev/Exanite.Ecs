@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using Exanite.Core.Pooling;
+using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.Components;
 
@@ -215,6 +218,54 @@ public sealed class QueryFilter
     {
         notAllFilter.Add(id);
         return this;
+    }
+
+    public override string ToString()
+    {
+        using (StringBuilderPool.Acquire(out var builder))
+        {
+            builder.Append('[');
+
+            var isFirst = true;
+            AppendFilter(builder, "Include", IncludeFilter, ref isFirst);
+            AppendFilter(builder, "Exclude", ExcludeFilter, ref isFirst);
+            AppendFilter(builder, "AtLeastOne", AtLeastOneFilter, ref isFirst);
+            AppendFilter(builder, "ExactlyOne", ExactlyOneFilter, ref isFirst);
+            AppendFilter(builder, "NotAll", NotAllFilter, ref isFirst);
+
+            builder.Append(']');
+
+            return builder.ToString();
+        }
+    }
+
+    private void AppendFilter(StringBuilder builder, string name, IReadOnlyList<TypeId> filter, ref bool isFirst)
+    {
+        if (filter.Count == 0)
+        {
+            return;
+        }
+
+        if (!isFirst)
+        {
+            builder.Append(", ");
+        }
+        isFirst = false;
+
+        builder.Append(name);
+        builder.Append('<');
+
+        for (var i = 0; i < filter.Count; i++)
+        {
+            builder.Append(TypeUtility.FormatConciseName(filter[i].Type));
+
+            if (i < filter.Count - 1)
+            {
+                builder.Append(", ");
+            }
+        }
+
+        builder.Append('>');
     }
 
     private class TypeIdSet
