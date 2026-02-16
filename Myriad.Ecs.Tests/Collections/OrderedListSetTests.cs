@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Exanite.Myriad.Ecs.Collections;
+﻿using Exanite.Myriad.Ecs.Collections;
 using Xunit;
 
 namespace Exanite.Myriad.Ecs.Tests.Collections;
