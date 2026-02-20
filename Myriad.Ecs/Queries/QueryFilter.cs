@@ -85,21 +85,17 @@ public sealed class QueryFilter
             exactlyOneFilter.ToReadOnlySet(),
             notAllFilter.ToReadOnlySet());
 
-        using (world.QueryViewCacheLock.EnterScope())
-        {
-            if (!world.QueryViewCache.TryGetValue(key, out var query))
-            {
-                world.QueryViewCache[key] = query = new QueryView(
-                    world,
-                    includeFilter.ToReadOnlySet(),
-                    excludeFilter.ToReadOnlySet(),
-                    atLeastOneFilter.ToReadOnlySet(),
-                    exactlyOneFilter.ToReadOnlySet(),
-                    notAllFilter.ToReadOnlySet()
-                );
-            }
+        return world.QueryViewCache.GetOrAdd(key, CreateQueryView, world);
 
-            return query;
+        static QueryView CreateQueryView(QueryCacheKey key, EcsWorld world)
+        {
+            return new QueryView(
+                world,
+                key.IncludeFilter,
+                key.ExcludeFilter,
+                key.AtLeastOneFilter,
+                key.ExactlyOneFilter,
+                key.NotAllFilter);
         }
     }
 

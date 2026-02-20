@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -42,8 +43,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
 
     private readonly List<InterfaceResolverRegistration> interfaceResolvers = new();
 
-    internal readonly Lock QueryViewCacheLock = new();
-    internal readonly Dictionary<QueryCacheKey, QueryView> QueryViewCache = new();
+    internal readonly ConcurrentDictionary<QueryCacheKey, QueryView> QueryViewCache = new();
     private readonly QueryView allEntitiesQuery;
 
     private readonly Pool<EcsCommandBuffer> commandBufferPool;
