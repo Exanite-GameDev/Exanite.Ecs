@@ -17,5 +17,5 @@ internal static class EcsConstants
     /// <summary>
     /// Number of local entity IDs to keep per command buffer for the purpose of avoiding thread contention.
     /// </summary>
-    internal const int CommandBufferLocalIdCount = 32;
+    internal const int CommandBufferLocalIdCount = 64;
 }
