@@ -74,8 +74,11 @@ public sealed class QueryFilter
     }
 
     /// <summary>
-    /// Build a <see cref="QueryView"/> from the current state of this filter.
+    /// Get or create a cached <see cref="QueryView"/> from the current state of this filter.
     /// </summary>
+    /// <remarks>
+    /// Calling this multiple times with equivalent filters will return the same view.
+    /// </remarks>
     public QueryView Build(EcsWorld world)
     {
         var key = new QueryCacheKey(
