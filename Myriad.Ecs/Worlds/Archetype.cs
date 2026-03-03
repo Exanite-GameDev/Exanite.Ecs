@@ -299,7 +299,7 @@ public sealed class Archetype
     /// Resolves the specified interface component from this archetype.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T Resolve<T>() where T : class, IInterfaceComponent
+    public T Resolve<T>() where T : class, IEcsInterface
     {
         var interfaceId = InterfaceId.Get<T>();
         var interfaceIndex = ~interfaceId.Value;
@@ -321,7 +321,7 @@ public sealed class Archetype
     /// Tries to resolve the specified interface component from this archetype.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IInterfaceComponent
+    public bool TryResolve<T>([NotNullWhen(true)] out T? instance) where T : class, IEcsInterface
     {
         var interfaceId = InterfaceId.Get<T>();
         var interfaceIndex = ~interfaceId.Value;
@@ -343,7 +343,7 @@ public sealed class Archetype
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Span<T> GetSpan<T>() where T : IComponent
+    public Span<T> GetSpan<T>() where T : IEcsComponent
     {
         // Unsafe.As() is safe because we have to get the column index using the component id
         // If the component id is invalid, then we will get an index out of bounds
@@ -359,13 +359,13 @@ public sealed class Archetype
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ref T Get<T>(int entityIndex) where T : IComponent
+    internal ref T Get<T>(int entityIndex) where T : IEcsComponent
     {
         return ref GetSpan<T>()[entityIndex];
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal Ref<T> GetRef<T>(int entityIndex) where T : IComponent
+    internal Ref<T> GetRef<T>(int entityIndex) where T : IEcsComponent
     {
         return new Ref<T>(ref Get<T>(entityIndex));
     }

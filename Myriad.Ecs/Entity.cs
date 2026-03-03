@@ -125,7 +125,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Check if this entity has a component.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Has<T>() where T : IComponent
+    public bool Has<T>() where T : IEcsComponent
     {
         return Components.Contains(ComponentId.Get<T>());
     }
@@ -135,7 +135,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ref T Get<T>() where T : IComponent
+    public ref T Get<T>() where T : IEcsComponent
     {
         ref var location = ref World.Entities.GetLocation(EntityId);
         return ref location.Archetype.Get<T>(location.IndexInArchetype);
@@ -146,7 +146,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Ref<T> GetRef<T>() where T : IComponent
+    public Ref<T> GetRef<T>() where T : IEcsComponent
     {
         ref var location = ref World.Entities.GetLocation(EntityId);
         return location.Archetype.GetRef<T>(location.IndexInArchetype);
@@ -157,7 +157,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// If the entity does not have this component an exception will be thrown.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public EcsRef<T> GetEcsRef<T>() where T : IComponent
+    public EcsRef<T> GetEcsRef<T>() where T : IEcsComponent
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         GuardUtility.IsTrue(Has<T>(), $"Component does not exist on entity: {GetType().Name}");
@@ -174,7 +174,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Accessing the component will still validate the reference.
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public EcsRef<T> GetEcsRefUnchecked<T>() where T : IComponent
+    public EcsRef<T> GetEcsRefUnchecked<T>() where T : IEcsComponent
     {
         return new EcsRef<T>(this);
     }
@@ -209,7 +209,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Throws if it fails.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T Resolve<T>() where T : class, IInterfaceComponent
+    public T Resolve<T>() where T : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -221,7 +221,7 @@ public readonly partial record struct Entity : IComparable<Entity>
     /// Throws if it fails.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public InterfaceBinding<T> ResolveBinding<T>() where T : class, IInterfaceComponent
+    public InterfaceBinding<T> ResolveBinding<T>() where T : class, IEcsInterface
     {
         return Resolve<T>().Bind(this);
     }

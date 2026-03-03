@@ -29,49 +29,49 @@ public abstract class ComponentDispatcher
     internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Archetype archetype, int startIndex, int length);
     internal abstract void OnComponentRemoved(EcsCommandBuffer recursiveCommandBuffer, Entity entity);
 
-    internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IComponent, IComponentSelfReference<T>
+    internal static void ComponentSelfReference<T>(ref T component, Entity entity) where T : IEcsComponent, IComponentSelfReference<T>
     {
         component.Self = entity.GetEcsRef<T>();
     }
 
-    internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, IEntityLookup lookup) where T : IComponent, IComponentCopied
+    internal static void ComponentCopied<T>(ref T component, EcsWorld newWorld, IEntityLookup lookup) where T : IEcsComponent, IComponentCopied
     {
         component.OnCopied(newWorld, lookup);
     }
 
-    internal static void ComponentAdded<T>(ref T component) where T : IComponent, IComponentAdded
+    internal static void ComponentAdded<T>(ref T component) where T : IEcsComponent, IComponentAdded
     {
         component.OnAdded();
     }
 
-    internal static void ComponentModified<T>(ref T component) where T : IComponent, IComponentModified
+    internal static void ComponentModified<T>(ref T component) where T : IEcsComponent, IComponentModified
     {
         component.OnModified();
     }
 
-    internal static void ComponentRemoved<T>(ref T component) where T : IComponent, IComponentRemoved
+    internal static void ComponentRemoved<T>(ref T component) where T : IEcsComponent, IComponentRemoved
     {
         component.OnRemoved();
     }
 
     public interface IComponentFactory<out TReturn>
     {
-        public TReturn Create<T>() where T : IComponent;
+        public TReturn Create<T>() where T : IEcsComponent;
     }
 
     public interface IComponentFactory<in TInput, out TReturn>
     {
-        public TReturn Create<T>(TInput input) where T : IComponent;
+        public TReturn Create<T>(TInput input) where T : IEcsComponent;
     }
 
     public interface IComponentAction
     {
-        public void Invoke<T>() where T : IComponent;
+        public void Invoke<T>() where T : IEcsComponent;
     }
 
     public interface IComponentAction<in TInput>
     {
-        public void Invoke<T>(TInput input) where T : IComponent;
+        public void Invoke<T>(TInput input) where T : IEcsComponent;
     }
 }
 
@@ -79,7 +79,7 @@ public abstract class ComponentDispatcher
 /// <remarks>
 /// The type check if statements should be dead code eliminated when the JIT generic specializes each method.
 /// </remarks>
-internal class ComponentDispatcher<T> : ComponentDispatcher where T : IComponent
+internal class ComponentDispatcher<T> : ComponentDispatcher where T : IEcsComponent
 {
     private delegate void ComponentSelfReferenceAction(ref T component, Entity entity);
 

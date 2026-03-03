@@ -15,7 +15,7 @@ namespace Exanite.Myriad.Ecs.Events;
 /// <para/>
 /// Code that relies on the previous component value should store it manually or ensure the component is readonly to ensure that immutable modifications are used.
 /// </remarks>
-public readonly ref struct ComponentModifiedEvent<T> where T : IComponent
+public readonly ref struct ComponentModifiedEvent<T> where T : IEcsComponent
 {
     /// <summary>
     /// A command buffer with which further operations can be enqueued.

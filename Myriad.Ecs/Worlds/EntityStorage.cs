@@ -40,7 +40,7 @@ internal readonly struct EntityStorage
 
     private readonly struct ArrayFactory : ComponentDispatcher.IComponentFactory<int, Array>
     {
-        public Array Create<T>(int capacity) where T : IComponent
+        public Array Create<T>(int capacity) where T : IEcsComponent
         {
             return capacity == 0 ? [] : new T[capacity];
         }

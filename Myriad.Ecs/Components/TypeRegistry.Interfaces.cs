@@ -7,7 +7,7 @@ internal static partial class TypeRegistry
     /// <summary>
     /// Gets the interface ID for the given type.
     /// </summary>
-    public static InterfaceId GetInterfaceId<T>() where T : IInterfaceComponent
+    public static InterfaceId GetInterfaceId<T>() where T : IEcsInterface
     {
         var type = typeof(T);
         using (Lock.EnterReadLock(out var state))

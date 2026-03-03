@@ -5,7 +5,7 @@ using Exanite.Core.Utilities;
 namespace Exanite.Myriad.Ecs.Components;
 
 /// <summary>
-/// Unique ID for a type that implements <see cref="IComponent"/>.
+/// Unique ID for a type that implements <see cref="IEcsComponent"/>.
 /// </summary>
 public readonly record struct ComponentId : IComparable<ComponentId>
 {
@@ -49,7 +49,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// <summary>
     /// Get the component ID for the given type.
     /// </summary>
-    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IComponent"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IEcsComponent"/>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ComponentId Get(Type type)
     {
@@ -60,7 +60,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     /// Get the component ID for the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ComponentId Get<T>() where T : IComponent
+    public static ComponentId Get<T>() where T : IEcsComponent
     {
         return ComponentId<T>.Id;
     }
@@ -78,7 +78,7 @@ public readonly record struct ComponentId : IComparable<ComponentId>
     }
 }
 
-internal static class ComponentId<T> where T : IComponent
+internal static class ComponentId<T> where T : IEcsComponent
 {
     /// <summary>
     /// The component ID for <typeparamref name="T"/>.

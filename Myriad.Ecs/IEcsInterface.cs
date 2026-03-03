@@ -4,4 +4,4 @@ namespace Exanite.Myriad.Ecs;
 /// Marker interface for virtual interface components.
 /// These components must be implemented as classes and are used to attach data and behavior to each archetype.
 /// </summary>
-public interface IInterfaceComponent : IEcsType;
+public interface IEcsInterface : IEcsType;

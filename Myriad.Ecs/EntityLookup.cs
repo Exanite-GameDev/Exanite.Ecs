@@ -21,7 +21,7 @@ public class EntityLookup : IEntityLookup
         Entries.Add(from, to);
     }
 
-    public EcsRef<T> Get<T>(EcsRef<T> from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
+    public EcsRef<T> Get<T>(EcsRef<T> from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IEcsComponent
     {
         return new EcsRef<T>(Get(from.Entity, policy));
     }

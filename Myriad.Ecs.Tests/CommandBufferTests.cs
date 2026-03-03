@@ -189,7 +189,7 @@ public class EcsCommandBufferTests
 
         return;
 
-        void ChangeComponent<T>(Entity entity, bool update) where T : struct, IComponent
+        void ChangeComponent<T>(Entity entity, bool update) where T : struct, IEcsComponent
         {
             if (entity.Has<T>() && !update)
             {

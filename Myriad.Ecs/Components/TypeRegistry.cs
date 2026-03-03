@@ -48,7 +48,7 @@ internal static partial class TypeRegistry
             {
                 GuardUtility.IsTrue(type.IsValueType, "Storage-backed components must be structs");
                 GuardUtility.IsTrue(type.IsConcrete(), "Storage-backed components must be concrete types");
-                GuardUtility.IsTrue(typeof(IComponent).IsAssignableFrom(type), $"{type.FullName} must implement the {nameof(IComponent)} interface");
+                GuardUtility.IsTrue(typeof(IEcsComponent).IsAssignableFrom(type), $"{type.FullName} must implement the {nameof(IEcsComponent)} interface");
 
                 // Get next ID
                 typeId = new TypeId(nextComponentId);
@@ -80,7 +80,7 @@ internal static partial class TypeRegistry
             if (!typeIdByType.TryGetValue(type, out var typeId))
             {
                 GuardUtility.IsTrue(type.IsInterface, "Interface components must be interfaces");
-                GuardUtility.IsTrue(typeof(IInterfaceComponent).IsAssignableFrom(type), $"{type.FullName} must implement the {nameof(IInterfaceComponent)} interface");
+                GuardUtility.IsTrue(typeof(IEcsInterface).IsAssignableFrom(type), $"{type.FullName} must implement the {nameof(IEcsInterface)} interface");
 
                 // Get next ID
                 typeId = new TypeId(nextInterfaceId);

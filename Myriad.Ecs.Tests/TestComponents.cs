@@ -1,58 +1,58 @@
 ﻿namespace Exanite.Myriad.Ecs.Tests;
 
-public interface IEcsInterface0 : IInterfaceComponent;
+public interface IEcsInterface0 : IEcsInterface;
 
-public interface IEcsInterface1 : IInterfaceComponent;
+public interface IEcsInterface1 : IEcsInterface;
 
-public interface IEcsInterface2 : IInterfaceComponent;
+public interface IEcsInterface2 : IEcsInterface;
 
-public record struct EcsByte(byte Value) : IComponent;
+public record struct EcsByte(byte Value) : IEcsComponent;
 
-public record struct EcsInt16(short Value) : IComponent;
+public record struct EcsInt16(short Value) : IEcsComponent;
 
-public record struct EcsFloat(float Value) : IComponent;
+public record struct EcsFloat(float Value) : IEcsComponent;
 
-public record struct EcsInt32(int Value) : IComponent;
+public record struct EcsInt32(int Value) : IEcsComponent;
 
-public record struct EcsInt64(long Value) : IComponent;
+public record struct EcsInt64(long Value) : IEcsComponent;
 
-public record struct Ecs0 : IComponent;
+public record struct Ecs0 : IEcsComponent;
 
-public record struct Ecs1 : IComponent;
+public record struct Ecs1 : IEcsComponent;
 
-public record struct Ecs2 : IComponent;
+public record struct Ecs2 : IEcsComponent;
 
-public record struct Ecs3 : IComponent;
+public record struct Ecs3 : IEcsComponent;
 
-public record struct Ecs4 : IComponent;
+public record struct Ecs4 : IEcsComponent;
 
-public record struct Ecs5 : IComponent;
+public record struct Ecs5 : IEcsComponent;
 
-public record struct Ecs6 : IComponent;
+public record struct Ecs6 : IEcsComponent;
 
-public record struct Ecs7 : IComponent;
+public record struct Ecs7 : IEcsComponent;
 
-public record struct Ecs8 : IComponent;
+public record struct Ecs8 : IEcsComponent;
 
-public record struct Ecs9 : IComponent;
+public record struct Ecs9 : IEcsComponent;
 
-public record struct Ecs10 : IComponent;
+public record struct Ecs10 : IEcsComponent;
 
-public record struct Ecs11 : IComponent;
+public record struct Ecs11 : IEcsComponent;
 
-public record struct Ecs12 : IComponent;
+public record struct Ecs12 : IEcsComponent;
 
-public record struct Ecs13 : IComponent;
+public record struct Ecs13 : IEcsComponent;
 
-public record struct Ecs14 : IComponent;
+public record struct Ecs14 : IEcsComponent;
 
-public record struct Ecs15 : IComponent;
+public record struct Ecs15 : IEcsComponent;
 
-public record struct Ecs16 : IComponent;
+public record struct Ecs16 : IEcsComponent;
 
-public record struct Ecs17 : IComponent;
+public record struct Ecs17 : IEcsComponent;
 
-public record struct EcsGeneric<T> : IComponent
+public record struct EcsGeneric<T> : IEcsComponent
 {
     public T Value;
 }

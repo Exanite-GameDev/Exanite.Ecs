@@ -238,7 +238,7 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     /// </remarks>
     /// <param name="filter">The archetypes that this interface component will be resolved for.</param>
     /// <param name="factory">Get or create the concrete implementation of the interface component for the specified archetype.</param>
-    public void RegisterInterfaceResolver<T>(QueryFilter filter, InterfaceResolverFactory<T> factory) where T : class, IInterfaceComponent
+    public void RegisterInterfaceResolver<T>(QueryFilter filter, InterfaceResolverFactory<T> factory) where T : class, IEcsInterface
     {
         var registration = new InterfaceResolverRegistration(InterfaceId.Get<T>(), filter, (previous, components) =>
         {

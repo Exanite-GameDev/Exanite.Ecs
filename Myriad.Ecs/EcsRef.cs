@@ -6,7 +6,7 @@ namespace Exanite.Myriad.Ecs;
 /// <summary>
 /// A storage reference to a component.
 /// </summary>
-public readonly record struct EcsRef<T> where T : IComponent
+public readonly record struct EcsRef<T> where T : IEcsComponent
 {
     public readonly Entity Entity;
 

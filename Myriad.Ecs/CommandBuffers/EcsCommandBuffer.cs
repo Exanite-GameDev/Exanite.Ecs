@@ -151,7 +151,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Add or overwrite a component attached to an entity.
     /// </summary>
-    public BufferedEntity Set<T>(Entity entity, T value) where T : IComponent
+    public BufferedEntity Set<T>(Entity entity, T value) where T : IEcsComponent
     {
         EnsureIsExternallyMutable();
         EnsureIsFromCurrentWorld(entity);
@@ -189,7 +189,7 @@ public sealed partial class EcsCommandBuffer
     /// Clears an existing set or remove operation from the command buffer.
     /// Not the same as <see cref="Remove{T}"/>
     /// </summary>
-    public BufferedEntity Unset<T>(Entity entity) where T : IComponent
+    public BufferedEntity Unset<T>(Entity entity) where T : IEcsComponent
     {
         EnsureIsExternallyMutable();
         EnsureIsFromCurrentWorld(entity);
@@ -223,7 +223,7 @@ public sealed partial class EcsCommandBuffer
     /// <summary>
     /// Remove a component attached to an entity.
     /// </summary>
-    public BufferedEntity Remove<T>(Entity entity) where T : IComponent
+    public BufferedEntity Remove<T>(Entity entity) where T : IEcsComponent
     {
         EnsureIsExternallyMutable();
         EnsureIsFromCurrentWorld(entity);

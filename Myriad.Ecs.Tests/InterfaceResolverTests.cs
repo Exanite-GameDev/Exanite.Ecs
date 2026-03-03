@@ -308,7 +308,7 @@ public class InterfaceResolverTests
         Assert.IsType<ConcreteInterface0>(interfaceInstance);
     }
 
-    private struct EcsHealth : IComponent
+    private struct EcsHealth : IEcsComponent
     {
         public int Health;
 
@@ -344,7 +344,7 @@ public class InterfaceResolverTests
     private class ConcreteInterface0 : IEcsInterface0;
     private class ConcreteInterface1 : IEcsInterface1;
 
-    private interface IEcsDamageable : IInterfaceComponent
+    private interface IEcsDamageable : IEcsInterface
     {
         void Damage(ref EcsHealth health, int amount);
     }

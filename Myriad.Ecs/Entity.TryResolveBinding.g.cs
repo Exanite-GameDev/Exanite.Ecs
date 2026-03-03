@@ -14,7 +14,7 @@ public readonly partial record struct Entity
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryResolveBinding<T0>(
         [NotNullWhen(true)]out InterfaceBinding<T0> binding0)
-        where T0 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0
@@ -36,8 +36,8 @@ public readonly partial record struct Entity
     public bool TryResolveBinding<T0, T1>(
         [NotNullWhen(true)]out InterfaceBinding<T0> binding0,
         [NotNullWhen(true)]out InterfaceBinding<T1> binding1)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0,
@@ -63,9 +63,9 @@ public readonly partial record struct Entity
         [NotNullWhen(true)]out InterfaceBinding<T0> binding0,
         [NotNullWhen(true)]out InterfaceBinding<T1> binding1,
         [NotNullWhen(true)]out InterfaceBinding<T2> binding2)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0,
@@ -95,10 +95,10 @@ public readonly partial record struct Entity
         [NotNullWhen(true)]out InterfaceBinding<T1> binding1,
         [NotNullWhen(true)]out InterfaceBinding<T2> binding2,
         [NotNullWhen(true)]out InterfaceBinding<T3> binding3)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0,
@@ -132,11 +132,11 @@ public readonly partial record struct Entity
         [NotNullWhen(true)]out InterfaceBinding<T2> binding2,
         [NotNullWhen(true)]out InterfaceBinding<T3> binding3,
         [NotNullWhen(true)]out InterfaceBinding<T4> binding4)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0,
@@ -174,12 +174,12 @@ public readonly partial record struct Entity
         [NotNullWhen(true)]out InterfaceBinding<T3> binding3,
         [NotNullWhen(true)]out InterfaceBinding<T4> binding4,
         [NotNullWhen(true)]out InterfaceBinding<T5> binding5)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0,
@@ -221,13 +221,13 @@ public readonly partial record struct Entity
         [NotNullWhen(true)]out InterfaceBinding<T4> binding4,
         [NotNullWhen(true)]out InterfaceBinding<T5> binding5,
         [NotNullWhen(true)]out InterfaceBinding<T6> binding6)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
-        where T6 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
+        where T6 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0,
@@ -273,14 +273,14 @@ public readonly partial record struct Entity
         [NotNullWhen(true)]out InterfaceBinding<T5> binding5,
         [NotNullWhen(true)]out InterfaceBinding<T6> binding6,
         [NotNullWhen(true)]out InterfaceBinding<T7> binding7)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
-        where T6 : class, IInterfaceComponent
-        where T7 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
+        where T6 : class, IEcsInterface
+        where T7 : class, IEcsInterface
     {
         if (!TryResolve(
             out T0? instance0,

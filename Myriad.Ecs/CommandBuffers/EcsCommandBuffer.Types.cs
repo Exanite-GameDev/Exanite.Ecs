@@ -62,7 +62,7 @@ public partial class EcsCommandBuffer
             this.commandBuffer = commandBuffer;
         }
 
-        public void Invoke<T>(Input input) where T : IComponent
+        public void Invoke<T>(Input input) where T : IEcsComponent
         {
             commandBuffer.Set(input.Entity, (T)input.Value);
         }
@@ -79,7 +79,7 @@ public partial class EcsCommandBuffer
             this.commandBuffer = commandBuffer;
         }
 
-        public void Invoke<T>(Entity input) where T : IComponent
+        public void Invoke<T>(Entity input) where T : IEcsComponent
         {
             commandBuffer.Unset<T>(input);
         }
@@ -94,7 +94,7 @@ public partial class EcsCommandBuffer
             this.commandBuffer = commandBuffer;
         }
 
-        public void Invoke<T>(Entity input) where T : IComponent
+        public void Invoke<T>(Entity input) where T : IEcsComponent
         {
             commandBuffer.Remove<T>(input);
         }
@@ -122,7 +122,7 @@ public partial class EcsCommandBuffer
             this.groupKey = groupKey;
         }
 
-        public EcsRef<T> Get<T>(EcsRef<T> from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IComponent
+        public EcsRef<T> Get<T>(EcsRef<T> from, EntityLookupPolicy policy = EntityLookupPolicy.PreserveIfNotExist) where T : IEcsComponent
         {
             return new EcsRef<T>(Get(from.Entity, policy));
         }
@@ -270,7 +270,7 @@ public partial class EcsCommandBuffer
         /// <summary>
         /// Creates a setter using a component value.
         /// </summary>
-        public void CreateFromValue<T>(T value, ref SetterId setterId) where T : IComponent
+        public void CreateFromValue<T>(T value, ref SetterId setterId) where T : IEcsComponent
         {
             if (setterId.IsValid && !setterId.IsPrefab)
             {
@@ -350,7 +350,7 @@ public partial class EcsCommandBuffer
             public void Recycle();
         }
 
-        private class ComponentList<T> : IComponentList where T : IComponent
+        private class ComponentList<T> : IComponentList where T : IEcsComponent
         {
             private readonly List<T> values = [];
 

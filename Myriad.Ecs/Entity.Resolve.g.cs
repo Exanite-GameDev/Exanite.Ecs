@@ -16,7 +16,7 @@ public readonly partial record struct Entity
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Resolve<T0>(
         out T0 instance0)
-        where T0 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -33,8 +33,8 @@ public readonly partial record struct Entity
     public void Resolve<T0, T1>(
         out T0 instance0,
         out T1 instance1)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -53,9 +53,9 @@ public readonly partial record struct Entity
         out T0 instance0,
         out T1 instance1,
         out T2 instance2)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -76,10 +76,10 @@ public readonly partial record struct Entity
         out T1 instance1,
         out T2 instance2,
         out T3 instance3)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -102,11 +102,11 @@ public readonly partial record struct Entity
         out T2 instance2,
         out T3 instance3,
         out T4 instance4)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -131,12 +131,12 @@ public readonly partial record struct Entity
         out T3 instance3,
         out T4 instance4,
         out T5 instance5)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -163,13 +163,13 @@ public readonly partial record struct Entity
         out T4 instance4,
         out T5 instance5,
         out T6 instance6)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
-        where T6 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
+        where T6 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);
@@ -198,14 +198,14 @@ public readonly partial record struct Entity
         out T5 instance5,
         out T6 instance6,
         out T7 instance7)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
-        where T6 : class, IInterfaceComponent
-        where T7 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
+        where T6 : class, IEcsInterface
+        where T7 : class, IEcsInterface
     {
         GuardUtility.IsTrue(IsAlive, "Entity is not alive");
         var location = World.Entities.GetLocation(EntityId);

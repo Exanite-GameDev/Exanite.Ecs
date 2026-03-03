@@ -5,7 +5,7 @@ namespace Exanite.Myriad.Ecs.Events;
 /// <summary>
 /// Raised after a component is added.
 /// </summary>
-public readonly ref struct ComponentAddedEvent<T> where T : IComponent
+public readonly ref struct ComponentAddedEvent<T> where T : IEcsComponent
 {
     /// <summary>
     /// A command buffer with which further operations can be enqueued.

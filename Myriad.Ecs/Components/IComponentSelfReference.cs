@@ -1,6 +1,6 @@
 namespace Exanite.Myriad.Ecs.Components;
 
-public interface IComponentSelfReference<T> where T : IComponent
+public interface IComponentSelfReference<T> where T : IEcsComponent
 {
     /// <summary>
     /// A reference to this component when attached to an entity.

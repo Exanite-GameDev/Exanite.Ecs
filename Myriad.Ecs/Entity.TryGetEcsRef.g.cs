@@ -19,7 +19,7 @@ public readonly partial record struct Entity
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetEcsRef<T0>(
         out EcsRef<T0> ref0)
-        where T0 : IComponent
+        where T0 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
 
@@ -47,8 +47,8 @@ public readonly partial record struct Entity
     public bool TryGetEcsRef<T0, T1>(
         out EcsRef<T0> ref0,
         out EcsRef<T1> ref1)
-        where T0 : IComponent
-        where T1 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -80,9 +80,9 @@ public readonly partial record struct Entity
         out EcsRef<T0> ref0,
         out EcsRef<T1> ref1,
         out EcsRef<T2> ref2)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -118,10 +118,10 @@ public readonly partial record struct Entity
         out EcsRef<T1> ref1,
         out EcsRef<T2> ref2,
         out EcsRef<T3> ref3)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -161,11 +161,11 @@ public readonly partial record struct Entity
         out EcsRef<T2> ref2,
         out EcsRef<T3> ref3,
         out EcsRef<T4> ref4)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -209,12 +209,12 @@ public readonly partial record struct Entity
         out EcsRef<T3> ref3,
         out EcsRef<T4> ref4,
         out EcsRef<T5> ref5)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -262,13 +262,13 @@ public readonly partial record struct Entity
         out EcsRef<T4> ref4,
         out EcsRef<T5> ref5,
         out EcsRef<T6> ref6)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -320,14 +320,14 @@ public readonly partial record struct Entity
         out EcsRef<T5> ref5,
         out EcsRef<T6> ref6,
         out EcsRef<T7> ref7)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -383,15 +383,15 @@ public readonly partial record struct Entity
         out EcsRef<T6> ref6,
         out EcsRef<T7> ref7,
         out EcsRef<T8> ref8)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -451,16 +451,16 @@ public readonly partial record struct Entity
         out EcsRef<T7> ref7,
         out EcsRef<T8> ref8,
         out EcsRef<T9> ref9)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -524,17 +524,17 @@ public readonly partial record struct Entity
         out EcsRef<T8> ref8,
         out EcsRef<T9> ref9,
         out EcsRef<T10> ref10)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -602,18 +602,18 @@ public readonly partial record struct Entity
         out EcsRef<T9> ref9,
         out EcsRef<T10> ref10,
         out EcsRef<T11> ref11)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -685,19 +685,19 @@ public readonly partial record struct Entity
         out EcsRef<T10> ref10,
         out EcsRef<T11> ref11,
         out EcsRef<T12> ref12)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -773,20 +773,20 @@ public readonly partial record struct Entity
         out EcsRef<T11> ref11,
         out EcsRef<T12> ref12,
         out EcsRef<T13> ref13)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
+        where T13 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -866,21 +866,21 @@ public readonly partial record struct Entity
         out EcsRef<T12> ref12,
         out EcsRef<T13> ref13,
         out EcsRef<T14> ref14)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
-        where T14 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
+        where T13 : IEcsComponent
+        where T14 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);
@@ -964,22 +964,22 @@ public readonly partial record struct Entity
         out EcsRef<T13> ref13,
         out EcsRef<T14> ref14,
         out EcsRef<T15> ref15)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
-        where T14 : IComponent
-        where T15 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
+        where T13 : IEcsComponent
+        where T14 : IEcsComponent
+        where T15 : IEcsComponent
     {
         ref0 = new EcsRef<T0>(this);
         ref1 = new EcsRef<T1>(this);

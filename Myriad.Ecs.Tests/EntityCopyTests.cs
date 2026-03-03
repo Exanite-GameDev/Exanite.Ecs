@@ -320,17 +320,17 @@ public class EntityCopyTests
         }
     }
 
-    private T GetSingle<T>(EcsWorld world) where T : IComponent
+    private T GetSingle<T>(EcsWorld world) where T : IEcsComponent
     {
         return new QueryFilter().Include<T>().Build(world).First().Get<T>();
     }
 
-    private struct EcsSelfReference : IComponent, IComponentSelfReference<EcsSelfReference>
+    private struct EcsSelfReference : IEcsComponent, IComponentSelfReference<EcsSelfReference>
     {
         public EcsRef<EcsSelfReference> Self { get; set; }
     }
 
-    private struct EcsCopied : IComponent, IComponentSelfReference<EcsCopied>, IComponentAdded, IComponentCopied
+    private struct EcsCopied : IEcsComponent, IComponentSelfReference<EcsCopied>, IComponentAdded, IComponentCopied
     {
         public EcsRef<EcsCopied> Self { get; set; }
 
@@ -352,7 +352,7 @@ public class EntityCopyTests
         }
     }
 
-    private struct EcsTransform : IComponent, IComponentSelfReference<EcsTransform>, IComponentCopied
+    private struct EcsTransform : IEcsComponent, IComponentSelfReference<EcsTransform>, IComponentCopied
     {
         public EcsRef<EcsTransform> Self { get; set; }
 

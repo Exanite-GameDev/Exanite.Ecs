@@ -16,7 +16,7 @@ public readonly partial record struct Entity
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryResolve<T0>(
         [NotNullWhen(true)] out T0? instance0)
-        where T0 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
     {
         instance0 = default;
 
@@ -36,8 +36,8 @@ public readonly partial record struct Entity
     public bool TryResolve<T0, T1>(
         [NotNullWhen(true)] out T0? instance0,
         [NotNullWhen(true)] out T1? instance1)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
     {
         instance0 = default;
         instance1 = default;
@@ -60,9 +60,9 @@ public readonly partial record struct Entity
         [NotNullWhen(true)] out T0? instance0,
         [NotNullWhen(true)] out T1? instance1,
         [NotNullWhen(true)] out T2? instance2)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
     {
         instance0 = default;
         instance1 = default;
@@ -88,10 +88,10 @@ public readonly partial record struct Entity
         [NotNullWhen(true)] out T1? instance1,
         [NotNullWhen(true)] out T2? instance2,
         [NotNullWhen(true)] out T3? instance3)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
     {
         instance0 = default;
         instance1 = default;
@@ -120,11 +120,11 @@ public readonly partial record struct Entity
         [NotNullWhen(true)] out T2? instance2,
         [NotNullWhen(true)] out T3? instance3,
         [NotNullWhen(true)] out T4? instance4)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
     {
         instance0 = default;
         instance1 = default;
@@ -156,12 +156,12 @@ public readonly partial record struct Entity
         [NotNullWhen(true)] out T3? instance3,
         [NotNullWhen(true)] out T4? instance4,
         [NotNullWhen(true)] out T5? instance5)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
     {
         instance0 = default;
         instance1 = default;
@@ -196,13 +196,13 @@ public readonly partial record struct Entity
         [NotNullWhen(true)] out T4? instance4,
         [NotNullWhen(true)] out T5? instance5,
         [NotNullWhen(true)] out T6? instance6)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
-        where T6 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
+        where T6 : class, IEcsInterface
     {
         instance0 = default;
         instance1 = default;
@@ -240,14 +240,14 @@ public readonly partial record struct Entity
         [NotNullWhen(true)] out T5? instance5,
         [NotNullWhen(true)] out T6? instance6,
         [NotNullWhen(true)] out T7? instance7)
-        where T0 : class, IInterfaceComponent
-        where T1 : class, IInterfaceComponent
-        where T2 : class, IInterfaceComponent
-        where T3 : class, IInterfaceComponent
-        where T4 : class, IInterfaceComponent
-        where T5 : class, IInterfaceComponent
-        where T6 : class, IInterfaceComponent
-        where T7 : class, IInterfaceComponent
+        where T0 : class, IEcsInterface
+        where T1 : class, IEcsInterface
+        where T2 : class, IEcsInterface
+        where T3 : class, IEcsInterface
+        where T4 : class, IEcsInterface
+        where T5 : class, IEcsInterface
+        where T6 : class, IEcsInterface
+        where T7 : class, IEcsInterface
     {
         instance0 = default;
         instance1 = default;

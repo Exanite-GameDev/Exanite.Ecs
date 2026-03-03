@@ -17,7 +17,7 @@ public readonly partial record struct Entity
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Get<T0>(
         out Ref<T0> ref0)
-        where T0 : IComponent
+        where T0 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -37,8 +37,8 @@ public readonly partial record struct Entity
     public void Get<T0, T1>(
         out Ref<T0> ref0,
         out Ref<T1> ref1)
-        where T0 : IComponent
-        where T1 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -60,9 +60,9 @@ public readonly partial record struct Entity
         out Ref<T0> ref0,
         out Ref<T1> ref1,
         out Ref<T2> ref2)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -86,10 +86,10 @@ public readonly partial record struct Entity
         out Ref<T1> ref1,
         out Ref<T2> ref2,
         out Ref<T3> ref3)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -115,11 +115,11 @@ public readonly partial record struct Entity
         out Ref<T2> ref2,
         out Ref<T3> ref3,
         out Ref<T4> ref4)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -147,12 +147,12 @@ public readonly partial record struct Entity
         out Ref<T3> ref3,
         out Ref<T4> ref4,
         out Ref<T5> ref5)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -182,13 +182,13 @@ public readonly partial record struct Entity
         out Ref<T4> ref4,
         out Ref<T5> ref5,
         out Ref<T6> ref6)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -220,14 +220,14 @@ public readonly partial record struct Entity
         out Ref<T5> ref5,
         out Ref<T6> ref6,
         out Ref<T7> ref7)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -261,15 +261,15 @@ public readonly partial record struct Entity
         out Ref<T6> ref6,
         out Ref<T7> ref7,
         out Ref<T8> ref8)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -305,16 +305,16 @@ public readonly partial record struct Entity
         out Ref<T7> ref7,
         out Ref<T8> ref8,
         out Ref<T9> ref9)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -352,17 +352,17 @@ public readonly partial record struct Entity
         out Ref<T8> ref8,
         out Ref<T9> ref9,
         out Ref<T10> ref10)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -402,18 +402,18 @@ public readonly partial record struct Entity
         out Ref<T9> ref9,
         out Ref<T10> ref10,
         out Ref<T11> ref11)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -455,19 +455,19 @@ public readonly partial record struct Entity
         out Ref<T10> ref10,
         out Ref<T11> ref11,
         out Ref<T12> ref12)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -511,20 +511,20 @@ public readonly partial record struct Entity
         out Ref<T11> ref11,
         out Ref<T12> ref12,
         out Ref<T13> ref13)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
+        where T13 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -570,21 +570,21 @@ public readonly partial record struct Entity
         out Ref<T12> ref12,
         out Ref<T13> ref13,
         out Ref<T14> ref14)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
-        where T14 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
+        where T13 : IEcsComponent
+        where T14 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {
@@ -632,22 +632,22 @@ public readonly partial record struct Entity
         out Ref<T13> ref13,
         out Ref<T14> ref14,
         out Ref<T15> ref15)
-        where T0 : IComponent
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-        where T5 : IComponent
-        where T6 : IComponent
-        where T7 : IComponent
-        where T8 : IComponent
-        where T9 : IComponent
-        where T10 : IComponent
-        where T11 : IComponent
-        where T12 : IComponent
-        where T13 : IComponent
-        where T14 : IComponent
-        where T15 : IComponent
+        where T0 : IEcsComponent
+        where T1 : IEcsComponent
+        where T2 : IEcsComponent
+        where T3 : IEcsComponent
+        where T4 : IEcsComponent
+        where T5 : IEcsComponent
+        where T6 : IEcsComponent
+        where T7 : IEcsComponent
+        where T8 : IEcsComponent
+        where T9 : IEcsComponent
+        where T10 : IEcsComponent
+        where T11 : IEcsComponent
+        where T12 : IEcsComponent
+        where T13 : IEcsComponent
+        where T14 : IEcsComponent
+        where T15 : IEcsComponent
     {
         if (IsDefault || !World.Entities.TryGetLocation(EntityId, out var locationRef))
         {

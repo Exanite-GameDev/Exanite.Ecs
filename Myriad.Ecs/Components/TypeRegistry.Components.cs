@@ -7,7 +7,7 @@ internal static partial class TypeRegistry
     /// <summary>
     /// Gets the component ID for the given type.
     /// </summary>
-    public static ComponentId GetComponentId<T>() where T : IComponent
+    public static ComponentId GetComponentId<T>() where T : IEcsComponent
     {
         var type = typeof(T);
         using (Lock.EnterReadLock(out var state))

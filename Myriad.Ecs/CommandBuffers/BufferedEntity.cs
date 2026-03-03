@@ -23,7 +23,7 @@ public readonly ref struct BufferedEntity
     }
 
     /// <inheritdoc cref="EcsCommandBuffer.Set"/>
-    public BufferedEntity Set<T>(T value) where T : IComponent
+    public BufferedEntity Set<T>(T value) where T : IEcsComponent
     {
         return CommandBuffer.Set(Entity, value);
     }
@@ -35,7 +35,7 @@ public readonly ref struct BufferedEntity
     }
 
     /// <inheritdoc cref="EcsCommandBuffer.Unset"/>
-    public BufferedEntity Unset<T>() where T : IComponent
+    public BufferedEntity Unset<T>() where T : IEcsComponent
     {
         return CommandBuffer.Unset<T>(Entity);
     }
@@ -47,7 +47,7 @@ public readonly ref struct BufferedEntity
     }
 
     /// <inheritdoc cref="EcsCommandBuffer.Remove"/>
-    public BufferedEntity Remove<T>() where T : IComponent
+    public BufferedEntity Remove<T>() where T : IEcsComponent
     {
         return CommandBuffer.Remove<T>(Entity);
     }

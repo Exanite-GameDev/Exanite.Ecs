@@ -5,7 +5,7 @@ using Exanite.Core.Utilities;
 namespace Exanite.Myriad.Ecs.Components;
 
 /// <summary>
-/// Unique ID for a type that implements <see cref="IInterfaceComponent"/>.
+/// Unique ID for a type that implements <see cref="IEcsInterface"/>.
 /// </summary>
 public readonly record struct InterfaceId : IComparable<InterfaceId>
 {
@@ -38,7 +38,7 @@ public readonly record struct InterfaceId : IComparable<InterfaceId>
     /// <summary>
     /// Get the interface ID for the given type.
     /// </summary>
-    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IInterfaceComponent"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown if <see cref="type"/> does not implement <see cref="IEcsInterface"/>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static InterfaceId Get(Type type)
     {
@@ -49,7 +49,7 @@ public readonly record struct InterfaceId : IComparable<InterfaceId>
     /// Get the interface ID for the given type.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static InterfaceId Get<T>() where T : IInterfaceComponent
+    public static InterfaceId Get<T>() where T : IEcsInterface
     {
         return InterfaceId<T>.Id;
     }
@@ -67,7 +67,7 @@ public readonly record struct InterfaceId : IComparable<InterfaceId>
     }
 }
 
-internal static class InterfaceId<T> where T : IInterfaceComponent
+internal static class InterfaceId<T> where T : IEcsInterface
 {
     /// <summary>
     /// The interface ID for <typeparamref name="T"/>.
