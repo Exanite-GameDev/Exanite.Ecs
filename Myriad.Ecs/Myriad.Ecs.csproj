@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Exanite.Core\Exanite.Core.csproj"/>
+    <ProjectReference Include="..\..\Exanite.Core\Exanite.Core\Exanite.Core.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
