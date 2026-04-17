@@ -18,7 +18,7 @@ public static class EntityLookupUtility
             EntityLookupPolicy.PreserveIfNotExist => entity,
             EntityLookupPolicy.DefaultIfNotExist => default,
             EntityLookupPolicy.ThrowIfNotExist => throw new InvalidOperationException("Entity does not exist in this lookup table"),
-            _ => throw ExceptionUtility.NotSupportedEnumValue(policy),
+            _ => throw ExceptionUtility.NotSupported(policy),
         };
     }
 }
