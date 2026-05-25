@@ -12,7 +12,7 @@ namespace Exanite.Myriad.Ecs.Queries;
 public class QueryViewGroup : IFilteredArchetypeView
 {
     private readonly QueryView[] queries;
-    private readonly RwLock<List<Archetype>> resultLock = new([]);
+    private readonly ReadWriteLock<List<Archetype>> resultLock = new([]);
 
     /// <summary>
     /// The queries in the group.

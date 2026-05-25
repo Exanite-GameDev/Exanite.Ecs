@@ -11,7 +11,7 @@ namespace Exanite.Myriad.Ecs.Components;
 /// </summary>
 internal static partial class TypeRegistry
 {
-    private static readonly RwLock<State> Lock = new(new State());
+    private static readonly ReadWriteLock<State> Lock = new(new State());
 
     private class State
     {
