@@ -12,7 +12,7 @@ being rewritten with an entirely different feature set and direction.
 
 Copyright (c) 2024 Martin Evans
 
-Author of the original Myriad.ECS library upon which this rewrite is based on.
+Author of the original Myriad.ECS library upon which this rewrite is based.
 
 The original can be found here: https://github.com/martindevans/Myriad.ECS
 
