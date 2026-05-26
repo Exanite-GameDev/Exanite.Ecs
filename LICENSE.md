@@ -1,6 +1,22 @@
 MIT License
 
+-----
+
+Copyright (c) 2025-2026 William Chen (Exanite)
+
+Author of the version of Myriad.ECS library modified for use in Exanite.Engine.
+Rebranding from Myriad.ECS to Exanite.Ecs is due to the majority of the library
+being rewritten with an entirely different feature set and direction.
+
+-----
+
 Copyright (c) 2024 Martin Evans
+
+Author of the original Myriad.ECS library upon which this rewrite is based on.
+
+The original can be found here: https://github.com/martindevans/Myriad.ECS
+
+-----
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

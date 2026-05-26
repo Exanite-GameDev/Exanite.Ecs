@@ -1,65 +1,64 @@
-# Exanite.Myriad.Ecs
+# Exanite.Ecs
 
-Exanite.Myriad.Ecs is a high performance Entity-Component-System (ECS) for C#.
+Exanite.Ecs is a high performance Entity-Component-System (ECS) for C#.
 
-This is a fork of Myriad.ECS. Original repository: https://github.com/martindevans/Myriad.ECS \
-This repository has been heavily modified for use in Exanite.Engine (engine is currently private).
+This is a heavily modified fork of Myriad.ECS for use in Exanite.Engine (engine is currently private).
 
-Also note, this ECS is not yet battle-tested. Many changes were made to the ECS recently (as of February 2026), and while I consider this ECS feature complete, there can still be many smaller issues that are yet to be discovered and fixed.
+The original repository can be found here: https://github.com/martindevans/Myriad.ECS
 
 ## Design goals
 
-- Focus on providing a fully featured entity storage, but not much more
-  - Entity manipulation (create entity/destroy entity/set component/remove component)
-  - Events (see the [event design section](#event-design))
-  - Light relation support
-    - Implemented through EcsRefs, which are strongly typed, storable references to components
+- Focus on providing a fully featured entity storage, but not much more.
+  - Entity manipulation (create entity/destroy entity/set component/remove component).
+  - Events (see the [event design section](#event-design)).
+  - Light relation support.
+    - Implemented through EcsRefs, which are strongly typed, storable references to components.
     - Events can also facilitate the implementation of relations.
-  - Entity copying support
+  - Entity copying support.
     - Can be used to implement prefabs and world snapshots.
     - Entity references can be automatically updated when worlds are copied.
   - Queries, systems, threading, and serialization are considered high level features and should be implemented separately.
-- Strong performance focus, but without sacrificing simplicity, safety, or functionality
+- Strong performance focus, but without sacrificing simplicity, safety, or functionality.
   - This means that this ECS is likely slower than other ECS's available.
   - Components are stored as managed structs instead of unmanaged memory.
   - All entity-focused structural modifications must be done through the command buffer.
   - TryGet methods for getting components.
   - The ComponentDispatcher can simplify invoking generic methods when given only a ComponentId.
-- Support for only the latest .NET
+- Support for only the latest .NET.
   - This repository is primarily meant for Exanite.Engine, which currently uses .NET 10.
   - Notably, no Unity support.
 
 ## Differences from Myriad.ECS
 
 Major modifications:
-- Removal of "high-level" code
-  - Eg: Queries, systems, and threading
+- Removal of "high-level" code.
+  - Eg: Queries, systems, and threading.
   - Exanite.Engine uses source generated query methods, similar to those found in [Arch ECS](https://github.com/genaray/Arch.Extended/wiki/Source-Generator).
   - Exanite.Engine also has a custom system scheduler, but does not support multithreading yet.
-- Removal of phantom components
+- Removal of phantom components.
   - Use events or tagging instead.
-- Buffered entities do not need to be resolved
+- Buffered entities do not need to be resolved.
   - Entity IDs are reserved as soon as an entity is pending creation.
-- Archetypes and chunks are exposed to the user
+- Archetypes and chunks are exposed to the user.
   - This is to allow for querying systems to be implemented on top of the base ECS.
 
 Other modifications include:
 - Changing the code to use code from [Exanite.Core](https://github.com/Exanite/Exanite.Core/), where applicable.
 - Reformatting of codebase to match conventions used in Exanite.Engine
-  - Eg: Myriad.Ecs instead of Myriad.ECS
-  - Eg: RefT has been renamed to Ref
+  - Eg: Ecs instead of ECS.
+  - Eg: RefT has been renamed to Ref.
 
 ## Event design
 
 The following events are provided:
-- Entity created - Raised when the entity is created, after its components are set
-- Entity destroyed - Raised when the entity is destroyed, before its components are removed
-- Component added - Raised when the component is set on an entity that never had the component
-- Component modified - Raised when the component is set on an entity that already had the component
+- Entity created - Raised when the entity is created, after its components are set.
+- Entity destroyed - Raised when the entity is destroyed, before its components are removed.
+- Component added - Raised when the component is set on an entity that never had the component.
+- Component modified - Raised when the component is set on an entity that already had the component.
   - Modifications from outside the command buffer don't trigger this event.
-- Component copied - Raised when the component is copied from an existing entity to another entity
+- Component copied - Raised when the component is copied from an existing entity to another entity.
   - Copied will be called before added or modified.
-- Component removed - Raised when the component is removed from an entity
+- Component removed - Raised when the component is removed from an entity.
 
 There are 2 ways of receiving events:
 1. Implementing the corresponding interface on the component
