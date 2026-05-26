@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Exanite.Myriad.Ecs.Tests</AssemblyName>
-    <RootNamespace>Exanite.Myriad.Ecs.Tests</RootNamespace>
+    <AssemblyName>Exanite.Ecs.Tests</AssemblyName>
+    <RootNamespace>Exanite.Ecs.Tests</RootNamespace>
 
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
@@ -21,6 +21,6 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Myriad.Ecs\Myriad.Ecs.csproj"/>
+    <ProjectReference Include="..\Exanite.Ecs\Exanite.Ecs.csproj"/>
   </ItemGroup>
 </Project>

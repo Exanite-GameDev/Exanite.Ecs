@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Exanite.Myriad.Ecs</AssemblyName>
-    <RootNamespace>Exanite.Myriad.Ecs</RootNamespace>
+    <AssemblyName>Exanite.Ecs</AssemblyName>
+    <RootNamespace>Exanite.Ecs</RootNamespace>
 
     <TargetFramework>net10.0</TargetFramework>
     <LangVersion>14</LangVersion>
