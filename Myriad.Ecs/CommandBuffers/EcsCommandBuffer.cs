@@ -372,15 +372,18 @@ public sealed partial class EcsCommandBuffer
             return;
         }
 
-        IsExecuting = true;
-        try
+        using (World.EnterWriteGuard())
         {
-            World.OnSyncPoint();
-            ExecuteInternal();
-        }
-        finally
-        {
-            IsExecuting = false;
+            IsExecuting = true;
+            try
+            {
+                World.OnSyncPoint();
+                ExecuteInternal();
+            }
+            finally
+            {
+                IsExecuting = false;
+            }
         }
     }
 

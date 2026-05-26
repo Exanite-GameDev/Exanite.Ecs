@@ -9,6 +9,7 @@ using System.Threading;
 using Exanite.Core.Events;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
+using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
 using Exanite.Myriad.Ecs.Collections;
 using Exanite.Myriad.Ecs.CommandBuffers;
@@ -42,6 +43,8 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     internal int Version;
 
     private readonly List<InterfaceResolverRegistration> interfaceResolvers = new();
+
+    private readonly ReadWriteGuard structuralChangeGuard = new();
 
     internal readonly ConcurrentDictionary<QueryCacheKey, QueryView> QueryViewCache = new();
     private readonly QueryView allEntitiesQuery;
@@ -125,6 +128,24 @@ public sealed class EcsWorld : IArchetypeView, ITrackedDisposable
     public void ReleaseCommandBuffer(EcsCommandBuffer value)
     {
         commandBufferPool.Release(value);
+    }
+
+    /// <summary>
+    /// Call this when iterating over queries to validate
+    /// that no structural changes occur during the iteration.
+    /// </summary>
+    public ReadWriteGuard.ReadGuardHandle EnterReadGuard()
+    {
+        return structuralChangeGuard.EnterReadGuard();
+    }
+
+    /// <summary>
+    /// Call this when making structural changes to ensure no
+    /// queries are iterating during the modification.
+    /// </summary>
+    internal ReadWriteGuard.WriteGuardHandle EnterWriteGuard()
+    {
+        return structuralChangeGuard.EnterWriteGuard();
     }
 
     /// <summary>
