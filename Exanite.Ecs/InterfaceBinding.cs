@@ -1,4 +1,4 @@
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 /// <summary>
 /// Represents an <see cref="IEcsInterface"/> that is bound to a specific entity.

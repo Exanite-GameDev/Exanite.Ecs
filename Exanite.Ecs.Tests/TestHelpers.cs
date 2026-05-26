@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Exanite.Myriad.Ecs.Tests;
+namespace Exanite.Ecs.Tests;
 
 public static class TestHelpers
 {

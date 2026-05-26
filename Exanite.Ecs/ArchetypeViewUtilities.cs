@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 public static class ArchetypeViewUtilities
 {

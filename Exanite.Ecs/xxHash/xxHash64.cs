@@ -31,7 +31,7 @@ using Exanite.Core.Utilities;
 // ReSharper disable All
 #pragma warning disable IDE1006 // Naming Styles
 
-namespace Myriad.Ecs.xxHash
+namespace Exanite.Ecs.xxHash
 {
     [ExcludeFromCodeCoverage]
     internal static partial class xxHash64

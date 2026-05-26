@@ -1,4 +1,4 @@
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 /// <summary>
 /// Marker interface for virtual interface components.

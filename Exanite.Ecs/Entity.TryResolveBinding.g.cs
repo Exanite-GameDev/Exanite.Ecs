@@ -2,9 +2,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Exanite.Myriad.Ecs;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 public readonly partial record struct Entity
 {

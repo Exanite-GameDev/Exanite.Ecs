@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Exanite.Myriad.Ecs.Collections;
+namespace Exanite.Ecs.Collections;
 
 public interface IReadOnlyOrderedListSet<T> : IReadOnlyList<T>, IEquatable<IReadOnlyOrderedListSet<T>> where T : struct, IComparable<T>, IEquatable<T>
 {

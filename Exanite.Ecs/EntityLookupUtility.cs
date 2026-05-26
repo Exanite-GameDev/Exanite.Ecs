@@ -1,7 +1,7 @@
 using System;
 using Exanite.Core.Utilities;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 public static class EntityLookupUtility
 {

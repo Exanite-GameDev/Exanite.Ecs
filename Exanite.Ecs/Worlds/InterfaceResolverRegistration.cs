@@ -1,8 +1,8 @@
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Queries;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Queries;
 
-namespace Exanite.Myriad.Ecs.Worlds;
+namespace Exanite.Ecs.Worlds;
 
 /// <summary>
 /// Represents a registration for an interface resolver.

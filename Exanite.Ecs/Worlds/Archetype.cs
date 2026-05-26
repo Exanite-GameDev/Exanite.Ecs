@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Components;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.Components;
 
-namespace Exanite.Myriad.Ecs.Worlds;
+namespace Exanite.Ecs.Worlds;
 
 /// <summary>
 /// An archetype contains all entities which share exactly the same set of components.

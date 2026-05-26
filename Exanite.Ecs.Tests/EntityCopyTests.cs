@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Queries;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Queries;
 using Xunit;
 
-namespace Exanite.Myriad.Ecs.Tests;
+namespace Exanite.Ecs.Tests;
 
 public class EntityCopyTests
 {

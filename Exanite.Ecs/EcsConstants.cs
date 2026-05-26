@@ -1,6 +1,6 @@
-using Exanite.Myriad.Ecs.Collections;
+using Exanite.Ecs.Collections;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 internal static class EcsConstants
 {

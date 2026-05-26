@@ -1,4 +1,4 @@
-﻿namespace Exanite.Myriad.Ecs.Tests;
+﻿namespace Exanite.Ecs.Tests;
 
 public interface IEcsInterface0 : IEcsInterface;
 

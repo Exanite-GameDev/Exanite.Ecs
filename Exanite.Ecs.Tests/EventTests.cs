@@ -1,11 +1,11 @@
 using Exanite.Core.Events;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Queries;
+using Exanite.Ecs.Events;
+using Exanite.Ecs.Queries;
 using Xunit;
 
-namespace Exanite.Myriad.Ecs.Tests;
+namespace Exanite.Ecs.Tests;
 
 public class EventTests
 {

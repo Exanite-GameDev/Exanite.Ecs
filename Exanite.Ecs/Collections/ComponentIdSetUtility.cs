@@ -1,8 +1,8 @@
 using System;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs.Collections;
+namespace Exanite.Ecs.Collections;
 
 internal static class ComponentIdSetUtility
 {

@@ -3,7 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace Exanite.Myriad.Ecs.Collections;
+namespace Exanite.Ecs.Collections;
 
 /// <summary>
 /// Implementation of a doubling segmented list for use by the <see cref="EntityManager"/>.

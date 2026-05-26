@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Exanite.Core.Utilities;
 
-namespace Exanite.Myriad.Ecs.Components;
+namespace Exanite.Ecs.Components;
 
 public readonly record struct TypeId : IComparable<TypeId>
 {

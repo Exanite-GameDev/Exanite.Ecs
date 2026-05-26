@@ -1,8 +1,8 @@
 ﻿using System;
-using Exanite.Myriad.Ecs.Components;
-using Myriad.Ecs.xxHash;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.xxHash;
 
-namespace Exanite.Myriad.Ecs.Worlds;
+namespace Exanite.Ecs.Worlds;
 
 /// <summary>
 /// An archetype hash is made by hashing all the components in an archetype.

@@ -1,4 +1,4 @@
-﻿namespace Exanite.Myriad.Ecs.Worlds;
+﻿namespace Exanite.Ecs.Worlds;
 
 internal struct EntityLocation
 {

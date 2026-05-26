@@ -1,7 +1,7 @@
-﻿using Exanite.Myriad.Ecs.Collections;
+﻿using Exanite.Ecs.Collections;
 using Xunit;
 
-namespace Exanite.Myriad.Ecs.Tests.Collections;
+namespace Exanite.Ecs.Tests.Collections;
 
 public class OrderedListSetTests
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Exanite.Myriad.Ecs.Components;
+namespace Exanite.Ecs.Components;
 
 internal static partial class TypeRegistry
 {

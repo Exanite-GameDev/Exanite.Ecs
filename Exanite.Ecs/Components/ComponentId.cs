@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Exanite.Core.Utilities;
 
-namespace Exanite.Myriad.Ecs.Components;
+namespace Exanite.Ecs.Components;
 
 /// <summary>
 /// Unique ID for a type that implements <see cref="IEcsComponent"/>.

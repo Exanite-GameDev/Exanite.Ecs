@@ -1,7 +1,7 @@
 using System;
-using Exanite.Myriad.Ecs.Components;
+using Exanite.Ecs.Components;
 
-namespace Exanite.Myriad.Ecs.Worlds;
+namespace Exanite.Ecs.Worlds;
 
 /// <summary>
 /// Contains the arrays used to store entity and component data.

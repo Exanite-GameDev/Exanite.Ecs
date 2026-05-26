@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 /// <summary>
 /// The ID of an <see cref="Entity"/> (not carrying a reference to a <see cref="EcsWorld"/>)

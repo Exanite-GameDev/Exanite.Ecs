@@ -1,8 +1,8 @@
 ﻿using Exanite.Core.Runtime;
-using Exanite.Myriad.Ecs.Components;
+using Exanite.Ecs.Components;
 using Xunit;
 
-namespace Exanite.Myriad.Ecs.Tests;
+namespace Exanite.Ecs.Tests;
 
 public class EntityTests
 {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Components;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.Components;
 
-namespace Exanite.Myriad.Ecs.Queries;
+namespace Exanite.Ecs.Queries;
 
 /// <summary>
 /// Build a new <see cref="QueryView"/> object

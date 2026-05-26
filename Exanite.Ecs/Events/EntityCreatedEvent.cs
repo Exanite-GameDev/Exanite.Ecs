@@ -1,6 +1,6 @@
-using Exanite.Myriad.Ecs.CommandBuffers;
+using Exanite.Ecs.CommandBuffers;
 
-namespace Exanite.Myriad.Ecs.Events;
+namespace Exanite.Ecs.Events;
 
 /// <summary>
 /// Raised after an entity is added to the world.

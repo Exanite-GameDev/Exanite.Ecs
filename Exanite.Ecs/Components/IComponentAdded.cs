@@ -1,4 +1,4 @@
-namespace Exanite.Myriad.Ecs.Components;
+namespace Exanite.Ecs.Components;
 
 public interface IComponentAdded
 {

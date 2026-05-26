@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Components;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.Components;
 
-namespace Exanite.Myriad.Ecs.Worlds;
+namespace Exanite.Ecs.Worlds;
 
 /// <summary>
 /// Stores information about the components stored in an archetype.

@@ -4,11 +4,11 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Exanite.Core.Pooling;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs.Queries;
+namespace Exanite.Ecs.Queries;
 
 /// <summary>
 /// Contains the set of matched archetypes based on a filter described by <see cref="QueryFilter"/>.

@@ -1,6 +1,6 @@
 using System;
 
-namespace Exanite.Myriad.Ecs.Worlds;
+namespace Exanite.Ecs.Worlds;
 
 /// <summary>
 /// Specifies a range of stored entities and contains utility methods for manipulating that range.

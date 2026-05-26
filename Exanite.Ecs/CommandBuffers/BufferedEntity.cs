@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Exanite.Myriad.Ecs.CommandBuffers;
+namespace Exanite.Ecs.CommandBuffers;
 
 /// <summary>
 /// An entity that is being processed by a command buffer.

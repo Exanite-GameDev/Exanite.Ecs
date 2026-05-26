@@ -1,7 +1,7 @@
 using System;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 /// <summary>
 /// Represents a high-performance collection of archetypes.

@@ -2,11 +2,9 @@
 
 using System.Runtime.CompilerServices;
 using Exanite.Core.Runtime;
-using Exanite.Myriad.Ecs;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Components;
+using Exanite.Ecs.Components;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 public readonly partial record struct Entity
 {

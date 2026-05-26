@@ -2,10 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
-using Exanite.Myriad.Ecs.Components;
-using Myriad.Ecs.xxHash;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.xxHash;
 
-namespace Exanite.Myriad.Ecs.Collections;
+namespace Exanite.Ecs.Collections;
 
 /// <summary>
 /// Probabilistic set of type IDs. Can be used to check if two sets intersect.<br/>

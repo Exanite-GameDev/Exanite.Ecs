@@ -4,7 +4,7 @@ using Exanite.Core.Runtime;
 using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
 
-namespace Exanite.Myriad.Ecs.Components;
+namespace Exanite.Ecs.Components;
 
 /// <summary>
 /// Stores information about component IDs.

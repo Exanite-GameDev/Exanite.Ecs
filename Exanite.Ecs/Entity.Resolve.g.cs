@@ -1,11 +1,9 @@
 ﻿#nullable enable
 
 using System.Runtime.CompilerServices;
-using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 public readonly partial record struct Entity
 {

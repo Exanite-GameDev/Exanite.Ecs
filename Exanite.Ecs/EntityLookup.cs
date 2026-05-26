@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 public class EntityLookup : IEntityLookup
 {

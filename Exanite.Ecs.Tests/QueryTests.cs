@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Exanite.Core.Runtime;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Queries;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Queries;
 using Xunit;
 
-namespace Exanite.Myriad.Ecs.Tests;
+namespace Exanite.Ecs.Tests;
 
 public class QueryTests
 {

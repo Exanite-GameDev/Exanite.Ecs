@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Events;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs.CommandBuffers;
+namespace Exanite.Ecs.CommandBuffers;
 
 public partial class EcsCommandBuffer
 {

@@ -1,4 +1,4 @@
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 public interface IEntityLookup
 {

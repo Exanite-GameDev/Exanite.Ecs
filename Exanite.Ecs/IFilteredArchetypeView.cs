@@ -1,4 +1,4 @@
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 /// <summary>
 /// Represents a high-performance filtered collection of archetypes.

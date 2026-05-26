@@ -1,10 +1,10 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Exanite.Myriad.Ecs.CommandBuffers;
-using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.CommandBuffers;
+using Exanite.Ecs.Events;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs.Components;
+namespace Exanite.Ecs.Components;
 
 /// <summary>
 /// Provides a performant way to invoke generic methods without having access to the component types at compile time.

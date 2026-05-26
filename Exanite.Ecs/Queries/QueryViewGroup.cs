@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs.Queries;
+namespace Exanite.Ecs.Queries;
 
 /// <summary>
 /// Wraps a group of queries and exposes them as a single view.

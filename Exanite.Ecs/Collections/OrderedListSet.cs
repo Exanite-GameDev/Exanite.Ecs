@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Exanite.Core.Utilities;
 
-namespace Exanite.Myriad.Ecs.Collections;
+namespace Exanite.Ecs.Collections;
 
 /// <summary>
 /// A set built out of an ordered list. This allows allocation free enumeration of the set.

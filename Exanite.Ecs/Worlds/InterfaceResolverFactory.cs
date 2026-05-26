@@ -1,7 +1,7 @@
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Components;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.Components;
 
-namespace Exanite.Myriad.Ecs.Worlds;
+namespace Exanite.Ecs.Worlds;
 
 /// <summary>
 /// Get or create the concrete implementation of the interface component for the specified archetype.

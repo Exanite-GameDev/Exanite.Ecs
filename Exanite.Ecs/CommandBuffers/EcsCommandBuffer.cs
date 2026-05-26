@@ -2,10 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs.CommandBuffers;
+namespace Exanite.Ecs.CommandBuffers;
 
 /// <summary>
 /// Buffers up modifications to entities and replays them all at once.

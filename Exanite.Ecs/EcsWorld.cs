@@ -11,14 +11,14 @@ using Exanite.Core.Pooling;
 using Exanite.Core.Runtime;
 using Exanite.Core.Threading;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.CommandBuffers;
-using Exanite.Myriad.Ecs.Components;
-using Exanite.Myriad.Ecs.Events;
-using Exanite.Myriad.Ecs.Queries;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.CommandBuffers;
+using Exanite.Ecs.Components;
+using Exanite.Ecs.Events;
+using Exanite.Ecs.Queries;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 /// <summary>
 /// A world contains all entities.

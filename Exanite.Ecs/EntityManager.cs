@@ -4,10 +4,10 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
-using Exanite.Myriad.Ecs.Collections;
-using Exanite.Myriad.Ecs.Worlds;
+using Exanite.Ecs.Collections;
+using Exanite.Ecs.Worlds;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 internal struct EntityManager
 {

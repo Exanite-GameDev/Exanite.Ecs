@@ -1,7 +1,7 @@
 using Exanite.Core.Runtime;
 using Exanite.Core.Utilities;
 
-namespace Exanite.Myriad.Ecs;
+namespace Exanite.Ecs;
 
 /// <summary>
 /// A storage reference to a component.
