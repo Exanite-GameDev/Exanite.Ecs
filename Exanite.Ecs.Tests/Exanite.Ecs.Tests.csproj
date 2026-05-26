@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Exanite.Ecs.Tests</AssemblyName>
+    <RootNamespace>Exanite.Ecs.Tests</RootNamespace>
+
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);xUnit2013</NoWarn> <!-- Don't care about Assert.Empty/NotEmpty/Single -->
+    <NoWarn>$(NoWarn);xUnit2017</NoWarn> <!-- Don't care about Assert.Contains/DoesNotContain -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0"/>
+    <PackageReference Include="coverlet.collector" Version="6.0.4"/>
+    <PackageReference Include="xunit.v3" Version="3.2.0"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exanite.Ecs\Exanite.Ecs.csproj"/>
+  </ItemGroup>
+</Project>
