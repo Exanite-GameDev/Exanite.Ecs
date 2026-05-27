@@ -180,9 +180,9 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         return items.BinarySearch(item) >= 0;
     }
 
-    public bool IsSubsetOf(IReadOnlyOrderedListSet<T> other)
+    public bool IsProperSubsetOf(IReadOnlyOrderedListSet<T> other)
     {
-        return other.IsSupersetOf(this);
+        return Count < other.Count && IsSubsetOf(other);
     }
 
     public bool IsProperSupersetOf(IReadOnlyOrderedListSet<T> other)
@@ -190,9 +190,9 @@ internal class OrderedListSet<T> : IReadOnlyOrderedListSet<T> where T : struct, 
         return Count > other.Count && IsSupersetOf(other);
     }
 
-    public bool IsProperSubsetOf(IReadOnlyOrderedListSet<T> other)
+    public bool IsSubsetOf(IReadOnlyOrderedListSet<T> other)
     {
-        return Count < other.Count && IsSubsetOf(other);
+        return other.IsSupersetOf(this);
     }
 
     public bool IsSupersetOf(IReadOnlyOrderedListSet<T> other)

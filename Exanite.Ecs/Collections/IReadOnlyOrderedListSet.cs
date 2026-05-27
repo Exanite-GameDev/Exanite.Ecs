@@ -26,9 +26,9 @@ public interface IReadOnlyOrderedListSet<T> : IReadOnlyList<T>, IEquatable<IRead
 
     public bool Contains(T item);
 
-    public bool IsSubsetOf(IReadOnlyOrderedListSet<T> other);
-    public bool IsProperSupersetOf(IReadOnlyOrderedListSet<T> other);
     public bool IsProperSubsetOf(IReadOnlyOrderedListSet<T> other);
+    public bool IsProperSupersetOf(IReadOnlyOrderedListSet<T> other);
+    public bool IsSubsetOf(IReadOnlyOrderedListSet<T> other);
     public bool IsSupersetOf(IReadOnlyOrderedListSet<T> other);
 
     public bool Overlaps(IReadOnlyOrderedListSet<T> other);
