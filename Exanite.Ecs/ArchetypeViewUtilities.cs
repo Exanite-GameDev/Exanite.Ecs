@@ -179,9 +179,9 @@ public static class ArchetypeViewUtilities
             private Archetype? archetype;
             private int archetypeIndex = 0;
 
-            public Entity Current { get; private set; }
             private int entityIndex = -1;
 
+            public Entity Current { get; private set; }
             object IEnumerator.Current => Current;
 
             public Enumerator(IArchetypeView view)
