@@ -11,7 +11,7 @@ The original repository can be found here: https://github.com/martindevans/Myria
 - Focus on providing a fully featured entity storage, but not much more.
   - Entity manipulation (create entity/destroy entity/set component/remove component).
   - Events (see the [event design section](#event-design)).
-  - Light relation support.
+  - Limited relation support.
     - Implemented through EcsRefs, which are strongly typed, storable references to components.
     - Events can also facilitate the implementation of relations.
   - Entity copying support.
@@ -79,8 +79,8 @@ Overall, query iteration speeds are extremely fast while structural changes are 
 Comparison using https://github.com/Doraku/Ecs.CSharp.Benchmark:
 - These comparisons focus on the single-threaded, non-SIMD cases.
 - Iteration speed matches `Frent_QueryInline` for the 1 component case, slower for the 2/3 component case.
-  - It's easily possible to beat Frent's iteration speed if I use Frent's query iteration approach,
-    but Frent's approach causes high register pressure that is bad for real world usage.
+  - It's possible to beat Frent's iteration speed if I use Frent's query iteration approach,
+    but Frent's approach likely causes register pressure that is bad for real world usage.
 - Structural changes are slower than `SveltoECS` in general.
   - This is likely due to how I'm handling events.
   - I have not heavily optimized this area.
