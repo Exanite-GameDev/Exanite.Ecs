@@ -138,7 +138,7 @@ public class EcsCommandBufferTests
     public void ChurnStructural()
     {
         var world = new EcsWorld();
-        var entities = TestHelpers.AddRandomEntities(world, 10_000);
+        var entities = TestHelpers.AddRandomEntities(world, 10000);
 
         var commandBuffer = world.AcquireCommandBuffer();
         var random = new Random(551514);
@@ -361,7 +361,7 @@ public class EcsCommandBufferTests
     public void DestroyByQuery()
     {
         var world = new EcsWorld();
-        TestHelpers.AddRandomEntities(world, count: 100000);
+        TestHelpers.AddRandomEntities(world, 100000);
 
         // Get the archetypes we're about to destroy
         var deleting = (from archetype in world.ArchetypesList

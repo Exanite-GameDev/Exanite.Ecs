@@ -5,7 +5,7 @@ namespace Exanite.Ecs.Tests;
 
 public static class TestHelpers
 {
-    public static List<Entity> AddRandomEntities(EcsWorld world, uint uniqueComponents = 7, int count = 1_000_000)
+    public static List<Entity> AddRandomEntities(EcsWorld world, int count, int uniqueComponents = 7)
     {
         uniqueComponents = Math.Clamp(uniqueComponents, 0, 7);
 
@@ -20,7 +20,7 @@ public static class TestHelpers
 
             for (var j = 0; j < 5; j++)
             {
-                switch (random.Next(0, checked((int)uniqueComponents)))
+                switch (random.Next(0, uniqueComponents))
                 {
                     case 0: entity.Set(new EcsByte(0)); break;
                     case 1: entity.Set(new EcsInt16(0)); break;
